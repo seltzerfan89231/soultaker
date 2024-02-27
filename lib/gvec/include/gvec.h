@@ -39,4 +39,8 @@ _VEC2_SUB(s)
         _type ## 32 x, y, z; \
     } vec3 ## _type;
 
+_VEC3_STRUCT(u)
+_VEC3_STRUCT(f)
+_VEC3_STRUCT(s)
+
 #endif

@@ -2,7 +2,7 @@
 
 Shader shader;
 
-void shader_init(void)
+void shader_init()
 {
     
 }

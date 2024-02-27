@@ -10,7 +10,7 @@
 #define DEFAULT_WINDOW_HEIGHT 1080 / 2
 
 typedef struct Mouse {
-    vec2u position;
+    vec2u pos;
 } Mouse;
 
 typedef struct Window {
@@ -19,7 +19,13 @@ typedef struct Window {
     Mouse mouse;
 } Window;
 
-void window_init(void);
+void window_init();
+void window_process_input();
+
+/* glfw abstractions */
+int window_closed();
+void window_poll_events();
+void window_swap_buffers();
 
 extern Window window;
 

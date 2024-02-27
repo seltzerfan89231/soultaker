@@ -5,7 +5,7 @@ typedef struct Shader {
     int x;
 } Shader;
 
-void shader_init(void);
+void shader_init();
 
 extern Shader shader;
 
