@@ -10,7 +10,7 @@ typedef struct State {
     Camera *camera;
 } State;
 
-void state_init();
-void state_loop();
+void state_init(void);
+void state_loop(void);
 
 #endif

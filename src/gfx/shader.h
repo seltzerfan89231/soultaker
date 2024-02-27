@@ -1,12 +1,15 @@
 #ifndef SHADER_H
 #define SHADER_H
 
+#include <glad.h>
+#include <glfw.h>
+#include <gtype.h>
+
 typedef struct Shader {
-    int x;
+    u32 ID;
 } Shader;
 
-void shader_init();
-
-extern Shader shader;
+Shader shader_create(char* vs_path, char* fs_path);
+void shader_use(Shader shader);
 
 #endif

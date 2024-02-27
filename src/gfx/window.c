@@ -7,7 +7,7 @@ static void framebuffer_size_callback();
 static void mouse_button_callback();
 static void mouse_callback();
 
-void window_init() 
+void window_init(void) 
 {
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -36,17 +36,17 @@ void window_init()
     glCullFace(GL_FRONT); 
 }
 
-void window_process_input()
+void window_process_input(void)
 {
     if (glfwGetKey(window.handle, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window.handle, true);
 }
 
-/* glfw abstractions */
-int window_closed() { return glfwWindowShouldClose(window.handle); }
-void window_poll_events() { glfwPollEvents(); }
-void window_swap_buffers() { glfwSwapBuffers(window.handle); }
-
 void framebuffer_size_callback() {}
 void mouse_button_callback() {}
 void mouse_callback() {}
+
+/* glfw abstractions */
+int window_closed(void) { return glfwWindowShouldClose(window.handle); }
+void window_poll_events(void) { glfwPollEvents(); }
+void window_swap_buffers(void) { glfwSwapBuffers(window.handle); }

@@ -19,13 +19,13 @@ typedef struct Window {
     Mouse mouse;
 } Window;
 
-void window_init();
-void window_process_input();
+void window_init(void);
+void window_process_input(void);
 
 /* glfw abstractions */
-int window_closed();
-void window_poll_events();
-void window_swap_buffers();
+int window_closed(void);
+void window_poll_events(void);
+void window_swap_buffers(void);
 
 extern Window window;
 

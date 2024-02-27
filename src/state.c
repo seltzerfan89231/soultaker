@@ -1,19 +1,18 @@
 #include "state.h"
-#include <stdio.h>
 
 State state;
 
-void state_init() 
+void state_init(void) 
 {
-    renderer_init();
     window_init();
-
+    renderer_init();
+    
     state.renderer = &renderer;
     state.window = &window;
     state.camera = &camera;
 }
 
-void state_loop()
+void state_loop(void)
 {
     while (!window_closed())
     {
