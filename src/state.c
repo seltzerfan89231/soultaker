@@ -2,14 +2,26 @@
 
 State state;
 
+static void link_camera(void) 
+{
+    state.camera->aspect_ratio = (float) state.window->size.x / state.window->size.y;
+    state.camera->viewID = glGetUniformLocation(state.renderer->shader.ID, "view");
+    state.camera->projID = glGetUniformLocation(state.renderer->shader.ID, "proj");
+    camera_update_view();
+    camera_update_proj();
+}
+
 void state_init(void) 
 {
     window_init();
     renderer_init();
-    
+    camera_init();
+
     state.renderer = &renderer;
     state.window = &window;
     state.camera = &camera;
+
+    link_camera();
 }
 
 void state_loop(void)

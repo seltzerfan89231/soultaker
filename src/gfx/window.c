@@ -18,8 +18,8 @@ void window_init(void)
     window.size.y = DEFAULT_WINDOW_HEIGHT;
     window.handle = glfwCreateWindow(window.size.x, window.size.y, "untitled", NULL, NULL);
 
-    window.mouse.pos.x = DEFAULT_WINDOW_WIDTH / 2;
-    window.mouse.pos.y = DEFAULT_WINDOW_HEIGHT / 2;
+    window.mouse.position.x = DEFAULT_WINDOW_WIDTH / 2;
+    window.mouse.position.y = DEFAULT_WINDOW_HEIGHT / 2;
 
     glfwMakeContextCurrent(window.handle);
     glfwSetInputMode(window.handle, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
@@ -32,8 +32,8 @@ void window_init(void)
     glViewport(0, 0, window.size.x, window.size.y);
     glDepthFunc(GL_LESS);
     glEnable(GL_DEPTH_TEST);
-    glEnable(GL_CULL_FACE); 
-    glCullFace(GL_FRONT); 
+    //glEnable(GL_CULL_FACE); 
+    //glCullFace(GL_FRONT); 
 }
 
 void window_process_input(void)

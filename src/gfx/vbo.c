@@ -13,7 +13,7 @@ void vbo_bind(VBO vbo)
     glBindBuffer(vbo.type, vbo.ID);
 }
 
-void vbo_buffer(VBO vbo, u32 size, void *data)
+void vbo_buffer(VBO vbo, u32 size, void* data)
 {
     glBufferData(vbo.type, size, data, GL_STATIC_DRAW);
 }

@@ -2,16 +2,61 @@
 
 Renderer renderer;
 
-float vertices[] = {
-    0.5f,  0.5f, 0.0f,  // top right
-    0.5f, -0.5f, 0.0f,  // bottom right
-    -0.5f, -0.5f, 0.0f,  // bottom left
-    -0.5f,  0.5f, 0.0f   // top left 
+/* float vertices[] = {
+    1.0f,  1.0f, 0.0f,  // top right
+    1.0f, 0.0f, 0.0f,  // bottom right
+    0.0f, 0.0f, 0.0f,  // bottom left
+    0.0f,  1.0f, 0.0f   // top left 
 };
 unsigned int indices[] = {  // note that we start from 0!
     0, 1, 3,  // first Triangle
     1, 2, 3   // second Triangle
 };
+ */
+
+float vertices[] = {
+        -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+         0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
+         0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+         0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+
+        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+         0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+         0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+         0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+        -0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
+        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+
+        -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+        -0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+        -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+
+         0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+         0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+         0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+         0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+         0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+         0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+
+        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+         0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
+         0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+         0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+
+        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+         0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+         0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+         0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+        -0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
+        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f
+    };
 
 void renderer_init(void) 
 {
@@ -23,15 +68,15 @@ void renderer_init(void)
     vao_bind(renderer.vao);
     vbo_bind(renderer.vbo);
     vbo_buffer(renderer.vbo, sizeof(vertices), vertices);
-    vbo_bind(renderer.ebo);
-    vbo_buffer(renderer.ebo, sizeof(indices), indices);
-    vao_attr(0, 3, 3 * sizeof(float), (void*)0);
+    // vbo_bind(renderer.ebo);
+    // vbo_buffer(renderer.ebo, sizeof(indices), indices);
+    vao_attr(0, 3, 5 * sizeof(float), (void*)0);
 }
 
 void renderer_render(void)
 {
     glClearColor(0.6f, 0.7f, 0.95f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); 
-    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-   
+    //glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+    glDrawArrays(GL_TRIANGLES, 0, 36);
 }
