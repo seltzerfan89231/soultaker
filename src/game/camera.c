@@ -40,13 +40,11 @@ void camera_init(void)
 
 void camera_rotate(f32 theta)
 {
-    vec3f offset;
     camera.yaw += theta;
-    offset.x = cos(camera.yaw) * cos(camera.pitch);
-    offset.y = sin(camera.pitch);
-    offset.z = sin(camera.yaw) * cos(camera.pitch);
-    camera.position = vec3f_scale(DEFAULT_DISTANCE, vec3f_create(offset.x, offset.y, offset.z));
-    camera.facing = vec3f_normalize(vec3f_sub(ORIGIN, camera.position));
+    camera.facing.x = cos(camera.yaw) * cos(camera.pitch);
+    camera.facing.y = sin(camera.pitch);
+    camera.facing.z = sin(camera.yaw) * cos(camera.pitch);
+    camera.position = vec3f_add(ORIGIN, vec3f_scale(-DEFAULT_DISTANCE, camera.facing));
     camera.right = vec3f_normalize(vec3f_cross(Y_AXIS, camera.facing));
     camera.up = vec3f_cross(camera.facing, camera.right);
     camera_update_view();

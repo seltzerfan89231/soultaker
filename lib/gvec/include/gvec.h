@@ -50,6 +50,15 @@ _VEC2_SUB(s)
         return ret; \
     }
 
+#define _VEC3_ADD(_type) \
+    static inline vec3##_type vec3##_type##_add(vec3##_type vec1, vec3##_type vec2) { \
+        vec3##_type ret; \
+        ret.x = vec1.x + vec2.x; \
+        ret.y = vec1.y + vec2.y; \
+        ret.z = vec1.z + vec2.z; \
+        return ret; \
+    }
+
 #define _VEC3_SUB(_type) \
     static inline vec3##_type vec3##_type##_sub(vec3##_type vec1, vec3##_type vec2) { \
         vec3##_type ret; \
@@ -77,9 +86,14 @@ _VEC2_SUB(s)
         return ret; \
     }
 
+#define _VEC3_MAG(_type) \
+    static inline f32 vec3##_type##_mag(vec3##_type vec) { \
+        return sqrt(vec.x*vec.x + vec.y*vec.y + vec.z*vec.z); \
+    }
+
 #define _VEC3_NORMALIZE(_type) \
     static inline vec3##_type vec3##_type##_normalize(vec3##_type vec) { \
-        f32 mag = sqrt(vec.x*vec.x + vec.y*vec.y + vec.z*vec.z); \
+        f32 mag = vec3##_type##_mag(vec); \
         if (mag == 0) \
             vec.x = vec.y = vec.z = 0; \
         else { \
@@ -98,6 +112,10 @@ _VEC3_CREATE(u)
 _VEC3_CREATE(f)
 _VEC3_CREATE(s)
 
+_VEC3_ADD(u)
+_VEC3_ADD(f)
+_VEC3_ADD(s)
+
 _VEC3_SUB(u)
 _VEC3_SUB(f)
 _VEC3_SUB(s)
@@ -109,6 +127,10 @@ _VEC3_SCALE(s)
 _VEC3_CROSS(u)
 _VEC3_CROSS(f)
 _VEC3_CROSS(s)
+
+_VEC3_MAG(u)
+_VEC3_MAG(f)
+_VEC3_MAG(s)
 
 _VEC3_NORMALIZE(u)
 _VEC3_NORMALIZE(f)

@@ -6,7 +6,7 @@
 
 #define NEAR_CLIP_DISTANCE 0.1
 #define FAR_CLIP_DISTANCE 10000
-#define ORIGIN vec3f_create(0.0f, 0.0f, 0.0f)
+#define ORIGIN vec3f_create(2.0f, 0.0f, 0.0f)
 #define Y_AXIS vec3f_create(0.0f, 1.0f, 0.0f)
 #define PI 3.141592653589
 
