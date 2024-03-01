@@ -1,7 +1,6 @@
 #ifndef STATE_H
 #define STATE_H
 
-#include <glad.h>
 #include "game/game.h"
 #include "gfx/gfx.h"
 

@@ -10,7 +10,7 @@ static const char* read_file(char *path)
     char *content;
     ptr = fopen(path, "rb");
     fseek(ptr, 0, SEEK_END);
-    s32 len = ftell(ptr);
+    i32 len = ftell(ptr);
     assert(len > 0);
     fseek(ptr, 0, SEEK_SET);
     content = calloc(1, len);
@@ -31,7 +31,7 @@ static unsigned int compile(char *s_path, GLenum type)
     glCompileShader(shader);
 
     char info_log[512];
-    s32 success;
+    i32 success;
     glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
     if (!success)
     {
@@ -46,7 +46,7 @@ static unsigned int compile(char *s_path, GLenum type)
 Shader shader_create(char* vs_path, char* fs_path)
 {
     Shader shader;
-    unsigned int vertex, fragment;
+    u32 vertex, fragment;
     shader.ID = glCreateProgram();
     vertex   = compile(vs_path, GL_VERTEX_SHADER);
     fragment = compile(fs_path, GL_FRAGMENT_SHADER);
@@ -57,7 +57,7 @@ Shader shader_create(char* vs_path, char* fs_path)
     glDeleteShader(fragment);
 
     char info_log[512];
-    s32 success;
+    i32 success;
     glGetProgramiv(shader.ID, GL_LINK_STATUS, &success);
     if (!success)
     {

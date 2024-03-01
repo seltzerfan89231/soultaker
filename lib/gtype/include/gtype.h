@@ -3,14 +3,14 @@
 
 #include <glad.h>
 
-typedef GLboolean s2;
-typedef GLbyte    s8;
+typedef GLboolean i2;
+typedef GLbyte    i8;
 typedef GLubyte   u8;
-typedef GLshort   s16;
+typedef GLshort   i16;
 typedef GLushort  u16;
-typedef GLint     s32;
+typedef GLint     i32;
 typedef GLuint    u32;
-typedef GLint64   s64;
+typedef GLint64   i64;
 typedef GLuint64  u64; 
 
 typedef GLhalf    f16;

@@ -32,9 +32,8 @@ void camera_init(void)
 {
     camera.yaw = DEFAULT_YAW;
     camera.pitch = DEFAULT_PITCH;
-    camera.speed = DEFAULT_SPEED;
-    camera.sensitivity = DEFAULT_SENSITIVITY;
     camera.fov = DEFAULT_FOV;
+    camera.target = vec3f_create(0.0f, 0.0f, 0.0f);
     camera_rotate(0);
 }
 
@@ -44,9 +43,24 @@ void camera_rotate(f32 theta)
     camera.facing.x = cos(camera.yaw) * cos(camera.pitch);
     camera.facing.y = sin(camera.pitch);
     camera.facing.z = sin(camera.yaw) * cos(camera.pitch);
-    camera.position = vec3f_add(ORIGIN, vec3f_scale(-DEFAULT_DISTANCE, camera.facing));
+    camera.position = vec3f_add(camera.target, vec3f_scale(-DEFAULT_DISTANCE, camera.facing));
     camera.right = vec3f_normalize(vec3f_cross(Y_AXIS, camera.facing));
     camera.up = vec3f_cross(camera.facing, camera.right);
+    camera_update_view();
+}
+
+void camera_move(vec2i move_offset)
+{
+    vec3f vec, offset;
+    vec2f v1, v2;
+    v1 = vec2f_normalize(vec2f_create(camera.facing.x, camera.facing.z));
+    v2 = vec2f_create(camera.right.x, camera.right.z);
+    vec.x = v1.x * move_offset.x + v2.x * move_offset.y;
+    vec.y = 0;
+    vec.z = v1.y * move_offset.x + v2.y * move_offset.y;
+    offset = vec3f_scale(DEFAULT_SPEED, vec);
+    camera.target = vec3f_add(camera.target, offset);
+    camera.position = vec3f_add(camera.position, offset);
     camera_update_view();
 }
 

@@ -8,6 +8,13 @@
         _type##32 x, y; \
     } vec2##_type;
 
+#define _VEC2_CREATE(_type) \
+    static inline vec2##_type vec2##_type##_create(_type##32 x, _type##32 y) { \
+        vec2##_type ret; \
+        ret.x = x; ret.y = y; \
+        return ret; \
+    }
+
 #define _VEC2_ADD(_type) \
     static inline vec2##_type vec2##_type##_add(vec2##_type vec1, vec2##_type vec2) { \
         vec2##_type ret; \
@@ -24,17 +31,46 @@
         return ret; \
     }
 
+#define _VEC2_MAG(_type) \
+    static inline f32 vec2##_type##_mag(vec2##_type vec) { \
+        return sqrt(vec.x*vec.x + vec.y*vec.y); \
+    }
+
+#define _VEC2_NORMALIZE(_type) \
+    static inline vec2##_type vec2##_type##_normalize(vec2##_type vec) { \
+        f32 mag = vec2##_type##_mag(vec); \
+        if (mag == 0) \
+            vec.x = vec.y = 0; \
+        else { \
+            vec.x /= mag; \
+            vec.y /= mag; \
+        } \
+        return vec; \
+    }
+
 _VEC2_STRUCT(u)
 _VEC2_STRUCT(f)
-_VEC2_STRUCT(s)
+_VEC2_STRUCT(i)
+
+_VEC2_CREATE(u)
+_VEC2_CREATE(f)
+_VEC2_CREATE(i)
 
 _VEC2_ADD(u)
 _VEC2_ADD(f)
-_VEC2_ADD(s)
+_VEC2_ADD(i)
 
 _VEC2_SUB(u)
 _VEC2_SUB(f)
-_VEC2_SUB(s)
+_VEC2_SUB(i)
+
+_VEC2_MAG(u)
+_VEC2_MAG(f)
+_VEC2_MAG(i)
+
+_VEC2_NORMALIZE(u)
+_VEC2_NORMALIZE(f)
+_VEC2_NORMALIZE(i)
 
 #define _VEC3_STRUCT(_type) \
     typedef struct vec3##_type { \
@@ -44,9 +80,7 @@ _VEC2_SUB(s)
 #define _VEC3_CREATE(_type) \
     static inline vec3##_type vec3##_type##_create(_type##32 x, _type##32 y, _type##32 z) { \
         vec3##_type ret; \
-        ret.x = x; \
-        ret.y = y; \
-        ret.z = z; \
+        ret.x = x; ret.y = y; ret.z = z; \
         return ret; \
     }
 
@@ -106,34 +140,34 @@ _VEC2_SUB(s)
 
 _VEC3_STRUCT(u)
 _VEC3_STRUCT(f)
-_VEC3_STRUCT(s)
+_VEC3_STRUCT(i)
 
 _VEC3_CREATE(u)
 _VEC3_CREATE(f)
-_VEC3_CREATE(s)
+_VEC3_CREATE(i)
 
 _VEC3_ADD(u)
 _VEC3_ADD(f)
-_VEC3_ADD(s)
+_VEC3_ADD(i)
 
 _VEC3_SUB(u)
 _VEC3_SUB(f)
-_VEC3_SUB(s)
+_VEC3_SUB(i)
 
 _VEC3_SCALE(u)
 _VEC3_SCALE(f)
-_VEC3_SCALE(s)
+_VEC3_SCALE(i)
 
 _VEC3_CROSS(u)
 _VEC3_CROSS(f)
-_VEC3_CROSS(s)
+_VEC3_CROSS(i)
 
 _VEC3_MAG(u)
 _VEC3_MAG(f)
-_VEC3_MAG(s)
+_VEC3_MAG(i)
 
 _VEC3_NORMALIZE(u)
 _VEC3_NORMALIZE(f)
-_VEC3_NORMALIZE(s)
+_VEC3_NORMALIZE(i)
 
 #endif

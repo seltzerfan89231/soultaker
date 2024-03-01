@@ -14,15 +14,10 @@ void window_init(void)
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    window.size.x = DEFAULT_WINDOW_WIDTH;
-    window.size.y = DEFAULT_WINDOW_HEIGHT;
+    window.size = vec2u_create(DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HEIGHT);
+    window.mouse.position = vec2u_create(window.size.x / 2, window.size.y / 2);
     window.handle = glfwCreateWindow(window.size.x, window.size.y, "untitled", NULL, NULL);
-
-    window.mouse.position.x = DEFAULT_WINDOW_WIDTH / 2;
-    window.mouse.position.y = DEFAULT_WINDOW_HEIGHT / 2;
-
     glfwMakeContextCurrent(window.handle);
-    glfwSetInputMode(window.handle, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
     glfwSetFramebufferSizeCallback(window.handle, framebuffer_size_callback);
     glfwSetMouseButtonCallback(window.handle, mouse_button_callback);
@@ -36,17 +31,13 @@ void window_init(void)
     //glCullFace(GL_FRONT); 
 }
 
-void window_process_input(void)
-{
-    if (glfwGetKey(window.handle, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-        glfwSetWindowShouldClose(window.handle, true);
-}
-
 void framebuffer_size_callback() {}
 void mouse_button_callback() {}
 void mouse_callback() {}
 
-/* glfw abstractions */
-int window_closed(void) { return glfwWindowShouldClose(window.handle); }
+/* abstractions */
+i2 window_closed(void) { return glfwWindowShouldClose(window.handle); }
+void window_close(void) { glfwSetWindowShouldClose(window.handle, true); }
 void window_poll_events(void) { glfwPollEvents(); }
 void window_swap_buffers(void) { glfwSwapBuffers(window.handle); }
+i2 window_key_pressed(GLenum key) { return glfwGetKey(window.handle, key) == GLFW_PRESS; }

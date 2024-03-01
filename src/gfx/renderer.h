@@ -13,9 +13,12 @@ typedef struct Renderer {
     Shader shader;
 } Renderer;
 
+extern Renderer renderer;
+
 void renderer_init(void);
 void renderer_render(void);
 
-extern Renderer renderer;
+/* abstractions */
+u32 renderer_uniform_location(char *identifier);
 
 #endif
