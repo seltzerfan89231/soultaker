@@ -41,11 +41,13 @@ _VEC2_SUB(s)
         _type##32 x, y, z; \
     } vec3##_type;
 
-#define _VEC3_SET(_type) \
-    static inline void vec3##_type##_set(vec3##_type *vec, _type##32 x, _type##32 y, _type##32 z) { \
-        vec->x = x; \
-        vec->y = y; \
-        vec->z = z; \
+#define _VEC3_CREATE(_type) \
+    static inline vec3##_type vec3##_type##_create(_type##32 x, _type##32 y, _type##32 z) { \
+        vec3##_type ret; \
+        ret.x = x; \
+        ret.y = y; \
+        ret.z = z; \
+        return ret; \
     }
 
 #define _VEC3_SUB(_type) \
@@ -54,6 +56,15 @@ _VEC2_SUB(s)
         ret.x = vec1.x - vec2.x; \
         ret.y = vec1.y - vec2.y; \
         ret.z = vec1.z - vec2.z; \
+        return ret; \
+    }
+
+#define _VEC3_SCALE(_type) \
+    static inline vec3##_type vec3##_type##_scale(_type##32 s, vec3##_type vec) { \
+        vec3##_type ret; \
+        ret.x = vec.x * s; \
+        ret.y = vec.y * s; \
+        ret.z = vec.z * s; \
         return ret; \
     }
 
@@ -83,13 +94,17 @@ _VEC3_STRUCT(u)
 _VEC3_STRUCT(f)
 _VEC3_STRUCT(s)
 
-_VEC3_SET(u)
-_VEC3_SET(f)
-_VEC3_SET(s)
+_VEC3_CREATE(u)
+_VEC3_CREATE(f)
+_VEC3_CREATE(s)
 
 _VEC3_SUB(u)
 _VEC3_SUB(f)
 _VEC3_SUB(s)
+
+_VEC3_SCALE(u)
+_VEC3_SCALE(f)
+_VEC3_SCALE(s)
 
 _VEC3_CROSS(u)
 _VEC3_CROSS(f)

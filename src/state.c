@@ -28,6 +28,7 @@ void state_loop(void)
 {
     while (!window_closed())
     {
+        camera_rotate(0.0008);
         window_process_input();
         renderer_render();
         window_poll_events();
