@@ -1,7 +1,7 @@
 #ifndef GFX_H
 #define GFX_H
 
-#include "renderer.h"
-#include "window.h"
+#include "renderer/renderer.h"
+#include "window/window.h"
 
 #endif

@@ -11,7 +11,8 @@
 
 #define DEFAULT_PITCH - PI / 4
 #define DEFAULT_DISTANCE 16
-#define DEFAULT_SPEED 0.01
+#define DEFAULT_ROTATE_SPEED 0.0008
+#define DEFAULT_MOVE_SPEED 0.01
 #define DEFAULT_YAW 0
 #define DEFAULT_FOV PI/4
 
@@ -25,8 +26,8 @@ typedef struct Camera {
 extern Camera camera;
 
 void camera_init(void);
-void camera_rotate(f32 theta);
-void camera_move(vec2i move_offset);
+void camera_rotate(i32 dir);
+void camera_move(vec2i dir);
 void camera_update_view(void);
 void camera_update_proj(void);
 

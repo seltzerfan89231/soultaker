@@ -13,22 +13,27 @@ static void link_camera(void)
 
 static void process_input(void)
 {
-    vec2i move_offset = vec2i_create(0, 0);
+    i32 rotation_magnitude = 0;
+    vec2i move_direction = vec2i_create(0, 0);
     if (window_key_pressed(GLFW_KEY_ESCAPE))
         window_close();
     if (window_key_pressed(GLFW_KEY_Q))
-        camera_rotate(0.0008);
+        rotation_magnitude++;
     if (window_key_pressed(GLFW_KEY_E))
-        camera_rotate(-0.0008);
+        rotation_magnitude--;
     if (window_key_pressed(GLFW_KEY_W))
-        move_offset.x++;
+        move_direction.x++;
     if (window_key_pressed(GLFW_KEY_S))
-        move_offset.x--;
+        move_direction.x--;
     if (window_key_pressed(GLFW_KEY_A))
-        move_offset.y--;
+        move_direction.y--;
     if (window_key_pressed(GLFW_KEY_D))
-        move_offset.y++;
-    camera_move(move_offset);
+        move_direction.y++;
+
+    if (move_direction.x != 0 || move_direction.y != 0)
+        camera_move(move_direction);
+    if (rotation_magnitude != 0)
+        camera_rotate(rotation_magnitude);
 }
 
 void state_init(void) 

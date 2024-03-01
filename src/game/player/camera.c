@@ -37,9 +37,9 @@ void camera_init(void)
     camera_rotate(0);
 }
 
-void camera_rotate(f32 theta)
+void camera_rotate(i32 dir)
 {
-    camera.yaw += theta;
+    camera.yaw += dir * DEFAULT_ROTATE_SPEED;
     camera.facing.x = cos(camera.yaw) * cos(camera.pitch);
     camera.facing.y = sin(camera.pitch);
     camera.facing.z = sin(camera.yaw) * cos(camera.pitch);
@@ -49,16 +49,14 @@ void camera_rotate(f32 theta)
     camera_update_view();
 }
 
-void camera_move(vec2i move_offset)
+void camera_move(vec2i dir)
 {
     vec3f vec, offset;
     vec2f v1, v2;
     v1 = vec2f_normalize(vec2f_create(camera.facing.x, camera.facing.z));
     v2 = vec2f_create(camera.right.x, camera.right.z);
-    vec.x = v1.x * move_offset.x + v2.x * move_offset.y;
-    vec.y = 0;
-    vec.z = v1.y * move_offset.x + v2.y * move_offset.y;
-    offset = vec3f_scale(DEFAULT_SPEED, vec);
+    vec = vec3f_normalize(vec3f_create(v1.x * dir.x + v2.x * dir.y, 0, v1.y * dir.x + v2.y * dir.y));
+    offset = vec3f_scale(DEFAULT_MOVE_SPEED, vec);
     camera.target = vec3f_add(camera.target, offset);
     camera.position = vec3f_add(camera.position, offset);
     camera_update_view();
