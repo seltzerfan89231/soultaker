@@ -3,5 +3,6 @@
 
 #include "renderer/renderer.h"
 #include "window/window.h"
+#include "camera/camera.h"
 
 #endif

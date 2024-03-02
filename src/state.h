@@ -8,6 +8,7 @@ typedef struct State {
     Renderer* renderer;
     Window* window;
     Camera* camera;
+    Game* game;
 } State;
 
 void state_init(void);

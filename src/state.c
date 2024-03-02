@@ -41,10 +41,12 @@ void state_init(void)
     window_init();
     renderer_init();
     camera_init();
+    game_init();
 
     state.renderer = &renderer;
     state.window = &window;
     state.camera = &camera;
+    state.game = &game;
 
     link_camera();
 }
