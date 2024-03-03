@@ -1,5 +1,5 @@
 #include "renderer.h"
-
+#include <stdio.h>
 Renderer renderer;
 
 /* float vertices[] = {
@@ -60,19 +60,17 @@ float vertices[] = {
 
 void renderer_init(void) 
 {
+    u32 test[2] = {3, 2};
     renderer.shader = shader_create("src/shaders/vert.sl", "src/shaders/frag.sl");
-    renderer.vao = vao_create();
+    renderer.vao = vao_create(2, 5, test);
     shader_use(renderer.shader);
     vao_update(renderer.vao, GL_ARRAY_BUFFER, sizeof(vertices), vertices);
-    vao_attr(0, 3, 5 * sizeof(f32), (void*)0);
-    vao_attr(1, 2, 5 * sizeof(f32), (void*)(3 * sizeof(f32)));
 }
 
 void renderer_render(void)
 {
     glClearColor(0.6f, 0.7f, 0.95f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); 
-    //glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
     glDrawArrays(GL_TRIANGLES, 0, 36);
 }
 
