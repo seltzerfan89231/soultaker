@@ -9,11 +9,11 @@ typedef struct VBO {
     u32 ID;
     GLenum type;
     void* data;
-    u32 size;
+    size_t size;
 } VBO;
 
 VBO vbo_create(GLenum type);
-void vbo_update(VBO* vbo, u32 size, void* data);
+void vbo_update(VBO* vbo, size_t size, void* data);
 void vbo_bind(VBO vbo);
 void vbo_buffer(VBO vbo);
 void vbo_destroy(VBO vbo);

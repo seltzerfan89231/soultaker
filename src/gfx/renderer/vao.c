@@ -21,19 +21,16 @@ void vao_bind(VAO vao)
     glBindVertexArray(vao.ID);
 }
 
-void vao_update(VAO vao, GLenum type, u32 size, void* data)
+void vao_update(VAO vao, GLenum type, size_t data_size, void* data)
 {
     vao_bind(vao);
-    u32 type_size = type == GL_ARRAY_BUFFER ? sizeof(f32) : sizeof(u32);
+    size_t type_size = type == GL_ARRAY_BUFFER ? sizeof(f32) : sizeof(u32);
     if (type == GL_ARRAY_BUFFER)
-        vbo_update(&vao.vbo, size, data);
+        vbo_update(&vao.vbo, data_size, data);
     else if (type == GL_ELEMENT_ARRAY_BUFFER)
-        vbo_update(&vao.ebo, size, data);
+        vbo_update(&vao.ebo, data_size, data);
     for (u32 c = 0, i = 0; i < vao.index_count; c += vao.indices[i], i++) {
-        u32 offset = c * type_size;
-        void* offset_ptr = &offset;
-        printf("%d, %d, %d, %d\n", i, vao.indices[i], vao.index_size, c);
-        glVertexAttribPointer(i, vao.indices[i], GL_FLOAT, GL_FALSE, vao.index_size * type_size, offset_ptr);
+        glVertexAttribPointer(i, vao.indices[i], GL_FLOAT, GL_FALSE, vao.index_size * type_size, (void*)(c * type_size));
         glEnableVertexAttribArray(i);
     }
 }

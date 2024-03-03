@@ -11,7 +11,7 @@ VBO vbo_create(GLenum type)
     return vbo;
 }
 
-void vbo_update(VBO* vbo, u32 size, void* data)
+void vbo_update(VBO* vbo, size_t size, void* data)
 {
     vbo->size = size;
     free(vbo->data);
