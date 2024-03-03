@@ -1,6 +1,7 @@
 #ifndef GVEC_H
 #define GVEC_H
 
+#include <gtype.h>
 #include <math.h>
 
 #define _VEC2_STRUCT(_type) \

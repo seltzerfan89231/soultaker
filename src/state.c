@@ -1,12 +1,16 @@
 #include "state.h"
+#include <stdlib.h>
 
-State state;
+extern Window window;
+extern Renderer renderer;
+extern Camera camera;
+extern TileMap tilemap;
 
 static void link_camera(void) 
 {
-    state.camera->aspect_ratio = (float) state.window->size.x / state.window->size.y;
-    state.camera->viewID = renderer_uniform_location("view");
-    state.camera->projID = renderer_uniform_location("proj");
+    camera.aspect_ratio = (float) window.size.x / window.size.y;
+    camera.viewID = renderer_uniform_location("view");
+    camera.projID = renderer_uniform_location("proj");
     camera_update_view();
     camera_update_proj();
 }
@@ -41,23 +45,23 @@ void state_init(void)
     window_init();
     renderer_init();
     camera_init();
-    game_init();
-
-    state.renderer = &renderer;
-    state.window = &window;
-    state.camera = &camera;
-    state.game = &game;
+    tilemap_init();
 
     link_camera();
 }
 
 void state_loop(void)
 {
-    while (!window_closed())
+    while (!window_closed()) 
     {
         process_input();
         renderer_render();
         window_poll_events();
         window_swap_buffers();
     }
+}
+
+void state_exit(void)
+{
+    renderer_destroy();
 }

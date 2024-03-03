@@ -1,8 +1,11 @@
 #include "tile.h"
+#include <stdlib.h>
 
-Tile tile_create(i32 data)
+Tile* tile_create(f32 r, f32 g, f32 b)
 {
-    Tile tile;
-    tile.data = data;
+    Tile* tile = malloc(sizeof(Tile));
+    tile->r = r;
+    tile->g = g;
+    tile->b = b;
     return tile;
 }

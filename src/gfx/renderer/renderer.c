@@ -62,14 +62,8 @@ void renderer_init(void)
 {
     renderer.shader = shader_create("src/shaders/vert.sl", "src/shaders/frag.sl");
     renderer.vao = vao_create();
-    renderer.vbo = vbo_create(GL_ARRAY_BUFFER);
-    renderer.ebo = vbo_create(GL_ELEMENT_ARRAY_BUFFER);
     shader_use(renderer.shader);
-    vao_bind(renderer.vao);
-    vbo_bind(renderer.vbo);
-    vbo_buffer(renderer.vbo, sizeof(vertices), vertices);
-    // vbo_bind(renderer.ebo);
-    // vbo_buffer(renderer.ebo, sizeof(indices), indices);
+    vao_update(renderer.vao, GL_ARRAY_BUFFER, sizeof(vertices), vertices);
     vao_attr(0, 3, 5 * sizeof(f32), (void*)0);
     vao_attr(1, 2, 5 * sizeof(f32), (void*)(3 * sizeof(f32)));
 }
@@ -80,6 +74,11 @@ void renderer_render(void)
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); 
     //glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
     glDrawArrays(GL_TRIANGLES, 0, 36);
+}
+
+void renderer_destroy(void)
+{
+    vao_destroy(renderer.vao);
 }
 
 /* abstractions */

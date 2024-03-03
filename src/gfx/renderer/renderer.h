@@ -9,7 +9,6 @@
 
 typedef struct Renderer {
     VAO vao;
-    VBO vbo, ebo;
     Shader shader;
 } Renderer;
 
@@ -17,8 +16,9 @@ extern Renderer renderer;
 
 void renderer_init(void);
 void renderer_render(void);
+void renderer_destroy(void);
 
 /* abstractions */
-u32 renderer_uniform_location(char *identifier);
+u32 renderer_uniform_location(char* identifier);
 
 #endif

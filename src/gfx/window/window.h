@@ -14,7 +14,7 @@ typedef struct Mouse {
 } Mouse;
 
 typedef struct Window {
-    GLFWwindow *handle;
+    GLFWwindow* handle;
     vec2u size;
     Mouse mouse;
 } Window;
