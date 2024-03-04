@@ -1,9 +1,9 @@
 #version 330 core
 
 layout (location = 0) in vec3 aPos;
-layout (location = 1) in vec2 aCol;
+layout (location = 1) in vec3 aCol;
 
-out vec2 Col;
+out vec3 Col;
 
 uniform mat4 view;
 uniform mat4 proj;

@@ -16,23 +16,24 @@ VAO vao_create(u32 index_count, u32 index_size, u32* indices)
     return vao;
 }
 
-void vao_bind(VAO vao)
+void vao_update(VAO* vao, GLenum type, size_t data_size, void* data)
 {
-    glBindVertexArray(vao.ID);
-}
-
-void vao_update(VAO vao, GLenum type, size_t data_size, void* data)
-{
-    vao_bind(vao);
+    glBindVertexArray(vao->ID);
     size_t type_size = type == GL_ARRAY_BUFFER ? sizeof(f32) : sizeof(u32);
     if (type == GL_ARRAY_BUFFER)
-        vbo_update(&vao.vbo, data_size, data);
+        vbo_update(&vao->vbo, data_size, data);
     else if (type == GL_ELEMENT_ARRAY_BUFFER)
-        vbo_update(&vao.ebo, data_size, data);
-    for (u32 c = 0, i = 0; i < vao.index_count; c += vao.indices[i], i++) {
-        glVertexAttribPointer(i, vao.indices[i], GL_FLOAT, GL_FALSE, vao.index_size * type_size, (void*)(c * type_size));
+        vbo_update(&vao->ebo, data_size, data);
+    for (u32 c = 0, i = 0; i < vao->index_count; c += vao->indices[i], i++) {
+        glVertexAttribPointer(i, vao->indices[i], GL_FLOAT, GL_FALSE, vao->index_size * type_size, (void*)(c * type_size));
         glEnableVertexAttribArray(i);
     }
+}
+
+void vao_draw(VAO vao)
+{
+    glBindVertexArray(vao.ID);
+    glDrawArrays(GL_TRIANGLES, 0, vao.vbo.data_size);
 }
 
 void vao_destroy(VAO vao)

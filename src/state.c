@@ -48,6 +48,8 @@ void state_init(void)
     tilemap_init();
 
     link_camera();
+    f32* ptr = tilemap_vertex_data();
+    renderer_update(5*6*6*15*sizeof(f32), ptr);
 }
 
 void state_loop(void)
