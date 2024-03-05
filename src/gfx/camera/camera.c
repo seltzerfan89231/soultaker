@@ -19,8 +19,8 @@ static void ortho(f32 m[16], f32 l, f32 r, f32 t, f32 b, f32 n, f32 f)
 {
     f32 val1, val2, val3, val4, val5, val6;
     val1 = 2 / (r - l);
-    val2 = 2 / (t - b);
-    val3 = -2 / (f - n);
+    val2 = -2 / (t - b);
+    val3 = 2 / (f - n);
     val4 = -(r + l) / (r - l);
     val5 = -(t + b) / (t - b);
     val6 = -(f + n) / (f - n);
@@ -85,7 +85,7 @@ void camera_update_view(void)
 
 void camera_update_proj(void)
 {
-    ortho(camera.proj, 0.0f, 540.0f, 0.0f, 540.0f, NEAR_CLIP_DISTANCE, FAR_CLIP_DISTANCE);
+    ortho(camera.proj, -5, 5, -5, 5, NEAR_CLIP_DISTANCE, FAR_CLIP_DISTANCE);
     //pers(camera.proj, 1.0, camera.fov, NEAR_CLIP_DISTANCE, FAR_CLIP_DISTANCE);
     glUniformMatrix4fv(camera.projID, 1, GL_FALSE, camera.proj);
 }

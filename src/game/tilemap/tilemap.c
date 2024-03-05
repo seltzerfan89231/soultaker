@@ -41,9 +41,9 @@ static void insert_vertex_data(f32* data, Tile* tile, i32* count)
             data[5*6*6*c+6*6*s+6*v]   = s_vertices[3*side_idxs[4*s+vertex_idxs[v]]]   + tile->pos.x;
             data[5*6*6*c+6*6*s+6*v+1] = s_vertices[3*side_idxs[4*s+vertex_idxs[v]]+1] * tile->pos.y;
             data[5*6*6*c+6*6*s+6*v+2] = s_vertices[3*side_idxs[4*s+vertex_idxs[v]]+2] + tile->pos.z;
-            data[5*6*6*c+6*6*s+6*v+3] = tile->r;
-            data[5*6*6*c+6*6*s+6*v+4] = tile->g;
-            data[5*6*6*c+6*6*s+6*v+5] = tile->b;
+            data[5*6*6*c+6*6*s+6*v+3] = tile->r + s * 0.1;
+            data[5*6*6*c+6*6*s+6*v+4] = tile->g + s * 0.1;
+            data[5*6*6*c+6*6*s+6*v+5] = tile->b + s * 0.1;
         }
     }
     (*count)++;
