@@ -4,7 +4,7 @@
 #include <gtype.h>
 #include "tile.h"
 
-#define TILEMAP_WIDTH 10
+#define TILEMAP_WIDTH 100
 
 typedef struct TileMap {
     Tile* map[TILEMAP_WIDTH][TILEMAP_WIDTH];

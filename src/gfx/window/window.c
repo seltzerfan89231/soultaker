@@ -28,7 +28,20 @@ void window_init(void)
     glDepthFunc(GL_LESS);
     glEnable(GL_DEPTH_TEST);
     //glEnable(GL_CULL_FACE); 
-    //glCullFace(GL_FRONT); 
+    //glCullFace(GL_FRONT);
+
+    window.last_frame = glfwGetTime();
+    window.dt = 0;
+    window.fps = 0;
+}
+
+void window_calc_dt(void)
+{
+    f32 cur_frame = glfwGetTime();
+    window.dt = cur_frame - window.last_frame;
+    if (window.dt != 0)
+        window.fps = 1 / window.dt;
+    window.last_frame = cur_frame;
 }
 
 void framebuffer_size_callback() {}

@@ -32,15 +32,15 @@ static u32 vertex_idxs[] = {
     0, 1, 2, 0, 2, 3
 };
 
-static void insert_vertex_data(f32* data, Tile* tile, i32 x, i32 z, i32* count)
+static void insert_vertex_data(f32* data, Tile* tile, i32* count)
 {
     /* c = count, s = side, v = vertex */
     int c = *count;
     for (i32 s = 0; s < NUM_WALL_SIDES; s++) {
         for (i32 v = 0; v < VERTEX_COUNT; v++) {
-            data[5*6*6*c+6*6*s+6*v]   = s_vertices[3*side_idxs[4*s+vertex_idxs[v]]]   + x;
-            data[5*6*6*c+6*6*s+6*v+1] = s_vertices[3*side_idxs[4*s+vertex_idxs[v]]+1];
-            data[5*6*6*c+6*6*s+6*v+2] = s_vertices[3*side_idxs[4*s+vertex_idxs[v]]+2] + z;
+            data[5*6*6*c+6*6*s+6*v]   = s_vertices[3*side_idxs[4*s+vertex_idxs[v]]]   + tile->pos.x;
+            data[5*6*6*c+6*6*s+6*v+1] = s_vertices[3*side_idxs[4*s+vertex_idxs[v]]+1] * tile->pos.y;
+            data[5*6*6*c+6*6*s+6*v+2] = s_vertices[3*side_idxs[4*s+vertex_idxs[v]]+2] + tile->pos.z;
             data[5*6*6*c+6*6*s+6*v+3] = tile->r;
             data[5*6*6*c+6*6*s+6*v+4] = tile->g;
             data[5*6*6*c+6*6*s+6*v+5] = tile->b;
@@ -54,7 +54,7 @@ void tilemap_init(void)
     tilemap.tile_count = 0;
     for (i32 i = 0; i < TILEMAP_WIDTH * TILEMAP_WIDTH; i++) {
         if (i % 7 == 0)
-            tilemap.map[i/TILEMAP_WIDTH][i%TILEMAP_WIDTH] = tile_create(0.5f, 0.5f, 0.5f), tilemap.tile_count++;
+            tilemap.map[i/TILEMAP_WIDTH][i%TILEMAP_WIDTH] = tile_create(i/TILEMAP_WIDTH, 3, i%TILEMAP_WIDTH, 0.5f, 0.5f, 0.5f), tilemap.tile_count++;
         else
             tilemap.map[i/TILEMAP_WIDTH][i%TILEMAP_WIDTH] = NULL;
     }
@@ -77,7 +77,7 @@ void** tilemap_vertex_data(void)
     for (i32 i = 0; i < TILEMAP_WIDTH; i++)
         for (i32 j = 0; j < TILEMAP_WIDTH; j++)
             if (tilemap.map[i][j] != NULL)
-                insert_vertex_data(data, tilemap.map[i][j], i, j, &count);
+                insert_vertex_data(data, tilemap.map[i][j], &count);
     data_signature[0] = (size_t*)data_size;
     data_signature[1] = (f32*)data;
     return data_signature;

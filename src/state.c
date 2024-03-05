@@ -35,7 +35,7 @@ static void process_input(void)
         move_direction.y++;
 
     if (move_direction.x != 0 || move_direction.y != 0)
-        camera_move(move_direction);
+        camera_move(move_direction, window.dt);
     if (rotation_magnitude != 0)
         camera_rotate(rotation_magnitude);
 }
@@ -59,6 +59,7 @@ void state_loop(void)
         renderer_render();
         window_poll_events();
         window_swap_buffers();
+        window_calc_dt();
     }
 }
 

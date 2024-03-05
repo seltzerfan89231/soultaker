@@ -12,7 +12,7 @@
 #define DEFAULT_PITCH - PI / 4
 #define DEFAULT_DISTANCE 16
 #define DEFAULT_ROTATE_SPEED 0.0008
-#define DEFAULT_MOVE_SPEED 0.003
+#define DEFAULT_MOVE_SPEED 3
 #define DEFAULT_YAW 0
 #define DEFAULT_FOV PI/4
 
@@ -27,7 +27,7 @@ extern Camera camera;
 
 void camera_init(void);
 void camera_rotate(i32 dir);
-void camera_move(vec2i dir);
+void camera_move(vec2i dir, f32 dt);
 void camera_update_view(void);
 void camera_update_proj(void);
 

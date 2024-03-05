@@ -6,8 +6,8 @@
 #include <gtype.h>
 #include <gvec.h>
 
-#define DEFAULT_WINDOW_WIDTH 1920 / 2
-#define DEFAULT_WINDOW_HEIGHT 1080 / 2
+#define DEFAULT_WINDOW_WIDTH 540
+#define DEFAULT_WINDOW_HEIGHT 540
 
 typedef struct Mouse {
     vec2u position;
@@ -17,11 +17,13 @@ typedef struct Window {
     GLFWwindow* handle;
     vec2u size;
     Mouse mouse;
+    f32 last_frame, dt, fps;
 } Window;
 
 extern Window window;
 
 void window_init(void);
+void window_calc_dt(void);
 
 /* abstractions */
 i2 window_closed(void);
