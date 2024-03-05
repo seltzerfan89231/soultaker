@@ -7,13 +7,12 @@
 
 typedef struct VBO {
     u32 ID;
-    GLenum type;
     void* data;
     size_t data_size;
 } VBO;
 
-VBO vbo_create(GLenum type);
-void vbo_update(VBO* vbo, size_t data_size, void* data);
+VBO vbo_create(void);
+void vbo_update(VBO* vbo, size_t data_size, f32* data);
 void vbo_destroy(VBO vbo);
 
 #endif

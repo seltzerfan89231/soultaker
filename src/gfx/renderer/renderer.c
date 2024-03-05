@@ -1,17 +1,21 @@
 #include "renderer.h"
 
+#define INDEX_COUNT 2
+#define FIELD_COUNT 6
+
 Renderer renderer;
 
-void renderer_init(u32 vao_index_count, u32 vao_field_count, u32* vao_fields) 
+void renderer_init(void) 
 {
+    u32 fields[] = {3, 3};
     renderer.shader = shader_create("src/shaders/vert.sl", "src/shaders/frag.sl");
-    renderer.vao = vao_create(vao_index_count, vao_field_count, vao_fields);
+    renderer.vao = vao_create(INDEX_COUNT, FIELD_COUNT, fields);
     shader_use(renderer.shader);
 }
 
-void renderer_update(size_t data_size, void* data)
+void renderer_update(size_t data_size, f32* data)
 {
-    vao_update(&renderer.vao, GL_ARRAY_BUFFER, data_size, data);
+    vao_update(&renderer.vao, data_size, data);
 }
 
 void renderer_render(void)

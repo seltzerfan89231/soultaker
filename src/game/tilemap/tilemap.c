@@ -1,8 +1,11 @@
 #include "tilemap.h"
 #include <gvec.h>
 #include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
+
+#define NUM_WALL_SIDES 5
+#define NUM_TILE_SIDES 1
+#define VERTEX_COUNT 6
+#define FIELD_COUNT 6
 
 TileMap tilemap;
 
@@ -33,8 +36,8 @@ static void insert_vertex_data(f32* data, Tile* tile, i32 x, i32 z, i32* count)
 {
     /* c = count, s = side, v = vertex */
     int c = *count;
-    for (i32 s = 0; s < 5; s++) {
-        for (i32 v = 0; v < 6; v++) {
+    for (i32 s = 0; s < NUM_WALL_SIDES; s++) {
+        for (i32 v = 0; v < VERTEX_COUNT; v++) {
             data[5*6*6*c+6*6*s+6*v]   = s_vertices[3*side_idxs[4*s+vertex_idxs[v]]]   + x;
             data[5*6*6*c+6*6*s+6*v+1] = s_vertices[3*side_idxs[4*s+vertex_idxs[v]]+1];
             data[5*6*6*c+6*6*s+6*v+2] = s_vertices[3*side_idxs[4*s+vertex_idxs[v]]+2] + z;
@@ -64,14 +67,18 @@ void tilemap_clear(void)
             free(tilemap.map[i/TILEMAP_WIDTH][i%TILEMAP_WIDTH]);
 }
 
-f32* tilemap_vertex_data(void) 
+void** tilemap_vertex_data(void) 
 {
-    size_t data_size = 5 * 6 * 6 * tilemap.tile_count * sizeof(f32);
-    f32* data = malloc(data_size);
+    void** data_signature = malloc(sizeof(void*));
+    size_t* data_size = malloc(sizeof(size_t));
+    *data_size = NUM_WALL_SIDES * VERTEX_COUNT * FIELD_COUNT * tilemap.tile_count * sizeof(f32);
+    f32* data = malloc(*data_size);
     i32 count = 0;
     for (i32 i = 0; i < TILEMAP_WIDTH; i++)
         for (i32 j = 0; j < TILEMAP_WIDTH; j++)
             if (tilemap.map[i][j] != NULL)
                 insert_vertex_data(data, tilemap.map[i][j], i, j, &count);
-    return data;
+    data_signature[0] = (size_t*)data_size;
+    data_signature[1] = (f32*)data;
+    return data_signature;
 }

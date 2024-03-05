@@ -1,5 +1,6 @@
 #include "state.h"
 #include <stdlib.h>
+#include <stdio.h>
 
 extern Window window;
 extern Renderer renderer;
@@ -41,15 +42,13 @@ static void process_input(void)
 
 void state_init(void) 
 {
-    u32 test[] = {3, 3};
     window_init();
-    game_init();
-    renderer_init(2, 6, test);
+    renderer_init();
     camera_init();
-
+    game_init();
     link_camera();
-    f32* data = game_vertex_data();
-    renderer_update(5 * 6 * 6 * tilemap.tile_count * sizeof(f32), data);
+    VertexData vertex_data = game_vertex_data();
+    renderer_update(vertex_data.data_size, vertex_data.data);
 }
 
 void state_loop(void)
