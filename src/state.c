@@ -48,9 +48,8 @@ void state_init(void)
     camera_init();
 
     link_camera();
-    void** ptr = game_vertex_data();
-    renderer_update(ptr);
-    free(ptr);
+    f32* data = game_vertex_data();
+    renderer_update(5 * 6 * 6 * tilemap.tile_count * sizeof(f32), data);
 }
 
 void state_loop(void)

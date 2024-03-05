@@ -64,18 +64,14 @@ void tilemap_clear(void)
             free(tilemap.map[i/TILEMAP_WIDTH][i%TILEMAP_WIDTH]);
 }
 
-void** tilemap_vertex_data(void) 
+f32* tilemap_vertex_data(void) 
 {
-    void** data_signature = malloc(2 * sizeof(void*));
-    size_t* data_size = malloc(sizeof(size_t));
-    *data_size = 5 * 6 * 6 * tilemap.tile_count * sizeof(f32);
-    f32* data = malloc(*data_size);
+    size_t data_size = 5 * 6 * 6 * tilemap.tile_count * sizeof(f32);
+    f32* data = malloc(data_size);
     i32 count = 0;
     for (i32 i = 0; i < TILEMAP_WIDTH; i++)
         for (i32 j = 0; j < TILEMAP_WIDTH; j++)
             if (tilemap.map[i][j] != NULL)
                 insert_vertex_data(data, tilemap.map[i][j], i, j, &count);
-    data_signature[0] = (void*)data_size;
-    data_signature[1] = (void*)data;
-    return data_signature;
+    return data;
 }

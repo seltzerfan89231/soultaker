@@ -15,7 +15,7 @@ typedef struct Renderer {
 extern Renderer renderer;
 
 void renderer_init(u32 vao_index_count, u32 vao_field_count, u32* vao_fields);
-void renderer_update(void** data);
+void renderer_update(size_t data_size, void* data);
 void renderer_render(void);
 void renderer_destroy(void);
 

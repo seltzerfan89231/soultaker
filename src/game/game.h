@@ -9,9 +9,9 @@ inline static void game_init(void)
     tilemap_init();
 }
 
-inline static void** game_vertex_data(void)
+inline static f32* game_vertex_data(void)
 {
-    void** tilemap_data = tilemap_vertex_data();
+    f32* tilemap_data = tilemap_vertex_data();
     return tilemap_data;
 }
 
