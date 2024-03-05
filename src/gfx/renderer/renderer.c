@@ -2,13 +2,11 @@
 
 Renderer renderer;
 
-void renderer_init(void) 
+void renderer_init(u32 vao_index_count, u32 vao_field_count, u32* vao_fields) 
 {
-    u32 test[2] = {3, 3};
     renderer.shader = shader_create("src/shaders/vert.sl", "src/shaders/frag.sl");
-    renderer.vao = vao_create(2, 6, test);
+    renderer.vao = vao_create(vao_index_count, vao_field_count, vao_fields);
     shader_use(renderer.shader);
-    //vao_update(renderer.vao, GL_ARRAY_BUFFER, sizeof(vertices), vertices);
 }
 
 void renderer_update(size_t data_size, void* data)

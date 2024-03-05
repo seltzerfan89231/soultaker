@@ -4,7 +4,6 @@
 extern Window window;
 extern Renderer renderer;
 extern Camera camera;
-extern TileMap tilemap;
 
 static void link_camera(void) 
 {
@@ -42,14 +41,16 @@ static void process_input(void)
 
 void state_init(void) 
 {
+    u32 test[] = {3, 3};
     window_init();
-    renderer_init();
+    game_init();
+    renderer_init(2, 6, test);
     camera_init();
-    tilemap_init();
 
     link_camera();
-    f32* ptr = tilemap_vertex_data();
-    renderer_update(5*6*6*15*sizeof(f32), ptr);
+    void** ptr = game_vertex_data();
+    renderer_update(ptr);
+    free(ptr);
 }
 
 void state_loop(void)
