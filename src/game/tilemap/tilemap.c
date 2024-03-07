@@ -52,12 +52,17 @@ static void insert_vertex_data(f32* data, Tile* tile, i32* count)
 void tilemap_init(void) 
 {
     tilemap.tile_count = 0;
+    tilemap.deque = deque_create();
     for (i32 i = 0; i < TILEMAP_WIDTH * TILEMAP_WIDTH; i++) {
-        if (i % 7 == 0)
-            tilemap.map[i/TILEMAP_WIDTH][i%TILEMAP_WIDTH] = tile_create(i/TILEMAP_WIDTH, 3, i%TILEMAP_WIDTH, 0.5f, 0.5f, 0.5f), tilemap.tile_count++;
+        if (i % 7 == 0) {
+            Tile* tile = tile_create(i / TILEMAP_WIDTH, 3, i % TILEMAP_WIDTH, 0.5f, 0.5f, 0.5f);
+            tilemap.tile_count++;
+            tilemap.map[i/TILEMAP_WIDTH][i%TILEMAP_WIDTH] = tile;
+            deque_insert(&tilemap.deque, tile->node);
+        }
         else
             tilemap.map[i/TILEMAP_WIDTH][i%TILEMAP_WIDTH] = NULL;
-    }
+    }  
 }
 
 void tilemap_clear(void)
@@ -71,13 +76,12 @@ void** tilemap_vertex_data(void)
 {
     void** data_signature = malloc(sizeof(void*));
     size_t* data_size = malloc(sizeof(size_t));
+    Node* cur = tilemap.deque.head;
     *data_size = NUM_WALL_SIDES * VERTEX_COUNT * FIELD_COUNT * tilemap.tile_count * sizeof(f32);
     f32* data = malloc(*data_size);
     i32 count = 0;
-    for (i32 i = 0; i < TILEMAP_WIDTH; i++)
-        for (i32 j = 0; j < TILEMAP_WIDTH; j++)
-            if (tilemap.map[i][j] != NULL)
-                insert_vertex_data(data, tilemap.map[i][j], &count);
+    while (cur != NULL)
+        insert_vertex_data(data, cur->data, &count), cur = cur->next;
     data_signature[0] = (size_t*)data_size;
     data_signature[1] = (f32*)data;
     return data_signature;

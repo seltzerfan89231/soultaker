@@ -1,5 +1,7 @@
 #include "game.h"
 
+extern TileMap tilemap;
+
 void game_init(void)
 {
     tilemap_init();

@@ -8,5 +8,11 @@ Tile* tile_create(i32 x, i32 y, i32 z, f32 r, f32 g, f32 b)
     tile->r = r;
     tile->g = g;
     tile->b = b;
+    tile->node = node_create(tile);
     return tile;
+}
+
+void tile_destroy(Tile* tile)
+{
+
 }
