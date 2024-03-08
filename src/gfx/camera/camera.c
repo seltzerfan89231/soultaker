@@ -12,12 +12,12 @@ void camera_init(void)
     camera.rotate_speed = DEFAULT_ROTATE_SPEED;
     camera.move_speed = DEFAULT_MOVE_SPEED;
     camera.target = vec3f_create(0.0f, 0.0f, 0.0f);
-    camera_rotate(0);
+    camera_rotate(0, 0);
 }
 
-void camera_rotate(i32 dir)
+void camera_rotate(i32 dir, f32 dt)
 {
-    camera.yaw += dir * camera.rotate_speed;
+    camera.yaw += dir * dt * camera.rotate_speed;
     camera.facing.x = cos(camera.yaw) * cos(camera.pitch);
     camera.facing.y = sin(camera.pitch);
     camera.facing.z = sin(camera.yaw) * cos(camera.pitch);

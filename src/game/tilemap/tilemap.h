@@ -10,7 +10,7 @@
 typedef struct TileMap {
     Tile* map[TILEMAP_WIDTH][TILEMAP_WIDTH];
     Deque deque;
-    u32 tile_count;
+    u32 faces;
     size_t data_size;
 } TileMap;
 

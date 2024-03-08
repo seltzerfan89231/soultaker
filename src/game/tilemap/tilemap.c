@@ -2,28 +2,27 @@
 #include <gvec.h>
 #include <stdlib.h>
 
-#define NUM_WALL_SIDES 5
-#define NUM_TILE_SIDES 1
-#define VERTEX_COUNT 6
-#define FIELD_COUNT 6
-
 TileMap tilemap;
 
 void tilemap_init(void) 
 {
-    tilemap.tile_count = 0;
+    tilemap.faces = 0;
     tilemap.deque = deque_create();
     for (i32 i = 0; i < TILEMAP_WIDTH * TILEMAP_WIDTH; i++) {
         if (i % 7 == 0) {
-            Tile* tile = tile_create(i / TILEMAP_WIDTH, 3, i % TILEMAP_WIDTH, 0.5f, 0.5f, 0.5f);
-            tilemap.tile_count++;
+            Tile* tile = tile_create(i / TILEMAP_WIDTH, 3, i % TILEMAP_WIDTH, 0.5f, 0.5f, 0.5f, WALL);
+            tilemap.faces += NUM_WALL_SIDES;
             tilemap.map[i/TILEMAP_WIDTH][i%TILEMAP_WIDTH] = tile;
             deque_insert(&tilemap.deque, tile->node);
         }
-        else
-            tilemap.map[i/TILEMAP_WIDTH][i%TILEMAP_WIDTH] = NULL;
+        else {
+            Tile* tile = tile_create(i / TILEMAP_WIDTH, 0, i % TILEMAP_WIDTH, 0.7f, 0.3f, 0.2f, FLOOR);
+            tilemap.faces += NUM_FLOOR_SIDES;
+            tilemap.map[i/TILEMAP_WIDTH][i%TILEMAP_WIDTH] = tile;
+            deque_insert(&tilemap.deque, tile->node);
+        }
     }
-    tilemap.data_size = NUM_WALL_SIDES * VERTEX_COUNT * FIELD_COUNT * tilemap.tile_count * sizeof(f32);
+    tilemap.data_size = tilemap.faces * VERTEX_COUNT * FIELD_COUNT * sizeof(f32);
 }
 
 void tilemap_clear(void)

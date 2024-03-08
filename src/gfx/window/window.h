@@ -6,8 +6,8 @@
 #include <gtype.h>
 #include <gvec.h>
 
-#define DEFAULT_WINDOW_WIDTH 600
-#define DEFAULT_WINDOW_HEIGHT 600
+#define DEFAULT_WINDOW_WIDTH 1920/2
+#define DEFAULT_WINDOW_HEIGHT 1080/2
 
 typedef struct Mouse {
     vec2u position;

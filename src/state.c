@@ -37,7 +37,7 @@ static void process_input(void)
     if (move_direction.x != 0 || move_direction.y != 0)
         camera_move(move_direction, window.dt);
     if (rotation_magnitude != 0)
-        camera_rotate(rotation_magnitude);
+        camera_rotate(rotation_magnitude, window.dt);
 }
 
 void state_init(void) 
