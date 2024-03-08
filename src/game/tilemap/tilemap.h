@@ -11,12 +11,13 @@ typedef struct TileMap {
     Tile* map[TILEMAP_WIDTH][TILEMAP_WIDTH];
     Deque deque;
     u32 tile_count;
+    size_t data_size;
 } TileMap;
 
 extern TileMap tilemap;
 
 void tilemap_init(void);
 void tilemap_clear(void);
-void** tilemap_vertex_data(void);
+void tilemap_vertex_data(f32* data, i32* offset);
 
 #endif

@@ -9,11 +9,10 @@ void game_init(void)
 
 VertexData game_vertex_data(void)
 {
+    i32 offset = 0;
     VertexData vertex_data;
-    void** tilemap_data = tilemap_vertex_data();
-    vertex_data.data_size = *(size_t*)(tilemap_data[0]);
-    vertex_data.data = (f32*)(tilemap_data[1]);
-    free((size_t*)tilemap_data[0]);
-    free(tilemap_data);
+    vertex_data.data_size = tilemap.data_size;
+    vertex_data.data = malloc(vertex_data.data_size);
+    tilemap_vertex_data(vertex_data.data, &offset);
     return vertex_data;
 }
