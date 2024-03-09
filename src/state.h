@@ -3,6 +3,7 @@
 
 #include "game/game.h"
 #include "gfx/gfx.h"
+#include "camera/camera.h"
 
 void state_init(void);
 void state_loop(void);

@@ -3,7 +3,7 @@
 
 #include <gtype.h>
 #include <gvec.h>
-#include "../dll.h"
+#include "../data_structures/dll.h"
 
 #define NUM_WALL_SIDES 5
 #define NUM_FLOOR_SIDES 1
@@ -18,11 +18,10 @@ typedef struct Tile {
     vec3i pos;
     f32 r, g, b;
     tiletype type;
-    Node* node;
 } Tile;
 
 Tile* tile_create(i32 x, i32 y, i32 z, f32 r, f32 g, f32 b, tiletype type);
 void tile_destroy(Tile* tile);
-void tile_vertex_data(f32* data, Tile* tile, i32* offset);
+void tile_vertex_data(f32* buffer, Tile* tile, i32* offset);
 
 #endif

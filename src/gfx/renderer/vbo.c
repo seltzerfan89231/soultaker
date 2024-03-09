@@ -5,21 +5,14 @@ VBO vbo_create(void)
 {
     VBO vbo;
     glGenBuffers(1, &vbo.ID);
-    vbo.data_size = 0;
-    vbo.data = malloc(0);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo.ID);
+    vbo.buffer_size = 0;
+    vbo.buffer = NULL;
     return vbo;
 }
 
-void vbo_update(VBO* vbo, size_t data_size, f32* data)
+void vbo_update(VBO* vbo, size_t buffer_size)
 {
-    free(vbo->data);
-    vbo->data_size = data_size;
-    vbo->data = data;
-    glBindBuffer(GL_ARRAY_BUFFER, vbo->ID);
-    glBufferData(GL_ARRAY_BUFFER, vbo->data_size, vbo->data, GL_STATIC_DRAW);
-}
-
-void vbo_destroy(VBO vbo)
-{
-    free(vbo.data);
+    vbo->buffer_size = buffer_size;
+    glBufferData(GL_ARRAY_BUFFER, vbo->buffer_size, vbo->buffer, GL_STATIC_DRAW);
 }

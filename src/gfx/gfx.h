@@ -3,6 +3,11 @@
 
 #include "renderer/renderer.h"
 #include "window/window.h"
-#include "camera/camera.h"
+
+inline static void gfx_init(void)
+{
+    window_init();
+    renderer_init();
+}
 
 #endif

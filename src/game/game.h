@@ -3,14 +3,22 @@
 
 #include <stdlib.h>
 #include "player/player.h"
-#include "tilemap/tilemap.h"
+#include "tile/tile.h"
 
-typedef struct VertexData {
-    size_t data_size;
-    f32* data;
-} VertexData;
+#define MAP_WIDTH 100
+
+typedef struct Game {
+    f32* buffer;
+    size_t buffer_size;
+    DLL objects;
+} Game;
+
+extern Game game;
 
 void game_init(void);
-VertexData game_vertex_data(void);
+void game_clear(void);
+void game_remove(Data* data);
+void game_insert(Data* data);
+void game_destroy(void);
 
 #endif

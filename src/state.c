@@ -5,7 +5,7 @@
 extern Window window;
 extern Renderer renderer;
 extern Camera camera;
-extern Player player;
+extern Game game;
 
 static void link_camera_gfx(void) 
 {
@@ -16,10 +16,15 @@ static void link_camera_gfx(void)
     camera_update_proj();
 }
 
-static void link_camera_player(void)
+static void link_camera_game(void)
 {
     player.rotation = &camera.yaw;
     player.position = &camera.target;
+}
+
+static void link_gfx_game(void)
+{
+    renderer.vao.vbo.buffer = game.buffer;
 }
 
 static void process_input(void)
@@ -49,14 +54,12 @@ static void process_input(void)
 
 void state_init(void) 
 {
-    window_init();
-    renderer_init();
+    gfx_init();
     camera_init();
     game_init();
     link_camera_gfx();
-    link_camera_player();
-    VertexData vertex_data = game_vertex_data();
-    renderer_update(vertex_data.data_size, vertex_data.data);
+    link_camera_game();
+    link_gfx_game();
 }
 
 void state_loop(void)
@@ -74,4 +77,5 @@ void state_loop(void)
 void state_exit(void)
 {
     renderer_destroy();
+    game_destroy();
 }

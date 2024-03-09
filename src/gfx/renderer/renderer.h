@@ -15,7 +15,7 @@ typedef struct Renderer {
 extern Renderer renderer;
 
 void renderer_init(void);
-void renderer_update(size_t data_size, f32* data);
+void renderer_update(size_t buffer_size);
 void renderer_render(void);
 void renderer_destroy(void);
 
