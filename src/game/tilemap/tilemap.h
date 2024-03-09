@@ -2,14 +2,14 @@
 #define TILEMAP_H
 
 #include <gtype.h>
-#include "../deque.h"
+#include "../dll.h"
 #include "tile.h"
 
 #define TILEMAP_WIDTH 100
 
 typedef struct TileMap {
     Tile* map[TILEMAP_WIDTH][TILEMAP_WIDTH];
-    Deque deque;
+    Dll dll;
     i32 faces;
 } TileMap;
 

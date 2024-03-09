@@ -1,5 +1,4 @@
 #include "game.h"
-#include <stdio.h>
 
 extern TileMap tilemap;
 

@@ -3,7 +3,7 @@
 
 #include <gtype.h>
 #include <gvec.h>
-#include "../deque.h"
+#include "../dll.h"
 
 #define NUM_WALL_SIDES 5
 #define NUM_FLOOR_SIDES 1

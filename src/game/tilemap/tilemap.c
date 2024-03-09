@@ -7,7 +7,7 @@ TileMap tilemap;
 void tilemap_init(void) 
 {
     tilemap.faces = 0;
-    tilemap.deque = deque_create();
+    tilemap.dll = dll_create();
     for (i32 i = 0; i < TILEMAP_WIDTH * TILEMAP_WIDTH; i++) {
         if (i % 7 == 0) 
             tilemap_insert(tile_create(i / TILEMAP_WIDTH, 3, i % TILEMAP_WIDTH, 0.5f, 0.5f, 0.5f, WALL));
@@ -18,15 +18,15 @@ void tilemap_init(void)
 
 void tilemap_clear(void)
 {
-    while (!deque_empty(&tilemap.deque))
-        tilemap_remove(tilemap.deque.head->data);
+    while (!dll_empty(&tilemap.dll))
+        tilemap_remove(tilemap.dll.head->data);
 }
 
 void tilemap_remove(Tile* tile)
 {
     tilemap.faces -= tile->type == WALL ? NUM_WALL_SIDES : NUM_FLOOR_SIDES;
     tilemap.map[tile->pos.x][tile->pos.z] = NULL;
-    deque_remove(&tilemap.deque, tile->node);
+    dll_remove(&tilemap.dll, tile->node);
     tile_destroy(tile);
 }
 
@@ -35,12 +35,12 @@ void tilemap_insert(Tile* tile)
     assert(tilemap.map[tile->pos.x][tile->pos.z] == NULL);
     tilemap.faces += tile->type == WALL ? NUM_WALL_SIDES : NUM_FLOOR_SIDES;
     tilemap.map[tile->pos.x][tile->pos.z] = tile;
-    deque_append(&tilemap.deque, tile->node);
+    dll_append(&tilemap.dll, tile->node);
 }
 
 void tilemap_vertex_data(f32* data, i32* offset) 
 {
-    Node* cur = tilemap.deque.head;
+    Node* cur = tilemap.dll.head;
     while (cur != NULL)
         tile_vertex_data(data, cur->data, offset), cur = cur->next;
 }
