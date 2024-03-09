@@ -6,6 +6,7 @@ extern TileMap tilemap;
 void game_init(void)
 {
     tilemap_init();
+    player_init();
 }
 
 VertexData game_vertex_data(void)

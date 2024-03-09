@@ -5,14 +5,21 @@
 extern Window window;
 extern Renderer renderer;
 extern Camera camera;
+extern Player player;
 
-static void link_camera(void) 
+static void link_camera_gfx(void) 
 {
     camera.aspect_ratio = (float) window.size.x / window.size.y;
     camera.viewID = renderer_uniform_location("view");
     camera.projID = renderer_uniform_location("proj");
     camera_update_view();
     camera_update_proj();
+}
+
+static void link_camera_player(void)
+{
+    player.rotation = &camera.yaw;
+    player.position = &camera.target;
 }
 
 static void process_input(void)
@@ -46,7 +53,8 @@ void state_init(void)
     renderer_init();
     camera_init();
     game_init();
-    link_camera();
+    link_camera_gfx();
+    link_camera_player();
     VertexData vertex_data = game_vertex_data();
     renderer_update(vertex_data.data_size, vertex_data.data);
 }
