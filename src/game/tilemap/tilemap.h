@@ -10,8 +10,7 @@
 typedef struct TileMap {
     Tile* map[TILEMAP_WIDTH][TILEMAP_WIDTH];
     Deque deque;
-    u32 faces;
-    size_t data_size;
+    i32 faces;
 } TileMap;
 
 extern TileMap tilemap;
@@ -19,6 +18,8 @@ extern TileMap tilemap;
 void tilemap_init(void);
 void tilemap_clear(void);
 void tilemap_remove(Tile* tile);
+void tilemap_insert(Tile* tile);
 void tilemap_vertex_data(f32* data, i32* offset);
+size_t tilemap_data_size(void);
 
 #endif

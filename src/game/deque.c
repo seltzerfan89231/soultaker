@@ -45,13 +45,3 @@ void deque_remove(Deque* dq, Node* n)
     if (n->prev != NULL)
         n->prev->next = n->next;
 }
-
-Node* deque_pop(Deque* dq)
-{
-    if (dq->head != NULL) {
-        Node* ret = dq->head;
-        dq->head = ret->next;
-        return ret;
-    }
-    return NULL;
-}
