@@ -2,6 +2,7 @@
 #define DEQUE_H
 
 #include <gvec.h>
+#include <gtype.h>
 
 typedef struct Node {
     void* data;
@@ -16,7 +17,9 @@ typedef struct Deque {
 
 Node* node_create(void* data);
 Deque deque_create(void);
-void deque_insert(Deque* dq, Node* n);
+i2 deque_empty(Deque* dq);
+void deque_append(Deque* dq, Node* n);
 void deque_remove(Deque* dq, Node* n);
+Node* deque_pop(Deque* dq);
 
 #endif

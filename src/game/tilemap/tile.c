@@ -18,7 +18,7 @@ static u32 side_idxs[] = {
     6, 5, 1, 2, //+x
     3, 0, 4, 7, //-x
     2, 3, 7, 6, //+y
-    5, 4, 0, 1  //-y
+    0, 4, 5, 1  //-y
 };
 
 static u32 vertex_idxs[] = {
@@ -39,7 +39,8 @@ Tile* tile_create(i32 x, i32 y, i32 z, f32 r, f32 g, f32 b, tiletype type)
 
 void tile_destroy(Tile* tile)
 {
-
+    free(tile->node);
+    free(tile);
 }
 
 void tile_vertex_data(f32* data, Tile* tile, i32* offset)

@@ -17,7 +17,12 @@ Deque deque_create(void)
     return dq;
 }
 
-void deque_insert(Deque* dq, Node* n)
+i2 deque_empty(Deque* dq)
+{
+    return dq->head == NULL;
+}
+
+void deque_append(Deque* dq, Node* n)
 {
     if (dq->head == NULL) {
         dq->head = dq->tail = n;
@@ -31,4 +36,22 @@ void deque_insert(Deque* dq, Node* n)
 
 void deque_remove(Deque* dq, Node* n)
 {
+    if (dq->head == n)
+        dq->head = n->next;
+    if (dq->tail == n)
+        dq->tail = n->prev;
+    if (n->next != NULL)
+        n->next->prev = n->prev;
+    if (n->prev != NULL)
+        n->prev->next = n->next;
+}
+
+Node* deque_pop(Deque* dq)
+{
+    if (dq->head != NULL) {
+        Node* ret = dq->head;
+        dq->head = ret->next;
+        return ret;
+    }
+    return NULL;
 }

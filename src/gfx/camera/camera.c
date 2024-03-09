@@ -48,6 +48,6 @@ void camera_update_view(void)
 
 void camera_update_proj(void)
 {
-    ortho(camera.proj, camera.aspect_ratio, 0.1);
+    ortho(camera.proj, camera.aspect_ratio, 0.15);
     glUniformMatrix4fv(camera.projID, 1, GL_FALSE, camera.proj);
 }

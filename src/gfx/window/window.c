@@ -27,8 +27,8 @@ void window_init(void)
     glViewport(0, 0, window.size.x, window.size.y);
     glDepthFunc(GL_LESS);
     glEnable(GL_DEPTH_TEST);
-    //glEnable(GL_CULL_FACE); 
-    //glCullFace(GL_FRONT);
+    glEnable(GL_CULL_FACE); 
+    glCullFace(GL_FRONT);
 
     window.last_frame = glfwGetTime();
     window.dt = 0;

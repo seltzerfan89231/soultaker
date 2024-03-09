@@ -18,6 +18,7 @@ extern TileMap tilemap;
 
 void tilemap_init(void);
 void tilemap_clear(void);
+void tilemap_remove(Tile* tile);
 void tilemap_vertex_data(f32* data, i32* offset);
 
 #endif
