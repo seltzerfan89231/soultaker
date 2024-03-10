@@ -1,6 +1,7 @@
 #include "state.h"
 #include <stdlib.h>
 #include <stdio.h>
+#include <time.h>
 
 extern Window window;
 extern Renderer renderer;
@@ -25,6 +26,7 @@ static void link_camera_game(void)
 static void link_gfx_game(void)
 {
     renderer.vao.vbo.buffer = game.buffer;
+    renderer_update(game.buffer_length * sizeof(f32));
 }
 
 static void process_input(void)

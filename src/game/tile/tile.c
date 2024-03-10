@@ -41,19 +41,19 @@ void tile_destroy(Tile* tile)
     free(tile);
 }
 
-void tile_vertex_data(f32* buffer, Tile* tile, i32* offset)
+void tile_vertex_data(f32* buffer, Tile* tile, i32 offset)
 {
     i32 start, end;
     start = tile->type == WALL ? 0 : NUM_WALL_SIDES;
     end   = tile->type == WALL ? NUM_WALL_SIDES : NUM_WALL_SIDES + NUM_FLOOR_SIDES;
     for (i32 s = start; s < end; s++) {
         for (i32 v = 0; v < VERTEX_COUNT; v++) {
-            buffer[(*offset)++] = s_vertices[3*side_idxs[4*s+vertex_idxs[v]]]   + tile->pos.x;
-            buffer[(*offset)++] = s_vertices[3*side_idxs[4*s+vertex_idxs[v]]+1] * tile->pos.y;
-            buffer[(*offset)++] = s_vertices[3*side_idxs[4*s+vertex_idxs[v]]+2] + tile->pos.z;
-            buffer[(*offset)++] = tile->r + s * 0.1;
-            buffer[(*offset)++] = tile->g + s * 0.1;
-            buffer[(*offset)++] = tile->b + s * 0.1;
+            buffer[offset++] = s_vertices[3*side_idxs[4*s+vertex_idxs[v]]]   + tile->pos.x;
+            buffer[offset++] = s_vertices[3*side_idxs[4*s+vertex_idxs[v]]+1] * tile->pos.y;
+            buffer[offset++] = s_vertices[3*side_idxs[4*s+vertex_idxs[v]]+2] + tile->pos.z;
+            buffer[offset++] = tile->r + s * 0.1;
+            buffer[offset++] = tile->g + s * 0.1;
+            buffer[offset++] = tile->b + s * 0.1;
         }
     }
 }

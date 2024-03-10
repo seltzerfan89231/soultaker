@@ -1,18 +1,22 @@
 #include "game.h"
+#include <stdio.h>
+
+#define QUAD_DATA_LENGTH 6 * 6
 
 Game game;
 
 void game_init(void)
 {
-    game.buffer = malloc(20000 * sizeof(f32));
-    game.buffer_size = 0;
+    game.buffer_length = 0;
+    game.buffer = malloc(10000 * sizeof(f32));
     game.objects = dll_create();
-    for (i32 i = 0; i < MAP_WIDTH * MAP_WIDTH; i++) {
-        if (i % 7 == 0) 
-            game_insert(data_create(tile_create(i / MAP_WIDTH, 3, i % MAP_WIDTH, 0.5f, 0.5f, 0.5f, WALL)));
-        else
-            game_insert(data_create(tile_create(i / MAP_WIDTH, 0, i % MAP_WIDTH, 0.7f, 0.3f, 0.2f, FLOOR)));
-    }
+    game_insert(data_create(tile_create(0, 3, 0, 0.5f, 0.5f, 0.5f, WALL), 5 * QUAD_DATA_LENGTH, game.buffer_length));
+    game_insert(data_create(tile_create(2, 3, 2, 0.5f, 0.5f, 0.5f, WALL), 5 * QUAD_DATA_LENGTH, game.buffer_length));
+    game_insert(data_create(tile_create(4, 3, 4, 0.5f, 0.5f, 0.5f, WALL), 5 * QUAD_DATA_LENGTH, game.buffer_length));
+    game_remove(game.objects.head->data);
+    game_remove(game.objects.head->data);
+    game_remove(game.objects.head->data);
+    printf("%d", game.objects.head == NULL);
 }
 
 void game_clear(void)
@@ -23,13 +27,18 @@ void game_clear(void)
 
 void game_remove(Data* data)
 {
-    dll_remove(&game.objects, data->node);
+    game.buffer_length -= data->length;
+    game.objects.tail->data->offset = data->offset;
+    tile_vertex_data(game.buffer, game.objects.tail->data->obj, game.objects.tail->data->offset);
+    dll_replace(&game.objects, data->node);
     data_destroy(data);
 }
 
 void game_insert(Data* data)
 {
-    dll_push(&game.objects, dll_node_create(data));
+    game.buffer_length += data->length;
+    tile_vertex_data(game.buffer, data->obj, data->offset);
+    dll_append(&game.objects, dll_node_create(data));
 }
 
 void game_destroy(void)

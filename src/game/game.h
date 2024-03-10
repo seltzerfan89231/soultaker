@@ -7,9 +7,13 @@
 
 #define MAP_WIDTH 100
 
+typedef enum objtype {
+    TILE
+} objtype;
+
 typedef struct Game {
     f32* buffer;
-    size_t buffer_size;
+    u32 buffer_length;
     DLL objects;
 } Game;
 
