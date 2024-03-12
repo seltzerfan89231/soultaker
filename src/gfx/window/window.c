@@ -29,6 +29,7 @@ void window_init(void)
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE); 
     glCullFace(GL_FRONT);
+    // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
     window.last_frame = glfwGetTime();
     window.dt = 0;

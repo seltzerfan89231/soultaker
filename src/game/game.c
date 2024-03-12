@@ -11,12 +11,8 @@ void game_init(void)
     game.buffer = malloc(10000 * sizeof(f32));
     game.objects = dll_create();
     game_insert(data_create(tile_create(0, 3, 0, 0.5f, 0.5f, 0.5f, WALL), 5 * QUAD_DATA_LENGTH, game.buffer_length));
-    game_insert(data_create(tile_create(2, 3, 2, 0.5f, 0.5f, 0.5f, WALL), 5 * QUAD_DATA_LENGTH, game.buffer_length));
-    game_insert(data_create(tile_create(4, 3, 4, 0.5f, 0.5f, 0.5f, WALL), 5 * QUAD_DATA_LENGTH, game.buffer_length));
-    game_remove(game.objects.head->data);
-    game_remove(game.objects.head->data);
-    game_remove(game.objects.head->data);
-    printf("%d", game.objects.head == NULL);
+    game_insert(data_create(tile_create(1, 3, 0, 0.5f, 0.5f, 0.5f, WALL), 5 * QUAD_DATA_LENGTH, game.buffer_length));
+    game_insert(data_create(tile_create(0, 3, 1, 0.5f, 0.5f, 0.5f, WALL), 5 * QUAD_DATA_LENGTH, game.buffer_length));
 }
 
 void game_clear(void)
