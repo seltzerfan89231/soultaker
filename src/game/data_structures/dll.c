@@ -1,10 +1,10 @@
 #include "dll.h"
 #include <stdlib.h>
 
-Data* data_create(void* obj, u32 length, u32 offset)
+Data* data_create(void* val, u32 length, u32 offset)
 {
     Data* d = malloc(sizeof(Data));
-    d->obj = obj;
+    d->val = val;
     d->length = length;
     d->offset = offset;
     return d;
@@ -13,7 +13,6 @@ Data* data_create(void* obj, u32 length, u32 offset)
 void data_destroy(Data* d)
 {
     free(d->node);
-    free(d->obj);
     free(d);
 }
 

@@ -17,12 +17,6 @@ static void link_camera_gfx(void)
     camera_update_proj();
 }
 
-static void link_camera_game(void)
-{
-    player.rotation = &camera.yaw;
-    player.position = &camera.target;
-}
-
 static void link_gfx_game(void)
 {
     renderer.vao.vbo.buffer = game.buffer;
@@ -49,9 +43,9 @@ static void process_input(void)
         move_direction.y++;
 
     if (move_direction.x != 0 || move_direction.y != 0)
-        camera_move(move_direction, window.dt);
+        game_set_target(camera_move(move_direction, window.dt));
     if (rotation_magnitude != 0)
-        camera_rotate(rotation_magnitude, window.dt);
+        game_set_rotation(camera_rotate(rotation_magnitude, window.dt));
 }
 
 void state_init(void) 
@@ -60,7 +54,6 @@ void state_init(void)
     camera_init();
     game_init();
     link_camera_gfx();
-    link_camera_game();
     link_gfx_game();
 }
 

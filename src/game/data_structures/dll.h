@@ -7,7 +7,7 @@
 typedef struct DLLNode DLLNode;
 
 typedef struct Data {
-    void* obj;
+    void* val;
     size_t length;
     u32 offset;
     DLLNode* node;
@@ -24,7 +24,7 @@ typedef struct DLL {
     struct DLLNode* tail;
 } DLL;
 
-Data* data_create(void* obj, u32 length, u32 offset);
+Data* data_create(void* val, u32 length, u32 offset);
 void data_destroy(Data* d);
 
 DLLNode* dll_node_create(Data* d);
