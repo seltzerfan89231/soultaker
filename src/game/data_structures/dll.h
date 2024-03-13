@@ -28,6 +28,7 @@ Data* data_create(void* val, u32 length, u32 offset);
 void data_destroy(Data* d);
 
 DLLNode* dll_node_create(Data* d);
+void dll_node_destroy(DLLNode* n);
 
 DLL dll_create(void);
 i2 dll_empty(DLL* dll);

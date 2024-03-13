@@ -1,10 +1,13 @@
 #ifndef ENTITY_H
 #define ENTITY_H
 
+typedef enum entitytype { PLAYER } entitytype;
+
 typedef struct Entity {
-    int x;
+    entitytype type;
 } Entity;
 
-extern Entity entity;
+Entity* entity_create(entitytype type);
+void entity_destroy(Entity* entity);
 
 #endif

@@ -12,7 +12,7 @@ Data* data_create(void* val, u32 length, u32 offset)
 
 void data_destroy(Data* d)
 {
-    free(d->node);
+    dll_node_destroy(d->node);
     free(d);
 }
 
@@ -22,6 +22,11 @@ DLLNode* dll_node_create(Data* d)
     n->data = d, d->node = n;
     n->next = n->prev = NULL;
     return n;
+}
+
+void dll_node_destroy(DLLNode* n)
+{
+    free(n);
 }
 
 DLL dll_create(void)
