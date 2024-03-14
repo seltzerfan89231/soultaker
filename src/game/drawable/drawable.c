@@ -7,6 +7,12 @@
 #define VERTEX_COUNT 6
 #define FIELD_COUNT 6
 
+#define PI 3.141592653589
+#define HALFPI 1.57079632679
+#define BOTRIGHTDIS 0.5
+#define TOPRIGHTDIS 1.11803398875
+#define ATAN2 1.10714872
+
 static f32 vertices[] = {
     0, 0, 0,
     1, 0, 0,
@@ -39,9 +45,9 @@ static void tile_vertex_data(f32* buffer, Drawable* drawable, i32 offset)
     end   = tile->type == WALL ? NUM_WALL_SIDES : NUM_WALL_SIDES + NUM_FLOOR_SIDES;
     for (i32 s = start; s < end; s++) {
         for (i32 v = 0; v < VERTEX_COUNT; v++) {
-            buffer[offset++] = vertices[3*sides[4*s+vertex_order[v]]]   + drawable->position.x;
-            buffer[offset++] = vertices[3*sides[4*s+vertex_order[v]]+1] * drawable->position.y;
-            buffer[offset++] = vertices[3*sides[4*s+vertex_order[v]]+2] + drawable->position.z;
+            buffer[offset++] = drawable->position.x + vertices[3*sides[4*s+vertex_order[v]]];
+            buffer[offset++] = drawable->position.y * vertices[3*sides[4*s+vertex_order[v]]+1];
+            buffer[offset++] = drawable->position.z + vertices[3*sides[4*s+vertex_order[v]]+2];
             buffer[offset++] = drawable->color.x + s * 0.1;
             buffer[offset++] = drawable->color.y + s * 0.1;
             buffer[offset++] = drawable->color.z + s * 0.1;
@@ -49,15 +55,34 @@ static void tile_vertex_data(f32* buffer, Drawable* drawable, i32 offset)
     }
 }
 
-static void entity_vertex_data(f32* buffer, Drawable* drawable, i32 offset, f32 rotation)
+static void entity_vertex_data(f32* buffer, Drawable* drawable, i32 offset, f32 rotation, f32 view_angle)
 {
     for (i32 v = 0; v < VERTEX_COUNT; v++) {
-        buffer[offset++] = (vertices[3*sides[4*5+vertex_order[v]]]   + drawable->position.x) * cos(rotation);
-        buffer[offset++] = vertices[3*sides[4*5+vertex_order[v]]+1] + drawable->position.y;
-        buffer[offset++] = (vertices[3*sides[4*5+vertex_order[v]]+2] + drawable->position.z) * sin(rotation);
-        buffer[offset++] = drawable->color.x;
-        buffer[offset++] = drawable->color.y;
-        buffer[offset++] = drawable->color.z;
+        switch (vertex_order[v]) {
+            case 0:
+                buffer[offset++] = drawable->position.x + cos(rotation + HALFPI) * BOTRIGHTDIS;
+                buffer[offset++] = drawable->position.y;
+                buffer[offset++] = drawable->position.z + sin(rotation + HALFPI) * BOTRIGHTDIS;
+                break;
+            case 1:
+                buffer[offset++] = drawable->position.x + cos(rotation + HALFPI - atan(2 * cos(view_angle + HALFPI))) * sqrt(0.5*0.5+cos(view_angle + HALFPI)*cos(view_angle + HALFPI));
+                buffer[offset++] = drawable->position.y + sin(view_angle + HALFPI);
+                buffer[offset++] = drawable->position.z + sin(rotation + HALFPI - atan(2 * cos(view_angle + HALFPI))) * sqrt(0.5*0.5+cos(view_angle + HALFPI)*cos(view_angle + HALFPI));
+                break;
+            case 2:
+                buffer[offset++] = drawable->position.x + cos(rotation - HALFPI + atan(2 * cos(view_angle + HALFPI))) * sqrt(0.5*0.5+cos(view_angle + HALFPI)*cos(view_angle + HALFPI));
+                buffer[offset++] = drawable->position.y + sin(view_angle + HALFPI);
+                buffer[offset++] = drawable->position.z + sin(rotation - HALFPI + atan(2 * cos(view_angle + HALFPI))) * sqrt(0.5*0.5+cos(view_angle + HALFPI)*cos(view_angle + HALFPI));
+                break;
+            case 3:
+                buffer[offset++] = drawable->position.x + cos(rotation - HALFPI) * BOTRIGHTDIS;
+                buffer[offset++] = drawable->position.y;
+                buffer[offset++] = drawable->position.z + sin(rotation - HALFPI) * BOTRIGHTDIS;
+                break;
+        }
+        buffer[offset++] = vertex_order[v] / 3.0f;
+        buffer[offset++] = 0;
+        buffer[offset++] = 0;
     }
 }
 
@@ -71,7 +96,7 @@ Drawable* drawable_create(vec3f position, vec3f color, void* obj, objtype type)
     return drawable;
 }
 
-void drawable_vertex_data(f32* buffer, Drawable* drawable, i32 offset, f32 rotation)
+void drawable_vertex_data(f32* buffer, Drawable* drawable, i32 offset, f32 rotation, f32 view_angle)
 {
     switch(drawable->type)
     {
@@ -79,7 +104,7 @@ void drawable_vertex_data(f32* buffer, Drawable* drawable, i32 offset, f32 rotat
             tile_vertex_data(buffer, drawable, offset);
             break;
         case ENTITY:
-            entity_vertex_data(buffer, drawable, offset, rotation);
+            entity_vertex_data(buffer, drawable, offset, rotation, view_angle);
             break;
     }
 }

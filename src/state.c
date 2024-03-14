@@ -17,10 +17,10 @@ static void link_camera_gfx(void)
     camera_update_proj();
 }
 
-static void link_gfx_game(void)
+static void link_camera_game(void)
 {
-    renderer.vao.vbo.buffer = game.buffer;
-    renderer_update(game.buffer_length * sizeof(f32));
+    game.rotation = camera.yaw;
+    game.view_angle = camera.pitch;
 }
 
 static void process_input(void)
@@ -54,7 +54,7 @@ void state_init(void)
     camera_init();
     game_init();
     link_camera_gfx();
-    link_gfx_game();
+    link_camera_game();
 }
 
 void state_loop(void)
@@ -62,6 +62,7 @@ void state_loop(void)
     while (!window_closed()) 
     {
         process_input();
+        renderer_update(game.buffer_length * sizeof(f32), game.buffer);
         renderer_render();
         window_poll_events();
         window_swap_buffers();

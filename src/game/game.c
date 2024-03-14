@@ -7,7 +7,7 @@ Game game;
 
 void game_init(void)
 {
-    game.rotation = 0.8;
+    game.rotation = game.view_angle = 0;
     game.buffer_length = 0;
     game.buffer = malloc(10000 * sizeof(f32));
     game.objects = dll_create();
@@ -35,20 +35,21 @@ void game_remove(Data* data)
 void game_insert(Data* data)
 {
     game.buffer_length += data->length;
-    drawable_vertex_data(game.buffer, data->val, data->offset, game.rotation);
+    drawable_vertex_data(game.buffer, data->val, data->offset, game.rotation, game.view_angle);
     dll_append(&game.objects, dll_node_create(data));
 }
 
 void game_set_target(vec3f target)
 {
-    f32 x = target.x;
-    x = x + 1;
+    Drawable* player = game.objects.head->data->val;
+    player->position = target;
+    drawable_vertex_data(game.buffer, game.objects.head->data->val, game.objects.head->data->offset, game.rotation, game.view_angle);
 }
 
 void game_set_rotation(f32 rotation)
 {
     game.rotation = rotation;
-    drawable_vertex_data(game.buffer, game.objects.head->data->val, game.objects.head->data->offset, game.rotation);
+    drawable_vertex_data(game.buffer, game.objects.head->data->val, game.objects.head->data->offset, game.rotation, game.view_angle);
 }
 
 void game_destroy(void)

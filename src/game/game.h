@@ -11,7 +11,7 @@ typedef struct Game {
     f32* buffer;
     u32 buffer_length;
     DLL objects;
-    f32 rotation;
+    f32 rotation, view_angle;
 } Game;
 
 extern Game game;

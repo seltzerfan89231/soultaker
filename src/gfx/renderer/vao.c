@@ -16,9 +16,9 @@ VAO vao_create(u32 index_count, u32 index_size, u32* indices)
     return vao;
 }
 
-void vao_update(VAO* vao, size_t buffer_size)
+void vao_update(VAO* vao, size_t buffer_size, f32* buffer)
 {
-    vbo_update(&vao->vbo, buffer_size);
+    vbo_update(&vao->vbo, buffer_size, buffer);
     for (u32 c = 0, i = 0; i < vao->index_count; c += vao->indices[i], i++) {
         glVertexAttribPointer(i, vao->indices[i], GL_FLOAT, GL_FALSE, vao->index_size * sizeof(f32), (void*)(c * sizeof(f32)));
         glEnableVertexAttribArray(i);

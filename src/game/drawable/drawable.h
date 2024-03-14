@@ -14,7 +14,7 @@ typedef struct Drawable {
 } Drawable;
 
 Drawable* drawable_create(vec3f position, vec3f color, void* obj, objtype type);
-void drawable_vertex_data(f32* buffer, Drawable* drawable, i32 offset, f32 rotation);
+void drawable_vertex_data(f32* buffer, Drawable* drawable, i32 offset, f32 rotation, f32 view_angle);
 void drawable_destroy(Drawable* drawable);
 
 #endif
