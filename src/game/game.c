@@ -7,7 +7,8 @@ Game game;
 
 void game_init(void)
 {
-    game.rotation = game.view_angle = 0;
+    game.rotation = 0;
+    game.view_angle = -1.0471975512;
     game.buffer_length = 0;
     game.buffer = malloc(10000 * sizeof(f32));
     game.objects = dll_create();

@@ -58,6 +58,7 @@ static void tile_vertex_data(f32* buffer, Drawable* drawable, i32 offset)
 static void entity_vertex_data(f32* buffer, Drawable* drawable, i32 offset, f32 rotation, f32 view_angle)
 {
     for (i32 v = 0; v < VERTEX_COUNT; v++) {
+        f32 y_offset = (1-0.5*cos(-view_angle + HALFPI))/sin(-view_angle + HALFPI);
         switch (vertex_order[v]) {
             case 0:
                 buffer[offset++] = drawable->position.x + cos(rotation + HALFPI) * BOTRIGHTDIS;
@@ -65,14 +66,14 @@ static void entity_vertex_data(f32* buffer, Drawable* drawable, i32 offset, f32 
                 buffer[offset++] = drawable->position.z + sin(rotation + HALFPI) * BOTRIGHTDIS;
                 break;
             case 1:
-                buffer[offset++] = drawable->position.x + cos(rotation + HALFPI - atan(2 * cos(view_angle + HALFPI))) * sqrt(0.5*0.5+cos(view_angle + HALFPI)*cos(view_angle + HALFPI));
-                buffer[offset++] = drawable->position.y + sin(view_angle + HALFPI);
-                buffer[offset++] = drawable->position.z + sin(rotation + HALFPI - atan(2 * cos(view_angle + HALFPI))) * sqrt(0.5*0.5+cos(view_angle + HALFPI)*cos(view_angle + HALFPI));
+                buffer[offset++] = drawable->position.x + cos(rotation + 3 * PI / 4) * sqrt(2) * 0.5;
+                buffer[offset++] = drawable->position.y + y_offset;
+                buffer[offset++] = drawable->position.z + sin(rotation + 3 * PI / 4) * sqrt(2) * 0.5;
                 break;
             case 2:
-                buffer[offset++] = drawable->position.x + cos(rotation - HALFPI + atan(2 * cos(view_angle + HALFPI))) * sqrt(0.5*0.5+cos(view_angle + HALFPI)*cos(view_angle + HALFPI));
-                buffer[offset++] = drawable->position.y + sin(view_angle + HALFPI);
-                buffer[offset++] = drawable->position.z + sin(rotation - HALFPI + atan(2 * cos(view_angle + HALFPI))) * sqrt(0.5*0.5+cos(view_angle + HALFPI)*cos(view_angle + HALFPI));
+                buffer[offset++] = drawable->position.x + cos(rotation + 5 * PI / 4) * sqrt(2) * 0.5;
+                buffer[offset++] = drawable->position.y + y_offset;
+                buffer[offset++] = drawable->position.z + sin(rotation + 5 * PI / 4) * sqrt(2) * 0.5;
                 break;
             case 3:
                 buffer[offset++] = drawable->position.x + cos(rotation - HALFPI) * BOTRIGHTDIS;
