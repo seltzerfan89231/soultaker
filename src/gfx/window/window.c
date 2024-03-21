@@ -13,6 +13,7 @@ void window_init(void)
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    glfwWindowHint(GLFW_SAMPLES, 4);
 
     window.size = vec2u_create(DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HEIGHT);
     window.mouse.position = vec2u_create(window.size.x / 2, window.size.y / 2);
@@ -30,6 +31,7 @@ void window_init(void)
     glEnable(GL_CULL_FACE); 
     glCullFace(GL_FRONT);
     // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    glEnable(GL_MULTISAMPLE);
 
     window.last_frame = glfwGetTime();
     window.dt = 0;

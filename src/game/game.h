@@ -11,17 +11,19 @@ typedef struct Game {
     f32* buffer;
     u32 buffer_length;
     DLL objects;
-    f32 rotation, view_angle;
+    f32 rotation, tilt;
 } Game;
 
 extern Game game;
 
 void game_init(void);
+void game_setup(void);
 void game_clear(void);
 void game_remove(Data* data);
 void game_insert(Data* data);
 void game_set_target(vec3f target);
 void game_set_rotation(f32 rotation);
+void game_set_tilt(f32 tilt);
 void game_destroy(void);
 
 #endif

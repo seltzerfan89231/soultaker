@@ -20,12 +20,13 @@ static void link_camera_gfx(void)
 static void link_camera_game(void)
 {
     game.rotation = camera.yaw;
-    game.view_angle = camera.pitch;
+    game.tilt = camera.pitch;
 }
 
 static void process_input(void)
 {
     i32 rotation_magnitude = 0;
+    i32 tilt_magnitude = 0;
     vec2i move_direction = vec2i_create(0, 0);
     if (window_key_pressed(GLFW_KEY_ESCAPE))
         window_close();
@@ -41,11 +42,17 @@ static void process_input(void)
         move_direction.y--;
     if (window_key_pressed(GLFW_KEY_D))
         move_direction.y++;
+    if (window_key_pressed(GLFW_KEY_T))
+        tilt_magnitude++;
+    if (window_key_pressed(GLFW_KEY_Y))
+        tilt_magnitude--;
 
     if (move_direction.x != 0 || move_direction.y != 0)
         game_set_target(camera_move(move_direction, window.dt));
     if (rotation_magnitude != 0)
         game_set_rotation(camera_rotate(rotation_magnitude, window.dt));
+    if (tilt_magnitude != 0)
+        game_set_tilt(camera_tilt(tilt_magnitude, window.dt));
 }
 
 void state_init(void) 
@@ -59,6 +66,7 @@ void state_init(void)
 
 void state_loop(void)
 {
+    game_setup();
     while (!window_closed()) 
     {
         process_input();

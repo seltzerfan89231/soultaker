@@ -15,17 +15,28 @@ void camera_init(void)
     camera_rotate(0, 0);
 }
 
-f32 camera_rotate(i32 dir, f32 dt)
+f32 camera_rotate(i32 mag, f32 dt)
 {
-    camera.yaw += dir * dt * camera.rotate_speed;
-    camera.facing.x = cos(camera.yaw) * cos(camera.pitch);
-    camera.facing.y = sin(camera.pitch);
-    camera.facing.z = sin(camera.yaw) * cos(camera.pitch);
+    camera.yaw += mag * dt * camera.rotate_speed;
+    camera.facing.x = cos(camera.yaw) * cos(-camera.pitch);
+    camera.facing.y = sin(-camera.pitch);
+    camera.facing.z = sin(camera.yaw) * cos(-camera.pitch);
     camera.position = vec3f_add(camera.target, vec3f_scale(-DISTANCE, camera.facing));
     camera.right = vec3f_normalize(vec3f_cross(Y_AXIS, camera.facing));
     camera.up = vec3f_cross(camera.facing, camera.right);
     camera_update_view();
     return camera.yaw;
+}
+
+f32 camera_tilt(i32 mag, f32 dt)
+{
+    camera.pitch += mag * dt;
+    if (camera.pitch <= 0.3)
+        camera.pitch = 0.3;
+    if (camera.pitch >= PI / 2 - 0.3)
+        camera.pitch = PI / 2 - 0.3;
+    camera_rotate(0, 0);
+    return camera.pitch;
 }
 
 vec3f camera_move(vec2i dir, f32 dt)
