@@ -46,6 +46,8 @@ static void process_input(void)
         tilt_magnitude++;
     if (window_key_pressed(GLFW_KEY_Y))
         tilt_magnitude--;
+    if (window_key_pressed(GLFW_KEY_F))
+        game_shoot();
 
     if (move_direction.x != 0 || move_direction.y != 0)
         game_set_target(camera_move(move_direction, window.dt));
@@ -67,14 +69,18 @@ void state_init(void)
 void state_loop(void)
 {
     game_setup();
+    f32 time = glfwGetTime();
     while (!window_closed()) 
     {
         process_input();
+        game_update();
         renderer_update(game.buffer_length * sizeof(f32), game.buffer);
         renderer_render();
         window_poll_events();
         window_swap_buffers();
         window_calc_dt();
+        if (glfwGetTime() - time > 1)
+            printf("%.0f\n", window.fps), time = glfwGetTime();
     }
 }
 

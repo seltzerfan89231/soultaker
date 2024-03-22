@@ -4,6 +4,12 @@
 #include "entity/entity.h"
 #include "tile/tile.h"
 
+#define NUM_WALL_SIDES 5
+#define NUM_FLOOR_SIDES 1
+#define VERTEX_COUNT 6
+#define FIELD_COUNT 6
+#define QUAD_DATA_LENGTH VERTEX_COUNT * FIELD_COUNT
+
 typedef enum objtype { ENTITY, TILE } objtype;
 
 typedef struct Drawable {

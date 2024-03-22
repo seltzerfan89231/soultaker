@@ -1,7 +1,7 @@
 #ifndef ENTITY_H
 #define ENTITY_H
 
-typedef enum entitytype { PLAYER } entitytype;
+typedef enum entitytype { PLAYER, PROJECTILE } entitytype;
 
 typedef struct Entity {
     entitytype type;

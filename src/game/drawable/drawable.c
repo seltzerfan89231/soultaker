@@ -2,15 +2,9 @@
 #include <stdlib.h>
 #include <math.h>
 
-#define NUM_WALL_SIDES 5
-#define NUM_FLOOR_SIDES 1
-#define VERTEX_COUNT 6
-#define FIELD_COUNT 6
-
 #define PI 3.141592653589
 #define HALFPI 1.57079632679
 #define BOTRIGHTDIS 0.5
-#define TOPRIGHTDIS 1.11803398875
 #define ATAN2 1.10714872
 
 static f32 vertices[] = {
