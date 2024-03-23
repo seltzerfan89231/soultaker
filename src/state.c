@@ -74,7 +74,6 @@ void state_loop(void)
     {
         process_input();
         game_update();
-        renderer_update(game.buffer_length * sizeof(f32), game.buffer);
         renderer_render();
         window_poll_events();
         window_swap_buffers();

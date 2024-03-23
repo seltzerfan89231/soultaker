@@ -4,13 +4,13 @@
 #include <stdlib.h>
 #include "data_structures/dll.h"
 #include "drawable/drawable.h"
+#include "../gfx/renderer/renderer.h"
 
 #define MAP_WIDTH 100
 
 typedef struct Game {
     f32* buffer;
     u32 buffer_length;
-    DLL objects;
     DLL tiles;
     DLL entities;
     f32 rotation, tilt;

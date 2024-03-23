@@ -12,6 +12,7 @@ typedef struct VBO {
 } VBO;
 
 VBO vbo_create(void);
-void vbo_update(VBO* vbo, size_t buffer_size, f32* buffer);
+void vbo_update(VBO* vbo, u32 offset, size_t buffer_size, f32* buffer);
+void vbo_destroy(VBO vbo);
 
 #endif

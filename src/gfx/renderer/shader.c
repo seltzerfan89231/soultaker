@@ -73,3 +73,8 @@ void shader_use(Shader shader)
 {
     glUseProgram(shader.ID);
 }
+
+void shader_destroy(Shader shader)
+{
+    glDeleteProgram(shader.ID);
+}
