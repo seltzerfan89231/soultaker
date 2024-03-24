@@ -15,15 +15,15 @@ VAO vao_create(u32 index_count, u32 index_size, u32* indices)
     return vao;
 }
 
-void vao_update(VAO* vao, u32 offset, size_t buffer_size, f32* buffer)
+void vao_update(VAO* vao, u32 offset, size_t subdata_size, f32* subdata, u32 buffer_length)
 {
-    vbo_update(&vao->vbo, offset, buffer_size, buffer);
+    vbo_update(&vao->vbo, offset, subdata_size, subdata, buffer_length);
     
 }
 
 void vao_draw(VAO vao)
 {
-    glDrawArrays(GL_TRIANGLES, 0, vao.vbo.buffer_size / sizeof(f32) / 6);
+    glDrawArrays(GL_TRIANGLES, 0, vao.vbo.buffer_length / 6);
 }
 
 void vao_destroy(VAO vao)

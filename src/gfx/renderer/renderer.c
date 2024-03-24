@@ -13,9 +13,9 @@ void renderer_init(void)
     shader_use(renderer.shader);
 }
 
-void renderer_update(u32 offset, size_t buffer_size, f32* buffer)
+void renderer_update(u32 offset, size_t subdata_size, f32* subdata, u32 buffer_length)
 {
-    vao_update(&renderer.vao, offset, buffer_size, buffer);
+    vao_update(&renderer.vao, offset, subdata_size, subdata, buffer_length);
 }
 
 void renderer_render(void)

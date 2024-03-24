@@ -5,14 +5,16 @@
 #include <glfw.h>
 #include <gtype.h>
 
+#define MAX_BUFFER_LENGTH 10000000
+
 typedef struct VBO {
     u32 ID;
     void* buffer;
-    size_t buffer_size;
+    u32 buffer_length;
 } VBO;
 
 VBO vbo_create(void);
-void vbo_update(VBO* vbo, u32 offset, size_t buffer_size, f32* buffer);
+void vbo_update(VBO* vbo, u32 offset, size_t subdata_size, f32* subdata, u32 buffer_length);
 void vbo_destroy(VBO vbo);
 
 #endif

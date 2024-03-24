@@ -3,8 +3,6 @@
 #include <assert.h>
 #include <glfw.h>
 
-#define MAX_BUFFER_LENGTH 10000000
-
 Game game;
 Data* player;
 
@@ -33,7 +31,7 @@ void game_setup(void)
             game_insert(data_create(drawable_create(vec3f_create(i, 0, j), vec3f_create(i/100.0, j/100.0, (i+j)/100.0), tile_create(FLOOR), TILE), QUAD_DATA_LENGTH, game.buffer_length));
     player = data_create(drawable_create(vec3f_create(0, 0, 0), vec3f_create(0.5, 0.5, 0.8), entity_create(PLAYER), ENTITY), QUAD_DATA_LENGTH, game.buffer_length);
     game_insert(player);
-    renderer_update(0, game.buffer_length * sizeof(f32), game.buffer);
+    renderer_update(0, game.buffer_length * sizeof(f32), game.buffer, game.buffer_length);
 }
 
 void game_update(void)
@@ -41,7 +39,7 @@ void game_update(void)
     DLLNode* n = game.entities.head;
     while (n != NULL)
         drawable_vertex_data(game.buffer, n->data->val, n->data->offset, game.rotation, game.tilt), n = n->next;
-    renderer_update(0, game.buffer_length * sizeof(f32), game.buffer);
+    renderer_update(game.entities.head->data->offset * sizeof(f32), (game.buffer_length - game.entities.head->data->offset) * sizeof(f32), game.buffer + game.entities.head->data->offset, game.buffer_length);
 }
 
 void game_clear(void)
