@@ -5,7 +5,7 @@
 #define PI 3.141592653589
 #define HALFPI 1.57079632679
 #define BOTRIGHTDIS 0.5
-#define ATAN2 1.10714872
+#define SQRT2 1.41421356237
 
 static f32 vertices[] = {
     0, 0, 0,
@@ -31,6 +31,8 @@ static u32 vertex_order[] = {
     0, 1, 2, 0, 2, 3
 };
 
+static f32 trig[10];
+
 static void tile_vertex_data(f32* buffer, Drawable* drawable, i32 offset)
 {
     i32 start, end;
@@ -49,30 +51,32 @@ static void tile_vertex_data(f32* buffer, Drawable* drawable, i32 offset)
     }
 }
 
-static void entity_vertex_data(f32* buffer, Drawable* drawable, i32 offset, f32 rotation, f32 tilt)
+static void entity_vertex_data(f32* buffer, Drawable* drawable, i32 offset)
 {
+    f32 var = ((Entity*)drawable->obj)->scale / 2;
+    f32 var2 = var * SQRT2;
     for (i32 v = 0; v < VERTEX_COUNT; v++) {
-        f32 y_offset = (1-0.5*cos(tilt + HALFPI))/sin(tilt + HALFPI);
+        f32 y_offset = (2 - trig[0]) / trig[1] * var;
         switch (vertex_order[v]) {
             case 0:
-                buffer[offset++] = drawable->position.x + cos(rotation + HALFPI) * BOTRIGHTDIS;
+                buffer[offset++] = drawable->position.x + trig[2] * var;
                 buffer[offset++] = drawable->position.y;
-                buffer[offset++] = drawable->position.z + sin(rotation + HALFPI) * BOTRIGHTDIS;
+                buffer[offset++] = drawable->position.z + trig[3] * var;
                 break;
             case 1:
-                buffer[offset++] = drawable->position.x + cos(rotation + 3 * PI / 4) * sqrt(2) * 0.5;
+                buffer[offset++] = drawable->position.x + trig[4] * var2;
                 buffer[offset++] = drawable->position.y + y_offset;
-                buffer[offset++] = drawable->position.z + sin(rotation + 3 * PI / 4) * sqrt(2) * 0.5;
+                buffer[offset++] = drawable->position.z + trig[5] * var2;
                 break;
             case 2:
-                buffer[offset++] = drawable->position.x + cos(rotation + 5 * PI / 4) * sqrt(2) * 0.5;
+                buffer[offset++] = drawable->position.x + trig[6] * var2;
                 buffer[offset++] = drawable->position.y + y_offset;
-                buffer[offset++] = drawable->position.z + sin(rotation + 5 * PI / 4) * sqrt(2) * 0.5;
+                buffer[offset++] = drawable->position.z + trig[7] * var2;
                 break;
             case 3:
-                buffer[offset++] = drawable->position.x + cos(rotation - HALFPI) * BOTRIGHTDIS;
+                buffer[offset++] = drawable->position.x + trig[8] * var;
                 buffer[offset++] = drawable->position.y;
-                buffer[offset++] = drawable->position.z + sin(rotation - HALFPI) * BOTRIGHTDIS;
+                buffer[offset++] = drawable->position.z + trig[9] * var;
                 break;
         }
         buffer[offset++] = drawable->color.x;
@@ -91,7 +95,25 @@ Drawable* drawable_create(vec3f position, vec3f color, void* obj, objtype type)
     return drawable;
 }
 
-void drawable_vertex_data(f32* buffer, Drawable* drawable, i32 offset, f32 rotation, f32 tilt)
+void drawable_update_tilt(f32 tilt)
+{
+    trig[0] = cos(tilt + HALFPI);
+    trig[1] = sin(tilt + HALFPI);
+}
+
+void drawable_update_rotation(f32 rotation)
+{
+    trig[2] = cos(rotation + HALFPI);
+    trig[3] = sin(rotation + HALFPI);
+    trig[4] = cos(rotation + 3 * PI / 4);
+    trig[5] = sin(rotation + 3 * PI / 4);
+    trig[6] = cos(rotation + 5 * PI / 4);
+    trig[7] = sin(rotation + 5 * PI / 4);
+    trig[8] = cos(rotation - HALFPI);
+    trig[9] = sin(rotation - HALFPI);
+}
+
+void drawable_vertex_data(f32* buffer, Drawable* drawable, i32 offset)
 {
     switch(drawable->type)
     {
@@ -99,7 +121,7 @@ void drawable_vertex_data(f32* buffer, Drawable* drawable, i32 offset, f32 rotat
             tile_vertex_data(buffer, drawable, offset);
             break;
         case ENTITY:
-            entity_vertex_data(buffer, drawable, offset, rotation, tilt);
+            entity_vertex_data(buffer, drawable, offset);
             break;
     }
 }

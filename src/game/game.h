@@ -13,7 +13,6 @@ typedef struct Game {
     u32 buffer_length;
     DLL tiles;
     DLL entities;
-    f32 rotation, tilt;
 } Game;
 
 extern Game game;
@@ -23,10 +22,10 @@ void game_setup(void);
 void game_update(void);
 void game_clear(void);
 void game_remove(Data* data);
-void game_insert(Data* data);
+void game_insert(Drawable* drawable);
 void game_set_target(vec3f target);
-void game_set_rotation(f32 rotation);
-void game_set_tilt(f32 tilt);
+void game_update_rotation(f32 rotation);
+void game_update_tilt(f32 tilt);
 void game_destroy(void);
 
 void game_shoot(void);

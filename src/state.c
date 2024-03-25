@@ -19,8 +19,8 @@ static void link_camera_gfx(void)
 
 static void link_camera_game(void)
 {
-    game.rotation = camera.yaw;
-    game.tilt = camera.pitch;
+    game_update_rotation(camera.yaw);
+    game_update_tilt(camera.pitch);
 }
 
 static void process_input(void)
@@ -52,9 +52,9 @@ static void process_input(void)
     if (move_direction.x != 0 || move_direction.y != 0)
         game_set_target(camera_move(move_direction, window.dt));
     if (rotation_magnitude != 0)
-        game_set_rotation(camera_rotate(rotation_magnitude, window.dt));
+        game_update_rotation(camera_rotate(rotation_magnitude, window.dt));
     if (tilt_magnitude != 0)
-        game_set_tilt(camera_tilt(tilt_magnitude, window.dt));
+        game_update_tilt(camera_tilt(tilt_magnitude, window.dt));
 }
 
 void state_init(void) 

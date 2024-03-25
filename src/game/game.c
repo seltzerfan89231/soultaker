@@ -4,7 +4,7 @@
 #include <glfw.h>
 
 Game game;
-Data* player;
+Drawable* player;
 
 extern Renderer renderer;
 
@@ -26,19 +26,25 @@ void game_init(void)
 
 void game_setup(void)
 {
-    for (i32 i = 0; i < 10; i++)
-        for (i32 j = 0; j < 10; j++)
-            game_insert(data_create(drawable_create(vec3f_create(i, 0, j), vec3f_create(i/100.0, j/100.0, (i+j)/100.0), tile_create(FLOOR), TILE), QUAD_DATA_LENGTH, game.buffer_length));
-    player = data_create(drawable_create(vec3f_create(0, 0, 0), vec3f_create(0.5, 0.5, 0.8), entity_create(PLAYER), ENTITY), QUAD_DATA_LENGTH, game.buffer_length);
+    for (i32 i = 0; i < MAP_WIDTH; i++)
+        for (i32 j = 0; j < MAP_WIDTH; j++) {
+            if (i == 0 || i == MAP_WIDTH - 1 || j == 0 || j == MAP_WIDTH - 1)
+                game_insert(drawable_create(vec3f_create(i, 3, j), vec3f_create(i/100.0, j/100.0, 0.3), tile_create(WALL), TILE));
+            else
+                game_insert(drawable_create(vec3f_create(i, 0, j), vec3f_create(i/100.0, j/100.0, 0.3), tile_create(FLOOR), TILE));
+    }
+    player = drawable_create(vec3f_create(0, 0, 0), vec3f_create(0.5, 0.5, 0.8), entity_create(PLAYER, 1), ENTITY);
     game_insert(player);
     renderer_update(0, game.buffer_length * sizeof(f32), game.buffer, game.buffer_length);
 }
 
 void game_update(void)
 {
+    if (dll_empty(&game.entities))
+        return;
     DLLNode* n = game.entities.head;
     while (n != NULL)
-        drawable_vertex_data(game.buffer, n->data->val, n->data->offset, game.rotation, game.tilt), n = n->next;
+        drawable_vertex_data(game.buffer, n->data->val, n->data->offset), n = n->next;
     renderer_update(game.entities.head->data->offset * sizeof(f32), (game.buffer_length - game.entities.head->data->offset) * sizeof(f32), game.buffer + game.entities.head->data->offset, game.buffer_length);
 }
 
@@ -48,6 +54,7 @@ void game_clear(void)
         game_remove(game.tiles.head->data);
     while (!dll_empty(&game.entities))
         game_remove(game.entities.head->data);
+    game.buffer_length = 0;
     player = NULL;
 }
 
@@ -66,31 +73,32 @@ void game_remove(Data* data)
     data_destroy(data);
 }
 
-void game_insert(Data* data)
+void game_insert(Drawable* drawable)
 {
+    Data* data = data_create(drawable, (drawable->type == TILE && ((Tile*)drawable->obj)->type == WALL ? 5 : 1) * QUAD_DATA_LENGTH, game.buffer_length);
     game.buffer_length += data->length;
     assert(game.buffer_length < MAX_BUFFER_LENGTH);
-    if (((Drawable*)data->val)->type == TILE)
+    if (drawable->type == TILE)
         dll_append(&game.tiles, dll_node_create(data));
     else
         dll_append(&game.entities, dll_node_create(data));
-    drawable_vertex_data(game.buffer, data->val, data->offset, game.rotation, game.tilt);
+    drawable_vertex_data(game.buffer, data->val, data->offset);
 }
 
 void game_set_target(vec3f target)
 {
     assert(player != NULL);
-    ((Drawable*)player->val)->position = target;
+    player->position = target;
 }
 
-void game_set_rotation(f32 rotation)
+void game_update_rotation(f32 rotation)
 {
-    game.rotation = rotation;
+    drawable_update_rotation(rotation);
 }
 
-void game_set_tilt(f32 tilt)
+void game_update_tilt(f32 tilt)
 {
-    game.tilt = tilt;
+    drawable_update_tilt(tilt);
 }
 
 void game_destroy(void)
@@ -105,10 +113,10 @@ void game_shoot(void)
         return;
     cooldown = glfwGetTime();
     assert(player != NULL);
-    vec3f pos = ((Drawable*)player->val)->position;
+    vec3f pos = player->position;
     pos.y = 0.5;
     static int x;
     x++;
     printf("%d\n", x);
-    game_insert(data_create(drawable_create(pos, vec3f_create(0.9, 0.2, 0), entity_create(PROJECTILE), ENTITY), QUAD_DATA_LENGTH, game.buffer_length));
+    game_insert(drawable_create(pos, vec3f_create(0.9, 0.2, 0), entity_create(PROJECTILE, 0.5), ENTITY));
 }
