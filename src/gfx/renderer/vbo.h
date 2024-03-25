@@ -4,8 +4,7 @@
 #include <glad.h>
 #include <glfw.h>
 #include <gtype.h>
-
-#define MAX_BUFFER_LENGTH 1000000
+#include <constants.h>
 
 typedef struct VBO {
     u32 ID;

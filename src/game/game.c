@@ -6,8 +6,6 @@
 Game game;
 Drawable* player;
 
-extern Renderer renderer;
-
 static void buffer_remove_tile(Tile* tile, u32 offset)
 {
     i32 length = QUAD_DATA_LENGTH * (tile->type == FLOOR ? NUM_FLOOR_SIDES : NUM_WALL_SIDES);
@@ -35,7 +33,6 @@ void game_setup(void)
     }
     player = drawable_create(vec3f_create(0, 0, 0), vec3f_create(0.5, 0.5, 0.8), entity_create(PLAYER, 1), ENTITY);
     game_insert(player);
-    renderer_update(0, game.buffer_length * sizeof(f32), game.buffer, game.buffer_length);
 }
 
 void game_update(void)
@@ -45,7 +42,6 @@ void game_update(void)
     DLLNode* n = game.entities.head;
     while (n != NULL)
         drawable_vertex_data(game.buffer, n->data->val, n->data->offset), n = n->next;
-    renderer_update(game.entities.head->data->offset * sizeof(f32), (game.buffer_length - game.entities.head->data->offset) * sizeof(f32), game.buffer + game.entities.head->data->offset, game.buffer_length);
 }
 
 void game_clear(void)

@@ -6,7 +6,7 @@
 #include <math.h>
 
 #define NEAR_CLIP_DISTANCE 0.1f
-#define FAR_CLIP_DISTANCE 100.0f
+#define FAR_CLIP_DISTANCE 1000.0f
 
 inline static void view(f32 m[16], vec3f r, vec3f u, vec3f f, vec3f p)
 {
@@ -18,23 +18,6 @@ inline static void view(f32 m[16], vec3f r, vec3f u, vec3f f, vec3f p)
     m[8]  = r.z; m[9]  = u.z; m[10] = f.z; m[11] = 0.0f;
     m[12] = -k1; m[13] = -k2; m[14] = -k3; m[15] = 1.0f;
 }
-
-/*
-inline static void ortho(f32 m[16], f32 l, f32 r, f32 b, f32 t, f32 n, f32 f)
-{
-    f32 val1, val2, val3, val4, val5, val6;
-    val1 = 2 / (r - l);
-    val2 = 2 / (t - b);
-    val3 = 2 / (f - n);
-    val4 = -(r + l) / (r - l);
-    val5 = -(t + b) / (t - b);
-    val6 = -(f + n) / (f - n);
-    m[0]  = val1; m[1]  = 0.0f; m[2]  = 0.0f; m[3]  = 0.0f;
-    m[4]  = 0.0f; m[5]  = val2; m[6]  = 0.0f; m[7]  = 0.0f;
-    m[8]  = 0.0f; m[9]  = 0.0f; m[10] = val3; m[11] = 0.0f;
-    m[12] = val4; m[13] = val5; m[14] = val6; m[15] = 1.0f;
-}
-*/
 
 inline static void ortho(f32 m[16], f32 ar, f32 zoom)
 {

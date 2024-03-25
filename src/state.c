@@ -23,6 +23,18 @@ static void link_camera_game(void)
     game_update_tilt(camera.pitch);
 }
 
+static void state_setup(void)
+{
+    game_setup();
+    renderer_update(0, game.buffer_length * sizeof(f32), game.buffer, game.buffer_length);
+}
+
+static void state_update(void)
+{
+    game_update();
+    renderer_update(game.entities.head->data->offset * sizeof(f32), (game.buffer_length - game.entities.head->data->offset) * sizeof(f32), game.buffer + game.entities.head->data->offset, game.buffer_length);
+}
+
 static void process_input(void)
 {
     i32 rotation_magnitude = 0;
@@ -68,12 +80,12 @@ void state_init(void)
 
 void state_loop(void)
 {
-    game_setup();
+    state_setup();
     f32 time = glfwGetTime();
     while (!window_closed()) 
     {
         process_input();
-        game_update();
+        state_update();
         renderer_render();
         window_poll_events();
         window_swap_buffers();

@@ -3,11 +3,10 @@
 
 #include <gtype.h>
 #include <gvec.h>
+#include <constants.h>
 
 #define Y_AXIS vec3f_create(0.0f, 1.0f, 0.0f)
-#define DISTANCE 12
-#define PI 3.141592653589
-
+#define DISTANCE 100
 #define DEFAULT_PITCH PI / 3
 #define DEFAULT_ROTATE_SPEED 3
 #define DEFAULT_TILT_SPEED 3

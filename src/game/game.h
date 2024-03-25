@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include "data_structures/dll.h"
 #include "drawable/drawable.h"
-#include "../gfx/renderer/renderer.h"
+#include <constants.h>
 
 #define MAP_WIDTH 100
 

@@ -3,6 +3,7 @@
 
 #include "entity/entity.h"
 #include "tile/tile.h"
+#include <constants.h>
 
 #define NUM_WALL_SIDES 5
 #define NUM_FLOOR_SIDES 1

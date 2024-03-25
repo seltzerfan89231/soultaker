@@ -2,11 +2,6 @@
 #include <stdlib.h>
 #include <math.h>
 
-#define PI 3.141592653589
-#define HALFPI 1.57079632679
-#define BOTRIGHTDIS 0.5
-#define SQRT2 1.41421356237
-
 static f32 vertices[] = {
     0, 0, 0,
     1, 0, 0,
