@@ -108,9 +108,17 @@ void drawable_update_rotation(f32 rotation)
     trig[9] = sin(rotation - HALFPI);
 }
 
+void drawable_update(Drawable* drawable, f32 dt)
+{
+    if (drawable->type == ENTITY) {
+        Entity* entity = drawable->obj;
+        drawable->position = vec3f_add(drawable->position, vec3f_scale(dt * entity->speed, entity->direction));
+    }
+}
+
 void drawable_vertex_data(f32* buffer, Drawable* drawable, i32 offset)
 {
-    switch(drawable->type)
+    switch (drawable->type)
     {
         case TILE:
             tile_vertex_data(buffer, drawable, offset);

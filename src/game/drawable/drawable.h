@@ -23,6 +23,7 @@ typedef struct Drawable {
 Drawable* drawable_create(vec3f position, vec3f color, void* obj, objtype type);
 void drawable_update_tilt(f32 tilt);
 void drawable_update_rotation(f32 rotation);
+void drawable_update(Drawable* drawable, f32 dt);
 void drawable_vertex_data(f32* buffer, Drawable* drawable, i32 offset);
 void drawable_destroy(Drawable* drawable);
 

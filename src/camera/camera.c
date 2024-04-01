@@ -4,20 +4,8 @@
 
 Camera camera;
 
-void camera_init(void)
+static void camera_update(void)
 {
-    camera.yaw = DEFAULT_YAW;
-    camera.pitch = DEFAULT_PITCH;
-    camera.fov = DEFAULT_FOV;
-    camera.rotate_speed = DEFAULT_ROTATE_SPEED;
-    camera.move_speed = DEFAULT_MOVE_SPEED;
-    camera.target = vec3f_create(0.0f, 0.0f, 0.0f);
-    camera_rotate(0, 0);
-}
-
-f32 camera_rotate(i32 mag, f32 dt)
-{
-    camera.yaw += mag * dt * camera.rotate_speed;
     camera.facing.x = cos(camera.yaw) * cos(-camera.pitch);
     camera.facing.y = sin(-camera.pitch);
     camera.facing.z = sin(camera.yaw) * cos(-camera.pitch);
@@ -25,6 +13,24 @@ f32 camera_rotate(i32 mag, f32 dt)
     camera.right = vec3f_normalize(vec3f_cross(Y_AXIS, camera.facing));
     camera.up = vec3f_cross(camera.facing, camera.right);
     camera_update_view();
+}
+
+void camera_init(void)
+{
+    camera.yaw = DEFAULT_YAW;
+    camera.pitch = DEFAULT_PITCH;
+    camera.fov = DEFAULT_FOV;
+    camera.rotate_speed = DEFAULT_ROTATE_SPEED;
+    camera.move_speed = DEFAULT_MOVE_SPEED;
+    camera.zoom = DEFAULT_ZOOM;
+    camera.target = vec3f_create(0.0f, 0.0f, 0.0f);
+    camera_update();
+}
+
+f32 camera_rotate(i32 mag, f32 dt)
+{
+    camera.yaw += mag * dt * camera.rotate_speed;
+    camera_update();
     return camera.yaw;
 }
 
@@ -35,7 +41,7 @@ f32 camera_tilt(i32 mag, f32 dt)
         camera.pitch = 0.3;
     if (camera.pitch >= PI / 2 - 0.3)
         camera.pitch = PI / 2 - 0.3;
-    camera_rotate(0, 0);
+    camera_update();
     return camera.pitch;
 }
 
@@ -61,6 +67,6 @@ void camera_update_view(void)
 
 void camera_update_proj(void)
 {
-    ortho(camera.proj, camera.aspect_ratio, 0.05);
+    ortho(camera.proj, camera.aspect_ratio, camera.zoom);
     glUniformMatrix4fv(camera.projID, 1, GL_FALSE, camera.proj);
 }

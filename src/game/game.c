@@ -31,17 +31,17 @@ void game_setup(void)
             else
                 game_insert(drawable_create(vec3f_create(i, 0, j), vec3f_create(i/100.0, j/100.0, 0.3), tile_create(FLOOR), TILE));
     }
-    player = drawable_create(vec3f_create(0, 0, 0), vec3f_create(0.5, 0.5, 0.8), entity_create(PLAYER, 1), ENTITY);
+    player = drawable_create(vec3f_create(0, 0, 0), vec3f_create(0.5, 0.9, 0.2), entity_create(PLAYER, 1), ENTITY);
     game_insert(player);
 }
 
-void game_update(void)
+void game_update(f32 dt)
 {
     if (dll_empty(&game.entities))
         return;
     DLLNode* n = game.entities.head;
     while (n != NULL)
-        drawable_vertex_data(game.buffer, n->data->val, n->data->offset), n = n->next;
+        drawable_update(n->data->val, dt), drawable_vertex_data(game.buffer, n->data->val, n->data->offset), n = n->next;
 }
 
 void game_clear(void)
@@ -89,12 +89,12 @@ void game_set_target(vec3f target)
 
 void game_update_rotation(f32 rotation)
 {
-    drawable_update_rotation(rotation);
+    drawable_update_rotation(game.rotation = rotation);
 }
 
 void game_update_tilt(f32 tilt)
 {
-    drawable_update_tilt(tilt);
+    drawable_update_tilt(game.tilt = tilt);
 }
 
 void game_destroy(void)
@@ -102,17 +102,20 @@ void game_destroy(void)
     free(game.buffer);
 }
 
-void game_shoot(void)
+void game_shoot(vec2f dir)
 {
-    static int cooldown;
-    if (glfwGetTime() - cooldown < 0)
+    static f32 cooldown;
+    if (glfwGetTime() - cooldown < 0.1)
         return;
     cooldown = glfwGetTime();
     assert(player != NULL);
-    vec3f pos = player->position;
-    pos.y = 0.5;
-    static int x;
-    x++;
-    printf("%d\n", x);
-    game_insert(drawable_create(pos, vec3f_create(0.9, 0.2, 0), entity_create(PROJECTILE, 0.5), ENTITY));
+    Entity* proj = entity_create(PROJECTILE, 0.5);
+    proj->speed = 5;
+    f32 dirx, dirz;
+    dirx = dir.x * cos(game.rotation - HALFPI) - -dir.y * sin(game.rotation - HALFPI);
+    dirz = dir.x * sin(game.rotation - HALFPI) + -dir.y * cos(game.rotation - HALFPI);
+    proj->direction = vec3f_normalize(vec3f_create(dirx, 0, dirz));
+    vec3f start = player->position;
+    start.y = 0.5;
+    game_insert(drawable_create(start, vec3f_create(0.9, 0.2, 0), proj, ENTITY));
 }

@@ -10,9 +10,9 @@
 
 inline static void view(f32 m[16], vec3f r, vec3f u, vec3f f, vec3f p)
 {
-    float k1 = p.x * r.x + p.y * r.y + p.z * r.z;
-    float k2 = p.x * u.x + p.y * u.y + p.z * u.z;
-    float k3 = p.x * f.x + p.y * f.y + p.z * f.z;
+    f32 k1 = p.x * r.x + p.y * r.y + p.z * r.z;
+    f32 k2 = p.x * u.x + p.y * u.y + p.z * u.z;
+    f32 k3 = p.x * f.x + p.y * f.y + p.z * f.z;
     m[0]  = r.x; m[1]  = u.x; m[2]  = f.x; m[3]  = 0.0f;
     m[4]  = r.y; m[5]  = u.y; m[6]  = f.y; m[7]  = 0.0f;
     m[8]  = r.z; m[9]  = u.z; m[10] = f.z; m[11] = 0.0f;

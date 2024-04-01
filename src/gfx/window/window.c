@@ -15,10 +15,14 @@ void window_init(void)
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_SAMPLES, 4);
 
-    window.size = vec2u_create(DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HEIGHT);
-    window.mouse.position = vec2u_create(window.size.x / 2, window.size.y / 2);
+    window.size = vec2f_create(DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HEIGHT);
+    window.mouse.position = vec2f_create(window.size.x / 2, window.size.y / 2);
     window.handle = glfwCreateWindow(window.size.x, window.size.y, "untitled", NULL, NULL);
     glfwMakeContextCurrent(window.handle);
+
+    window.mouse.left = UP;
+    window.mouse.middle = UP;
+    window.mouse.right = UP;
 
     glfwSetFramebufferSizeCallback(window.handle, framebuffer_size_callback);
     glfwSetMouseButtonCallback(window.handle, mouse_button_callback);
@@ -48,8 +52,43 @@ void window_calc_dt(void)
 }
 
 void framebuffer_size_callback() {}
-void mouse_button_callback() {}
-void mouse_callback() {}
+
+void mouse_button_callback(GLFWwindow* handle, int button, int action)
+{
+    if (handle != window.handle)
+        return;
+    if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
+        window.mouse.left = DOWN;
+    if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_RELEASE)
+        window.mouse.left = UP;
+}
+
+void mouse_callback(GLFWwindow* handle, double xpos, double ypos)
+{
+    if (handle != window.handle)
+        return;
+    window.mouse.position.x = xpos;
+    window.mouse.position.y = ypos;
+}
+
+vec2f window_mouse_direction(void)
+{
+    return vec2f_normalize(vec2f_sub(window.mouse.position, vec2f_scale(0.5, window.size)));
+}
+
+i2 window_mouse_button_pressed(mousebutton mb)
+{
+    switch (mb) 
+    {
+        case MOUSE_LEFT:
+            return window.mouse.left == DOWN;
+        case MOUSE_MIDDLE:
+            return window.mouse.middle == DOWN;
+        case MOUSE_RIGHT:
+            return window.mouse.right == DOWN;
+    }
+    return UP;
+}
 
 /* abstractions */
 i2 window_closed(void) { return glfwWindowShouldClose(window.handle); }

@@ -31,7 +31,7 @@ static void state_setup(void)
 
 static void state_update(void)
 {
-    game_update();
+    game_update(window.dt);
     renderer_update(game.entities.head->data->offset * sizeof(f32), (game.buffer_length - game.entities.head->data->offset) * sizeof(f32), game.buffer + game.entities.head->data->offset, game.buffer_length);
 }
 
@@ -58,8 +58,8 @@ static void process_input(void)
         tilt_magnitude++;
     if (window_key_pressed(GLFW_KEY_Y))
         tilt_magnitude--;
-    if (window_key_pressed(GLFW_KEY_F))
-        game_shoot();
+    if (window_mouse_button_pressed(MOUSE_LEFT))
+        game_shoot(window_mouse_direction());
 
     if (move_direction.x != 0 || move_direction.y != 0)
         game_set_target(camera_move(move_direction, window.dt));
@@ -91,7 +91,7 @@ void state_loop(void)
         window_swap_buffers();
         window_calc_dt();
         if (glfwGetTime() - time > 1)
-            printf("%.0f\n", window.fps), time = glfwGetTime();
+            printf("%d, %.0f\n", window.mouse.left, window.fps), time = glfwGetTime();
     }
 }
 

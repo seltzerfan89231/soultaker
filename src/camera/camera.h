@@ -13,9 +13,10 @@
 #define DEFAULT_MOVE_SPEED 8
 #define DEFAULT_YAW 0
 #define DEFAULT_FOV PI/4
+#define DEFAULT_ZOOM 0.1
 
 typedef struct Camera {
-    f32 yaw, pitch, aspect_ratio, fov, rotate_speed, move_speed;
+    f32 yaw, pitch, aspect_ratio, fov, rotate_speed, move_speed, zoom;
     f32 view[16], proj[16];
     vec3f target, position, facing, right, up;
     u8 viewID, projID;

@@ -32,6 +32,14 @@
         return ret; \
     }
 
+#define _VEC2_SCALE(_type) \
+    static inline vec2##_type vec2##_type##_scale(_type##32 s, vec2##_type vec) { \
+        vec2##_type ret; \
+        ret.x = vec.x * s; \
+        ret.y = vec.y * s; \
+        return ret; \
+    }
+
 #define _VEC2_MAG(_type) \
     static inline f32 vec2##_type##_mag(vec2##_type vec) { \
         return sqrt(vec.x*vec.x + vec.y*vec.y); \
@@ -64,6 +72,10 @@ _VEC2_ADD(i)
 _VEC2_SUB(u)
 _VEC2_SUB(f)
 _VEC2_SUB(i)
+
+_VEC2_SCALE(u)
+_VEC2_SCALE(f)
+_VEC2_SCALE(i)
 
 _VEC2_MAG(u)
 _VEC2_MAG(f)
