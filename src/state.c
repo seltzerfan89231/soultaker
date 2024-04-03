@@ -39,6 +39,7 @@ static void process_input(void)
 {
     i32 rotation_magnitude = 0;
     i32 tilt_magnitude = 0;
+    i32 zoom_magnitude = 0;
     vec2i move_direction = vec2i_create(0, 0);
     if (window_key_pressed(GLFW_KEY_ESCAPE))
         window_close();
@@ -58,6 +59,10 @@ static void process_input(void)
         tilt_magnitude++;
     if (window_key_pressed(GLFW_KEY_Y))
         tilt_magnitude--;
+    if (window_key_pressed(GLFW_KEY_O))
+        zoom_magnitude++;
+    if (window_key_pressed(GLFW_KEY_P))
+        zoom_magnitude--;
     if (window_mouse_button_pressed(MOUSE_LEFT))
         game_shoot(window_mouse_direction());
 
@@ -67,6 +72,8 @@ static void process_input(void)
         game_update_rotation(camera_rotate(rotation_magnitude, window.dt));
     if (tilt_magnitude != 0)
         game_update_tilt(camera_tilt(tilt_magnitude, window.dt));
+    if (zoom_magnitude != 0)
+        camera_zoom(zoom_magnitude, window.dt);
 }
 
 void state_init(void) 
@@ -90,7 +97,7 @@ void state_loop(void)
         window_poll_events();
         window_swap_buffers();
         window_calc_dt();
-        if (glfwGetTime() - time > 1)
+        if (glfwGetTime() - time > 1000)
             printf("%d, %.0f\n", window.mouse.left, window.fps), time = glfwGetTime();
     }
 }
