@@ -6,8 +6,6 @@
 #include <gtype.h>
 #include "vbo.h"
 
-typedef enum buffertype { DRAWABLE = 0, GUI = 1 } buffertype;
-
 typedef struct VAO {
     u32 ID, vertex_length;
     VBO vbo;

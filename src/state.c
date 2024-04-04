@@ -4,9 +4,12 @@
 #include <time.h>
 
 static f32 vertices[] = {
-    -0.5f, -0.5f, 0.0f, 0.0f, 0.6f,
-     0.5f, -0.5f, 0.0f, 0.0f, 0.6f,
-     0.0f,  0.5f, 0.0f, 0.0f, 0.6f
+     -1.0f, 0.95f, 0.0f, 0.0f, 0.6f,
+     -1.0f, 1.0f, 0.0f, 0.0f, 0.6f,
+    -0.85f, 0.95f, 0.0f, 0.0f, 0.6f,
+     -1.0f, 1.0f, 0.0f, 0.0f, 0.6f,
+     -0.85f, 1.0f, 0.0f, 0.0f, 0.6f,
+     -0.85f,  0.95f, 0.0f, 0.0f, 0.6f
 };
 
 extern Window window;
@@ -89,8 +92,7 @@ void state_loop(void)
 {
     state_setup();
     f32 time = glfwGetTime();
-    while (!window_closed()) 
-    {
+    while (!window_closed()) {
         process_input();
         state_update();
         renderer_render();

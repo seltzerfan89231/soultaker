@@ -7,20 +7,18 @@ VAO vao_create(buffertype type)
     VAO vao;
     glGenVertexArrays(1, &vao.ID);
     glBindVertexArray(vao.ID);
-    vao.vbo = vbo_create();
+    vao.vbo = vbo_create(type);
     if (type == DRAWABLE) {
         vao.vertex_length = 6;
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(f32), (void*)(0));
-        glEnableVertexAttribArray(0);
         glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(f32), (void*)(3 * sizeof(f32)));
-        glEnableVertexAttribArray(1);
     } else if (type == GUI) {
         vao.vertex_length = 5;
         glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(f32), (void*)(0));
-        glEnableVertexAttribArray(0);
         glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(f32), (void*)(2 * sizeof(f32)));
-        glEnableVertexAttribArray(1);
     }
+    glEnableVertexAttribArray(0);
+    glEnableVertexAttribArray(1);
     return vao;
 }
 

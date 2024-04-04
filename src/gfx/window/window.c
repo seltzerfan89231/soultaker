@@ -1,5 +1,6 @@
 #include "window.h"
 #include <stdbool.h>
+#include <assert.h>
 
 Window window;
 
@@ -55,8 +56,7 @@ void framebuffer_size_callback() {}
 
 void mouse_button_callback(GLFWwindow* handle, int button, int action)
 {
-    if (handle != window.handle)
-        return;
+    assert(handle == window.handle);
     if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
         window.mouse.left = DOWN;
     if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_RELEASE)
@@ -65,8 +65,7 @@ void mouse_button_callback(GLFWwindow* handle, int button, int action)
 
 void mouse_callback(GLFWwindow* handle, double xpos, double ypos)
 {
-    if (handle != window.handle)
-        return;
+    assert(handle == window.handle);
     window.mouse.position.x = xpos;
     window.mouse.position.y = ypos;
 }

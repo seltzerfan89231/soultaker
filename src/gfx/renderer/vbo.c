@@ -3,13 +3,16 @@
 #include <stdlib.h>
 #include <assert.h>
 
-VBO vbo_create(void)
+VBO vbo_create(buffertype type)
 {
     VBO vbo;
     glGenBuffers(1, &vbo.ID);
     glBindBuffer(GL_ARRAY_BUFFER, vbo.ID);
     vbo.buffer_length = 0;
-    glBufferData(GL_ARRAY_BUFFER, MAX_BUFFER_LENGTH * sizeof(f32), NULL, GL_DYNAMIC_DRAW);
+    if (type == DRAWABLE)
+        glBufferData(GL_ARRAY_BUFFER, MAX_BUFFER_LENGTH * sizeof(f32), NULL, GL_DYNAMIC_DRAW);
+    else
+        glBufferData(GL_ARRAY_BUFFER, MAX_BUFFER_LENGTH * sizeof(f32), NULL, GL_STATIC_DRAW);
     return vbo;
 }
 
@@ -18,6 +21,9 @@ void vbo_update(VBO* vbo, u32 offset, size_t subdata_size, f32* subdata, u32 buf
     assert(buffer_length < MAX_BUFFER_LENGTH);
     glBindBuffer(GL_ARRAY_BUFFER, vbo->ID);
     vbo->buffer_length = buffer_length;
+    if (buffer_length == 15)
+        for (int i = 0; i < 15; i++)
+            printf(i % 5 == 4 ? "%f\n" : "%f ", subdata[i]);
     glBufferSubData(GL_ARRAY_BUFFER, offset, subdata_size, subdata);
 }
 

@@ -19,12 +19,15 @@ void renderer_render(void)
 {
     glClearColor(0.6f, 0.7f, 0.95f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    shader_use(renderer.shaders[DRAWABLE]);
+    glEnable(GL_DEPTH_TEST);
+    vao_bind(renderer.vaos[DRAWABLE]);
+    vao_draw(renderer.vaos[DRAWABLE]);
+    glDisable(GL_DEPTH_TEST);
     shader_use(renderer.shaders[GUI]);
     vao_bind(renderer.vaos[GUI]);
     vao_draw(renderer.vaos[GUI]);
     shader_use(renderer.shaders[DRAWABLE]);
-    vao_bind(renderer.vaos[DRAWABLE]);
-    vao_draw(renderer.vaos[DRAWABLE]);
 }
 
 void renderer_destroy(void)
