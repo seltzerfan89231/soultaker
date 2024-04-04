@@ -4,7 +4,7 @@
 
 Camera camera;
 
-static void camera_update_vectors(void)
+static void camera_update(void)
 {
     camera.facing.x = cos(camera.yaw) * cos(-camera.pitch);
     camera.facing.y = sin(-camera.pitch);
@@ -22,16 +22,15 @@ void camera_init(void)
     camera.fov = DEFAULT_FOV;
     camera.rotate_speed = DEFAULT_ROTATE_SPEED;
     camera.move_speed = DEFAULT_MOVE_SPEED;
-    camera.zoom_speed = DEFAULT_ZOOM_SPEED;
     camera.zoom = DEFAULT_ZOOM;
     camera.target = vec3f_create(0.0f, 0.0f, 0.0f);
-    camera_update_vectors();
+    camera_update();
 }
 
 f32 camera_rotate(i32 mag, f32 dt)
 {
     camera.yaw += mag * dt * camera.rotate_speed;
-    camera_update_vectors();
+    camera_update();
     return camera.yaw;
 }
 
@@ -42,16 +41,8 @@ f32 camera_tilt(i32 mag, f32 dt)
         camera.pitch = 0.3;
     if (camera.pitch >= PI / 2 - 0.3)
         camera.pitch = PI / 2 - 0.3;
-    camera_update_vectors();
+    camera_update();
     return camera.pitch;
-}
-
-void camera_zoom(i32 mag, f32 dt)
-{
-    camera.zoom += mag * dt * camera.zoom_speed;
-    if (camera.zoom < 0.01)
-        camera.zoom = 0.01;
-    camera_update_proj();
 }
 
 vec3f camera_move(vec2i dir, f32 dt)

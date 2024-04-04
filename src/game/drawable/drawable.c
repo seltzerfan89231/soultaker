@@ -102,8 +102,8 @@ void drawable_update_rotation(f32 rotation)
     trig[3] = sin(rotation + HALFPI);
     trig[4] = cos(rotation + 3 * PI / 4);
     trig[5] = sin(rotation + 3 * PI / 4);
-    trig[6] = cos(rotation - 3 * PI / 4);
-    trig[7] = sin(rotation - 3 * PI / 4);
+    trig[6] = cos(rotation + 5 * PI / 4);
+    trig[7] = sin(rotation + 5 * PI / 4);
     trig[8] = cos(rotation - HALFPI);
     trig[9] = sin(rotation - HALFPI);
 }
