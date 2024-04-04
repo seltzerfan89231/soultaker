@@ -2,9 +2,10 @@
 #define GAME_H
 
 #include <stdlib.h>
+#include <constants.h>
 #include "data_structures/dll.h"
 #include "drawable/drawable.h"
-#include <constants.h>
+#include "gui/gui.h"
 
 #define MAP_WIDTH 100
 

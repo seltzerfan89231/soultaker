@@ -8,7 +8,6 @@
 
 typedef struct VBO {
     u32 ID;
-    void* buffer;
     u32 buffer_length;
 } VBO;
 

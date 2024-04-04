@@ -3,6 +3,12 @@
 #include <stdio.h>
 #include <time.h>
 
+static f32 vertices[] = {
+    -0.5f, -0.5f, 0.0f, 0.0f, 0.6f,
+     0.5f, -0.5f, 0.0f, 0.0f, 0.6f,
+     0.0f,  0.5f, 0.0f, 0.0f, 0.6f
+};
+
 extern Window window;
 extern Renderer renderer;
 extern Camera camera;
@@ -11,8 +17,8 @@ extern Game game;
 static void link_camera_gfx(void) 
 {
     camera.aspect_ratio = (float) window.size.x / window.size.y;
-    camera.viewID = renderer_uniform_location("view");
-    camera.projID = renderer_uniform_location("proj");
+    camera.viewID = renderer_uniform_location("view", DRAWABLE);
+    camera.projID = renderer_uniform_location("proj", DRAWABLE);
     camera_update_view();
     camera_update_proj();
 }
@@ -26,13 +32,14 @@ static void link_camera_game(void)
 static void state_setup(void)
 {
     game_setup();
-    renderer_update(0, game.buffer_length * sizeof(f32), game.buffer, game.buffer_length);
+    renderer_update(0, game.buffer_length * sizeof(f32), game.buffer, game.buffer_length, DRAWABLE);
+    renderer_update(0, sizeof(vertices), vertices, sizeof(vertices) / sizeof(f32), GUI);
 }
 
 static void state_update(void)
 {
     game_update(window.dt);
-    renderer_update(game.entities.head->data->offset * sizeof(f32), (game.buffer_length - game.entities.head->data->offset) * sizeof(f32), game.buffer + game.entities.head->data->offset, game.buffer_length);
+    renderer_update(game.entities.head->data->offset * sizeof(f32), (game.buffer_length - game.entities.head->data->offset) * sizeof(f32), game.buffer + game.entities.head->data->offset, game.buffer_length, DRAWABLE);
 }
 
 static void process_input(void)
