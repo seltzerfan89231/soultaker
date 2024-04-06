@@ -8,6 +8,9 @@ void renderer_init(void)
     renderer.shaders[GUI] = shader_create("src/shaders/gui_vertex.sl", "src/shaders/gui_fragment.sl");
     renderer.vaos[DRAWABLE] = vao_create(DRAWABLE);
     renderer.vaos[GUI] = vao_create(GUI);
+    renderer.spritesheet = texture_create("assets/spritesheet.png");
+    glUniform1i(renderer_uniform_location("tex", DRAWABLE), renderer.spritesheet.ID);
+    texture_bind(renderer.spritesheet);
 }
 
 void renderer_update(u32 offset, size_t subdata_size, f32* subdata, u32 buffer_length, buffertype type)

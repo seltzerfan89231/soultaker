@@ -27,11 +27,11 @@ void game_setup(void)
     for (i32 i = 0; i < MAP_WIDTH; i++)
         for (i32 j = 0; j < MAP_WIDTH; j++) {
             if (i == 0 || i == MAP_WIDTH - 1 || j == 0 || j == MAP_WIDTH - 1)
-                game_insert(drawable_create(vec3f_create(i, 3, j), vec3f_create(i/100.0, j/100.0, 0.3), tile_create(WALL), TILE));
+                game_insert(drawable_create(vec3f_create(i, 3, j), vec2f_create(0.25, 0), tile_create(WALL), TILE));
             else
-                game_insert(drawable_create(vec3f_create(i, 0, j), vec3f_create(i/100.0, j/100.0, 0.3), tile_create(FLOOR), TILE));
+                game_insert(drawable_create(vec3f_create(i, 0, j), vec2f_create(0.25, 0), tile_create(FLOOR), TILE));
     }
-    player = drawable_create(vec3f_create(0, 0, 0), vec3f_create(0.5, 0.9, 0.2), entity_create(PLAYER, 1), ENTITY);
+    player = drawable_create(vec3f_create(0, 0, 0), vec2f_create(0, 0), entity_create(PLAYER, 1), ENTITY);
     game_insert(player);
 }
 
@@ -117,5 +117,5 @@ void game_shoot(vec2f dir)
     proj->direction = vec3f_normalize(vec3f_create(dirx, 0, dirz));
     vec3f start = player->position;
     start.y = 0.5;
-    game_insert(drawable_create(start, vec3f_create(0.9, 0.2, 0), proj, ENTITY));
+    game_insert(drawable_create(start, vec2f_create(0.5, 0), proj, ENTITY));
 }

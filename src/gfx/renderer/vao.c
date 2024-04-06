@@ -9,9 +9,9 @@ VAO vao_create(buffertype type)
     glBindVertexArray(vao.ID);
     vao.vbo = vbo_create(type);
     if (type == DRAWABLE) {
-        vao.vertex_length = 6;
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(f32), (void*)(0));
-        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(f32), (void*)(3 * sizeof(f32)));
+        vao.vertex_length = 5;
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(f32), (void*)(0));
+        glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(f32), (void*)(3 * sizeof(f32)));
     } else if (type == GUI) {
         vao.vertex_length = 5;
         glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(f32), (void*)(0));

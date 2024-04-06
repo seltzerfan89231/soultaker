@@ -22,6 +22,13 @@ static u32 sides[] = {
     0, 4, 5, 1  //-y
 };
 
+static u32 tex[] = {
+    0, 0,
+    0, 1,
+    1, 1,
+    1, 0
+};
+
 static u32 vertex_order[] = {
     0, 1, 2, 0, 2, 3
 };
@@ -39,9 +46,8 @@ static void tile_vertex_data(f32* buffer, Drawable* drawable, i32 offset)
             buffer[offset++] = drawable->position.x + vertices[3*sides[4*s+vertex_order[v]]];
             buffer[offset++] = drawable->position.y * vertices[3*sides[4*s+vertex_order[v]]+1];
             buffer[offset++] = drawable->position.z + vertices[3*sides[4*s+vertex_order[v]]+2];
-            buffer[offset++] = drawable->color.x + s * 0.1;
-            buffer[offset++] = drawable->color.y + s * 0.1;
-            buffer[offset++] = drawable->color.z + s * 0.1;
+            buffer[offset++] = drawable->tex.x + tex[2*vertex_order[v]] * 0.25;
+            buffer[offset++] = drawable->tex.y + tex[2*vertex_order[v]+1] * 0.25;
         }
     }
 }
@@ -74,17 +80,16 @@ static void entity_vertex_data(f32* buffer, Drawable* drawable, i32 offset)
                 buffer[offset++] = drawable->position.z + trig[9] * var;
                 break;
         }
-        buffer[offset++] = drawable->color.x;
-        buffer[offset++] = drawable->color.y;
-        buffer[offset++] = drawable->color.z;
+        buffer[offset++] = drawable->tex.x + tex[2*vertex_order[v]] * 0.25;
+        buffer[offset++] = drawable->tex.y + tex[2*vertex_order[v]+1] * 0.25;
     }
 }
 
-Drawable* drawable_create(vec3f position, vec3f color, void* obj, objtype type)
+Drawable* drawable_create(vec3f position, vec2f tex, void* obj, objtype type)
 {
     Drawable* drawable = malloc(sizeof(Drawable));
     drawable->position = position;
-    drawable->color = color;
+    drawable->tex = tex;
     drawable->obj = obj;
     drawable->type = type;
     return drawable;

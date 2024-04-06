@@ -45,6 +45,16 @@ f32 camera_tilt(i32 mag, f32 dt)
     return camera.pitch;
 }
 
+void camera_zoom(i32 mag, f32 dt)
+{
+    camera.zoom += mag * dt;
+    if (camera.zoom < 0.1)
+        camera.zoom = 0.1;
+    if (camera.zoom > 0.5)
+        camera.zoom = 0.5;
+    camera_update_proj();
+}
+
 vec3f camera_move(vec2i dir, f32 dt)
 {
     vec3f vec, offset;

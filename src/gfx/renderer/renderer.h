@@ -6,10 +6,12 @@
 #include "vao.h"
 #include "vbo.h"
 #include "shader.h"
+#include "texture.h"
 
 typedef struct Renderer {
     VAO vaos[2];
     Shader shaders[2];
+    Texture spritesheet;
 } Renderer;
 
 extern Renderer renderer;
