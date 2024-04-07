@@ -2,7 +2,8 @@
 #define STATE_H
 
 #include "game/game.h"
-#include "gfx/gfx.h"
+#include "window/window.h"
+#include "renderer/renderer.h"
 #include "camera/camera.h"
 
 void state_init(void);

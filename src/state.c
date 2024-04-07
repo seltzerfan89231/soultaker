@@ -17,7 +17,7 @@ extern Renderer renderer;
 extern Camera camera;
 extern Game game;
 
-static void link_camera_gfx(void) 
+static void link_camera_window(void) 
 {
     camera.aspect_ratio = (float) window.size.x / window.size.y;
     camera.viewID = renderer_uniform_location("view", DRAWABLE);
@@ -88,10 +88,11 @@ static void process_input(void)
 
 void state_init(void) 
 {
-    gfx_init();
+    window_init();
+    renderer_init();
     camera_init();
     game_init();
-    link_camera_gfx();
+    link_camera_window();
     link_camera_game();
 }
 

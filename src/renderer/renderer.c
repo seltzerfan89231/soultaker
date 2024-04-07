@@ -2,6 +2,17 @@
 
 Renderer renderer;
 
+static void renderer_settings(void)
+{
+    glDepthFunc(GL_LESS);
+    glEnable(GL_DEPTH_TEST);
+    glEnable(GL_CULL_FACE); 
+    glEnable(GL_MULTISAMPLE);
+    glCullFace(GL_FRONT);
+    // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    glfwWindowHint(GLFW_SAMPLES, 4);
+}
+
 void renderer_init(void) 
 {
     renderer.shaders[DRAWABLE] = shader_create("src/shaders/drawable_vertex.sl", "src/shaders/drawable_fragment.sl");
@@ -11,6 +22,7 @@ void renderer_init(void)
     renderer.spritesheet = texture_create("assets/spritesheet.png");
     glUniform1i(renderer_uniform_location("tex", DRAWABLE), renderer.spritesheet.ID);
     texture_bind(renderer.spritesheet);
+    renderer_settings();
 }
 
 void renderer_update(u32 offset, size_t subdata_size, f32* subdata, u32 buffer_length, buffertype type)

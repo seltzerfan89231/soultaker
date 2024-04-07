@@ -40,8 +40,11 @@ void game_update(f32 dt)
     if (dll_empty(&game.entities))
         return;
     DLLNode* n = game.entities.head;
-    while (n != NULL)
-        drawable_update(n->data->val, dt), drawable_vertex_data(game.buffer, n->data->val, n->data->offset), n = n->next;
+    while (n != NULL) {
+        drawable_update(n->data->val, dt);
+        drawable_vertex_data(game.buffer, n->data->val, n->data->offset);
+        n = n->next;
+    }
 }
 
 void game_clear(void)

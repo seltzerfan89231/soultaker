@@ -23,10 +23,10 @@ static u32 sides[] = {
 };
 
 static u32 tex[] = {
-    0, 0,
-    0, 1,
     1, 1,
-    1, 0
+    1, 0,
+    0, 0,
+    0, 1
 };
 
 static u32 vertex_order[] = {
@@ -117,6 +117,7 @@ void drawable_update(Drawable* drawable, f32 dt)
 {
     if (drawable->type == ENTITY) {
         Entity* entity = drawable->obj;
+        entity->lifetime -= dt;
         drawable->position = vec3f_add(drawable->position, vec3f_scale(dt * entity->speed, entity->direction));
     }
 }
