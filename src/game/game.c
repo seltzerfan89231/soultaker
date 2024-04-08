@@ -118,11 +118,10 @@ void game_shoot(vec2f dir)
     a = atan(-dir.y/dir.x);
     b = PI/2 + game.tilt;
     c = tan(a) * tan(a) / cos(b) / cos(b) + 1;
-    // dirx = dir.x * cos(game.rotation - HALFPI) - -dir.y * sin(game.rotation - HALFPI);
-    // dirz = dir.x * sin(game.rotation - HALFPI) + -dir.y * cos(game.rotation - HALFPI);
-    dirx = 1 / sqrt(c);
-    dirz = sqrt(1 - 1 / c);
-    printf("%f, %f, %f, %f\n", a, b, dirx, dirz);
+    dir.x =  dir.x > 0 ? 1 / sqrt(c) : -1 / sqrt(c);
+    dir.y = -dir.y > 0 ? sqrt(1 - 1 / c) : -sqrt(1 - 1 / c);
+    dirx = dir.x * cos(game.rotation - HALFPI) - dir.y * sin(game.rotation - HALFPI);
+    dirz = dir.x * sin(game.rotation - HALFPI) + dir.y * cos(game.rotation - HALFPI);
     proj->direction = vec3f_normalize(vec3f_create(dirx, 0, dirz));
     vec3f start = player->position;
     start.y = 0.0;
