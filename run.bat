@@ -1,10 +1,19 @@
 @echo off
 setlocal enableextensions enabledelayedexpansion
-set Cfiles=%Cfiles% .\lib\glad\src\glad_gl.o
-set Cfiles=%Cfiles% .\lib\stb\src\stb_image.o
+set flags=-O3 -Wall -Wextra -Wpedantic
+set name=untitled
+set link=-L./lib/glfw/link -lglfw3dll
+set Ifiles=
+set Cfiles=
+for /d %%f in (".\lib\*") do (
+    set "Ifiles=!Ifiles! -I%%f\include"
+)
+for /R .\lib %%f in (*) do (
+    if %%~xf==.o set "Cfiles=!Cfiles! %%f"
+)
 for /R .\src %%f in (*) do (
     if %%~xf==.c set "Cfiles=!Cfiles! %%f"
 )
-gcc -O3 -Wall -Wextra -Wpedantic -I./lib/glad/include -I./lib/ht/include -I./lib/glfw/include -I./lib/stb/include -I./lib/gtype/include -I./lib/constants/include -I./lib/gvec/include -L./lib/glfw/link %Cfiles% -lglfw3dll -o prog
-prog
-del prog.exe
+gcc %flags% %Ifiles% %Cfiles% %link% -o %name%
+%name%
+del %name%.exe
