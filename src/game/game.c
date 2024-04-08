@@ -108,17 +108,23 @@ void game_destroy(void)
 void game_shoot(vec2f dir)
 {
     static f32 cooldown;
-    if (glfwGetTime() - cooldown < 0.1)
+    if (glfwGetTime() - cooldown < 0.05)
         return;
     cooldown = glfwGetTime();
     assert(player != NULL);
     Entity* proj = entity_create(PROJECTILE, 0.5);
-    proj->speed = 5;
-    f32 dirx, dirz;
-    dirx = dir.x * cos(game.rotation - HALFPI) - -dir.y * sin(game.rotation - HALFPI);
-    dirz = dir.x * sin(game.rotation - HALFPI) + -dir.y * cos(game.rotation - HALFPI);
+    proj->speed = 4;
+    f32 dirx, dirz, a, b, c;
+    a = atan(-dir.y/dir.x);
+    b = PI/2 + game.tilt;
+    c = tan(a) * tan(a) / cos(b) / cos(b) + 1;
+    // dirx = dir.x * cos(game.rotation - HALFPI) - -dir.y * sin(game.rotation - HALFPI);
+    // dirz = dir.x * sin(game.rotation - HALFPI) + -dir.y * cos(game.rotation - HALFPI);
+    dirx = 1 / sqrt(c);
+    dirz = sqrt(1 - 1 / c);
+    printf("%f, %f, %f, %f\n", a, b, dirx, dirz);
     proj->direction = vec3f_normalize(vec3f_create(dirx, 0, dirz));
     vec3f start = player->position;
-    start.y = 0.5;
+    start.y = 0.0;
     game_insert(drawable_create(start, vec2f_create(0.5, 0), proj, ENTITY));
 }
