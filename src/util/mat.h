@@ -22,8 +22,8 @@ inline static void view(f32 m[16], vec3f r, vec3f u, vec3f f, vec3f p)
 inline static void ortho(f32 m[16], f32 ar, f32 zoom)
 {
     f32 r, l, t, b, f, n;
-    b = -(t = (1 / zoom));
-    l = -(r = ar * (1 / zoom));
+    b = -(t = zoom);
+    l = -(r = ar * zoom);
     f = FAR_CLIP_DISTANCE;
     n = NEAR_CLIP_DISTANCE;
     f32 val1, val2, val3, val4, val5, val6;

@@ -3,7 +3,6 @@
 
 #include "../../util/type.h"
 #include "../../util/vec.h"
-#include "../../util/vertex_data.h"
 
 typedef enum tiletype { FLOOR, WALL } tiletype;
 
@@ -15,7 +14,8 @@ typedef struct Tile {
 } Tile;
 
 Tile* tile_create(tiletype type);
-void tile_vertex_data(Tile* tile, f32* buffer, u32* offset);
+void tile_push_data(Tile* tile, f32* buffer, u32* length);
+void tile_remove_data(Tile* tile, f32* buffer, u32 offset);
 void tile_destroy(Tile* tile);
 
 #endif

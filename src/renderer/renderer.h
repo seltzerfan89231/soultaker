@@ -3,14 +3,12 @@
 
 #include <glad.h>
 #include <glfw.h>
-#include "../util/vertex_data.h"
+#include "../util/buffertype.h"
 #include "vao/vao.h"
 #include "shader/shader.h"
 #include "texture/texture.h"
 
 #define NUM_SAMPLES 4
-
-typedef enum buffertype { TILE, GUI } buffertype;
 
 typedef struct Renderer {
     VAO vaos[2];

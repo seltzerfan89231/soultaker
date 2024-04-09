@@ -1,4 +1,6 @@
 #include "tile.h"
+#include "../../util/vertex_data.h"
+#include "../../util/buffertype.h"
 #include <stdlib.h>
 
 Tile* tile_create(tiletype type)
@@ -10,18 +12,34 @@ Tile* tile_create(tiletype type)
     return tile;
 }
 
-void tile_vertex_data(Tile* tile, f32* buffer, u32* offset)
+void tile_push_data(Tile* tile, f32* buffer, u32* length)
 {
     i32 start, end;
     start = tile->type == WALL ? 0 : 5;
     end   = tile->type == WALL ? 5 : 6;
     for (i32 s = start; s < end; s++) {
         for (i32 v = 0; v < QUAD_VERTEX_COUNT; v++) {
-            buffer[(*offset)++] = tile->position.x + vertices[3*sides[4*s+vertex_order[v]]];
-            buffer[(*offset)++] = tile->height * vertices[3*sides[4*s+vertex_order[v]]+1];
-            buffer[(*offset)++] = tile->position.y + vertices[3*sides[4*s+vertex_order[v]]+2];
-            buffer[(*offset)++] = tile->tex.x + tex[2*vertex_order[v]] * 0.25;
-            buffer[(*offset)++] = tile->tex.y + tex[2*vertex_order[v]+1] * 0.25;
+            buffer[(*length)++] = tile->position.x + vertices[3*sides[4*s+vertex_order[v]]];
+            buffer[(*length)++] = tile->height * vertices[3*sides[4*s+vertex_order[v]]+1];
+            buffer[(*length)++] = tile->position.y + vertices[3*sides[4*s+vertex_order[v]]+2];
+            buffer[(*length)++] = tile->tex.x + tex[2*vertex_order[v]] * 0.25;
+            buffer[(*length)++] = tile->tex.y + tex[2*vertex_order[v]+1] * 0.25;
+        }
+    }
+}
+
+void tile_remove_data(Tile* tile, f32* buffer, u32 offset)
+{
+    i32 start, end;
+    start = tile->type == WALL ? 0 : 5;
+    end   = tile->type == WALL ? 5 : 6;
+    for (i32 s = start; s < end; s++) {
+        for (i32 v = 0; v < QUAD_VERTEX_COUNT; v++) {
+            buffer[offset++] = 0;
+            buffer[offset++] = 0;
+            buffer[offset++] = 0;
+            buffer[offset++] = 0;
+            buffer[offset++] = 0;
         }
     }
 }

@@ -1,12 +1,13 @@
 #include "game.h"
+#include "../util/buffertype.h"
 #include <stdio.h>
 #include <assert.h>
 #include <glfw.h>
 
 Game game;
 
-static void game_push_tile(Tile* tile);
-static void game_remove_tile(Tile* tile);
+static void game_push_data(Data* data);
+static void game_remove_data(Data* data);
 
 void game_init(void)
 {
@@ -20,12 +21,18 @@ void game_init(void)
 void game_setup(void)
 {
     game.tile_buffer = malloc(MAX_BUFFER_LENGTH * sizeof(f32));
-    Tile* tile = tile_create(FLOOR);
-    tile->position = vec2f_create(0.0f, 1.0f);
-    game_push_tile(tile);
-    tile = tile_create(WALL);
-    tile->position = vec2f_create(1.0f, 0.0f);
-    game_push_tile(tile);
+    for (f32 i = 0; i < 30; i++) {
+        for (f32 j = 0; j < 30; j++) {
+            Tile* tile;
+            if (i == 0 || i == 29 || j == 0 || j == 29)
+                tile = tile_create(WALL);
+            else
+                tile = tile_create(FLOOR);
+            tile->position = vec2f_create(i, j);
+            game_push_data(data_create(tile, game.tile_length, TILE));
+        }
+    }
+    game.tile_buffer = realloc(game.tile_buffer, game.tile_length * sizeof(f32));
 }
 
 void game_update(f32 dt)
@@ -68,7 +75,23 @@ void game_shoot(vec2f dir)
     game_insert(drawable_create(start, vec2f_create(0.5, 0), proj, ENTITY)); */
 }
 
-void game_push_tile(Tile* tile)
+void game_push_data(Data* data)
 {
-    tile_vertex_data(tile, game.tile_buffer, &game.tile_length);
+    DLLNode* node = dll_node_create(data);
+    switch (data->type) {
+        case TILE:
+            dll_push(&game.tiles, node);
+            tile_push_data((Tile*)data->val, game.tile_buffer, &game.tile_length);
+            break;
+        default:
+            break;
+    }
+}
+
+void game_remove(Data* data)
+{
+    Tile* tile = data->val;
+    tile_remove_data(tile, game.tile_buffer, data->offset);
+    dll_node_destroy(data->node);
+    data_destroy(data);
 }

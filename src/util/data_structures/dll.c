@@ -1,18 +1,17 @@
 #include "dll.h"
 #include <stdlib.h>
 
-Data* data_create(void* val, u32 length, u32 offset)
+Data* data_create(void* val, u32 offset, buffertype type)
 {
     Data* d = malloc(sizeof(Data));
     d->val = val;
-    d->length = length;
     d->offset = offset;
+    d->type = type;
     return d;
 }
 
 void data_destroy(Data* d)
 {
-    dll_node_destroy(d->node);
     free(d);
 }
 
@@ -41,7 +40,7 @@ i2 dll_empty(DLL* dll)
     return dll->head == NULL;
 }
 
-void dll_append(DLL* dll, DLLNode* n)
+void dll_push(DLL* dll, DLLNode* n)
 {
     if (dll->head == NULL) {
         dll->head = dll->tail = n;
