@@ -6,8 +6,8 @@
 
 Game game;
 
-static void game_push_data(Data* data);
-static void game_remove_data(Data* data);
+static void push_data(Data* data);
+static void remove_data(Data* data);
 
 void game_init(void)
 {
@@ -29,15 +29,20 @@ void game_setup(void)
             else
                 tile = tile_create(FLOOR);
             tile->position = vec2f_create(i, j);
-            game_push_data(data_create(tile, game.tile_length, TILE));
+            push_data(data_create(tile, game.tile_length, TILE));
         }
     }
+    remove_data(game.tiles.head->next->next->next->next->data);
     game.tile_buffer = realloc(game.tile_buffer, game.tile_length * sizeof(f32));
+    
+    game.gui_buffer = malloc(MAX_BUFFER_LENGTH * sizeof(f32));
+    gui_push_data(game.gui_buffer, &game.gui_length);
+    game.gui_buffer = realloc(game.gui_buffer, game.gui_length * sizeof(f32));
 }
 
 void game_update(f32 dt)
 {
-
+    
 }
 
 void game_set_target(vec3f target)
@@ -75,7 +80,7 @@ void game_shoot(vec2f dir)
     game_insert(drawable_create(start, vec2f_create(0.5, 0), proj, ENTITY)); */
 }
 
-void game_push_data(Data* data)
+void push_data(Data* data)
 {
     DLLNode* node = dll_node_create(data);
     switch (data->type) {
@@ -83,15 +88,20 @@ void game_push_data(Data* data)
             dll_push(&game.tiles, node);
             tile_push_data((Tile*)data->val, game.tile_buffer, &game.tile_length);
             break;
-        default:
+        case GUI:
             break;
     }
 }
 
-void game_remove(Data* data)
+void remove_data(Data* data)
 {
-    Tile* tile = data->val;
-    tile_remove_data(tile, game.tile_buffer, data->offset);
+    switch (data->type) {
+        case TILE:
+            tile_remove_data((Tile*)data->val, game.tile_buffer, data->offset);
+            break;
+        case GUI:
+            break;
+    }
     dll_node_destroy(data->node);
     data_destroy(data);
 }
