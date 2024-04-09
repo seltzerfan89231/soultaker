@@ -5,6 +5,7 @@
 #include <glfw.h>
 
 Game game;
+Entity* player;
 
 static void push_data(Data* data);
 static void remove_data(Data* data);
@@ -38,6 +39,11 @@ void game_setup(void)
     game.gui_buffer = malloc(MAX_BUFFER_LENGTH * sizeof(f32));
     gui_push_data(game.gui_buffer, &game.gui_length);
     game.gui_buffer = realloc(game.gui_buffer, game.gui_length * sizeof(f32));
+
+    game.entity_buffer = malloc(MAX_BUFFER_LENGTH * sizeof(f32));
+    player = entity_create(PLAYER);
+    player->position = vec3f_create(0.0f, 0.0f, 0.0f);
+    entity_push_data(player, game.entity_buffer, &game.entity_length);
 }
 
 void game_update(f32 dt)
@@ -47,7 +53,7 @@ void game_update(f32 dt)
 
 void game_set_target(vec3f target)
 {
-
+    player->position = target;
 }
 
 void game_destroy(void)

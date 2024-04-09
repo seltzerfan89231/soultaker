@@ -11,9 +11,9 @@
 #define NUM_SAMPLES 4
 
 typedef struct Renderer {
-    VAO vaos[2];
-    Shader shaders[2];
-    GLenum usage[2];
+    VAO vaos[NUM_BUFFER_TYPES];
+    Shader shaders[NUM_BUFFER_TYPES];
+    GLenum usage[NUM_BUFFER_TYPES];
     Texture spritesheet;
 } Renderer;
 
@@ -24,7 +24,7 @@ void renderer_malloc(buffertype type, u32 length);
 void renderer_update(buffertype type, u32 offset, u32 length, f32* buffer);
 void renderer_render(void);
 void renderer_destroy(void);
-
-u32 renderer_uniform_location(buffertype type, char* identifier);
+void renderer_uniform_update_texture(buffertype type, char* identifier, Texture texture);
+void renderer_uniform_update_matrix(buffertype type, char* identifier, f32* mat4);
 
 #endif

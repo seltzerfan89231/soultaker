@@ -23,6 +23,7 @@ void camera_init(void)
     camera.zoom = DEFAULT_ZOOM;
     camera.target = ORIGIN;
     camera_update();
+    camera_update_proj();
 }
 
 f32 camera_rotate(i32 mag, f32 dt)
@@ -67,14 +68,18 @@ vec3f camera_move(vec2i dir, f32 dt)
     return camera.target;
 }
 
+void camera_aspect_ratio(f32 ar)
+{
+    camera.aspect_ratio = ar;
+    camera_update_proj();
+}
+
 void camera_update_view(void)
 {
     view(camera.view, camera.right, camera.up, camera.facing, camera.position);
-    glUniformMatrix4fv(camera.viewID, 1, GL_FALSE, camera.view);
 }
 
 void camera_update_proj(void)
 {
     ortho(camera.proj, camera.aspect_ratio, camera.zoom);
-    glUniformMatrix4fv(camera.projID, 1, GL_FALSE, camera.proj);
 }

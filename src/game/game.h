@@ -3,6 +3,7 @@
 
 #include <stdlib.h>
 #include "../util/data_structures/dll.h"
+#include "entity/entity.h"
 #include "tile/tile.h"
 #include "gui/gui.h"
 

@@ -26,7 +26,6 @@ typedef struct Camera {
     f32 yaw, pitch, aspect_ratio, fov, rotate_speed, move_speed, zoom;
     f32 view[16], proj[16];
     vec3f target, position, facing, right, up;
-    u8 viewID, projID;
 } Camera;
 
 extern Camera camera;
@@ -36,6 +35,7 @@ f32 camera_rotate(i32 mag, f32 dt);
 f32 camera_tilt(i32 mag, f32 dt);
 void camera_zoom(i32 mag, f32 dt);
 vec3f camera_move(vec2i dir, f32 dt);
+void camera_aspect_ratio(f32 ar);
 void camera_update_view(void);
 void camera_update_proj(void);
 

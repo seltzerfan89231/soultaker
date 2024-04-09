@@ -29,10 +29,10 @@ void vao_malloc(VAO* vao, u32 length, GLenum usage)
     vbo_malloc(&vao->vbo, length, usage);
 }
 
-void vao_draw(VAO vao)
+void vao_draw(VAO vao, GLenum mode)
 {
     vao_bind(vao);
-    glDrawArrays(GL_TRIANGLES, 0, vao.vbo.length / vao.length);
+    glDrawArrays(mode, 0, vao.vbo.length / vao.length);
 }
 
 void vao_bind(VAO vao)

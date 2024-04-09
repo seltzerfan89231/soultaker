@@ -8,20 +8,13 @@ extern Renderer renderer;
 extern Camera camera;
 extern Game game;
 
-static void link_camera_window(void) 
-{
-    camera.aspect_ratio = (float) window.size.x / window.size.y;
-    camera.viewID = renderer_uniform_location(TILE, "view");
-    camera.projID = renderer_uniform_location(TILE, "proj");
-    camera_update_view();
-    camera_update_proj();
-}
-
 static void state_setup(void)
 {
     game_setup();
-    renderer_malloc(TILE, game.tile_length);
-    renderer_update(TILE, 0, game.tile_length, game.tile_buffer);
+    //renderer_malloc(TILE, game.tile_length);
+    //renderer_update(TILE, 0, game.tile_length, game.tile_buffer);
+    renderer_malloc(ENTITY, MAX_BUFFER_LENGTH);
+    renderer_update(ENTITY, 0, game.entity_length, game.entity_buffer);
     renderer_malloc(GUI, game.gui_length);
     renderer_update(GUI, 0, game.gui_length, game.gui_buffer);
 }
@@ -29,7 +22,19 @@ static void state_setup(void)
 static void state_update(void)
 {
     game_update(window.dt);
-    // renderer_update(DRAWABLE, 0, game.buffer_length, game.buffer);
+    renderer_update(ENTITY, 0, game.entity_length, game.entity_buffer);
+}
+
+static void update_proj_matrix(void)
+{
+    renderer_uniform_update_matrix(TILE, "proj", camera.proj);
+    renderer_uniform_update_matrix(ENTITY, "proj", camera.proj);
+}
+
+static void update_view_matrix(void)
+{
+    renderer_uniform_update_matrix(TILE, "view", camera.view);
+    renderer_uniform_update_matrix(ENTITY, "view", camera.view);
 }
 
 static void process_input(void)
@@ -71,6 +76,11 @@ static void process_input(void)
         camera_tilt(tilt_magnitude, window.dt);
     if (zoom_magnitude != 0)
         camera_zoom(zoom_magnitude, window.dt);
+
+    if (move_direction.x != 0 || move_direction.y != 0 || rotation_magnitude != 0 || tilt_magnitude != 0)
+        update_view_matrix();
+    if (zoom_magnitude != 0)
+        update_proj_matrix();
 }
 
 void state_init(void) 
@@ -79,7 +89,10 @@ void state_init(void)
     renderer_init();
     camera_init();
     game_init();
-    link_camera_window();
+
+    camera_aspect_ratio(window.size.x / window.size.y);
+    renderer_uniform_update_matrix(TILE, "view", camera.view);
+    renderer_uniform_update_matrix(TILE, "proj", camera.proj);
 }
 
 void state_loop(void)
