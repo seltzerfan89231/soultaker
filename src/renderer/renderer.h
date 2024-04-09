@@ -8,16 +8,22 @@
 #include "shader.h"
 #include "texture.h"
 
+#define NUM_SAMPLES 4
+
+typedef enum buffertype { DRAWABLE, GUI } buffertype;
+
 typedef struct Renderer {
     VAO vaos[2];
     Shader shaders[2];
+    GLenum usage[2];
     Texture spritesheet;
 } Renderer;
 
 extern Renderer renderer;
 
 void renderer_init(void);
-void renderer_update(u32 offset, size_t subdata_size, f32* subdata, u32 buffer_length, buffertype type);
+void renderer_malloc(buffertype type, u32 length);
+void renderer_update(buffertype type, u32 length, f32* buffer);
 void renderer_render(void);
 void renderer_destroy(void);
 

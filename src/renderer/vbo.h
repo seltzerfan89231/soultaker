@@ -6,15 +6,14 @@
 #include <gtype.h>
 #include <constants.h>
 
-typedef enum buffertype { DRAWABLE = 0, GUI = 1 } buffertype;
-
 typedef struct VBO {
-    u32 ID;
-    u32 buffer_length;
+    u32 id, length;
 } VBO;
 
-VBO vbo_create(buffertype type);
-void vbo_update(VBO* vbo, u32 offset, size_t subdata_size, f32* subdata, u32 buffer_length);
+VBO vbo_create(void);
+void vbo_malloc(VBO* vbo, u32 length, GLenum usage);
+void vbo_update(VBO* vbo, u32 length, f32* buffer);
+void vbo_bind(VBO vbo);
 void vbo_destroy(VBO vbo);
 
 #endif

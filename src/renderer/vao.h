@@ -7,12 +7,14 @@
 #include "vbo.h"
 
 typedef struct VAO {
-    u32 ID, vertex_length;
+    u32 id, length;
     VBO vbo;
 } VAO;
 
-VAO vao_create(buffertype type);
-void vao_update(VAO* vao, u32 offset, size_t subdata_size, f32* subdata, u32 buffer_length);
+VAO vao_create(void);
+void vao_attr(VAO* vao, u32 index, u32 length, u32 stride, u32 offset);
+void vao_update(VAO* vao, u32 length, f32* buffer);
+void vao_malloc(VAO* vao, u32 length, GLenum usage);
 void vao_destroy(VAO vao);
 void vao_bind(VAO vao);
 void vao_draw(VAO vao);

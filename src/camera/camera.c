@@ -9,7 +9,7 @@ static void camera_update(void)
     camera.facing.x = cos(camera.yaw) * cos(-camera.pitch);
     camera.facing.y = sin(-camera.pitch);
     camera.facing.z = sin(camera.yaw) * cos(-camera.pitch);
-    camera.position = vec3f_add(camera.target, vec3f_scale(-DISTANCE, camera.facing));
+    camera.position = vec3f_add(camera.target, vec3f_scale(-DEFAULT_DISTANCE, camera.facing));
     camera.right = vec3f_normalize(vec3f_cross(Y_AXIS, camera.facing));
     camera.up = vec3f_cross(camera.facing, camera.right);
     camera_update_view();
@@ -23,7 +23,7 @@ void camera_init(void)
     camera.rotate_speed = DEFAULT_ROTATE_SPEED;
     camera.move_speed = DEFAULT_MOVE_SPEED;
     camera.zoom = DEFAULT_ZOOM;
-    camera.target = vec3f_create(0.0f, 0.0f, 0.0f);
+    camera.target = ORIGIN;
     camera_update();
 }
 
@@ -37,10 +37,10 @@ f32 camera_rotate(i32 mag, f32 dt)
 f32 camera_tilt(i32 mag, f32 dt)
 {
     camera.pitch += mag * dt;
-    if (camera.pitch <= 0.3)
-        camera.pitch = 0.3;
-    if (camera.pitch >= PI / 2 - 0.3)
-        camera.pitch = PI / 2 - 0.3;
+    if (camera.pitch <= MIN_PITCH)
+        camera.pitch = MIN_PITCH;
+    if (camera.pitch >= MAX_PITCH)
+        camera.pitch = MAX_PITCH;
     camera_update();
     return camera.pitch;
 }
@@ -48,10 +48,10 @@ f32 camera_tilt(i32 mag, f32 dt)
 void camera_zoom(i32 mag, f32 dt)
 {
     camera.zoom += mag * dt;
-    if (camera.zoom < 0.1)
-        camera.zoom = 0.1;
-    if (camera.zoom > 0.5)
-        camera.zoom = 0.5;
+    if (camera.zoom < MIN_ZOOM)
+        camera.zoom = MIN_ZOOM;
+    if (camera.zoom > MAX_ZOOM)
+        camera.zoom = MAX_ZOOM;
     camera_update_proj();
 }
 

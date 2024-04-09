@@ -5,8 +5,9 @@
 #include <gvec.h>
 #include <constants.h>
 
+#define ORIGIN vec3f_create(0.0f, 0.0f, 0.0f);
 #define Y_AXIS vec3f_create(0.0f, 1.0f, 0.0f)
-#define DISTANCE 100
+#define DEFAULT_DISTANCE 100
 #define DEFAULT_PITCH PI / 3
 #define DEFAULT_ROTATE_SPEED 3
 #define DEFAULT_TILT_SPEED 3
@@ -14,6 +15,10 @@
 #define DEFAULT_YAW PI / 2
 #define DEFAULT_FOV PI/4
 #define DEFAULT_ZOOM 0.2
+#define MIN_PITCH 0.3
+#define MAX_PITCH 1.3
+#define MIN_ZOOM 0.1
+#define MAX_ZOOM 0.5
 
 typedef struct Camera {
     f32 yaw, pitch, aspect_ratio, fov, rotate_speed, move_speed, zoom;

@@ -35,14 +35,16 @@ static void link_camera_game(void)
 static void state_setup(void)
 {
     game_setup();
-    renderer_update(0, game.buffer_length * sizeof(f32), game.buffer, game.buffer_length, DRAWABLE);
-    renderer_update(0, sizeof(vertices), vertices, sizeof(vertices) / sizeof(f32), GUI);
+    renderer_malloc(DRAWABLE, MAX_BUFFER_LENGTH);
+    renderer_update(DRAWABLE, game.buffer_length, game.buffer);
+    renderer_malloc(GUI, sizeof(vertices) / 4);
+    renderer_update(GUI, sizeof(vertices) / 4, vertices);
 }
 
 static void state_update(void)
 {
     game_update(window.dt);
-    renderer_update(game.entities.head->data->offset * sizeof(f32), (game.buffer_length - game.entities.head->data->offset) * sizeof(f32), game.buffer + game.entities.head->data->offset, game.buffer_length, DRAWABLE);
+    renderer_update(DRAWABLE, game.buffer_length, game.buffer);
 }
 
 static void process_input(void)
