@@ -47,21 +47,21 @@ Shader shader_create(char* vs_path, char* fs_path)
 {
     Shader shader;
     u32 vertex, fragment;
-    shader.ID = glCreateProgram();
+    shader.id = glCreateProgram();
     vertex   = compile(vs_path, GL_VERTEX_SHADER);
     fragment = compile(fs_path, GL_FRAGMENT_SHADER);
-    glAttachShader(shader.ID, vertex);
-    glAttachShader(shader.ID, fragment);
-    glLinkProgram(shader.ID);
+    glAttachShader(shader.id, vertex);
+    glAttachShader(shader.id, fragment);
+    glLinkProgram(shader.id);
     glDeleteShader(vertex);
     glDeleteShader(fragment);
 
     char info_log[512];
     i32 success;
-    glGetProgramiv(shader.ID, GL_LINK_STATUS, &success);
+    glGetProgramiv(shader.id, GL_LINK_STATUS, &success);
     if (!success)
     {
-        glGetProgramInfoLog(shader.ID, 512, NULL, info_log);
+        glGetProgramInfoLog(shader.id, 512, NULL, info_log);
         printf(info_log);
         exit(1);
     }
@@ -71,10 +71,10 @@ Shader shader_create(char* vs_path, char* fs_path)
 
 void shader_use(Shader shader)
 {
-    glUseProgram(shader.ID);
+    glUseProgram(shader.id);
 }
 
 void shader_destroy(Shader shader)
 {
-    glDeleteProgram(shader.ID);
+    glDeleteProgram(shader.id);
 }

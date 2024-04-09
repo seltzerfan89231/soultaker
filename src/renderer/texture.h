@@ -7,7 +7,7 @@
 #include <stb_image.h>
 
 typedef struct Texture {
-    u32 ID;
+    u32 id;
 } Texture;
 
 Texture texture_create(const char* image_path);

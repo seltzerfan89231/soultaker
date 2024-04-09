@@ -20,8 +20,8 @@ extern Game game;
 static void link_camera_window(void) 
 {
     camera.aspect_ratio = (float) window.size.x / window.size.y;
-    camera.viewID = renderer_uniform_location("view", DRAWABLE);
-    camera.projID = renderer_uniform_location("proj", DRAWABLE);
+    camera.viewID = renderer_uniform_location(DRAWABLE, "view");
+    camera.projID = renderer_uniform_location(DRAWABLE, "proj");
     camera_update_view();
     camera_update_proj();
 }
@@ -36,15 +36,15 @@ static void state_setup(void)
 {
     game_setup();
     renderer_malloc(DRAWABLE, MAX_BUFFER_LENGTH);
-    renderer_update(DRAWABLE, game.buffer_length, game.buffer);
+    renderer_update(DRAWABLE, 0, game.buffer_length, game.buffer);
     renderer_malloc(GUI, sizeof(vertices) / 4);
-    renderer_update(GUI, sizeof(vertices) / 4, vertices);
+    renderer_update(GUI, 0, sizeof(vertices) / 4, vertices);
 }
 
 static void state_update(void)
 {
     game_update(window.dt);
-    renderer_update(DRAWABLE, game.buffer_length, game.buffer);
+    renderer_update(DRAWABLE, 0, game.buffer_length, game.buffer);
 }
 
 static void process_input(void)

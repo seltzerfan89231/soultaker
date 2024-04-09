@@ -17,6 +17,7 @@ void game_init(void)
 {
     game.buffer_length = 0;
     game.buffer = malloc(MAX_BUFFER_LENGTH * sizeof(f32));
+    game.entity_buffer = malloc(MAX_BUFFER_LENGTH * sizeof(f32));
     game.tiles = dll_create();
     game.entities = dll_create();
     player = NULL;

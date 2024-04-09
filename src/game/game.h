@@ -12,6 +12,8 @@
 typedef struct Game {
     f32* buffer;
     u32 buffer_length;
+    f32 *tile_buffer, *entity_buffer, *gui_buffer;
+    f32 tile_length, entity_length, gui_length;
     DLL tiles;
     DLL entities;
     f32 rotation, tilt;
@@ -29,7 +31,6 @@ void game_set_target(vec3f target);
 void game_update_rotation(f32 rotation);
 void game_update_tilt(f32 tilt);
 void game_destroy(void);
-
 void game_shoot(vec2f dir);
 
 #endif

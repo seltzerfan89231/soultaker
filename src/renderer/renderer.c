@@ -28,19 +28,19 @@ void renderer_init(void)
     vao_attr(&renderer.vaos[GUI], 1, 3, 5, 2);
 
     renderer.spritesheet = texture_create("assets/spritesheet.png");
-    glUniform1i(renderer_uniform_location("tex", DRAWABLE), renderer.spritesheet.ID);
+    glUniform1i(renderer_uniform_location(DRAWABLE, "tex"), renderer.spritesheet.id);
     texture_bind(renderer.spritesheet);
     renderer_settings();
 }
 
-void renderer_malloc(buffertype type, u32 length)
+void renderer_malloc(RENenum type, u32 length)
 {
     vao_malloc(&renderer.vaos[type], length, renderer.usage[type]);
 }
 
-void renderer_update(buffertype type, u32 length, f32* buffer)
+void renderer_update(RENenum type, u32 offset, u32 length, f32* buffer)
 {
-    vao_update(&renderer.vaos[type], length, buffer);
+    vao_update(&renderer.vaos[type], offset, length, buffer);
 }
 
 void renderer_render(void)
@@ -64,7 +64,7 @@ void renderer_destroy(void)
     shader_destroy(renderer.shaders[GUI]);
 }
 
-u32 renderer_uniform_location(char* identifier, buffertype type) {
+u32 renderer_uniform_location(RENenum type, char* identifier) {
     shader_use(renderer.shaders[DRAWABLE]);
-    return glGetUniformLocation(renderer.shaders[type].ID, identifier); 
+    return glGetUniformLocation(renderer.shaders[type].id, identifier); 
 }

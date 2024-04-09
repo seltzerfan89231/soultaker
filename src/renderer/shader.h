@@ -6,7 +6,7 @@
 #include <gtype.h>
 
 typedef struct Shader {
-    u32 ID;
+    u32 id;
 } Shader;
 
 Shader shader_create(char* vs_path, char* fs_path);

@@ -1,7 +1,5 @@
 #include "vbo.h"
-#include <stdio.h>
 #include <stdlib.h>
-#include <assert.h>
 
 VBO vbo_create(void)
 {
@@ -18,11 +16,11 @@ void vbo_malloc(VBO* vbo, u32 length, GLenum usage)
     glBufferData(GL_ARRAY_BUFFER, length * sizeof(f32), NULL, usage);
 }
 
-void vbo_update(VBO* vbo, u32 length, f32* buffer)
+void vbo_update(VBO* vbo, u32 offset, u32 length, f32* buffer)
 {
     vbo_bind(*vbo);
     vbo->length = length;
-    glBufferSubData(GL_ARRAY_BUFFER, 0, length * sizeof(f32), buffer);
+    glBufferSubData(GL_ARRAY_BUFFER, offset, length * sizeof(f32), buffer);
 }
 
 void vbo_bind(VBO vbo)

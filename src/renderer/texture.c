@@ -4,8 +4,8 @@
 Texture texture_create(const char* image_path)
 {
     Texture texture;
-    glGenTextures(1, &texture.ID);
-    glBindTexture(GL_TEXTURE_2D, texture.ID);
+    glGenTextures(1, &texture.id);
+    glBindTexture(GL_TEXTURE_2D, texture.id);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
@@ -22,5 +22,5 @@ Texture texture_create(const char* image_path)
 void texture_bind(Texture texture)
 {
     glActiveTexture(GL_TEXTURE1);
-    glBindTexture(GL_TEXTURE_2D, texture.ID);
+    glBindTexture(GL_TEXTURE_2D, texture.id);
 }
