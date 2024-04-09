@@ -3,7 +3,7 @@
 
 #include <glad.h>
 #include <glfw.h>
-#include <gtype.h>
+#include "../../util/type.h"
 
 typedef struct Shader {
     u32 id;

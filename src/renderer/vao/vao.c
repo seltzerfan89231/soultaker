@@ -13,7 +13,6 @@ VAO vao_create(void)
 void vao_attr(VAO* vao, u32 index, u32 length, u32 stride, u32 offset)
 {
     vao_bind(*vao);
-    vao->length = stride;
     glVertexAttribPointer(index, length, GL_FLOAT, GL_FALSE, stride * sizeof(f32), (void*)(offset * sizeof(f32)));
     glEnableVertexAttribArray(index);
 }

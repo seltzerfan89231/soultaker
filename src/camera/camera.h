@@ -1,9 +1,11 @@
 #ifndef CAMERA_H
 #define CAMERA_H
 
-#include <gtype.h>
-#include <gvec.h>
-#include <constants.h>
+#include <math.h>
+#include "../util/type.h"
+#include "../util/vec.h"
+#include "../util/mat.h"
+#include "../util/constants.h"
 
 #define ORIGIN vec3f_create(0.0f, 0.0f, 0.0f);
 #define Y_AXIS vec3f_create(0.0f, 1.0f, 0.0f)

@@ -3,15 +3,6 @@
 #include <stdio.h>
 #include <time.h>
 
-static f32 vertices[] = {
-     -1.0f, 0.95f, 0.0f, 0.0f, 0.6f,
-     -1.0f, 1.0f, 0.0f, 0.0f, 0.6f,
-    -0.85f, 0.95f, 0.0f, 0.0f, 0.6f,
-     -1.0f, 1.0f, 0.0f, 0.0f, 0.6f,
-     -0.85f, 1.0f, 0.0f, 0.0f, 0.6f,
-     -0.85f,  0.95f, 0.0f, 0.0f, 0.6f
-};
-
 extern Window window;
 extern Renderer renderer;
 extern Camera camera;
@@ -20,31 +11,25 @@ extern Game game;
 static void link_camera_window(void) 
 {
     camera.aspect_ratio = (float) window.size.x / window.size.y;
-    camera.viewID = renderer_uniform_location(DRAWABLE, "view");
-    camera.projID = renderer_uniform_location(DRAWABLE, "proj");
+    camera.viewID = renderer_uniform_location(TILE, "view");
+    camera.projID = renderer_uniform_location(TILE, "proj");
     camera_update_view();
     camera_update_proj();
-}
-
-static void link_camera_game(void)
-{
-    game_update_rotation(camera.yaw);
-    game_update_tilt(camera.pitch);
 }
 
 static void state_setup(void)
 {
     game_setup();
-    renderer_malloc(DRAWABLE, MAX_BUFFER_LENGTH);
-    renderer_update(DRAWABLE, 0, game.buffer_length, game.buffer);
-    renderer_malloc(GUI, sizeof(vertices) / 4);
-    renderer_update(GUI, 0, sizeof(vertices) / 4, vertices);
+    renderer_malloc(TILE, game.tile_length);
+    renderer_update(TILE, 0, game.tile_length, game.tile_buffer);
+    renderer_malloc(GUI, game.gui_length);
+    renderer_update(GUI, 0, game.gui_length, game.gui_buffer);
 }
 
 static void state_update(void)
 {
     game_update(window.dt);
-    renderer_update(DRAWABLE, 0, game.buffer_length, game.buffer);
+    // renderer_update(DRAWABLE, 0, game.buffer_length, game.buffer);
 }
 
 static void process_input(void)
@@ -81,9 +66,9 @@ static void process_input(void)
     if (move_direction.x != 0 || move_direction.y != 0)
         game_set_target(camera_move(move_direction, window.dt));
     if (rotation_magnitude != 0)
-        game_update_rotation(camera_rotate(rotation_magnitude, window.dt));
+        camera_rotate(rotation_magnitude, window.dt);
     if (tilt_magnitude != 0)
-        game_update_tilt(camera_tilt(tilt_magnitude, window.dt));
+        camera_tilt(tilt_magnitude, window.dt);
     if (zoom_magnitude != 0)
         camera_zoom(zoom_magnitude, window.dt);
 }
@@ -95,7 +80,6 @@ void state_init(void)
     camera_init();
     game_init();
     link_camera_window();
-    link_camera_game();
 }
 
 void state_loop(void)

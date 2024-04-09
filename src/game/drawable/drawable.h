@@ -1,8 +1,8 @@
-#ifndef DRAWABLE_H
+/* #ifndef DRAWABLE_H
 #define DRAWABLE_H
 
-#include "entity/entity.h"
-#include "tile/tile.h"
+#include <gtype.h>
+#include <gvec.h>
 #include <constants.h>
 
 #define NUM_WALL_SIDES 5
@@ -27,4 +27,4 @@ void drawable_update(Drawable* drawable, f32 dt);
 void drawable_vertex_data(f32* buffer, Drawable* drawable, i32 offset);
 void drawable_destroy(Drawable* drawable);
 
-#endif
+#endif */

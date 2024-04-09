@@ -3,8 +3,8 @@
 
 #include <glad.h>
 #include <glfw.h>
-#include <gtype.h>
-#include <gvec.h>
+#include "../util/type.h"
+#include "../util/vec.h"
 
 #define DEFAULT_WINDOW_WIDTH 1920/2
 #define DEFAULT_WINDOW_HEIGHT 1080/2

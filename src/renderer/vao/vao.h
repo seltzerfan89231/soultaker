@@ -3,8 +3,8 @@
 
 #include <glad.h>
 #include <glfw.h>
-#include <gtype.h>
-#include "vbo.h"
+#include "../../util/type.h"
+#include "vbo/vbo.h"
 
 typedef struct VAO {
     u32 id, length;

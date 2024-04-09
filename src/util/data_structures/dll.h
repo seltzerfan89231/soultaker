@@ -1,16 +1,15 @@
 #ifndef DLL_H
 #define DLL_H
 
-#include <gvec.h>
-#include <gtype.h>
+#include "../type.h"
+#include "../vec.h"
 
-typedef struct DLLNode DLLNode;
+struct DLLNode;
 
 typedef struct Data {
     void* val;
-    size_t length;
-    u32 offset;
-    DLLNode* node;
+    u32 length, offset;
+    struct DLLNode* node;
 } Data;
 
 typedef struct DLLNode {

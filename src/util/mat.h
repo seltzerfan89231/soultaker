@@ -1,9 +1,9 @@
 #ifndef MAT_H
 #define MAT_H
 
-#include <gvec.h>
-#include <gtype.h>
 #include <math.h>
+#include "vec.h"
+#include "type.h"
 
 #define NEAR_CLIP_DISTANCE 0.1f
 #define FAR_CLIP_DISTANCE 1000.0f

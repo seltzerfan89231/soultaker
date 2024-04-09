@@ -1,4 +1,4 @@
-#include "drawable.h"
+/* #include "drawable.h"
 #include <stdlib.h>
 #include <math.h>
 
@@ -147,4 +147,4 @@ void drawable_destroy(Drawable* drawable)
             break;
     }
     free(drawable);
-}
+} */

@@ -1,6 +1,4 @@
 #include "camera.h"
-#include "mat.h"
-#include <math.h>
 
 Camera camera;
 

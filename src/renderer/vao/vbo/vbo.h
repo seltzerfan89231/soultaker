@@ -3,8 +3,7 @@
 
 #include <glad.h>
 #include <glfw.h>
-#include <gtype.h>
-#include <constants.h>
+#include "../../../util/type.h"
 
 typedef struct VBO {
     u32 id, length;

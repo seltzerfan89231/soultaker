@@ -3,8 +3,8 @@
 
 #include <glad.h>
 #include <glfw.h>
-#include <gtype.h>
 #include <stb_image.h>
+#include "../../util/type.h"
 
 typedef struct Texture {
     u32 id;
