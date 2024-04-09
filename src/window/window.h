@@ -32,8 +32,6 @@ void window_init(void);
 void window_calc_dt(void);
 vec2f window_mouse_direction(void);
 i2 window_mouse_button_pressed(mousebutton mb);
-
-/* abstractions */
 i2 window_closed(void);
 void window_close(void);
 void window_poll_events(void);

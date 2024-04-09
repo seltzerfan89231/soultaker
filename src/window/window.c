@@ -63,11 +63,6 @@ void mouse_callback(GLFWwindow* handle, double xpos, double ypos)
     window.mouse.position.y = ypos;
 }
 
-vec2f window_mouse_direction(void)
-{
-    return vec2f_normalize(vec2f_sub(window.mouse.position, vec2f_scale(0.5, window.size)));
-}
-
 i2 window_mouse_button_pressed(mousebutton mb)
 {
     switch (mb) 
@@ -82,9 +77,9 @@ i2 window_mouse_button_pressed(mousebutton mb)
     return UP;
 }
 
-/* abstractions */
 i2 window_closed(void) { return glfwWindowShouldClose(window.handle); }
 void window_close(void) { glfwSetWindowShouldClose(window.handle, true); }
 void window_poll_events(void) { glfwPollEvents(); }
 void window_swap_buffers(void) { glfwSwapBuffers(window.handle); }
 i2 window_key_pressed(GLenum key) { return glfwGetKey(window.handle, key) == GLFW_PRESS; }
+vec2f window_mouse_direction(void) { return vec2f_normalize(vec2f_sub(window.mouse.position, vec2f_scale(0.5, window.size))); }

@@ -39,19 +39,4 @@ inline static void ortho(f32 m[16], f32 ar, f32 zoom)
     m[12] = val4; m[13] = val5; m[14] = val6; m[15] = 1.0f;
 }
 
-/*
-static void pers(f32 m[16], f32 ar, f32 fov, f32 ncd, f32 fcd)
-{
-    f32 a, b, c, d;
-    a = 1 / (ar * tan(fov / 2));
-    b = 1 / (tan(fov / 2));
-    c = (-ncd-fcd) / (ncd - fcd);
-    d = (2 * fcd * ncd) / (ncd - fcd);
-    m[0]  = a; m[1]  = 0; m[2]  = 0; m[3]  = 0;
-    m[4]  = 0; m[5]  = b; m[6]  = 0; m[7]  = 0;
-    m[8]  = 0; m[9]  = 0; m[10] = c; m[11] = 1;
-    m[12] = 0; m[13] = 0; m[14] = d; m[15] = 0;
-}
-*/
-
 #endif
