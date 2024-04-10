@@ -53,9 +53,9 @@ void entity_update_data(Entity* entity, f32* buffer, u32 offset)
     entity_push_data(entity, buffer, &offset);
 }
 
-void entity_update_position(Entity* entity)
+void entity_update_position(Entity* entity, f32 dt)
 {
-    entity->position = vec3f_add(entity->position, entity->direction);
+    entity->position = vec3f_add(entity->position, vec3f_scale(dt * entity->speed, entity->direction));
 }
 
 void entity_update_tilt(f32 tilt)

@@ -50,7 +50,9 @@ void game_update(f32 dt)
 {
     DLLNode* n = game.entities.head;
     while (n != NULL) {
-        entity_update_data((Entity*)n->data->val, game.entity_buffer, n->data->offset);
+        Entity* entity = n->data->val;
+        entity_update_position(entity, dt);
+        entity_update_data(entity, game.entity_buffer, n->data->offset);
         n = n->next;
     }
 }
