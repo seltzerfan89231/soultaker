@@ -43,17 +43,33 @@ void game_setup(void)
     game.entity_buffer = malloc(MAX_BUFFER_LENGTH * sizeof(f32));
     player = entity_create(PLAYER);
     player->position = vec3f_create(0.0f, 0.0f, 0.0f);
-    entity_push_data(player, game.entity_buffer, &game.entity_length);
+    push_data(data_create(player, game.entity_length, ENTITY));
 }
 
 void game_update(f32 dt)
 {
-    
+    DLLNode* n = game.entities.head;
+    while (n != NULL) {
+        entity_update_data((Entity*)n->data->val, game.entity_buffer, n->data->offset);
+        n = n->next;
+    }
 }
 
 void game_set_target(vec3f target)
 {
     player->position = target;
+}
+
+void game_set_rotation(f32 rotation)
+{
+    game.rotation = rotation;
+    entity_update_rotation(rotation);
+}
+
+void game_set_tilt(f32 tilt)
+{
+    game.tilt = tilt;
+    entity_update_tilt(tilt);
 }
 
 void game_destroy(void)
@@ -93,6 +109,10 @@ void push_data(Data* data)
         case TILE:
             dll_push(&game.tiles, node);
             tile_push_data((Tile*)data->val, game.tile_buffer, &game.tile_length);
+            break;
+        case ENTITY:
+            dll_push(&game.entities, node);
+            entity_push_data((Entity*)data->val, game.entity_buffer, &game.entity_length);
             break;
         case GUI:
             break;

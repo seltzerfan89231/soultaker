@@ -11,8 +11,8 @@ extern Game game;
 static void state_setup(void)
 {
     game_setup();
-    //renderer_malloc(TILE, game.tile_length);
-    //renderer_update(TILE, 0, game.tile_length, game.tile_buffer);
+    renderer_malloc(TILE, game.tile_length);
+    renderer_update(TILE, 0, game.tile_length, game.tile_buffer);
     renderer_malloc(ENTITY, MAX_BUFFER_LENGTH);
     renderer_update(ENTITY, 0, game.entity_length, game.entity_buffer);
     renderer_malloc(GUI, game.gui_length);
@@ -71,9 +71,9 @@ static void process_input(void)
     if (move_direction.x != 0 || move_direction.y != 0)
         game_set_target(camera_move(move_direction, window.dt));
     if (rotation_magnitude != 0)
-        camera_rotate(rotation_magnitude, window.dt);
+        game_set_rotation(camera_rotate(rotation_magnitude, window.dt));
     if (tilt_magnitude != 0)
-        camera_tilt(tilt_magnitude, window.dt);
+        game_set_tilt(camera_tilt(tilt_magnitude, window.dt));
     if (zoom_magnitude != 0)
         camera_zoom(zoom_magnitude, window.dt);
 
@@ -90,9 +90,11 @@ void state_init(void)
     camera_init();
     game_init();
 
+    game_set_rotation(camera.yaw);
+    game_set_tilt(camera.pitch);
     camera_aspect_ratio(window.size.x / window.size.y);
-    renderer_uniform_update_matrix(TILE, "view", camera.view);
-    renderer_uniform_update_matrix(TILE, "proj", camera.proj);
+    update_view_matrix();
+    update_proj_matrix();
 }
 
 void state_loop(void)

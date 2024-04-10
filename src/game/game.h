@@ -20,6 +20,8 @@ void game_init(void);
 void game_setup(void);
 void game_update(f32 dt);
 void game_set_target(vec3f target);
+void game_set_rotation(f32 rotation);
+void game_set_tilt(f32 tilt);
 void game_destroy(void);
 void game_shoot(vec2f dir);
 

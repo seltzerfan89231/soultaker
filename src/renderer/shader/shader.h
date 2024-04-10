@@ -9,7 +9,7 @@ typedef struct Shader {
     u32 id;
 } Shader;
 
-Shader shader_create(char* vs_path, char* fs_path, char* gs_path);
+Shader shader_create(char* vs_path, char* fs_path);
 void shader_use(Shader shader);
 void shader_destroy(Shader shader);
 
