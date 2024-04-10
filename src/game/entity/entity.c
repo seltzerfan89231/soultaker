@@ -53,6 +53,11 @@ void entity_update_data(Entity* entity, f32* buffer, u32 offset)
     entity_push_data(entity, buffer, &offset);
 }
 
+void entity_update_position(Entity* entity)
+{
+    entity->position = vec3f_add(entity->position, entity->direction);
+}
+
 void entity_update_tilt(f32 tilt)
 {
     trig[0] = cos(tilt + HALFPI);

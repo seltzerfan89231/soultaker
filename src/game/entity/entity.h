@@ -18,6 +18,7 @@ typedef struct Entity {
 Entity* entity_create(entitytype type);
 void entity_push_data(Entity* entity, f32* buffer, u32* length);
 void entity_update_data(Entity* entity, f32* buffer, u32 offset);
+void entity_update_position(Entity* entity);
 void entity_update_tilt(f32 tilt);
 void entity_update_rotation(f32 rotation);
 void entity_destroy(Entity* entity);

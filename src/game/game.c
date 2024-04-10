@@ -81,12 +81,12 @@ void game_destroy(void)
 
 void game_shoot(vec2f dir)
 {
-    /* static f32 cooldown;
+    static f32 cooldown;
     if (glfwGetTime() - cooldown < 0.05)
         return;
     cooldown = glfwGetTime();
     assert(player != NULL);
-    Entity* proj = entity_create(PROJECTILE, 0.5);
+    Entity* proj = entity_create(PROJECTILE);
     proj->speed = 4;
     f32 dirx, dirz, a, b, c;
     a = atan(-dir.y/dir.x);
@@ -96,10 +96,10 @@ void game_shoot(vec2f dir)
     dir.y = -dir.y > 0 ? sqrt(1 - 1 / c) : -sqrt(1 - 1 / c);
     dirx = dir.x * cos(game.rotation - HALFPI) - dir.y * sin(game.rotation - HALFPI);
     dirz = dir.x * sin(game.rotation - HALFPI) + dir.y * cos(game.rotation - HALFPI);
+    proj->position = player->position;
     proj->direction = vec3f_normalize(vec3f_create(dirx, 0, dirz));
-    vec3f start = player->position;
-    start.y = 0.0;
-    game_insert(drawable_create(start, vec2f_create(0.5, 0), proj, ENTITY)); */
+    proj->tex = vec2f_create(0.5, 0);
+    push_data(data_create(proj, game.entity_length, ENTITY));
 }
 
 void push_data(Data* data)
