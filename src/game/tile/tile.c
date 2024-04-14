@@ -1,5 +1,4 @@
 #include "tile.h"
-#include "../../util/buffertype.h"
 #include <stdlib.h>
 
 Tile* tile_create(tiletype type)

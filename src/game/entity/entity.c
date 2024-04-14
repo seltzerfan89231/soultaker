@@ -1,5 +1,4 @@
 #include "entity.h"
-#include "../../util/buffertype.h"
 
 Entity* entity_create(entitytype type)
 {

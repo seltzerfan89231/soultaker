@@ -6,7 +6,8 @@ static void renderer_settings(void)
 {
     glDepthFunc(GL_LESS);
     glEnable(GL_DEPTH_TEST);
-    //glEnable(GL_CULL_FACE); 
+    glEnable(GL_STENCIL_TEST);
+    glEnable(GL_CULL_FACE); 
     glEnable(GL_MULTISAMPLE);
     glCullFace(GL_FRONT);
     // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -34,9 +35,9 @@ void renderer_init(void)
     vao_attr(&renderer.vaos[GUI], 0, 2, 5, 0);
     vao_attr(&renderer.vaos[GUI], 1, 3, 5, 2);
 
-    renderer.spritesheet = texture_create("assets/spritesheet.png");
-    renderer_uniform_update_texture(TILE, "tex", renderer.spritesheet);
-    texture_bind(renderer.spritesheet);
+    renderer.atlas = texture_create("assets/atlas.png");
+    renderer_uniform_update_texture(TILE, "tex", renderer.atlas);
+    texture_bind(renderer.atlas);
     renderer_settings();
 }
 
@@ -52,9 +53,9 @@ void renderer_update(buffertype type, u32 offset, u32 length, f32* buffer)
 
 void renderer_render(void)
 {
-    glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glEnable(GL_DEPTH_TEST);
+    glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
     shader_use(renderer.shaders[TILE]);
     vao_draw(renderer.vaos[TILE], GL_POINTS);
     shader_use(renderer.shaders[ENTITY]);
@@ -72,7 +73,7 @@ void renderer_destroy(void)
     shader_destroy(renderer.shaders[TILE]);
     shader_destroy(renderer.shaders[ENTITY]);
     shader_destroy(renderer.shaders[GUI]);
-    texture_destroy(renderer.spritesheet);
+    texture_destroy(renderer.atlas);
 }
 
 static u32 renderer_uniform_location(buffertype type, char* identifier) {

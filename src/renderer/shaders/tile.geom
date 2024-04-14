@@ -63,8 +63,8 @@ void draw_sides(vec4 position)
 
 void main() 
 {    
+    draw_top(gl_in[0].gl_Position);
     if (gl_in[0].gl_Position.y != 0) {
-        draw_top(gl_in[0].gl_Position);
         draw_sides(gl_in[0].gl_Position);
     }
 }

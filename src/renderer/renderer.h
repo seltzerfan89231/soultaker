@@ -14,7 +14,7 @@ typedef struct Renderer {
     VAO vaos[NUM_BUFFER_TYPES];
     Shader shaders[NUM_BUFFER_TYPES];
     GLenum usage[NUM_BUFFER_TYPES];
-    Texture spritesheet;
+    Texture atlas;
 } Renderer;
 
 extern Renderer renderer;
