@@ -6,7 +6,7 @@ static void renderer_settings(void)
 {
     glDepthFunc(GL_LESS);
     glEnable(GL_DEPTH_TEST);
-    //glEnable(GL_CULL_FACE); 
+    glEnable(GL_CULL_FACE); 
     glEnable(GL_MULTISAMPLE);
     glCullFace(GL_FRONT);
     // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -15,25 +15,24 @@ static void renderer_settings(void)
 
 void renderer_init(void) 
 {
-    renderer.shaders[TILE] = shader_create("src/renderer/shaders/tile.vert", "src/renderer/shaders/tile.frag", NULL);
+    renderer.shaders[TILE] = shader_create("src/renderer/shaders/tile.vert", "src/renderer/shaders/tile.frag", "src/renderer/shaders/tile.geom");
     renderer.usage[TILE] = GL_STATIC_DRAW;
     renderer.vaos[TILE] = vao_create();
-    renderer.vaos[TILE].length = TILE_VERTEX_LENGTH;
-    vao_attr(&renderer.vaos[TILE], 0, 3, TILE_VERTEX_LENGTH, 0);
-    vao_attr(&renderer.vaos[TILE], 1, 2, TILE_VERTEX_LENGTH, 3);
+    renderer.vaos[TILE].length = 3;
+    vao_attr(&renderer.vaos[TILE], 0, 3, 3, 0);
 
     renderer.shaders[ENTITY] = shader_create("src/renderer/shaders/entity.vert", "src/renderer/shaders/entity.frag", "src/renderer/shaders/entity.geom");
     renderer.usage[ENTITY] = GL_DYNAMIC_DRAW;
     renderer.vaos[ENTITY] = vao_create();
-    renderer.vaos[ENTITY].length = ENTITY_VERTEX_LENGTH;
-    vao_attr(&renderer.vaos[ENTITY], 0, 3, ENTITY_VERTEX_LENGTH, 0);
+    renderer.vaos[ENTITY].length = 3;
+    vao_attr(&renderer.vaos[ENTITY], 0, 3, 3, 0);
 
     renderer.shaders[GUI] = shader_create("src/renderer/shaders/gui.vert", "src/renderer/shaders/gui.frag", NULL);
     renderer.usage[GUI] = GL_STATIC_DRAW;
     renderer.vaos[GUI] = vao_create();
-    renderer.vaos[GUI].length = GUI_VERTEX_LENGTH;
-    vao_attr(&renderer.vaos[GUI], 0, 2, GUI_VERTEX_LENGTH, 0);
-    vao_attr(&renderer.vaos[GUI], 1, 3, GUI_VERTEX_LENGTH, 2);
+    renderer.vaos[GUI].length = 5;
+    vao_attr(&renderer.vaos[GUI], 0, 2, 5, 0);
+    vao_attr(&renderer.vaos[GUI], 1, 3, 5, 2);
 
     renderer.spritesheet = texture_create("assets/spritesheet.png");
     renderer_uniform_update_texture(TILE, "tex", renderer.spritesheet);
@@ -57,7 +56,7 @@ void renderer_render(void)
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glEnable(GL_DEPTH_TEST);
     shader_use(renderer.shaders[TILE]);
-    vao_draw(renderer.vaos[TILE], GL_TRIANGLES);
+    vao_draw(renderer.vaos[TILE], GL_POINTS);
     shader_use(renderer.shaders[ENTITY]);
     vao_draw(renderer.vaos[ENTITY], GL_POINTS);
     glDisable(GL_DEPTH_TEST);

@@ -22,14 +22,17 @@ void game_init(void)
 void game_setup(void)
 {
     game.tile_buffer = malloc(MAX_BUFFER_LENGTH * sizeof(f32));
-    for (f32 i = 15; i < 30; i++) {
-        for (f32 j = 15; j < 30; j++) {
+    for (f32 i = 0; i < 30; i++) {
+        for (f32 j = 0; j < 30; j++) {
             Tile* tile;
-            if (i == 0 || i == 29 || j == 0 || j == 29)
+            if (i == 0 || i == 29 || j == 0 || j == 29) {
                 tile = tile_create(WALL);
-            else
+                tile->position = vec3f_create(i, 3.0f, j);
+            }
+            else {
                 tile = tile_create(FLOOR);
-            tile->position = vec2f_create(i, j);
+                tile->position = vec3f_create(i, 0.0f, j);
+            }
             push_data(data_create(tile, game.tile_length, TILE));
         }
     }
@@ -45,14 +48,14 @@ void game_setup(void)
     Data* player_data = data_create(player, game.entity_length, ENTITY);
     push_data(player_data);
 
-    for (i32 i = 0; i < 10; i++) {
+    /* for (i32 i = 0; i < 10; i++) {
         for (i32 j = 0; j < 10; j++) {
             Entity* entity = entity_create(PLAYER);
             entity->position = vec3f_create(3 * i + 2, 0, 3 * j + 2);
             Data* entity_data = data_create(entity, game.entity_length, ENTITY);
             push_data(entity_data);
         }
-    }
+    } */
 
     dll_clear(&game.tiles);
 }
@@ -76,13 +79,11 @@ void game_set_target(vec3f target)
 void game_set_rotation(f32 rotation)
 {
     game.rotation = rotation;
-    entity_update_rotation(rotation);
 }
 
 void game_set_tilt(f32 tilt)
 {
     game.tilt = tilt;
-    entity_update_tilt(tilt);
 }
 
 void game_destroy(void)
