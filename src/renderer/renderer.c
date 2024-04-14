@@ -6,7 +6,7 @@ static void renderer_settings(void)
 {
     glDepthFunc(GL_LESS);
     glEnable(GL_DEPTH_TEST);
-    glEnable(GL_CULL_FACE); 
+    //glEnable(GL_CULL_FACE); 
     glEnable(GL_MULTISAMPLE);
     glCullFace(GL_FRONT);
     // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -22,7 +22,7 @@ void renderer_init(void)
     vao_attr(&renderer.vaos[TILE], 0, 3, TILE_VERTEX_LENGTH, 0);
     vao_attr(&renderer.vaos[TILE], 1, 2, TILE_VERTEX_LENGTH, 3);
 
-    renderer.shaders[ENTITY] = shader_create("src/renderer/shaders/entity.vert", "src/renderer/shaders/entity.frag", NULL);
+    renderer.shaders[ENTITY] = shader_create("src/renderer/shaders/entity.vert", "src/renderer/shaders/entity.frag", "src/renderer/shaders/entity.geom");
     renderer.usage[ENTITY] = GL_DYNAMIC_DRAW;
     renderer.vaos[ENTITY] = vao_create();
     renderer.vaos[ENTITY].length = ENTITY_VERTEX_LENGTH;
@@ -87,4 +87,8 @@ void renderer_uniform_update_texture(buffertype type, char* identifier, Texture 
 
 void renderer_uniform_update_matrix(buffertype type, char* identifier, f32* mat4) {
     glUniformMatrix4fv(renderer_uniform_location(type, identifier), 1, GL_FALSE, mat4);
+}
+
+void renderer_uniform_update_float(buffertype type, char* identifier, f32 flt) {
+    glUniform1f(renderer_uniform_location(type, identifier), flt);
 }

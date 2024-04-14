@@ -26,5 +26,6 @@ void renderer_render(void);
 void renderer_destroy(void);
 void renderer_uniform_update_texture(buffertype type, char* identifier, Texture texture);
 void renderer_uniform_update_matrix(buffertype type, char* identifier, f32* mat4);
+void renderer_uniform_update_float(buffertype type, char* identifier, f32 flt);
 
 #endif
