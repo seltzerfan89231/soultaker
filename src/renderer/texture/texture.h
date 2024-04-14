@@ -12,5 +12,6 @@ typedef struct Texture {
 
 Texture texture_create(const char* image_path);
 void texture_bind(Texture texture);
+void texture_destroy(Texture texture);
 
 #endif

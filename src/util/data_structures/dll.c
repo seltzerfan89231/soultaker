@@ -25,6 +25,7 @@ DLLNode* dll_node_create(Data* d)
 
 void dll_node_destroy(DLLNode* n)
 {
+    free(n->data);
     free(n);
 }
 
@@ -38,6 +39,17 @@ DLL dll_create(void)
 i2 dll_empty(DLL* dll)
 {
     return dll->head == NULL;
+}
+
+void dll_clear(DLL* dll)
+{
+    DLLNode* n = dll->head;
+    while (n != NULL) {
+        DLLNode* next = n->next;
+        dll_node_destroy(n);
+        n = next;
+    }
+    dll->head = dll->tail = NULL;
 }
 
 void dll_push(DLL* dll, DLLNode* n)
@@ -81,4 +93,9 @@ void dll_replace(DLL* dll, DLLNode* n)
     else
         dll->head = NULL;
     dll->tail = new_tail;
+}
+
+void dll_destroy(DLL* dll)
+{
+    dll_clear(dll);
 }

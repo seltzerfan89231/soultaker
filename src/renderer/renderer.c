@@ -69,21 +69,23 @@ void renderer_render(void)
 void renderer_destroy(void)
 {
     vao_destroy(renderer.vaos[TILE]);
+    vao_destroy(renderer.vaos[ENTITY]);
     vao_destroy(renderer.vaos[GUI]);
     shader_destroy(renderer.shaders[TILE]);
+    shader_destroy(renderer.shaders[ENTITY]);
     shader_destroy(renderer.shaders[GUI]);
+    texture_destroy(renderer.spritesheet);
 }
 
 static u32 renderer_uniform_location(buffertype type, char* identifier) {
+    shader_use(renderer.shaders[type]);
     return glGetUniformLocation(renderer.shaders[type].id, identifier);
 }
 
 void renderer_uniform_update_texture(buffertype type, char* identifier, Texture texture) {
-    shader_use(renderer.shaders[type]);
     glUniform1i(renderer_uniform_location(type, identifier), texture.id);
 }
 
 void renderer_uniform_update_matrix(buffertype type, char* identifier, f32* mat4) {
-    shader_use(renderer.shaders[type]);
     glUniformMatrix4fv(renderer_uniform_location(type, identifier), 1, GL_FALSE, mat4);
 }

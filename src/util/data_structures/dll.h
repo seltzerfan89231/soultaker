@@ -33,8 +33,10 @@ void dll_node_destroy(DLLNode* n);
 
 DLL dll_create(void);
 i2 dll_empty(DLL* dll);
+void dll_clear(DLL* dll);
 void dll_push(DLL* dll, DLLNode* n);
 void dll_remove(DLL* dll, DLLNode* n);
 void dll_replace(DLL* dll, DLLNode* n);
+void dll_destroy(DLL* dll);
 
 #endif
