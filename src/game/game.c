@@ -22,8 +22,8 @@ void game_init(void)
 void game_setup(void)
 {
     game.tile_buffer = malloc(MAX_BUFFER_LENGTH * sizeof(f32));
-    for (f32 i = 0; i < 30; i++) {
-        for (f32 j = 0; j < 30; j++) {
+    for (f32 i = 15; i < 30; i++) {
+        for (f32 j = 15; j < 30; j++) {
             Tile* tile;
             if (i == 0 || i == 29 || j == 0 || j == 29)
                 tile = tile_create(WALL);
@@ -44,6 +44,15 @@ void game_setup(void)
     player->position = vec3f_create(0.0f, 0.0f, 0.0f);
     Data* player_data = data_create(player, game.entity_length, ENTITY);
     push_data(player_data);
+
+    for (i32 i = 0; i < 10; i++) {
+        for (i32 j = 0; j < 10; j++) {
+            Entity* entity = entity_create(PLAYER);
+            entity->position = vec3f_create(3 * i + 2, 0, 3 * j + 2);
+            Data* entity_data = data_create(entity, game.entity_length, ENTITY);
+            push_data(entity_data);
+        }
+    }
 
     dll_clear(&game.tiles);
 }

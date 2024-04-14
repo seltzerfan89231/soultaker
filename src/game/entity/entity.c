@@ -17,6 +17,10 @@ Entity* entity_create(entitytype type)
 
 void entity_push_data(Entity* entity, f32* buffer, u32* length)
 {
+    buffer[(*length)++] = entity->position.x;
+    buffer[(*length)++] = entity->position.y;
+    buffer[(*length)++] = entity->position.z;
+    return;
     f32 var = entity->scale / 2;
     f32 var2 = var * SQRT2;
     for (i32 v = 0; v < QUAD_VERTEX_COUNT; v++) {

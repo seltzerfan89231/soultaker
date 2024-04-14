@@ -15,21 +15,20 @@ static void renderer_settings(void)
 
 void renderer_init(void) 
 {
-    renderer.shaders[TILE] = shader_create("src/renderer/shaders/tile.vert", "src/renderer/shaders/tile.frag");
+    renderer.shaders[TILE] = shader_create("src/renderer/shaders/tile.vert", "src/renderer/shaders/tile.frag", NULL);
     renderer.usage[TILE] = GL_STATIC_DRAW;
     renderer.vaos[TILE] = vao_create();
     renderer.vaos[TILE].length = TILE_VERTEX_LENGTH;
     vao_attr(&renderer.vaos[TILE], 0, 3, TILE_VERTEX_LENGTH, 0);
     vao_attr(&renderer.vaos[TILE], 1, 2, TILE_VERTEX_LENGTH, 3);
 
-    renderer.shaders[ENTITY] = shader_create("src/renderer/shaders/entity.vert", "src/renderer/shaders/entity.frag");
+    renderer.shaders[ENTITY] = shader_create("src/renderer/shaders/entity.vert", "src/renderer/shaders/entity.frag", NULL);
     renderer.usage[ENTITY] = GL_DYNAMIC_DRAW;
     renderer.vaos[ENTITY] = vao_create();
     renderer.vaos[ENTITY].length = ENTITY_VERTEX_LENGTH;
     vao_attr(&renderer.vaos[ENTITY], 0, 3, ENTITY_VERTEX_LENGTH, 0);
-    vao_attr(&renderer.vaos[ENTITY], 1, 2, ENTITY_VERTEX_LENGTH, 3);
 
-    renderer.shaders[GUI] = shader_create("src/renderer/shaders/gui.vert", "src/renderer/shaders/gui.frag");
+    renderer.shaders[GUI] = shader_create("src/renderer/shaders/gui.vert", "src/renderer/shaders/gui.frag", NULL);
     renderer.usage[GUI] = GL_STATIC_DRAW;
     renderer.vaos[GUI] = vao_create();
     renderer.vaos[GUI].length = GUI_VERTEX_LENGTH;
@@ -60,7 +59,7 @@ void renderer_render(void)
     shader_use(renderer.shaders[TILE]);
     vao_draw(renderer.vaos[TILE], GL_TRIANGLES);
     shader_use(renderer.shaders[ENTITY]);
-    vao_draw(renderer.vaos[ENTITY], GL_TRIANGLES);
+    vao_draw(renderer.vaos[ENTITY], GL_POINTS);
     glDisable(GL_DEPTH_TEST);
     shader_use(renderer.shaders[GUI]);
     vao_draw(renderer.vaos[GUI], GL_TRIANGLES);
