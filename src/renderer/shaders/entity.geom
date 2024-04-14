@@ -6,14 +6,14 @@ uniform float ar;
 uniform float zoom;
 
 void build_house(vec4 position)
-{    
-    gl_Position = position + (1 / zoom) * vec4(-0.5 / ar, 0.0, 0.0, 0.0);    // 1:bottom-left
-    EmitVertex();   
-    gl_Position = position + (1 / zoom) * vec4( 0.5 / ar, 0.0, 0.0, 0.0);    // 2:bottom-right
+{   
+    gl_Position = position + zoom * vec4(-0.5 * ar, 0.0, 0.0, 0.0);    // 1:bottom-left
     EmitVertex();
-    gl_Position = position + (1 / zoom) * vec4(-0.5 / ar, 1.0, 0.0, 0.0);    // 3:top-left
+    gl_Position = position + zoom * vec4(-0.5 * ar, 1.0, 0.0, 0.0);    // 3:top-left
     EmitVertex();
-    gl_Position = position + (1 / zoom) * vec4( 0.5 / ar, 1.0, 0.0, 0.0);    // 4:top-right
+    gl_Position = position + zoom * vec4( 0.5 * ar, 0.0, 0.0, 0.0);    // 2:bottom-right
+    EmitVertex();
+    gl_Position = position + zoom * vec4( 0.5 * ar, 1.0, 0.0, 0.0);    // 4:top-right
     EmitVertex();
     EndPrimitive();
 }

@@ -29,7 +29,7 @@ static void update_proj_matrix(void)
 {
     renderer_uniform_update_matrix(TILE, "proj", camera.proj);
     renderer_uniform_update_matrix(ENTITY, "proj", camera.proj);
-    renderer_uniform_update_float(ENTITY, "zoom", camera.zoom);
+    renderer_uniform_update_float(ENTITY, "zoom", 1 / camera.zoom);
 }
 
 static void update_view_matrix(void)
@@ -94,7 +94,7 @@ void state_init(void)
     game_set_rotation(camera.yaw);
     game_set_tilt(camera.pitch);
     camera_aspect_ratio(window.size.x / window.size.y);
-    renderer_uniform_update_float(ENTITY, "ar", camera.aspect_ratio);
+    renderer_uniform_update_float(ENTITY, "ar", 1 / camera.aspect_ratio);
     update_view_matrix();
     update_proj_matrix();
 }
