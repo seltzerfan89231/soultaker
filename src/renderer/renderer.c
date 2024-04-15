@@ -36,7 +36,7 @@ void renderer_init(void)
     vao_attr(&renderer.vaos[GUI], 1, 3, 5, 2);
 
     renderer.atlas = texture_create("assets/atlas.png");
-    renderer_uniform_update_texture(TILE, "tex", renderer.atlas);
+    renderer_uniform_update_texture(ENTITY, "tex", renderer.atlas);
     texture_bind(renderer.atlas);
     renderer_settings();
 }

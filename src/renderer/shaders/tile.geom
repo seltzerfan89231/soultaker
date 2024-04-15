@@ -5,15 +5,21 @@ layout (triangle_strip, max_vertices = 20) out;
 uniform mat4 view;
 uniform mat4 proj;
 
+out vec2 texCoord;
+
 void draw_top(vec4 position)
 {    
     gl_Position = proj * view * (position + vec4(0.0, 0.0, 1.0, 0.0));
+    texCoord = vec2(0.25f, 0.25f);
     EmitVertex();
     gl_Position = proj * view * (position + vec4(1.0, 0.0, 1.0, 0.0));
+    texCoord = vec2(0.5f, 0.25f);
     EmitVertex();
     gl_Position = proj * view * (position + vec4(0.0, 0.0, 0.0, 0.0));
+    texCoord = vec2(0.25f, 0.0f);
     EmitVertex();   
     gl_Position = proj * view * (position + vec4(1.0, 0.0, 0.0, 0.0));
+    texCoord = vec2(0.5f, 0.0f);
     EmitVertex();
     EndPrimitive();
 }
