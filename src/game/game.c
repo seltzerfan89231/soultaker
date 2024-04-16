@@ -114,6 +114,7 @@ void game_shoot(vec2f dir)
     dirz = dir.x * sin(game.rotation - HALFPI) + dir.y * cos(game.rotation - HALFPI);
     proj->position = player->position;
     // proj->position.y = 0.5;
+    proj->rotation = game.rotation;
     proj->direction = vec3f_normalize(vec3f_create(dirx, 0, dirz));
     proj->tex = vec2f_create(0.5, 0);
     push_data(data_create(proj, game.entity_length, ENTITY));

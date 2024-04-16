@@ -9,7 +9,7 @@
 typedef enum entitytype { PLAYER, PROJECTILE } entitytype;
 
 typedef struct Entity {
-    f32 speed, scale, lifetime;
+    f32 speed, scale, lifetime, rotation;
     entitytype type;
     vec3f position, direction;
     vec2f tex;
