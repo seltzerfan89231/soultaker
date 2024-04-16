@@ -17,7 +17,6 @@ void entity_push_data(Entity* entity, f32* buffer, u32* length)
     buffer[(*length)++] = entity->position.x;
     buffer[(*length)++] = entity->position.y;
     buffer[(*length)++] = entity->position.z;
-    buffer[(*length)++] = entity->rotation;
 }
 
 void entity_update_data(Entity* entity, f32* buffer, u32 offset)

@@ -67,14 +67,14 @@ static void process_input(void)
     if (window_key_pressed(GLFW_KEY_P))
         zoom_magnitude--;
     if (window_mouse_button_pressed(MOUSE_LEFT))
-        game_shoot(window_mouse_direction());
+        game_shoot(window_mouse_direction(), camera.yaw, camera.pitch);
 
     if (move_direction.x != 0 || move_direction.y != 0)
         game_set_target(camera_move(move_direction, window.dt));
     if (rotation_magnitude != 0)
-        game_set_rotation(camera_rotate(rotation_magnitude, window.dt));
+        camera_rotate(rotation_magnitude, window.dt);
     if (tilt_magnitude != 0)
-        game_set_tilt(camera_tilt(tilt_magnitude, window.dt));
+        camera_tilt(tilt_magnitude, window.dt);
     if (zoom_magnitude != 0)
         camera_zoom(zoom_magnitude, window.dt);
 
@@ -91,8 +91,6 @@ void state_init(void)
     camera_init();
     game_init();
 
-    game_set_rotation(camera.yaw);
-    game_set_tilt(camera.pitch);
     camera_aspect_ratio(window.size.x / window.size.y);
     renderer_uniform_update_float(ENTITY, "ar", 1 / camera.aspect_ratio);
     update_view_matrix();

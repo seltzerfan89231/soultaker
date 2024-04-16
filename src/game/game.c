@@ -16,7 +16,6 @@ void game_init(void)
     game.tile_length = game.entity_length = game.gui_length = 0;
     game.tiles = dll_create();
     game.entities = dll_create();
-    game.rotation = game.tilt = 0;
 }
 
 void game_setup(void)
@@ -76,16 +75,6 @@ void game_set_target(vec3f target)
     player->position = target;
 }
 
-void game_set_rotation(f32 rotation)
-{
-    game.rotation = rotation;
-}
-
-void game_set_tilt(f32 tilt)
-{
-    game.tilt = tilt;
-}
-
 void game_destroy(void)
 {
     free(game.tile_buffer);
@@ -95,7 +84,7 @@ void game_destroy(void)
     dll_destroy(&game.entities);
 }
 
-void game_shoot(vec2f dir)
+void game_shoot(vec2f dir, f32 rotation, f32 tilt)
 {
     static f32 cooldown;
     if (glfwGetTime() - cooldown < 0.05)
@@ -106,15 +95,14 @@ void game_shoot(vec2f dir)
     proj->speed = 4;
     f32 dirx, dirz, a, b, c;
     a = atan(-dir.y/dir.x);
-    b = PI/2 + game.tilt;
+    b = PI/2 + tilt;
     c = tan(a) * tan(a) / cos(b) / cos(b) + 1;
     dir.x =  dir.x > 0 ? 1 / sqrt(c) : -1 / sqrt(c);
     dir.y = -dir.y > 0 ? sqrt(1 - 1 / c) : -sqrt(1 - 1 / c);
-    dirx = dir.x * cos(game.rotation - HALFPI) - dir.y * sin(game.rotation - HALFPI);
-    dirz = dir.x * sin(game.rotation - HALFPI) + dir.y * cos(game.rotation - HALFPI);
+    dirx = dir.x * cos(rotation - HALFPI) - dir.y * sin(rotation - HALFPI);
+    dirz = dir.x * sin(rotation - HALFPI) + dir.y * cos(rotation - HALFPI);
     proj->position = player->position;
     // proj->position.y = 0.5;
-    proj->rotation = game.rotation;
     proj->direction = vec3f_normalize(vec3f_create(dirx, 0, dirz));
     proj->tex = vec2f_create(0.5, 0);
     push_data(data_create(proj, game.entity_length, ENTITY));
