@@ -15,6 +15,8 @@ static void state_setup(void)
     renderer_update(TILE, 0, game.tile_length, game.tile_buffer);
     renderer_malloc(ENTITY, MAX_BUFFER_LENGTH);
     renderer_update(ENTITY, 0, game.entity_length, game.entity_buffer);
+    renderer_malloc(PROJECTILE, MAX_BUFFER_LENGTH);
+    renderer_update(PROJECTILE, 0, game.projectile_length, game.projectile_buffer);
     renderer_malloc(GUI, game.gui_length);
     renderer_update(GUI, 0, game.gui_length, game.gui_buffer);
 }
@@ -23,19 +25,24 @@ static void state_update(void)
 {
     game_update(window.dt);
     renderer_update(ENTITY, 0, game.entity_length, game.entity_buffer);
+    renderer_update(PROJECTILE, 0, game.projectile_length, game.projectile_buffer);
 }
 
 static void update_proj_matrix(void)
 {
     renderer_uniform_update_matrix(TILE, "proj", camera.proj);
     renderer_uniform_update_matrix(ENTITY, "proj", camera.proj);
+    renderer_uniform_update_matrix(PROJECTILE, "proj", camera.proj);
     renderer_uniform_update_float(ENTITY, "zoom", 1 / camera.zoom);
+    renderer_uniform_update_float(PROJECTILE, "zoom", 1 / camera.zoom);
 }
 
 static void update_view_matrix(void)
 {
     renderer_uniform_update_matrix(TILE, "view", camera.view);
     renderer_uniform_update_matrix(ENTITY, "view", camera.view);
+    renderer_uniform_update_matrix(PROJECTILE, "view", camera.view);
+    renderer_uniform_update_float(PROJECTILE, "camera_rotation", camera.yaw);
 }
 
 static void process_input(void)
@@ -93,6 +100,8 @@ void state_init(void)
 
     camera_aspect_ratio(window.size.x / window.size.y);
     renderer_uniform_update_float(ENTITY, "ar", 1 / camera.aspect_ratio);
+    renderer_uniform_update_float(PROJECTILE, "ar", 1 / camera.aspect_ratio);
+    renderer_uniform_update_float(PROJECTILE, "camera_rotation", camera.yaw);
     update_view_matrix();
     update_proj_matrix();
 }

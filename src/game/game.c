@@ -12,10 +12,11 @@ static void remove_data(Data* data);
 
 void game_init(void)
 {
-    game.tile_buffer = game.entity_buffer = game.gui_buffer = NULL;
-    game.tile_length = game.entity_length = game.gui_length = 0;
+    game.tile_buffer = game.entity_buffer = game.gui_buffer = game.projectile_buffer = NULL;
+    game.tile_length = game.entity_length = game.gui_length = game.projectile_length = 0;
     game.tiles = dll_create();
     game.entities = dll_create();
+    game.projectiles = dll_create();
 }
 
 void game_setup(void)
@@ -56,16 +57,24 @@ void game_setup(void)
         }
     }
 
-    dll_clear(&game.tiles);
+    game.projectile_buffer = malloc(MAX_BUFFER_LENGTH * sizeof(f32));
 }
 
 void game_update(f32 dt)
 {
-    DLLNode* n = game.entities.head;
+    DLLNode* n;
+    n = game.entities.head;
     while (n != NULL) {
         Entity* entity = n->data->val;
         entity_update_position(entity, dt);
         entity_update_data(entity, game.entity_buffer, n->data->offset);
+        n = n->next;
+    }
+    n = game.projectiles.head;
+    while (n != NULL) {
+        Projectile* proj = n->data->val;
+        projectile_update_position(proj, dt);
+        projectile_update_data(proj, game.projectile_buffer, n->data->offset);
         n = n->next;
     }
 }
@@ -79,19 +88,21 @@ void game_destroy(void)
 {
     free(game.tile_buffer);
     free(game.entity_buffer);
+    free(game.projectile_buffer);
     free(game.gui_buffer);
     dll_destroy(&game.tiles);
     dll_destroy(&game.entities);
+    dll_destroy(&game.projectiles);
 }
 
 void game_shoot(vec2f dir, f32 rotation, f32 tilt)
 {
     static f32 cooldown;
-    if (glfwGetTime() - cooldown < 0.05)
+    if (glfwGetTime() - cooldown < 1)
         return;
     cooldown = glfwGetTime();
     assert(player != NULL);
-    Entity* proj = entity_create(PROJECTILE);
+    Projectile* proj = projectile_create(ONE);
     proj->speed = 4;
     f32 dirx, dirz, a, b, c;
     a = atan(-dir.y/dir.x);
@@ -102,10 +113,11 @@ void game_shoot(vec2f dir, f32 rotation, f32 tilt)
     dirx = dir.x * cos(rotation - HALFPI) - dir.y * sin(rotation - HALFPI);
     dirz = dir.x * sin(rotation - HALFPI) + dir.y * cos(rotation - HALFPI);
     proj->position = player->position;
-    // proj->position.y = 0.5;
+    proj->rotation = dir.x > 0 ? a - HALFPI : a + HALFPI;
+    proj->camera_rotation = rotation;
     proj->direction = vec3f_normalize(vec3f_create(dirx, 0, dirz));
     proj->tex = vec2f_create(0.5, 0);
-    push_data(data_create(proj, game.entity_length, ENTITY));
+    push_data(data_create(proj, game.projectile_length, PROJECTILE));
 }
 
 void push_data(Data* data)
@@ -119,6 +131,10 @@ void push_data(Data* data)
         case ENTITY:
             dll_push(&game.entities, node);
             entity_push_data((Entity*)data->val, game.entity_buffer, &game.entity_length);
+            break;
+        case PROJECTILE:
+            dll_push(&game.projectiles, node);
+            projectile_push_data((Projectile*)data->val, game.projectile_buffer, &game.projectile_length);
             break;
         case GUI:
             break;

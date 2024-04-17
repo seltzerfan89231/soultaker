@@ -6,7 +6,7 @@
 #include "../../util/constants.h"
 #include <stdlib.h>
 
-typedef enum entitytype { PLAYER, PROJECTILE } entitytype;
+typedef enum entitytype { PLAYER } entitytype;
 
 typedef struct Entity {
     f32 speed, scale, lifetime, rotation;

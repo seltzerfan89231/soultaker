@@ -7,7 +7,7 @@ uniform mat4 proj;
 
 out vec2 texCoord;
 
-void draw_top(vec4 position)
+void build_top(vec4 position)
 {    
     gl_Position = proj * view * (position + vec4(0.0, 0.0, 1.0, 0.0));
     texCoord = vec2(0.25f, 0.25f);
@@ -24,7 +24,7 @@ void draw_top(vec4 position)
     EndPrimitive();
 }
 
-void draw_sides(vec4 position)
+void build_sides(vec4 position)
 {
     gl_Position = proj * view * (position + vec4(0.0, -position.y, 0.0, 0.0));
     texCoord = vec2(0.00f, 0.5f);
@@ -73,8 +73,7 @@ void draw_sides(vec4 position)
 
 void main() 
 {    
-    draw_top(gl_in[0].gl_Position);
-    if (gl_in[0].gl_Position.y != 0) {
-        draw_sides(gl_in[0].gl_Position);
-    }
+    build_top(gl_in[0].gl_Position);
+    if (gl_in[0].gl_Position.y != 0)
+        build_sides(gl_in[0].gl_Position);
 }

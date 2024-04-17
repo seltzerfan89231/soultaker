@@ -28,6 +28,13 @@ void renderer_init(void)
     renderer.vaos[ENTITY].length = 3;
     vao_attr(&renderer.vaos[ENTITY], 0, 3, 3, 0);
 
+    renderer.shaders[PROJECTILE] = shader_create("src/renderer/shaders/projectile.vert", "src/renderer/shaders/projectile.frag", "src/renderer/shaders/projectile.geom");
+    renderer.usage[PROJECTILE] = GL_DYNAMIC_DRAW;
+    renderer.vaos[PROJECTILE] = vao_create();
+    renderer.vaos[PROJECTILE].length = 5;
+    vao_attr(&renderer.vaos[PROJECTILE], 0, 3, 5, 0);
+    vao_attr(&renderer.vaos[PROJECTILE], 1, 2, 5, 3);
+
     renderer.shaders[GUI] = shader_create("src/renderer/shaders/gui.vert", "src/renderer/shaders/gui.frag", NULL);
     renderer.usage[GUI] = GL_STATIC_DRAW;
     renderer.vaos[GUI] = vao_create();
@@ -60,6 +67,8 @@ void renderer_render(void)
     vao_draw(renderer.vaos[TILE], GL_POINTS);
     shader_use(renderer.shaders[ENTITY]);
     vao_draw(renderer.vaos[ENTITY], GL_POINTS);
+    shader_use(renderer.shaders[PROJECTILE]);
+    vao_draw(renderer.vaos[PROJECTILE], GL_POINTS);
     glDisable(GL_DEPTH_TEST);
     shader_use(renderer.shaders[GUI]);
     vao_draw(renderer.vaos[GUI], GL_TRIANGLES);
