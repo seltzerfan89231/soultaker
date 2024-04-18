@@ -98,13 +98,12 @@ void game_destroy(void)
 void game_shoot(vec2f dir, f32 rotation, f32 tilt, f32 zoom)
 {
     static f32 cooldown;
-    if (glfwGetTime() - cooldown < 1)
+    if (glfwGetTime() - cooldown < 0.1)
         return;
     cooldown = glfwGetTime();
     assert(player != NULL);
     Projectile* proj = projectile_create(ONE);
     proj->speed = 4;
-    printf("%f\n", zoom);
     dir.y += zoom;
     f32 dirx, dirz, a, b, c;
     a = atan(-dir.y/dir.x);
@@ -115,8 +114,7 @@ void game_shoot(vec2f dir, f32 rotation, f32 tilt, f32 zoom)
     dirx = dir.x * cos(rotation - HALFPI) - dir.y * sin(rotation - HALFPI);
     dirz = dir.x * sin(rotation - HALFPI) + dir.y * cos(rotation - HALFPI);
     proj->position = player->position;
-    proj->rotation = dir.x > 0 ? a - HALFPI : a + HALFPI;
-    proj->camera_rotation = rotation;
+    proj->rotation = (dir.x > 0 ? a - HALFPI : a + HALFPI) + rotation;
     proj->position.y = zoom;
     proj->direction = vec3f_normalize(vec3f_create(dirx, 0, dirz));
     proj->tex = vec2f_create(0.5, 0);

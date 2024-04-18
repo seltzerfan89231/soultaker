@@ -8,14 +8,14 @@ uniform float camera_rotation;
 
 out vec2 texCoord;
 
-in vec2 rotation[];
+in float rotation[];
 
 float k = 1 / sqrt(2);
 
 void build_projectile(vec4 position) 
 {
     float c = 3.141592653589 / 4;
-    float a = rotation[0].x + rotation[0].y - camera_rotation;
+    float a = rotation[0] - camera_rotation;
     vec2 offset;
     offset = zoom * vec2(k * ar * cos(a - 3 * c), k * sin(a - 3 * c) + 0.5);
     gl_Position = position + vec4(offset, 0.0, 0.0);    // 1:bottom-left

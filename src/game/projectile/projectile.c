@@ -18,7 +18,6 @@ void projectile_push_data(Projectile* projectile, f32* buffer, u32* length)
     buffer[(*length)++] = projectile->position.y;
     buffer[(*length)++] = projectile->position.z;
     buffer[(*length)++] = projectile->rotation;
-    buffer[(*length)++] = projectile->camera_rotation;
 }
 
 void projectile_update_data(Projectile* projectile, f32* buffer, u32 offset)

@@ -31,9 +31,9 @@ void renderer_init(void)
 
     renderer.shaders[PROJECTILE] = shader_create("src/renderer/shaders/projectile.vert", "src/renderer/shaders/projectile.frag", "src/renderer/shaders/projectile.geom");
     renderer.vaos[PROJECTILE] = vao_create(GL_DYNAMIC_DRAW);
-    renderer.vaos[PROJECTILE].length = 5;
-    vao_attr(&renderer.vaos[PROJECTILE], 0, 3, 5, 0);
-    vao_attr(&renderer.vaos[PROJECTILE], 1, 2, 5, 3);
+    renderer.vaos[PROJECTILE].length = 4;
+    vao_attr(&renderer.vaos[PROJECTILE], 0, 3, 4, 0);
+    vao_attr(&renderer.vaos[PROJECTILE], 1, 1, 4, 3);
 
     renderer.shaders[GUI] = shader_create("src/renderer/shaders/gui.vert", "src/renderer/shaders/gui.frag", NULL);
     renderer.vaos[GUI] = vao_create(GL_STATIC_DRAW);
