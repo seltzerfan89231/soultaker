@@ -10,34 +10,33 @@ static void renderer_settings(void)
     glEnable(GL_CULL_FACE); 
     glEnable(GL_MULTISAMPLE);
     glCullFace(GL_FRONT);
-    // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     glfwWindowHint(GLFW_SAMPLES, NUM_SAMPLES);
 }
 
 void renderer_init(void) 
 {
+    renderer.shaders = malloc(NUM_BUFFER_TYPES * sizeof(Shader));
+    renderer.vaos = malloc(NUM_BUFFER_TYPES * sizeof(VAO));
+
     renderer.shaders[TILE] = shader_create("src/renderer/shaders/tile.vert", "src/renderer/shaders/tile.frag", "src/renderer/shaders/tile.geom");
-    renderer.usage[TILE] = GL_STATIC_DRAW;
-    renderer.vaos[TILE] = vao_create();
+    renderer.vaos[TILE] = vao_create(GL_STATIC_DRAW);
     renderer.vaos[TILE].length = 3;
     vao_attr(&renderer.vaos[TILE], 0, 3, 3, 0);
 
     renderer.shaders[ENTITY] = shader_create("src/renderer/shaders/entity.vert", "src/renderer/shaders/entity.frag", "src/renderer/shaders/entity.geom");
-    renderer.usage[ENTITY] = GL_DYNAMIC_DRAW;
-    renderer.vaos[ENTITY] = vao_create();
+    renderer.vaos[ENTITY] = vao_create(GL_DYNAMIC_DRAW);
     renderer.vaos[ENTITY].length = 3;
     vao_attr(&renderer.vaos[ENTITY], 0, 3, 3, 0);
 
     renderer.shaders[PROJECTILE] = shader_create("src/renderer/shaders/projectile.vert", "src/renderer/shaders/projectile.frag", "src/renderer/shaders/projectile.geom");
-    renderer.usage[PROJECTILE] = GL_DYNAMIC_DRAW;
-    renderer.vaos[PROJECTILE] = vao_create();
+    renderer.vaos[PROJECTILE] = vao_create(GL_DYNAMIC_DRAW);
     renderer.vaos[PROJECTILE].length = 5;
     vao_attr(&renderer.vaos[PROJECTILE], 0, 3, 5, 0);
     vao_attr(&renderer.vaos[PROJECTILE], 1, 2, 5, 3);
 
     renderer.shaders[GUI] = shader_create("src/renderer/shaders/gui.vert", "src/renderer/shaders/gui.frag", NULL);
-    renderer.usage[GUI] = GL_STATIC_DRAW;
-    renderer.vaos[GUI] = vao_create();
+    renderer.vaos[GUI] = vao_create(GL_STATIC_DRAW);
     renderer.vaos[GUI].length = 5;
     vao_attr(&renderer.vaos[GUI], 0, 2, 5, 0);
     vao_attr(&renderer.vaos[GUI], 1, 3, 5, 2);
@@ -50,7 +49,7 @@ void renderer_init(void)
 
 void renderer_malloc(buffertype type, u32 length)
 {
-    vao_malloc(&renderer.vaos[type], length, renderer.usage[type]);
+    vao_malloc(&renderer.vaos[type], length);
 }
 
 void renderer_update(buffertype type, u32 offset, u32 length, f32* buffer)
@@ -83,6 +82,8 @@ void renderer_destroy(void)
     shader_destroy(renderer.shaders[ENTITY]);
     shader_destroy(renderer.shaders[GUI]);
     texture_destroy(renderer.atlas);
+    free(renderer.shaders);
+    free(renderer.vaos);
 }
 
 static u32 renderer_uniform_location(buffertype type, char* identifier) {

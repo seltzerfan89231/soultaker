@@ -29,7 +29,6 @@ static unsigned int compile(char *s_path, GLenum type)
     shader_code = read_file(s_path);
     glShaderSource(shader, 1, &shader_code, NULL);
     glCompileShader(shader);
-
     char info_log[512];
     i32 success;
     glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
@@ -39,7 +38,6 @@ static unsigned int compile(char *s_path, GLenum type)
         printf(info_log);
         exit(1);
     }
-
     return shader;
 }
 
@@ -60,7 +58,6 @@ Shader shader_create(char* vs_path, char* fs_path, char* gs_path)
     glDeleteShader(vertex);
     glDeleteShader(fragment);
     glDeleteShader(geometry);
-
     char info_log[512];
     i32 success;
     glGetProgramiv(shader.id, GL_LINK_STATUS, &success);
@@ -70,7 +67,6 @@ Shader shader_create(char* vs_path, char* fs_path, char* gs_path)
         printf(info_log);
         exit(1);
     }
-
     return shader;
 }
 

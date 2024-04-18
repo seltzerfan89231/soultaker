@@ -1,12 +1,13 @@
 #include "vao.h"
 
-VAO vao_create(void)
+VAO vao_create(GLenum usage)
 {
     VAO vao;
     glGenVertexArrays(1, &vao.id);
     vao_bind(vao);
     vao.vbo = vbo_create();
     vao.length = 0;
+    vao.usage = usage;
     return vao;
 }
 
@@ -23,10 +24,10 @@ void vao_update(VAO* vao, u32 offset, u32 length, f32* buffer)
     vbo_update(&vao->vbo, offset, length, buffer);
 }
 
-void vao_malloc(VAO* vao, u32 length, GLenum usage)
+void vao_malloc(VAO* vao, u32 length)
 {
     vao_bind(*vao);
-    vbo_malloc(&vao->vbo, length, usage);
+    vbo_malloc(&vao->vbo, length, vao->usage);
 }
 
 void vao_draw(VAO vao, GLenum mode)

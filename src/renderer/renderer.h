@@ -11,9 +11,8 @@
 #define NUM_SAMPLES 4
 
 typedef struct Renderer {
-    VAO vaos[NUM_BUFFER_TYPES];
-    Shader shaders[NUM_BUFFER_TYPES];
-    GLenum usage[NUM_BUFFER_TYPES];
+    VAO *vaos;
+    Shader *shaders;
     Texture atlas;
 } Renderer;
 

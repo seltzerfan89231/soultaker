@@ -74,7 +74,7 @@ static void process_input(void)
     if (window_key_pressed(GLFW_KEY_P))
         zoom_magnitude--;
     if (window_mouse_button_pressed(MOUSE_LEFT))
-        game_shoot(window_mouse_direction(), camera.yaw, camera.pitch);
+        game_shoot(window_mouse_direction(), camera.yaw, camera.pitch, 1 / camera.zoom);
 
     if (move_direction.x != 0 || move_direction.y != 0)
         game_set_target(camera_move(move_direction, window.dt));
