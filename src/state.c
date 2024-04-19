@@ -45,6 +45,11 @@ static void update_view_matrix(void)
     renderer_uniform_update_float(PROJECTILE, "camera_rotation", camera.yaw);
 }
 
+static void update_player_position(void)
+{
+    renderer_uniform_update_vec3(TILE, "player_pos", camera.target);
+}
+
 static void process_input(void)
 {
     i32 rotation_magnitude = 0;
@@ -74,7 +79,7 @@ static void process_input(void)
     if (window_key_pressed(GLFW_KEY_P))
         zoom_magnitude--;
     if (window_mouse_button_pressed(MOUSE_LEFT))
-        game_shoot(window_mouse_direction(), camera.yaw, camera.pitch, 1 / camera.zoom);
+        game_shoot(window_mouse_direction(), camera.yaw, camera.pitch, camera.zoom);
 
     if (move_direction.x != 0 || move_direction.y != 0)
         game_set_target(camera_move(move_direction, window.dt));
@@ -85,6 +90,8 @@ static void process_input(void)
     if (zoom_magnitude != 0)
         camera_zoom(zoom_magnitude, window.dt);
 
+    if (move_direction.x != 0 || move_direction.y != 0)
+        update_player_position();
     if (move_direction.x != 0 || move_direction.y != 0 || rotation_magnitude != 0 || tilt_magnitude != 0)
         update_view_matrix();
     if (zoom_magnitude != 0)
@@ -99,6 +106,7 @@ void state_init(void)
     game_init();
 
     camera_aspect_ratio(window.size.x / window.size.y);
+    renderer_uniform_update_vec3(TILE, "player_pos", camera.target);
     renderer_uniform_update_float(ENTITY, "ar", 1 / camera.aspect_ratio);
     renderer_uniform_update_float(PROJECTILE, "ar", 1 / camera.aspect_ratio);
     renderer_uniform_update_float(PROJECTILE, "camera_rotation", camera.yaw);

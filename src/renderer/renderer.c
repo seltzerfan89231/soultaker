@@ -87,7 +87,9 @@ void renderer_destroy(void)
 }
 
 static u32 renderer_uniform_location(buffertype type, char* identifier) {
+    float t = glfwGetTime();
     shader_use(renderer.shaders[type]);
+    printf("%.10", glfwGetTime() - t);
     return glGetUniformLocation(renderer.shaders[type].id, identifier);
 }
 
@@ -101,4 +103,8 @@ void renderer_uniform_update_matrix(buffertype type, char* identifier, f32* mat4
 
 void renderer_uniform_update_float(buffertype type, char* identifier, f32 flt) {
     glUniform1f(renderer_uniform_location(type, identifier), flt);
+}
+
+void renderer_uniform_update_vec3(buffertype type, char* identifier, vec3f vec) {
+    glUniform3f(renderer_uniform_location(type, identifier), vec.x, vec.y, vec.z);
 }
