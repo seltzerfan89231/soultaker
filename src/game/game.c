@@ -22,8 +22,8 @@ void game_init(void)
 void game_setup(void)
 {
     game.tile_buffer = malloc(MAX_BUFFER_LENGTH * sizeof(f32));
-    for (f32 i = 0; i < 30; i++) {
-        for (f32 j = 0; j < 30; j++) {
+    for (f32 i = 0; i < 256; i++) {
+        for (f32 j = 0; j < 256; j++) {
             Tile* tile;
             if (i == 0 || i == 29 || j == 0 || j == 29) {
                 tile = tile_create(WALL);
@@ -104,7 +104,7 @@ void game_shoot(vec2f dir, f32 rotation, f32 tilt, f32 zoom)
     assert(player != NULL);
     Projectile* proj = projectile_create(ONE);
     proj->speed = 4;
-    dir.y += zoom;
+    // dir.y += 1 / zoom;
     f32 dirx, dirz, a, b, c;
     a = atan(-dir.y/dir.x);
     b = PI/2 + tilt;
@@ -114,9 +114,9 @@ void game_shoot(vec2f dir, f32 rotation, f32 tilt, f32 zoom)
     dirx = dir.x * cos(rotation - HALFPI) - dir.y * sin(rotation - HALFPI);
     dirz = dir.x * sin(rotation - HALFPI) + dir.y * cos(rotation - HALFPI);
     proj->position = player->position;
-    proj->rotation = (dir.x > 0 ? a - HALFPI : a + HALFPI) + rotation;
-    proj->position.y = zoom;
-    proj->direction = vec3f_normalize(vec3f_create(dirx, 0, dirz));
+    proj->rotation = (dir.x > 0 ?- HALFPI : HALFPI) + rotation + a;
+    //proj->position.y = zoom;
+    proj->direction = vec3f_normalize(vec3f_create(dirx, 0.0, dirz));
     proj->tex = vec2f_create(0.5, 0);
     push_data(data_create(proj, game.projectile_length, PROJECTILE));
 }
@@ -157,7 +157,7 @@ void remove_data(Data* data)
                 new->offset = data->offset;
                 entity_update_data((Entity*)new->val, game.entity_buffer, new->offset);
             }
-            game.entity_length -= 6 * 5;
+            game.entity_length -= 3 * sizeof(f32);
             break;
         case GUI:
             break;

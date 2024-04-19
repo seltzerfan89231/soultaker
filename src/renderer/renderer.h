@@ -4,6 +4,7 @@
 #include <glad.h>
 #include <glfw.h>
 #include "../util/buffertype.h"
+#include "../util/vec.h"
 #include "vao/vao.h"
 #include "shader/shader.h"
 #include "texture/texture.h"
@@ -11,8 +12,8 @@
 #define NUM_SAMPLES 4
 
 typedef struct Renderer {
-    VAO *vaos;
-    Shader *shaders;
+    VAO* vaos;
+    Shader* shaders;
     Texture atlas;
 } Renderer;
 
@@ -26,5 +27,6 @@ void renderer_destroy(void);
 void renderer_uniform_update_texture(buffertype type, char* identifier, Texture texture);
 void renderer_uniform_update_matrix(buffertype type, char* identifier, f32* mat4);
 void renderer_uniform_update_float(buffertype type, char* identifier, f32 flt);
+void renderer_uniform_update_vec3(buffertype type, char* identifier, vec3f vec);
 
 #endif

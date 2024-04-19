@@ -31,8 +31,8 @@ typedef struct Camera {
 extern Camera camera;
 
 void camera_init(void);
-f32 camera_rotate(i32 mag, f32 dt);
-f32 camera_tilt(i32 mag, f32 dt);
+void camera_rotate(i32 mag, f32 dt);
+void camera_tilt(i32 mag, f32 dt);
 void camera_zoom(i32 mag, f32 dt);
 vec3f camera_move(vec2i dir, f32 dt);
 void camera_aspect_ratio(f32 ar);

@@ -26,14 +26,13 @@ void camera_init(void)
     camera_update_proj();
 }
 
-f32 camera_rotate(i32 mag, f32 dt)
+void camera_rotate(i32 mag, f32 dt)
 {
     camera.yaw += mag * dt * camera.rotate_speed;
     camera_update();
-    return camera.yaw;
 }
 
-f32 camera_tilt(i32 mag, f32 dt)
+void camera_tilt(i32 mag, f32 dt)
 {
     camera.pitch += mag * dt;
     if (camera.pitch <= MIN_PITCH)
@@ -41,7 +40,6 @@ f32 camera_tilt(i32 mag, f32 dt)
     if (camera.pitch >= MAX_PITCH)
         camera.pitch = MAX_PITCH;
     camera_update();
-    return camera.pitch;
 }
 
 void camera_zoom(i32 mag, f32 dt)
