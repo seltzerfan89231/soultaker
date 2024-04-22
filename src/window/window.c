@@ -1,6 +1,4 @@
 #include "window.h"
-#include <stdbool.h>
-#include <assert.h>
 
 Window window;
 
@@ -31,13 +29,16 @@ void window_init(void)
     gladLoadGL(glfwGetProcAddress);
     glViewport(0, 0, window.size.x, window.size.y);
 
+    window.aspect_ratio = (f32)window.size.x / window.size.y;
     window.last_frame = glfwGetTime();
     window.dt = 0;
     window.fps = 0;
 }
 
-void window_calc_dt(void)
+void window_update(void)
 {
+    glfwPollEvents();
+    glfwSwapBuffers(window.handle);
     f32 cur_frame = glfwGetTime();
     window.dt = cur_frame - window.last_frame;
     if (window.dt != 0)
@@ -49,7 +50,6 @@ void framebuffer_size_callback() {}
 
 void mouse_button_callback(GLFWwindow* handle, int button, int action)
 {
-    assert(handle == window.handle);
     if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
         window.mouse.left = DOWN;
     if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_RELEASE)
@@ -58,9 +58,8 @@ void mouse_button_callback(GLFWwindow* handle, int button, int action)
 
 void mouse_callback(GLFWwindow* handle, double xpos, double ypos)
 {
-    assert(handle == window.handle);
-    window.mouse.position.x = xpos;
-    window.mouse.position.y = ypos;
+    window.mouse.position.x = xpos / window.size.x;
+    window.mouse.position.y = ypos / window.size.y;
 }
 
 i2 window_mouse_button_pressed(mousebutton mb)
@@ -78,8 +77,5 @@ i2 window_mouse_button_pressed(mousebutton mb)
 }
 
 i2 window_closed(void) { return glfwWindowShouldClose(window.handle); }
-void window_close(void) { glfwSetWindowShouldClose(window.handle, true); }
-void window_poll_events(void) { glfwPollEvents(); }
-void window_swap_buffers(void) { glfwSwapBuffers(window.handle); }
+void window_close(void) { glfwSetWindowShouldClose(window.handle, 1); }
 i2 window_key_pressed(GLenum key) { return glfwGetKey(window.handle, key) == GLFW_PRESS; }
-vec2f window_mouse_direction(void) { return vec2f_normalize(vec2f_sub(window.mouse.position, vec2f_scale(0.5, window.size))); }

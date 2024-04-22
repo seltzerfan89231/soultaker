@@ -79,7 +79,7 @@ static void process_input(void)
     if (window_key_pressed(GLFW_KEY_P))
         zoom_magnitude--;
     if (window_mouse_button_pressed(MOUSE_LEFT))
-        game_shoot(window_mouse_direction(), camera.yaw, camera.pitch, camera.zoom);
+        game_shoot(window.mouse.position, camera.yaw, camera.pitch, camera.zoom, window.aspect_ratio);
 
     if (move_direction.x != 0 || move_direction.y != 0)
         game_set_target(camera_move(move_direction, window.dt));
@@ -88,7 +88,7 @@ static void process_input(void)
     if (tilt_magnitude != 0)
         camera_tilt(tilt_magnitude, window.dt);
     if (zoom_magnitude != 0)
-        camera_zoom(zoom_magnitude, window.dt);
+        camera_zoom(zoom_magnitude, window.dt, window.aspect_ratio);
 
     if (move_direction.x != 0 || move_direction.y != 0)
         update_player_position();
@@ -102,14 +102,15 @@ void state_init(void)
 {
     window_init();
     renderer_init();
-    camera_init();
+    camera_init(vec3f_create(0.0f, 0.0f, 0.0f), window.aspect_ratio);
     game_init();
 
-    camera_aspect_ratio(window.size.x / window.size.y);
     renderer_uniform_update_vec3(TILE, "player_pos", camera.target);
-    renderer_uniform_update_float(ENTITY, "ar", 1 / camera.aspect_ratio);
-    renderer_uniform_update_float(PROJECTILE, "ar", 1 / camera.aspect_ratio);
+    renderer_uniform_update_float(ENTITY, "ar", 1 / window.aspect_ratio);
+    renderer_uniform_update_float(PROJECTILE, "ar", 1 / window.aspect_ratio);
     renderer_uniform_update_float(PROJECTILE, "camera_rotation", camera.yaw);
+    renderer_uniform_update_float(PROJECTILE, "c", PI / 4);
+    renderer_uniform_update_float(PROJECTILE, "k", 1 / sqrt(2));
     update_view_matrix();
     update_proj_matrix();
 }
@@ -122,9 +123,7 @@ void state_loop(void)
         process_input();
         state_update();
         renderer_render();
-        window_poll_events();
-        window_swap_buffers();
-        window_calc_dt();
+        window_update();
         if (glfwGetTime() - time > 1)
             printf("%d, %.0f\n", window.mouse.left, window.fps), time = glfwGetTime();
     }

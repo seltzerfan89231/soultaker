@@ -10,7 +10,7 @@ static void renderer_settings(void)
     glEnable(GL_CULL_FACE); 
     glEnable(GL_MULTISAMPLE);
     glCullFace(GL_FRONT);
-    //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     glfwWindowHint(GLFW_SAMPLES, NUM_SAMPLES);
 }
 
