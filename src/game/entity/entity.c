@@ -12,16 +12,11 @@ Entity* entity_create(entitytype type)
     return entity;
 }
 
-void entity_push_data(Entity* entity, f32* buffer, u32* length)
+void entity_push_data(Entity* entity, f32* buffer, u32 offset)
 {
-    buffer[(*length)++] = entity->position.x;
-    buffer[(*length)++] = entity->position.y;
-    buffer[(*length)++] = entity->position.z;
-}
-
-void entity_update_data(Entity* entity, f32* buffer, u32 offset)
-{
-    entity_push_data(entity, buffer, &offset);
+    buffer[offset++] = entity->position.x;
+    buffer[offset++] = entity->position.y;
+    buffer[offset++] = entity->position.z;
 }
 
 void entity_update_position(Entity* entity, f32 dt)

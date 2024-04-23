@@ -11,7 +11,9 @@
 typedef struct Game {
     f32 *tile_buffer, *entity_buffer, *projectile_buffer, *gui_buffer;
     u32 tile_length, entity_length, projectile_length, gui_length;
-    DLL tiles, entities, projectiles;
+    Tile **tiles;
+    Entity **entities;
+    Projectile **projectiles;
 } Game;
 
 extern Game game;

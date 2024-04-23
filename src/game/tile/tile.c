@@ -9,11 +9,11 @@ Tile* tile_create(tiletype type)
     return tile;
 }
 
-void tile_push_data(Tile* tile, f32* buffer, u32* length)
+void tile_push_data(Tile* tile, f32* buffer, u32 offset)
 {
-    buffer[(*length)++] = tile->position.x;
-    buffer[(*length)++] = tile->position.y;
-    buffer[(*length)++] = tile->position.z;
+    buffer[offset++] = tile->position.x;
+    buffer[offset++] = tile->position.y;
+    buffer[offset++] = tile->position.z;
 }
 
 void tile_remove_data(Tile* tile, f32* buffer, u32 offset)

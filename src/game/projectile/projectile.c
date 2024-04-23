@@ -12,17 +12,12 @@ Projectile* projectile_create(projtype type)
     return projectile;
 }
 
-void projectile_push_data(Projectile* projectile, f32* buffer, u32* length)
+void projectile_push_data(Projectile* projectile, f32* buffer, u32 offset)
 {
-    buffer[(*length)++] = projectile->position.x;
-    buffer[(*length)++] = projectile->position.y;
-    buffer[(*length)++] = projectile->position.z;
-    buffer[(*length)++] = projectile->rotation;
-}
-
-void projectile_update_data(Projectile* projectile, f32* buffer, u32 offset)
-{
-    projectile_push_data(projectile, buffer, &offset);
+    buffer[offset++] = projectile->position.x;
+    buffer[offset++] = projectile->position.y;
+    buffer[offset++] = projectile->position.z;
+    buffer[offset++] = projectile->rotation;
 }
 
 void projectile_update_position(Projectile* projectile, f32 dt)
