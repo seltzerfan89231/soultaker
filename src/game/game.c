@@ -104,7 +104,6 @@ void game_shoot(vec2f pos, f32 rotation, f32 tilt, f32 zoom, f32 ar)
     assert(player != NULL);
     Projectile* proj = projectile_create(ONE);
     proj->speed = 4;
-    printf("%f\n", zoom);
     vec2f dir = vec2f_normalize(vec2f_create((pos.x - 0.5) * ar, pos.y - 0.5 + 1.0 / 4 / zoom));
     f32 dirx, dirz, a, b, c;
     a = atan(-dir.y/dir.x);

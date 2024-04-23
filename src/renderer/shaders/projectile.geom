@@ -1,6 +1,6 @@
 #version 330 core
 layout (points) in;
-layout (points, max_vertices = 1) out;
+layout (triangle_strip, max_vertices = 4) out;
 
 uniform float ar;
 uniform float zoom;
@@ -36,8 +36,5 @@ void build_projectile(vec4 position)
 }
 
 void main() {
-    // build_projectile(gl_in[0].gl_Position);
-    gl_Position = gl_in[0].gl_Position;
-    EmitVertex();
-    EndPrimitive();
+    build_projectile(gl_in[0].gl_Position);
 }

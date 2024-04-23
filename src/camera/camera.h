@@ -16,7 +16,7 @@
 #define DEFAULT_MOVE_SPEED 8
 #define DEFAULT_YAW PI / 2
 #define DEFAULT_FOV PI / 4
-#define DEFAULT_ZOOM 1
+#define DEFAULT_ZOOM 4
 #define MIN_PITCH 0.3
 #define MAX_PITCH 1.3
 #define MIN_ZOOM 1

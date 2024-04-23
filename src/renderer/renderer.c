@@ -10,7 +10,7 @@ static void renderer_settings(void)
     glEnable(GL_CULL_FACE); 
     glEnable(GL_MULTISAMPLE);
     glCullFace(GL_FRONT);
-    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     glfwWindowHint(GLFW_SAMPLES, NUM_SAMPLES);
 }
 
@@ -59,7 +59,6 @@ void renderer_update(buffertype type, u32 offset, u32 length, f32* buffer)
 
 void renderer_render(void)
 {
-    glEnable(GL_DEPTH_TEST);
     glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
     shader_use(renderer.shaders[TILE]);
@@ -71,6 +70,7 @@ void renderer_render(void)
     glDisable(GL_DEPTH_TEST);
     shader_use(renderer.shaders[GUI]);
     vao_draw(renderer.vaos[GUI], GL_TRIANGLES);
+    glEnable(GL_DEPTH_TEST);
 }
 
 void renderer_destroy(void)
