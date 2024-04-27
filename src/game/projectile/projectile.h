@@ -18,8 +18,6 @@ typedef struct Projectile {
 Projectile* projectile_create(projtype type);
 void projectile_push_data(Projectile* projectile, f32* buffer, u32 offset);
 void projectile_update_position(Projectile* projectile, f32 dt);
-void projectile_update_tilt(f32 tilt);
-void projectile_update_rotation(f32 rotation);
 void projectile_destroy(Projectile* projectile);
 
 #endif

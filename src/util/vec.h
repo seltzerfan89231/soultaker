@@ -151,6 +151,14 @@ _VEC2_NORMALIZE(i)
         return vec; \
     }
 
+#define _VEC3_DISTANCE(_type) \
+    static inline f32 vec3##_type##_distance(vec3##_type vec1, vec3##_type vec2) { \
+        f32 dx = vec1.x - vec2.x; \
+        f32 dy = vec1.y - vec2.y; \
+        f32 dz = vec1.z - vec2.z; \
+        return sqrt(dx*dx + dy*dy + dz*dz); \
+    }
+
 _VEC3_STRUCT(u)
 _VEC3_STRUCT(f)
 _VEC3_STRUCT(i)
@@ -182,5 +190,7 @@ _VEC3_MAG(i)
 _VEC3_NORMALIZE(u)
 _VEC3_NORMALIZE(f)
 _VEC3_NORMALIZE(i)
+
+_VEC3_DISTANCE(f)
 
 #endif

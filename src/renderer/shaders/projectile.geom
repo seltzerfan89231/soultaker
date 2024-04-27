@@ -5,6 +5,7 @@ layout (triangle_strip, max_vertices = 4) out;
 uniform float ar;
 uniform float zoom;
 uniform float camera_rotation;
+uniform float b;
 uniform float c;
 uniform float k;
 
@@ -14,7 +15,14 @@ in float rotation[];
 
 void build_projectile(vec4 position) 
 {
-    float a = rotation[0] - camera_rotation;
+    float a = rotation[0] - camera_rotation;  
+    float g = 0;
+    if (cos(a) > 0) {
+        g = 0;
+    } else {
+        g = 4 * c;
+    }
+    a = atan(tan(a) / cos(2 * c + b)) + g;
     vec2 offset;
     offset = zoom * vec2(k * ar * cos(a - 3 * c), k * sin(a - 3 * c));
     gl_Position = position + vec4(offset, 0.0, 0.0);    // 1:bottom-left

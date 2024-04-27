@@ -34,6 +34,10 @@ void camera_init(vec3f pos, f32 ar) {
 
 void camera_rotate(i32 mag, f32 dt) {
     camera.yaw += mag * dt * camera.rotate_speed;
+    if (camera.yaw > 2 * PI)
+        camera.yaw -= 2 * PI;
+    if (camera.yaw < 0)
+        camera.yaw += 2 * PI;
     update_vectors();
     update_view();
 }

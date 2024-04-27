@@ -28,7 +28,7 @@ void game_setup(void)
     for (f32 i = 0; i < 30; i++) {
         for (f32 j = 0; j < 30; j++) {
             Tile* tile;
-            if (i == 0 || i == 29 || j == 0 || j == 29) {
+            if (i == 0 || j == 0 || j == 29) {
                 tile = tile_create(WALL);
                 tile->position = vec3f_create(i - 15, 3.0f, j - 15);
             }
@@ -38,7 +38,6 @@ void game_setup(void)
             }
             game.tiles[game.tile_length++] = tile;
             tile_push_data(tile, game.tile_buffer, game.tile_length * 3);
-            // push_data(data_create(tile, game.tile_length, TILE));
         }
     }
     
@@ -49,18 +48,43 @@ void game_setup(void)
     game.entities[game.entity_length++] = player;
     entity_push_data(player, game.entity_buffer, game.entity_length * 3);
 
-    for (i32 i = 0; i < 10; i++) {
-        for (i32 j = 0; j < 10; j++) {
-            Entity* entity = entity_create(PLAYER);
-            entity->position = vec3f_create(3 * i + 2, 0, 3 * j + 2);
-            game.entities[game.entity_length++] = entity;
-            entity_push_data(entity, game.entity_buffer, game.entity_length * 3);
-        }
-    }
+    Entity* entity = entity_create(ENEMY);
+    entity->position = vec3f_create(5, 0, 0);
+    game.entities[game.entity_length++] = entity;
+    entity_push_data(entity, game.entity_buffer, game.entity_length * 3);
 }
 
 void game_update(f32 dt)
 {
+    for (i32 i = 0; i < game.entity_length; i++) {
+        Entity *entity = game.entities[i];
+        if (entity->type == PLAYER)
+            continue;
+        for (i32 j = 0; j < game.projectile_length; j++) {
+            Projectile *proj = game.projectiles[j];
+            f32 dx, dz;
+            dx = entity->position.x - proj->position.x;
+            dz = entity->position.z - proj->position.z;
+            /* if (sqrt(dx*dx + dz*dz) < 1) {
+                projectile_destroy(proj);
+                game.projectiles[j--] = game.projectiles[--game.projectile_length];
+                puts("Collision");
+            } */
+        }
+    }
+    static f32 cooldown;
+    if (glfwGetTime() - cooldown >= 0.5) {
+        cooldown = glfwGetTime();
+        Projectile* proj = projectile_create(ONE);
+        proj->position = game.entities[1]->position;
+        proj->rotation = 1.1;
+        proj->direction = vec3f_create(cos(proj->rotation), 0.0f, sin(proj->rotation));
+        proj->position.y = 0.5f;
+        proj->speed = 4;
+        proj->tex = vec2f_create(0.5, 0);
+        game.projectiles[game.projectile_length++] = proj;
+        projectile_push_data(proj, game.projectile_buffer, game.projectile_length * 4);
+    }
     for (i32 i = 0; i < game.entity_length; i++) {
         Entity *entity = game.entities[i];
         entity_update_position(entity, dt);
@@ -92,7 +116,7 @@ void game_destroy(void)
 void game_shoot(vec2f pos, f32 rotation, f32 tilt, f32 zoom, f32 ar)
 {
     static f32 cooldown;
-    if (glfwGetTime() - cooldown < 0.1)
+    if (glfwGetTime() - cooldown < 0.5)
         return;
     cooldown = glfwGetTime();
     assert(player != NULL);
@@ -108,7 +132,8 @@ void game_shoot(vec2f pos, f32 rotation, f32 tilt, f32 zoom, f32 ar)
     dirx = dir.x * cos(rotation - HALFPI) - dir.y * sin(rotation - HALFPI);
     dirz = dir.x * sin(rotation - HALFPI) + dir.y * cos(rotation - HALFPI);
     proj->position = player->position;
-    proj->rotation = (dir.x > 0 ?- HALFPI : HALFPI) + rotation + a;
+    // proj->rotation = (dir.x > 0 ?- HALFPI : HALFPI) + rotation + a;
+    proj->rotation = a - HALFPI;
     proj->direction = vec3f_normalize(vec3f_create(dirx, 0.0, dirz));
     proj->position.y = 0.5f;
     proj->tex = vec2f_create(0.5, 0);

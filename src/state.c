@@ -43,6 +43,7 @@ static void update_view_matrix(void)
     renderer_uniform_update_matrix(ENTITY, "view", camera.view);
     renderer_uniform_update_matrix(PROJECTILE, "view", camera.view);
     renderer_uniform_update_float(PROJECTILE, "camera_rotation", camera.yaw);
+    renderer_uniform_update_float(PROJECTILE, "b", -camera.pitch);
 }
 
 static void update_player_position(void)
@@ -109,6 +110,7 @@ void state_init(void)
     renderer_uniform_update_float(ENTITY, "ar", 1 / window.aspect_ratio);
     renderer_uniform_update_float(PROJECTILE, "ar", 1 / window.aspect_ratio);
     renderer_uniform_update_float(PROJECTILE, "camera_rotation", camera.yaw);
+    renderer_uniform_update_float(PROJECTILE, "b", -camera.pitch);
     renderer_uniform_update_float(PROJECTILE, "c", PI / 4);
     renderer_uniform_update_float(PROJECTILE, "k", 1 / sqrt(2));
     update_view_matrix();
@@ -125,7 +127,7 @@ void state_loop(void)
         renderer_render();
         window_update();
         if (glfwGetTime() - time > 1)
-            printf("%d, %.0f\n", window.mouse.left, window.fps), time = glfwGetTime();
+            printf("%d, %.0f, %f\n", window.mouse.left, window.fps, camera.yaw), time = glfwGetTime();
     }
 }
 
