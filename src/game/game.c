@@ -133,7 +133,11 @@ void game_shoot(vec2f pos, f32 rotation, f32 tilt, f32 zoom, f32 ar)
     dirz = dir.x * sin(rotation - HALFPI) + dir.y * cos(rotation - HALFPI);
     proj->position = player->position;
     // proj->rotation = (dir.x > 0 ?- HALFPI : HALFPI) + rotation + a;
-    proj->rotation = a - HALFPI;
+    f32 t = atan(dirz / dirx);
+    if (cos(t) > 0)
+        proj->rotation = t;
+    else
+        proj->rotation = t + PI;
     proj->direction = vec3f_normalize(vec3f_create(dirx, 0.0, dirz));
     proj->position.y = 0.5f;
     proj->tex = vec2f_create(0.5, 0);
