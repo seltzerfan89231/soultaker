@@ -2,9 +2,11 @@
 layout (points) in;
 layout (triangle_strip, max_vertices = 20) out;
 
-uniform mat4 view;
-uniform mat4 proj;
-uniform vec3 player_pos;
+layout (std140) uniform Matrices
+{
+    mat4 view;
+    mat4 proj;
+};
 
 out vec2 texCoord;
 
@@ -75,7 +77,6 @@ void build_sides(vec4 position)
 void main() 
 {    
     build_top(gl_in[0].gl_Position);
-    if (gl_in[0].gl_Position.y != 0) {
+    if (gl_in[0].gl_Position.y != 0)
         build_sides(gl_in[0].gl_Position);
-    }
 }

@@ -31,6 +31,7 @@ static void state_update(void)
 
 static void update_proj_matrix(void)
 {
+    renderer_uniform_update_proj(camera.proj);
     renderer_uniform_update_matrix(TILE, "proj", camera.proj);
     renderer_uniform_update_matrix(ENTITY, "proj", camera.proj);
     renderer_uniform_update_matrix(PROJECTILE, "proj", camera.proj);
@@ -40,6 +41,7 @@ static void update_proj_matrix(void)
 
 static void update_view_matrix(void)
 {
+    renderer_uniform_update_view(camera.view);
     renderer_uniform_update_matrix(TILE, "view", camera.view);
     renderer_uniform_update_matrix(ENTITY, "view", camera.view);
     renderer_uniform_update_matrix(PROJECTILE, "view", camera.view);

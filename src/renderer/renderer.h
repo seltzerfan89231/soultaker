@@ -8,12 +8,14 @@
 #include "vao/vao.h"
 #include "shader/shader.h"
 #include "texture/texture.h"
+#include "ubo/ubo.h"
 
 #define NUM_SAMPLES 4
 
 typedef struct Renderer {
-    VAO* vaos;
+    VAO *vaos;
     Shader* shaders;
+    UBO *ubos;
     Texture atlas;
 } Renderer;
 
@@ -28,5 +30,8 @@ void renderer_uniform_update_texture(buffertype type, char* identifier, Texture 
 void renderer_uniform_update_matrix(buffertype type, char* identifier, f32* mat4);
 void renderer_uniform_update_float(buffertype type, char* identifier, f32 flt);
 void renderer_uniform_update_vec3(buffertype type, char* identifier, vec3f vec);
+
+void renderer_uniform_update_view(f32 *mat);
+void renderer_uniform_update_proj(f32 *mat);
 
 #endif

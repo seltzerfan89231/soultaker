@@ -19,11 +19,19 @@ void renderer_init(void)
 {
     renderer.shaders = malloc(NUM_BUFFER_TYPES * sizeof(Shader));
     renderer.vaos = malloc(NUM_BUFFER_TYPES * sizeof(VAO));
+    renderer.ubos = malloc(sizeof(UBO));
+
 
     renderer.shaders[TILE] = shader_create("src/renderer/shaders/tile/tile.vert", "src/renderer/shaders/tile/tile.frag", "src/renderer/shaders/tile/tile.geom");
     renderer.vaos[TILE] = vao_create(GL_STATIC_DRAW);
     renderer.vaos[TILE].length = 3;
     vao_attr(&renderer.vaos[TILE], 0, 3, 3, 0);
+
+    renderer.ubos[0] = ubo_create(32 * sizeof(f32));
+    u32 i = glGetUniformBlockIndex(renderer.shaders[TILE].id, "Matrices");
+    printf("%d, %d\n", i, renderer.ubos[0].id);
+    glUniformBlockBinding(renderer.shaders[TILE].id, i, 0);
+    glBindBufferRange(GL_UNIFORM_BUFFER, 0, renderer.ubos[0].id, 0, 32 * sizeof(f32)); 
 
     renderer.shaders[ENTITY] = shader_create("src/renderer/shaders/entity/entity.vert", "src/renderer/shaders/entity/entity.frag", "src/renderer/shaders/entity/entity.geom");
     renderer.vaos[ENTITY] = vao_create(GL_DYNAMIC_DRAW);
@@ -103,12 +111,11 @@ void renderer_destroy(void)
     texture_destroy(renderer.atlas);
     free(renderer.shaders);
     free(renderer.vaos);
+    free(renderer.ubos);
 }
 
 static u32 renderer_uniform_location(buffertype type, char* identifier) {
-    float t = glfwGetTime();
     shader_use(renderer.shaders[type]);
-    printf("%.10", glfwGetTime() - t);
     return glGetUniformLocation(renderer.shaders[type].id, identifier);
 }
 
@@ -126,4 +133,16 @@ void renderer_uniform_update_float(buffertype type, char* identifier, f32 flt) {
 
 void renderer_uniform_update_vec3(buffertype type, char* identifier, vec3f vec) {
     glUniform3f(renderer_uniform_location(type, identifier), vec.x, vec.y, vec.z);
+}
+
+void renderer_uniform_update_view(f32 *mat) {
+    glBindBuffer(GL_UNIFORM_BUFFER, renderer.ubos[0].id);
+    glBufferSubData(GL_UNIFORM_BUFFER, 0, 16 * sizeof(f32), mat);
+    glBindBuffer(GL_UNIFORM_BUFFER, 0);
+}
+
+void renderer_uniform_update_proj(f32 *mat) {
+    glBindBuffer(GL_UNIFORM_BUFFER, renderer.ubos[0].id);
+    glBufferSubData(GL_UNIFORM_BUFFER, 16 * sizeof(f32), 16 * sizeof(f32), mat);
+    glBindBuffer(GL_UNIFORM_BUFFER, 0);
 }

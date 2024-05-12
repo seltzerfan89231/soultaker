@@ -8,15 +8,12 @@ static const char* read_file(char *path)
 {
     FILE *ptr;
     char *content;
-    ptr = fopen(path, "rb");
+    ptr = fopen(path, "r");
     fseek(ptr, 0, SEEK_END);
     i32 len = ftell(ptr);
-    assert(len > 0);
     fseek(ptr, 0, SEEK_SET);
-    content = calloc(1, len);
-    assert(content != NULL);
+    content = calloc(len, sizeof(char));
     fread(content, 1, len, ptr);
-    assert(strlen(content) > 0);
     fclose(ptr);
     return content;
 }
