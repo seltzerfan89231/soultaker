@@ -4,6 +4,6 @@
 #define MAX_BUFFER_LENGTH 1000000
 #define NUM_BUFFER_TYPES 4
 
-typedef enum buffertype { TILE, ENTITY, PROJECTILE, GUI } buffertype;
+typedef enum buffertype { TILE, ENTITY, PROJECTILE, GUIB } buffertype;
 
 #endif

@@ -7,16 +7,12 @@
 Game game;
 Entity* player;
 
-static void push_data(Data* data);
-static void remove_data(Data* data);
-
 void game_init(void)
 {
-    game.tile_buffer = game.entity_buffer = game.gui_buffer = game.projectile_buffer = NULL;
-    game.tile_length = game.entity_length = game.gui_length = game.projectile_length = 0;
+    game.tile_buffer = game.entity_buffer = game.projectile_buffer = NULL;
+    game.tile_length = game.entity_length = game.projectile_length = 0;
     game.tile_buffer = malloc(MAX_BUFFER_LENGTH * sizeof(f32));
     game.entity_buffer = malloc(MAX_BUFFER_LENGTH * sizeof(f32));
-    game.gui_buffer = malloc(MAX_BUFFER_LENGTH * sizeof(f32));
     game.projectile_buffer = malloc(MAX_BUFFER_LENGTH * sizeof(f32));
     game.tiles = malloc(MAX_BUFFER_LENGTH * sizeof(Tile*));
     game.entities = malloc(MAX_BUFFER_LENGTH * sizeof(Entity*));
@@ -40,8 +36,6 @@ void game_setup(void)
             tile_push_data(tile, game.tile_buffer, game.tile_length * 3);
         }
     }
-    
-    gui_push_data(game.gui_buffer, &game.gui_length);
 
     player = entity_create(PLAYER);
     player->position = vec3f_create(0.0f, 0.0f, 0.0f);
@@ -107,7 +101,6 @@ void game_destroy(void)
     free(game.tile_buffer);
     free(game.entity_buffer);
     free(game.projectile_buffer);
-    free(game.gui_buffer);
     free(game.tiles);
     free(game.entities);
     free(game.projectiles);
@@ -134,7 +127,7 @@ void game_shoot(vec2f pos, f32 rotation, f32 tilt, f32 zoom, f32 ar)
     proj->position = player->position;
     // proj->rotation = (dir.x > 0 ?- HALFPI : HALFPI) + rotation + a;
     f32 t = atan(dirz / dirx);
-    if (cos(t) > 0)
+    if (dirx > 0)
         proj->rotation = t;
     else
         proj->rotation = t + PI;

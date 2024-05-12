@@ -25,7 +25,7 @@ void build_projectile(vec4 position)
     a = atan(tan(a) / cos(2 * c + b)) + g;
     vec2 offset;
     offset = zoom * vec2(k * ar * cos(a - 3 * c), k * sin(a - 3 * c));
-    gl_Position = position + vec4(offset, 0.0, 0.0);    // 1:bottom-left
+    gl_Position = position + vec4(offset, 0.0 , 0.0);    // 1:bottom-left
     texCoord = vec2(0.0f, 0.25f);
     EmitVertex();
     offset = zoom * vec2(k * ar * cos(a + 3 * c), k * sin(a + 3 * c));

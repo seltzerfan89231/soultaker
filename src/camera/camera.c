@@ -2,15 +2,15 @@
 
 Camera camera;
 
-static void update_view(void) { 
+static void update_view_matrix(void) { 
     view(camera.view, camera.right, camera.up, camera.facing, camera.position); 
 }
 
-static void update_proj(f32 ar) { 
+static void update_proj_matrix(f32 ar) { 
     ortho(camera.proj, ar, camera.zoom); 
 }
 
-static void update_vectors(void) {
+static void update_orientation_vectors(void) {
     camera.facing.x = cos(camera.yaw) * cos(-camera.pitch);
     camera.facing.y = sin(-camera.pitch);
     camera.facing.z = sin(camera.yaw) * cos(-camera.pitch);
@@ -27,9 +27,9 @@ void camera_init(vec3f pos, f32 ar) {
     camera.move_speed = DEFAULT_MOVE_SPEED;
     camera.zoom = DEFAULT_ZOOM;
     camera.target = pos;
-    update_vectors();
-    update_view();
-    update_proj(ar);
+    update_orientation_vectors();
+    update_view_matrix();
+    update_proj_matrix(ar);
 }
 
 void camera_rotate(i32 mag, f32 dt) {
@@ -38,8 +38,8 @@ void camera_rotate(i32 mag, f32 dt) {
         camera.yaw -= 2 * PI;
     if (camera.yaw < 0)
         camera.yaw += 2 * PI;
-    update_vectors();
-    update_view();
+    update_orientation_vectors();
+    update_view_matrix();
 }
 
 void camera_tilt(i32 mag, f32 dt) {
@@ -48,8 +48,8 @@ void camera_tilt(i32 mag, f32 dt) {
         camera.pitch = MIN_PITCH;
     if (camera.pitch >= MAX_PITCH)
         camera.pitch = MAX_PITCH;
-    update_vectors();
-    update_view();
+    update_orientation_vectors();
+    update_view_matrix();
 }
 
 void camera_zoom(i32 mag, f32 dt, f32 ar) {
@@ -58,7 +58,7 @@ void camera_zoom(i32 mag, f32 dt, f32 ar) {
         camera.zoom = MIN_ZOOM;
     if (camera.zoom > MAX_ZOOM)
         camera.zoom = MAX_ZOOM;
-    update_proj(ar);
+    update_proj_matrix(ar);
 }
 
 vec3f camera_move(vec2i dir, f32 dt) {
@@ -70,7 +70,7 @@ vec3f camera_move(vec2i dir, f32 dt) {
     offset = vec3f_scale(camera.move_speed * dt, vec);
     camera.target = vec3f_add(camera.target, offset);
     camera.position = vec3f_add(camera.position, offset);
-    update_view();
+    update_view_matrix();
     return camera.target;
 }
 

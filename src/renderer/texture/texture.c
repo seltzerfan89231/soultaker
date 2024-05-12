@@ -14,14 +14,13 @@ Texture texture_create(const char* image_path)
     unsigned char *data = stbi_load(image_path, &width, &height, &nrChannels, 0); 
     assert(data != NULL);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-    glGenerateMipmap(GL_TEXTURE_2D);
     stbi_image_free(data);
     return texture;
 }
 
 void texture_bind(Texture texture)
 {
-    glActiveTexture(GL_TEXTURE1);
+    glActiveTexture(GL_TEXTURE0 + texture.id);
     glBindTexture(GL_TEXTURE_2D, texture.id);
 }
 

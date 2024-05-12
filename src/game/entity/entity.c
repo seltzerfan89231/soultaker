@@ -21,7 +21,7 @@ void entity_push_data(Entity* entity, f32* buffer, u32 offset)
 
 void entity_update_position(Entity* entity, f32 dt)
 {
-    entity->position = vec3f_add(entity->position, vec3f_scale(dt * entity->speed, entity->direction));
+    entity->position = vec3f_add(entity->position, vec3f_scale(entity->speed * dt, entity->direction));
 }
 
 void entity_destroy(Entity* entity)

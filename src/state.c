@@ -7,6 +7,7 @@ extern Window window;
 extern Renderer renderer;
 extern Camera camera;
 extern Game game;
+extern GUI gui;
 
 static void state_setup(void)
 {
@@ -17,8 +18,8 @@ static void state_setup(void)
     renderer_update(ENTITY, 0, game.entity_length * 3, game.entity_buffer);
     renderer_malloc(PROJECTILE, MAX_BUFFER_LENGTH);
     renderer_update(PROJECTILE, 0, game.projectile_length * 4, game.projectile_buffer);
-    renderer_malloc(GUI, game.gui_length);
-    renderer_update(GUI, 0, game.gui_length, game.gui_buffer);
+    renderer_malloc(GUIB, MAX_BUFFER_LENGTH);
+    renderer_update(GUIB, 0, gui.length, gui.buffer);
 }
 
 static void state_update(void)
@@ -105,6 +106,7 @@ void state_init(void)
     renderer_init();
     camera_init(vec3f_create(0.0f, 0.0f, 0.0f), window.aspect_ratio);
     game_init();
+    gui_init();
 
     renderer_uniform_update_vec3(TILE, "player_pos", camera.target);
     renderer_uniform_update_float(ENTITY, "ar", 1 / window.aspect_ratio);
@@ -135,4 +137,5 @@ void state_exit(void)
 {
     renderer_destroy();
     game_destroy();
+    gui_destroy();
 }

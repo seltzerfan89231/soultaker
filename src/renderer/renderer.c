@@ -19,27 +19,27 @@ void renderer_init(void)
     renderer.shaders = malloc(NUM_BUFFER_TYPES * sizeof(Shader));
     renderer.vaos = malloc(NUM_BUFFER_TYPES * sizeof(VAO));
 
-    renderer.shaders[TILE] = shader_create("src/renderer/shaders/tile.vert", "src/renderer/shaders/tile.frag", "src/renderer/shaders/tile.geom");
+    renderer.shaders[TILE] = shader_create("src/renderer/shaders/tile/tile.vert", "src/renderer/shaders/tile/tile.frag", "src/renderer/shaders/tile/tile.geom");
     renderer.vaos[TILE] = vao_create(GL_STATIC_DRAW);
     renderer.vaos[TILE].length = 3;
     vao_attr(&renderer.vaos[TILE], 0, 3, 3, 0);
 
-    renderer.shaders[ENTITY] = shader_create("src/renderer/shaders/entity.vert", "src/renderer/shaders/entity.frag", "src/renderer/shaders/entity.geom");
+    renderer.shaders[ENTITY] = shader_create("src/renderer/shaders/entity/entity.vert", "src/renderer/shaders/entity/entity.frag", "src/renderer/shaders/entity/entity.geom");
     renderer.vaos[ENTITY] = vao_create(GL_DYNAMIC_DRAW);
     renderer.vaos[ENTITY].length = 3;
     vao_attr(&renderer.vaos[ENTITY], 0, 3, 3, 0);
 
-    renderer.shaders[PROJECTILE] = shader_create("src/renderer/shaders/projectile.vert", "src/renderer/shaders/projectile.frag", "src/renderer/shaders/projectile.geom");
+    renderer.shaders[PROJECTILE] = shader_create("src/renderer/shaders/projectile/projectile.vert", "src/renderer/shaders/projectile/projectile.frag", "src/renderer/shaders/projectile/projectile.geom");
     renderer.vaos[PROJECTILE] = vao_create(GL_DYNAMIC_DRAW);
     renderer.vaos[PROJECTILE].length = 4;
     vao_attr(&renderer.vaos[PROJECTILE], 0, 3, 4, 0);
     vao_attr(&renderer.vaos[PROJECTILE], 1, 1, 4, 3);
 
-    renderer.shaders[GUI] = shader_create("src/renderer/shaders/gui.vert", "src/renderer/shaders/gui.frag", NULL);
-    renderer.vaos[GUI] = vao_create(GL_STATIC_DRAW);
-    renderer.vaos[GUI].length = 5;
-    vao_attr(&renderer.vaos[GUI], 0, 2, 5, 0);
-    vao_attr(&renderer.vaos[GUI], 1, 3, 5, 2);
+    renderer.shaders[GUIB] = shader_create("src/renderer/shaders/gui/gui.vert", "src/renderer/shaders/gui/gui.frag", NULL);
+    renderer.vaos[GUIB] = vao_create(GL_STATIC_DRAW);
+    renderer.vaos[GUIB].length = 5;
+    vao_attr(&renderer.vaos[GUIB], 0, 2, 5, 0);
+    vao_attr(&renderer.vaos[GUIB], 1, 3, 5, 2);
 
     renderer.atlas = texture_create("assets/atlas.png");
     renderer_uniform_update_texture(ENTITY, "tex", renderer.atlas);
@@ -63,13 +63,15 @@ void renderer_render(void)
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
     shader_use(renderer.shaders[TILE]);
     vao_draw(renderer.vaos[TILE], GL_POINTS);
+    glDepthFunc(GL_ALWAYS);
     shader_use(renderer.shaders[ENTITY]);
     vao_draw(renderer.vaos[ENTITY], GL_POINTS);
     shader_use(renderer.shaders[PROJECTILE]);
     vao_draw(renderer.vaos[PROJECTILE], GL_POINTS);
+    glDepthFunc(GL_LESS);
     glDisable(GL_DEPTH_TEST);
-    shader_use(renderer.shaders[GUI]);
-    vao_draw(renderer.vaos[GUI], GL_TRIANGLES);
+    shader_use(renderer.shaders[GUIB]);
+    vao_draw(renderer.vaos[GUIB], GL_TRIANGLES);
     glEnable(GL_DEPTH_TEST);
 }
 
@@ -77,10 +79,10 @@ void renderer_destroy(void)
 {
     vao_destroy(renderer.vaos[TILE]);
     vao_destroy(renderer.vaos[ENTITY]);
-    vao_destroy(renderer.vaos[GUI]);
+    vao_destroy(renderer.vaos[GUIB]);
     shader_destroy(renderer.shaders[TILE]);
     shader_destroy(renderer.shaders[ENTITY]);
-    shader_destroy(renderer.shaders[GUI]);
+    shader_destroy(renderer.shaders[GUIB]);
     texture_destroy(renderer.atlas);
     free(renderer.shaders);
     free(renderer.vaos);
