@@ -7,6 +7,7 @@ static void renderer_settings(void)
     glDepthFunc(GL_LESS);
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_STENCIL_TEST);
+    glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);  
     glEnable(GL_CULL_FACE); 
     glEnable(GL_MULTISAMPLE);
     glCullFace(GL_FRONT);
@@ -41,6 +42,8 @@ void renderer_init(void)
     vao_attr(&renderer.vaos[GUIB], 0, 2, 5, 0);
     vao_attr(&renderer.vaos[GUIB], 1, 3, 5, 2);
 
+    renderer.shaders[4] = shader_create("src/renderer/shaders/entity/entity_outline.vert", "src/renderer/shaders/entity/entity_outline.frag", "src/renderer/shaders/entity/entity_outline.geom");
+
     renderer.atlas = texture_create("assets/atlas.png");
     renderer_uniform_update_texture(ENTITY, "tex", renderer.atlas);
     texture_bind(renderer.atlas);
@@ -61,11 +64,25 @@ void renderer_render(void)
 {
     glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+    glStencilMask(0x00);
     shader_use(renderer.shaders[TILE]);
     vao_draw(renderer.vaos[TILE], GL_POINTS);
     glDepthFunc(GL_ALWAYS);
+
+    glStencilFunc(GL_ALWAYS, 1, 0xFF); // all fragments should pass the stencil test
+    glStencilMask(0xFF); // enable writing to the stencil buffer
     shader_use(renderer.shaders[ENTITY]);
     vao_draw(renderer.vaos[ENTITY], GL_POINTS);
+
+    glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
+    glStencilMask(0x00); // disable writing to the stencil buffer
+    glDisable(GL_DEPTH_TEST);
+    shader_use(renderer.shaders[4]); 
+    vao_draw(renderer.vaos[ENTITY], GL_POINTS);
+    glStencilMask(0xFF);
+    glStencilFunc(GL_ALWAYS, 1, 0xFF);   
+    glEnable(GL_DEPTH_TEST); 
+
     shader_use(renderer.shaders[PROJECTILE]);
     vao_draw(renderer.vaos[PROJECTILE], GL_POINTS);
     glDepthFunc(GL_LESS);
