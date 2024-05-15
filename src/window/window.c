@@ -62,7 +62,7 @@ void mouse_callback(GLFWwindow* handle, double xpos, double ypos)
     window.mouse.position.y = ypos / window.size.y;
 }
 
-i2 window_mouse_button_pressed(mousebutton mb)
+bool window_mouse_button_pressed(mousebutton mb)
 {
     switch (mb) 
     {
@@ -76,6 +76,6 @@ i2 window_mouse_button_pressed(mousebutton mb)
     return UP;
 }
 
-i2 window_closed(void) { return glfwWindowShouldClose(window.handle); }
+bool window_closed(void) { return glfwWindowShouldClose(window.handle); }
 void window_close(void) { glfwSetWindowShouldClose(window.handle, 1); }
-i2 window_key_pressed(GLenum key) { return glfwGetKey(window.handle, key) == GLFW_PRESS; }
+bool window_key_pressed(GLenum key) { return glfwGetKey(window.handle, key) == GLFW_PRESS; }

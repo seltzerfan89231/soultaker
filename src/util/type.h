@@ -3,7 +3,7 @@
 
 #include <glad.h>
 
-typedef GLboolean i2;
+typedef GLboolean bool;
 typedef GLbyte    i8;
 typedef GLubyte   u8;
 typedef GLshort   i16;

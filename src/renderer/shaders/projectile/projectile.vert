@@ -3,7 +3,7 @@
 layout (location = 0) in vec3 aPos;
 layout (location = 1) in float aRotation;
 
-out float proj_rotation;
+out float projectile_rotation;
 
 layout (std140) uniform Matrices
 {
@@ -20,5 +20,5 @@ void main()
 {
     gl_Position = proj * view * vec4(aPos.x, 0.0, aPos.z, 1.0f);
     gl_Position.y += zoom * aPos.y;
-    proj_rotation = aRotation;
+    projectile_rotation = aRotation;
 }

@@ -31,9 +31,9 @@ extern Window window;
 void window_init(void);
 void window_update(void);
 void window_calc_dt(void);
-i2 window_mouse_button_pressed(mousebutton mb);
-i2 window_closed(void);
+bool window_mouse_button_pressed(mousebutton mb);
+bool window_closed(void);
 void window_close(void);
-i2 window_key_pressed(GLenum key);
+bool window_key_pressed(GLenum key);
 
 #endif

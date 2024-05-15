@@ -1,6 +1,6 @@
 @echo off
 setlocal enableextensions enabledelayedexpansion
-set flags=-O3
+set flags=-O3 -fopenmp
 set name=untitled
 set link=-L./lib/glfw/link -lglfw3dll
 set Ifiles=

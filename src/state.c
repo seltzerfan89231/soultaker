@@ -95,15 +95,14 @@ void state_init(void)
     camera_init(vec3f_create(0.0f, 0.0f, 0.0f), window.aspect_ratio);
     game_init();
     gui_init();
-
     renderer_uniform_update_aspect_ratio(1 / window.aspect_ratio);
     update_view_matrix();
     update_proj_matrix();
+    state_setup();
 }
 
 void state_loop(void)
 {
-    state_setup();
     f32 time = glfwGetTime();
     while (!window_closed()) {
         process_input();
@@ -111,7 +110,7 @@ void state_loop(void)
         renderer_render();
         window_update();
         if (glfwGetTime() - time > 1)
-            printf("%d, %.0f, %f\n", window.mouse.left, window.fps, camera.yaw), time = glfwGetTime();
+            printf("%d, %.0f\n", window.mouse.left, window.fps), time = glfwGetTime();
     }
 }
 
