@@ -1,5 +1,4 @@
 #include "game.h"
-#include "../util/buffertype.h"
 #include <stdio.h>
 #include <assert.h>
 #include <glfw.h>
@@ -11,12 +10,12 @@ void game_init(void)
 {
     game.tile_buffer = game.entity_buffer = game.projectile_buffer = NULL;
     game.tile_length = game.entity_length = game.projectile_length = 0;
-    game.tile_buffer = malloc(MAX_BUFFER_LENGTH * sizeof(f32));
-    game.entity_buffer = malloc(MAX_BUFFER_LENGTH * sizeof(f32));
-    game.projectile_buffer = malloc(MAX_BUFFER_LENGTH * sizeof(f32));
-    game.tiles = malloc(MAX_BUFFER_LENGTH * sizeof(Tile*));
-    game.entities = malloc(MAX_BUFFER_LENGTH * sizeof(Entity*));
-    game.projectiles = malloc(MAX_BUFFER_LENGTH * sizeof(Projectile*));
+    game.tile_buffer = malloc(1000000* sizeof(f32));
+    game.entity_buffer = malloc(1000000* sizeof(f32));
+    game.projectile_buffer = malloc(1000000* sizeof(f32));
+    game.tiles = malloc(1000000* sizeof(Tile*));
+    game.entities = malloc(1000000* sizeof(Entity*));
+    game.projectiles = malloc(1000000* sizeof(Projectile*));
 }
 
 void game_setup(void)

@@ -32,26 +32,14 @@ static void state_update(void)
 static void update_proj_matrix(void)
 {
     renderer_uniform_update_proj(camera.proj);
-    renderer_uniform_update_matrix(TILE, "proj", camera.proj);
-    renderer_uniform_update_matrix(ENTITY, "proj", camera.proj);
-    renderer_uniform_update_matrix(PROJECTILE, "proj", camera.proj);
-    renderer_uniform_update_float(ENTITY, "zoom", 1 / camera.zoom);
-    renderer_uniform_update_float(PROJECTILE, "zoom", 1 / camera.zoom);
+    renderer_uniform_update_zoom(1 / camera.zoom);
 }
 
 static void update_view_matrix(void)
 {
     renderer_uniform_update_view(camera.view);
-    renderer_uniform_update_matrix(TILE, "view", camera.view);
-    renderer_uniform_update_matrix(ENTITY, "view", camera.view);
-    renderer_uniform_update_matrix(PROJECTILE, "view", camera.view);
-    renderer_uniform_update_float(PROJECTILE, "camera_rotation", camera.yaw);
-    renderer_uniform_update_float(PROJECTILE, "b", -camera.pitch);
-}
-
-static void update_player_position(void)
-{
-    renderer_uniform_update_vec3(TILE, "player_pos", camera.target);
+    renderer_uniform_update_rotation(camera.yaw);
+    renderer_uniform_update_tilt(-camera.pitch);
 }
 
 static void process_input(void)
@@ -94,8 +82,6 @@ static void process_input(void)
     if (zoom_magnitude != 0)
         camera_zoom(zoom_magnitude, window.dt, window.aspect_ratio);
 
-    if (move_direction.x != 0 || move_direction.y != 0)
-        update_player_position();
     if (move_direction.x != 0 || move_direction.y != 0 || rotation_magnitude != 0 || tilt_magnitude != 0)
         update_view_matrix();
     if (zoom_magnitude != 0)
@@ -110,13 +96,7 @@ void state_init(void)
     game_init();
     gui_init();
 
-    renderer_uniform_update_vec3(TILE, "player_pos", camera.target);
-    renderer_uniform_update_float(ENTITY, "ar", 1 / window.aspect_ratio);
-    renderer_uniform_update_float(PROJECTILE, "ar", 1 / window.aspect_ratio);
-    renderer_uniform_update_float(PROJECTILE, "camera_rotation", camera.yaw);
-    renderer_uniform_update_float(PROJECTILE, "b", -camera.pitch);
-    renderer_uniform_update_float(PROJECTILE, "c", PI / 4);
-    renderer_uniform_update_float(PROJECTILE, "k", 1 / sqrt(2));
+    renderer_uniform_update_aspect_ratio(1 / window.aspect_ratio);
     update_view_matrix();
     update_proj_matrix();
 }

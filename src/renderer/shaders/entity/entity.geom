@@ -2,8 +2,15 @@
 layout (points) in;
 layout (triangle_strip, max_vertices = 4) out;
 
-uniform float ar;
-uniform float zoom;
+layout (std140) uniform AspectRatio
+{
+    float ar;
+};
+
+layout (std140) uniform Zoom
+{
+    float zoom;
+};
 
 out vec2 texCoord;
 
