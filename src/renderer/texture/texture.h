@@ -6,7 +6,7 @@
 #include <stb_image.h>
 #include "../../util/type.h"
 
-typedef struct Texture {
+typedef struct {
     u32 id;
 } Texture;
 

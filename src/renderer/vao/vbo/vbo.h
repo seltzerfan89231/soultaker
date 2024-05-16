@@ -5,7 +5,7 @@
 #include <glfw.h>
 #include "../../../util/type.h"
 
-typedef struct VBO {
+typedef struct {
     u32 id, length;
 } VBO;
 

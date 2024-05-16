@@ -5,13 +5,12 @@
 #include "entity/entity.h"
 #include "projectile/projectile.h"
 #include "tile/tile.h"
+#include "storage.h"
 
-typedef struct Game {
-    f32 *tile_buffer, *entity_buffer, *projectile_buffer;
-    u32 tile_length, entity_length, projectile_length;
-    Tile **tiles;
-    Entity **entities;
-    Projectile **projectiles;
+typedef struct {
+    ProjectileStorage projectiles;
+    EntityStorage entities;
+    TileStorage tiles;
 } Game;
 
 extern Game game;

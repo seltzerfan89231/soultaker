@@ -8,14 +8,23 @@ Entity* player;
 
 void game_init(void)
 {
-    game.tile_buffer = game.entity_buffer = game.projectile_buffer = NULL;
-    game.tile_length = game.entity_length = game.projectile_length = 0;
-    game.tile_buffer = malloc(1000000* sizeof(f32));
-    game.entity_buffer = malloc(1000000* sizeof(f32));
-    game.projectile_buffer = malloc(1000000* sizeof(f32));
-    game.tiles = malloc(1000000* sizeof(Tile*));
-    game.entities = malloc(1000000* sizeof(Entity*));
-    game.projectiles = malloc(1000000* sizeof(Projectile*));
+    game.projectiles = (ProjectileStorage) {
+        .vertex_buffer = malloc(1000000 * sizeof(Entity*)),
+        .obj_buffer = malloc(1000000 * sizeof(f32)),
+        .length = 0
+    };
+
+    game.entities = (EntityStorage) {
+        .vertex_buffer = malloc(1000000 * sizeof(Entity*)),
+        .obj_buffer = malloc(1000000 * sizeof(f32)),
+        .length = 0
+    };
+
+    game.tiles = (TileStorage) {
+        .vertex_buffer = malloc(1000000 * sizeof(Tile*)),
+        .obj_buffer = malloc(1000000 * sizeof(f32)),
+        .length = 0
+    };
 }
 
 void game_setup(void)
@@ -31,36 +40,36 @@ void game_setup(void)
                 tile = tile_create(FLOOR);
                 tile->position = vec3f_create(i - 15, 0.0f, j - 15);
             }
-            game.tiles[game.tile_length++] = tile;
-            tile_push_data(tile, game.tile_buffer, game.tile_length * 3);
+            tile_push_data(tile, game.tiles.vertex_buffer, game.tiles.length);
+            game.tiles.obj_buffer[game.tiles.length++] = tile;
         }
     }
 
     player = entity_create(PLAYER);
     player->position = vec3f_create(0.0f, 0.0f, 0.0f);
-    game.entities[game.entity_length++] = player;
-    entity_push_data(player, game.entity_buffer, game.entity_length * 3);
+    entity_push_data(player, game.entities.vertex_buffer, game.entities.length);
+    game.entities.obj_buffer[game.entities.length++] = player;
 
     Entity* entity = entity_create(ENEMY);
     entity->position = vec3f_create(5, 0, 0);
-    game.entities[game.entity_length++] = entity;
-    entity_push_data(entity, game.entity_buffer, game.entity_length * 3);
+    entity_push_data(player, game.entities.vertex_buffer, game.entities.length);
+    game.entities.obj_buffer[game.entities.length++] = entity;
 }
 
 void game_update(f32 dt)
 {
-    for (i32 i = 0; i < game.entity_length; i++) {
-        Entity *entity = game.entities[i];
+    for (i32 i = 0; i < game.entities.length; i++) {
+        Entity *entity = game.entities.obj_buffer[i];
         if (entity->type == PLAYER)
             continue;
-        for (i32 j = 0; j < game.projectile_length; j++) {
-            Projectile *proj = game.projectiles[j];
+        for (i32 j = 0; j < game.projectiles.length; j++) {
+            Projectile *proj = game.projectiles.obj_buffer[j];
             f32 dx, dz;
             dx = entity->position.x - proj->position.x;
             dz = entity->position.z - proj->position.z;
             /* if (sqrt(dx*dx + dz*dz) < 1) {
                 projectile_destroy(proj);
-                game.projectiles[j--] = game.projectiles[--game.projectile_length];
+                game.projectiles.obj_buffer[j--] = game.projectiles.obj_buffer[--game.projectiles.length];
                 puts("Collision");
             } */
         }
@@ -69,24 +78,24 @@ void game_update(f32 dt)
     if (glfwGetTime() - cooldown >= 0.5) {
         cooldown = glfwGetTime();
         Projectile* proj = projectile_create(ONE);
-        proj->position = game.entities[1]->position;
+        proj->position = game.entities.obj_buffer[1]->position;
         proj->rotation = 1.1;
         proj->direction = vec3f_create(cos(proj->rotation), 0.0f, sin(proj->rotation));
         proj->position.y = 0.5f;
         proj->speed = 4;
         proj->tex = vec2f_create(0.5, 0);
-        game.projectiles[game.projectile_length++] = proj;
-        projectile_push_data(proj, game.projectile_buffer, game.projectile_length * 4);
+        game.projectiles.obj_buffer[game.projectiles.length++] = proj;
+        projectile_push_data(proj, game.projectiles.vertex_buffer, game.projectiles.length);
     }
-    for (i32 i = 0; i < game.entity_length; i++) {
-        Entity *entity = game.entities[i];
+    for (i32 i = 0; i < game.entities.length; i++) {
+        Entity *entity = game.entities.obj_buffer[i];
         entity_update_position(entity, dt);
-        entity_push_data(entity, game.entity_buffer, i * 3);
+        entity_push_data(entity, game.entities.vertex_buffer, i);
     }
-    for (i32 i = 0; i < game.projectile_length; i++) {
-        Projectile *proj = game.projectiles[i];
+    for (i32 i = 0; i < game.projectiles.length; i++) {
+        Projectile *proj = game.projectiles.obj_buffer[i];
         projectile_update_position(proj, dt);
-        projectile_push_data(proj, game.projectile_buffer, i * 4);
+        projectile_push_data(proj, game.projectiles.vertex_buffer, i);
     }
 }
 
@@ -97,12 +106,9 @@ void game_set_target(vec3f target)
 
 void game_destroy(void)
 {
-    free(game.tile_buffer);
-    free(game.entity_buffer);
-    free(game.projectile_buffer);
-    free(game.tiles);
-    free(game.entities);
-    free(game.projectiles);
+    tile_storage_destroy(game.tiles);
+    entity_storage_destroy(game.entities);
+    projectile_storage_destroy(game.projectiles);
 }
 
 void game_shoot(vec2f pos, f32 rotation, f32 tilt, f32 zoom, f32 ar)
@@ -133,7 +139,7 @@ void game_shoot(vec2f pos, f32 rotation, f32 tilt, f32 zoom, f32 ar)
     proj->direction = vec3f_normalize(vec3f_create(dirx, 0.0, dirz));
     proj->position.y = 0.5f;
     proj->tex = vec2f_create(0.5, 0);
-    game.projectiles[game.projectile_length++] = proj;
-    projectile_push_data(proj, game.projectile_buffer, game.projectile_length * 4);
-    printf("%d\n", game.projectile_length);
+    game.projectiles.obj_buffer[game.projectiles.length++] = proj;
+    projectile_push_data(proj, game.projectiles.vertex_buffer, game.projectiles.length);
+    printf("%d\n", game.projectiles.length);
 }

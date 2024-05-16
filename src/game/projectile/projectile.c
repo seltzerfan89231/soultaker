@@ -14,6 +14,7 @@ Projectile* projectile_create(projtype type)
 
 void projectile_push_data(Projectile* projectile, f32* buffer, u32 offset)
 {
+    offset *= 4;
     buffer[offset++] = projectile->position.x;
     buffer[offset++] = projectile->position.y;
     buffer[offset++] = projectile->position.z;

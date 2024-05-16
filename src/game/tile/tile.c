@@ -11,6 +11,7 @@ Tile* tile_create(tiletype type)
 
 void tile_push_data(Tile* tile, f32* buffer, u32 offset)
 {
+    offset *= 3;
     buffer[offset++] = tile->position.x;
     buffer[offset++] = tile->position.y;
     buffer[offset++] = tile->position.z;
@@ -18,6 +19,7 @@ void tile_push_data(Tile* tile, f32* buffer, u32 offset)
 
 void tile_remove_data(Tile* tile, f32* buffer, u32 offset)
 {
+    offset *= 3;
     buffer[offset++] = 0;
     buffer[offset++] = 0;
     buffer[offset++] = 0;

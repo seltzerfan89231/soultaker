@@ -8,7 +8,7 @@
 
 typedef enum projtype { ONE } projtype;
 
-typedef struct Projectile {
+typedef struct {
     f32 speed, scale, lifetime, rotation;
     projtype type;
     vec3f position, direction;

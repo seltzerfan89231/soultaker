@@ -22,7 +22,7 @@
 #define MIN_ZOOM 1
 #define MAX_ZOOM 10
 
-typedef struct Camera {
+typedef struct {
     f32 yaw, pitch, fov, rotate_speed, move_speed, zoom;
     f32 view[16], proj[16];
     vec3f target, position, facing, right, up;

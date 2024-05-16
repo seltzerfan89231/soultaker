@@ -17,7 +17,7 @@
 typedef enum ubotype { MATRICES, ZOOM, ASPECT_RATIO, ROTATION, TILT, CONSTANTS } ubotype;
 typedef enum buffertype { TILE, ENTITY, PROJECTILE, GUIB } buffertype;
 
-typedef struct Renderer {
+typedef struct {
     VAO *vaos;
     Shader* shaders;
     UBO *ubos;

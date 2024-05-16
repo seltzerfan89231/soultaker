@@ -5,7 +5,7 @@
 #include <glfw.h>
 #include "../../util/type.h"
 
-typedef struct Shader {
+typedef struct {
     u32 id;
 } Shader;
 

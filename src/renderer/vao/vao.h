@@ -6,7 +6,7 @@
 #include "../../util/type.h"
 #include "vbo/vbo.h"
 
-typedef struct VAO {
+typedef struct {
     u32 id, length;
     GLenum usage;
     VBO vbo;

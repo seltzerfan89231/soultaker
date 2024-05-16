@@ -6,7 +6,7 @@
 
 typedef enum tiletype { FLOOR, WALL } tiletype;
 
-typedef struct Tile {
+typedef struct {
     vec3f position;
     vec2f tex;
     tiletype type;

@@ -12,8 +12,8 @@
 typedef enum mousebutton { MOUSE_LEFT, MOUSE_MIDDLE, MOUSE_RIGHT } mousebutton;
 typedef enum mbstate { UP, DOWN } mbstate;
 
-typedef struct Window {
-    GLFWwindow* handle;
+typedef struct {
+    GLFWwindow *handle;
     vec2f size;
     struct {
         vec2f position;
