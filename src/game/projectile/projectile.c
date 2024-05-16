@@ -1,4 +1,5 @@
 #include "projectile.h"
+#include <stdlib.h>
 
 Projectile* projectile_create(projtype type)
 {

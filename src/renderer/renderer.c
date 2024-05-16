@@ -32,11 +32,20 @@ void renderer_init(void)
 
     renderer.shaders[TILE] = shader_create("src/renderer/shaders/tile/tile.vert", "src/renderer/shaders/tile/tile.frag", "src/renderer/shaders/tile/tile.geom");
     renderer.vaos[TILE] = vao_create(GL_STATIC_DRAW);
-    renderer.vaos[TILE].length = 3;
-    vao_attr(&renderer.vaos[TILE], 0, 3, 3, 0);
+    renderer.vaos[TILE].length = 2;
+    vao_attr(&renderer.vaos[TILE], 0, 2, 2, 0);
 
     i = glGetUniformBlockIndex(renderer.shaders[TILE].id, "Matrices");
     glUniformBlockBinding(renderer.shaders[TILE].id, i, MATRICES);
+    glBindBufferRange(GL_UNIFORM_BUFFER, MATRICES, renderer.ubos[MATRICES].id, 0, 32 * sizeof(f32));
+
+    renderer.shaders[WALL] = shader_create("src/renderer/shaders/wall/wall.vert", "src/renderer/shaders/wall/wall.frag", "src/renderer/shaders/wall/wall.geom");
+    renderer.vaos[WALL] = vao_create(GL_STATIC_DRAW);
+    renderer.vaos[WALL].length = 3;
+    vao_attr(&renderer.vaos[WALL], 0, 3, 3, 0);
+
+    i = glGetUniformBlockIndex(renderer.shaders[WALL].id, "Matrices");
+    glUniformBlockBinding(renderer.shaders[WALL].id, i, MATRICES);
     glBindBufferRange(GL_UNIFORM_BUFFER, MATRICES, renderer.ubos[MATRICES].id, 0, 32 * sizeof(f32));
 
     renderer.shaders[ENTITY] = shader_create("src/renderer/shaders/entity/entity.vert", "src/renderer/shaders/entity/entity.frag", "src/renderer/shaders/entity/entity.geom");
@@ -92,7 +101,7 @@ void renderer_init(void)
     vao_attr(&renderer.vaos[GUIB], 0, 2, 5, 0);
     vao_attr(&renderer.vaos[GUIB], 1, 3, 5, 2);
 
-    renderer.shaders[4] = shader_create("src/renderer/shaders/entity/entity_outline.vert", "src/renderer/shaders/entity/entity_outline.frag", "src/renderer/shaders/entity/entity_outline.geom");
+    //renderer.shaders[] = shader_create("src/renderer/shaders/entity/entity_outline.vert", "src/renderer/shaders/entity/entity_outline.frag", "src/renderer/shaders/entity/entity_outline.geom");
 
     renderer.atlas = texture_create("assets/atlas.png");
     renderer_uniform_update_texture(ENTITY, "tex", renderer.atlas);
@@ -114,6 +123,7 @@ void renderer_malloc(buffertype type, u32 length)
 
 void renderer_update(buffertype type, u32 offset, u32 length, f32* buffer)
 {
+    length *= renderer.vaos[type].length;
     vao_update(&renderer.vaos[type], offset, length, buffer);
 }
 
@@ -124,6 +134,8 @@ void renderer_render(void)
     glStencilMask(0x00);
     shader_use(renderer.shaders[TILE]);
     vao_draw(renderer.vaos[TILE], GL_POINTS);
+    shader_use(renderer.shaders[WALL]);
+    vao_draw(renderer.vaos[WALL], GL_POINTS);
     glDepthFunc(GL_ALWAYS);
 
     glStencilFunc(GL_ALWAYS, 1, 0xFF); // all fragments should pass the stencil test

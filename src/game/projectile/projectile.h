@@ -4,9 +4,8 @@
 #include "../../util/type.h"
 #include "../../util/vec.h"
 #include "../../util/constants.h"
-#include <stdlib.h>
 
-typedef enum projtype { ONE } projtype;
+typedef enum { ONE } projtype;
 
 typedef struct {
     f32 speed, scale, lifetime, rotation;

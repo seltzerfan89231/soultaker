@@ -1,4 +1,5 @@
 #include "entity.h"
+#include <stdlib.h>
 
 Entity* entity_create(entitytype type)
 {

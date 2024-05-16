@@ -13,11 +13,13 @@ static void state_setup(void)
 {
     game_setup();
     renderer_malloc(TILE, MAX_BUFFER_LENGTH);
-    renderer_update(TILE, 0, game.tiles.length * 3, game.tiles.vertex_buffer);
+    renderer_update(TILE, 0, game.tiles.length, game.tiles.vertex_buffer);
+    renderer_malloc(WALL, MAX_BUFFER_LENGTH);
+    renderer_update(WALL, 0, game.walls.length, game.walls.vertex_buffer);
     renderer_malloc(ENTITY, MAX_BUFFER_LENGTH);
-    renderer_update(ENTITY, 0, game.entities.length * 3, game.entities.vertex_buffer);
+    renderer_update(ENTITY, 0, game.entities.length, game.entities.vertex_buffer);
     renderer_malloc(PROJECTILE, MAX_BUFFER_LENGTH);
-    renderer_update(PROJECTILE, 0, game.projectiles.length * 4, game.projectiles.vertex_buffer);
+    renderer_update(PROJECTILE, 0, game.projectiles.length, game.projectiles.vertex_buffer);
     renderer_malloc(GUIB, MAX_BUFFER_LENGTH);
     renderer_update(GUIB, 0, gui.length, gui.buffer);
 }
@@ -25,8 +27,8 @@ static void state_setup(void)
 static void state_update(void)
 {
     game_update(window.dt);
-    renderer_update(ENTITY, 0, game.entities.length * 3, game.entities.vertex_buffer);
-    renderer_update(PROJECTILE, 0, game.projectiles.length * 4, game.projectiles.vertex_buffer);
+    renderer_update(ENTITY, 0, game.entities.length, game.entities.vertex_buffer);
+    renderer_update(PROJECTILE, 0, game.projectiles.length, game.projectiles.vertex_buffer);
 }
 
 static void update_proj_matrix(void)

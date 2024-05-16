@@ -10,5 +10,6 @@
     }
 
 _STORAGE_DEFINE(Tile, tile)
+_STORAGE_DEFINE(Wall, wall)
 _STORAGE_DEFINE(Projectile, projectile)
 _STORAGE_DEFINE(Entity, entity)

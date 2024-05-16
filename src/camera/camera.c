@@ -10,7 +10,8 @@ static void update_proj_matrix(f32 ar) {
     ortho(camera.proj, ar, camera.zoom); 
 }
 
-static void update_orientation_vectors(void) {
+static void update_orientation_vectors(void)
+{
     camera.facing.x = cos(camera.yaw) * cos(-camera.pitch);
     camera.facing.y = sin(-camera.pitch);
     camera.facing.z = sin(camera.yaw) * cos(-camera.pitch);
@@ -19,7 +20,8 @@ static void update_orientation_vectors(void) {
     camera.up = vec3f_cross(camera.facing, camera.right);
 }
 
-void camera_init(vec3f pos, f32 ar) {
+void camera_init(vec3f pos, f32 ar)
+{
     camera.yaw = DEFAULT_YAW;
     camera.pitch = DEFAULT_PITCH;
     camera.fov = DEFAULT_FOV;
@@ -32,7 +34,8 @@ void camera_init(vec3f pos, f32 ar) {
     update_proj_matrix(ar);
 }
 
-void camera_rotate(i32 mag, f32 dt) {
+void camera_rotate(i32 mag, f32 dt)
+{
     camera.yaw += mag * dt * camera.rotate_speed;
     if (camera.yaw > 2 * PI)
         camera.yaw -= 2 * PI;
@@ -42,7 +45,8 @@ void camera_rotate(i32 mag, f32 dt) {
     update_view_matrix();
 }
 
-void camera_tilt(i32 mag, f32 dt) {
+void camera_tilt(i32 mag, f32 dt)
+{
     camera.pitch += mag * dt;
     if (camera.pitch <= MIN_PITCH)
         camera.pitch = MIN_PITCH;
@@ -52,7 +56,8 @@ void camera_tilt(i32 mag, f32 dt) {
     update_view_matrix();
 }
 
-void camera_zoom(i32 mag, f32 dt, f32 ar) {
+void camera_zoom(i32 mag, f32 dt, f32 ar)
+{
     camera.zoom += mag * dt;
     if (camera.zoom < MIN_ZOOM)
         camera.zoom = MIN_ZOOM;
@@ -61,7 +66,8 @@ void camera_zoom(i32 mag, f32 dt, f32 ar) {
     update_proj_matrix(ar);
 }
 
-vec3f camera_move(vec2i dir, f32 dt) {
+vec3f camera_move(vec2i dir, f32 dt)
+{
     vec3f vec, offset;
     vec2f v1, v2;
     v1 = vec2f_normalize(vec2f_create(camera.facing.x, camera.facing.z));

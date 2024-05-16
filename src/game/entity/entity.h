@@ -4,9 +4,8 @@
 #include "../../util/type.h"
 #include "../../util/vec.h"
 #include "../../util/constants.h"
-#include <stdlib.h>
 
-typedef enum entitytype { PLAYER, ENEMY } entitytype;
+typedef enum { PLAYER, ENEMY } entitytype;
 
 typedef struct {
     f32 speed, scale, lifetime, rotation;

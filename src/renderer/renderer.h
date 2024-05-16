@@ -14,12 +14,17 @@
 #define NUM_BUFFER_TYPES 5
 #define NUM_UBO_TYPES 6
 
-typedef enum ubotype { MATRICES, ZOOM, ASPECT_RATIO, ROTATION, TILT, CONSTANTS } ubotype;
-typedef enum buffertype { TILE, ENTITY, PROJECTILE, GUIB } buffertype;
+typedef enum {
+    MATRICES, ZOOM, ASPECT_RATIO, ROTATION, TILT, CONSTANTS
+} ubotype;
+
+typedef enum {
+    TILE, WALL, ENTITY, PROJECTILE, GUIB
+} buffertype;
 
 typedef struct {
     VAO *vaos;
-    Shader* shaders;
+    Shader *shaders;
     UBO *ubos;
     Texture atlas;
 } Renderer;

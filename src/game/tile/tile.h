@@ -4,11 +4,10 @@
 #include "../../util/type.h"
 #include "../../util/vec.h"
 
-typedef enum tiletype { FLOOR, WALL } tiletype;
+typedef enum { FLOOR, WALL1 } tiletype;
 
 typedef struct {
-    vec3f position;
-    vec2f tex;
+    vec2i position;
     tiletype type;
 } Tile;
 
