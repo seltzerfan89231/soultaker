@@ -12,17 +12,13 @@
 typedef enum mousebutton { MOUSE_LEFT, MOUSE_MIDDLE, MOUSE_RIGHT } mousebutton;
 typedef enum mbstate { UP, DOWN } mbstate;
 
-typedef struct Mouse {
-    vec2f position;
-    mbstate left;
-    mbstate middle;
-    mbstate right;
-} Mouse;
-
 typedef struct Window {
     GLFWwindow* handle;
     vec2f size;
-    Mouse mouse;
+    struct {
+        vec2f position;
+        mbstate left, middle, right;
+    } mouse;
     f32 aspect_ratio, last_frame, dt, fps;
 } Window;
 
