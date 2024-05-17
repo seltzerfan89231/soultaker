@@ -13,14 +13,6 @@ Entity* entity_create(entitytype type)
     return entity;
 }
 
-void entity_push_data(Entity* entity, f32* buffer, u32 offset)
-{
-    offset *= 3;
-    buffer[offset++] = entity->position.x;
-    buffer[offset++] = entity->position.y;
-    buffer[offset++] = entity->position.z;
-}
-
 void entity_update_position(Entity* entity, f32 dt)
 {
     entity->position = vec3f_add(entity->position, vec3f_scale(entity->speed * dt, entity->direction));

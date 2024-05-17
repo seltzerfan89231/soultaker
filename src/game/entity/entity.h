@@ -15,7 +15,6 @@ typedef struct {
 } Entity;
 
 Entity* entity_create(entitytype type);
-void entity_push_data(Entity* entity, f32* buffer, u32 offset);
 void entity_update_position(Entity* entity, f32 dt);
 void entity_destroy(Entity* entity);
 

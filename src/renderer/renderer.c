@@ -118,6 +118,7 @@ void renderer_init(void)
 
 void renderer_malloc(buffertype type, u32 length)
 {
+    length *= renderer.vaos[type].length;
     vao_malloc(&renderer.vaos[type], length);
 }
 

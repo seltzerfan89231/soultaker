@@ -20,7 +20,7 @@ void vbo_update(VBO* vbo, u32 offset, u32 length, f32* buffer)
 {
     vbo_bind(*vbo);
     vbo->length = length;
-    glBufferSubData(GL_ARRAY_BUFFER, offset, length * sizeof(f32), buffer);
+    glBufferSubData(GL_ARRAY_BUFFER, offset, (length - offset) * sizeof(f32), buffer);
 }
 
 void vbo_bind(VBO vbo)

@@ -9,26 +9,84 @@ extern Camera camera;
 extern Game game;
 extern GUI gui;
 
+static void wall_push_data(Wall* wall, f32* buffer, u32 offset)
+{
+    offset *= 3;
+    buffer[offset++] = wall->position.x;
+    buffer[offset++] = wall->height;
+    buffer[offset++] = wall->position.y;
+}
+
+static void tile_push_data(Tile* tile, f32* buffer, u32 offset)
+{
+    offset *= 2;
+    buffer[offset++] = tile->position.x;
+    buffer[offset++] = tile->position.y;
+}
+
+static void projectile_push_data(Projectile* projectile, f32* buffer, u32 offset)
+{
+    offset *= 4;
+    buffer[offset++] = projectile->position.x;
+    buffer[offset++] = projectile->position.y;
+    buffer[offset++] = projectile->position.z;
+    buffer[offset++] = projectile->rotation;
+}
+
+static void entity_push_data(Entity* entity, f32* buffer, u32 offset)
+{
+    offset *= 3;
+    buffer[offset++] = entity->position.x;
+    buffer[offset++] = entity->position.y;
+    buffer[offset++] = entity->position.z;
+}
+
 static void state_setup(void)
 {
+    f32 *buffer = malloc(4000000 * sizeof(f32));
+    i32 i;
     game_setup();
-    renderer_malloc(TILE, MAX_BUFFER_LENGTH);
-    renderer_update(TILE, 0, game.tiles.length, game.tiles.vertex_buffer);
-    renderer_malloc(WALL, MAX_BUFFER_LENGTH);
-    renderer_update(WALL, 0, game.walls.length, game.walls.vertex_buffer);
-    renderer_malloc(ENTITY, MAX_BUFFER_LENGTH);
-    renderer_update(ENTITY, 0, game.entities.length, game.entities.vertex_buffer);
-    renderer_malloc(PROJECTILE, MAX_BUFFER_LENGTH);
-    renderer_update(PROJECTILE, 0, game.projectiles.length, game.projectiles.vertex_buffer);
-    renderer_malloc(GUIB, MAX_BUFFER_LENGTH);
-    renderer_update(GUIB, 0, gui.length, gui.buffer);
+
+    renderer_malloc(TILE, game.tiles.max_length);
+    for (i = 0; i < game.tiles.length; i++)
+        tile_push_data(game.tiles.buffer[i], buffer, i);
+    renderer_update(TILE, 0, i, buffer);
+
+    renderer_malloc(WALL, game.walls.max_length);
+    for (i = 0; i < game.walls.length; i++)
+        wall_push_data(game.walls.buffer[i], buffer, i);
+    renderer_update(WALL, 0, i, buffer);
+
+    renderer_malloc(ENTITY, game.entities.max_length);
+    for (i = 0; i < game.entities.length; i++)
+        entity_push_data(game.entities.buffer[i], buffer, i);
+    renderer_update(ENTITY, 0, i, buffer);
+    
+    renderer_malloc(PROJECTILE, game.projectiles.max_length);
+    for (i = 0; i < game.projectiles.length; i++)
+        projectile_push_data(game.projectiles.buffer[i], buffer, i);
+    renderer_update(PROJECTILE, 0, i, buffer);
+    //renderer_malloc(GUIB, MAX_BUFFER_LENGTH);
+    //renderer_update(GUIB, 0, gui.length, gui.buffer);
+    free(buffer);
 }
 
 static void state_update(void)
 {
+    f32 *buffer = malloc(4000000 * sizeof(f32));
+    i32 i;
     game_update(window.dt);
-    renderer_update(ENTITY, 0, game.entities.length, game.entities.vertex_buffer);
-    renderer_update(PROJECTILE, 0, game.projectiles.length, game.projectiles.vertex_buffer);
+
+    renderer_malloc(ENTITY, game.entities.max_length);
+    for (i = 0; i < game.entities.length; i++)
+        entity_push_data(game.entities.buffer[i], buffer, i);
+    renderer_update(ENTITY, 0, i, buffer);
+
+    renderer_malloc(PROJECTILE, game.projectiles.max_length);
+    for (i = 0; i < game.projectiles.length; i++)
+        projectile_push_data(game.projectiles.buffer[i], buffer, i);
+    renderer_update(PROJECTILE, 0, i, buffer);
+    free(buffer);
 }
 
 static void update_proj_matrix(void)

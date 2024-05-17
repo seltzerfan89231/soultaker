@@ -1,13 +1,13 @@
 #ifndef GAME_H
 #define GAME_H
 
-#include "storage.h"
+#include "array.h"
 
 typedef struct {
-    ProjectileStorage projectiles;
-    EntityStorage entities;
-    TileStorage tiles;
-    WallStorage walls;
+    ProjectileArray projectiles;
+    EntityArray entities;
+    TileArray tiles;
+    WallArray walls;
 } Game;
 
 extern Game game;

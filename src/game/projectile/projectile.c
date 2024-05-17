@@ -13,15 +13,6 @@ Projectile* projectile_create(projtype type)
     return projectile;
 }
 
-void projectile_push_data(Projectile* projectile, f32* buffer, u32 offset)
-{
-    offset *= 4;
-    buffer[offset++] = projectile->position.x;
-    buffer[offset++] = projectile->position.y;
-    buffer[offset++] = projectile->position.z;
-    buffer[offset++] = projectile->rotation;
-}
-
 void projectile_update_position(Projectile* projectile, f32 dt)
 {
     projectile->position = vec3f_add(projectile->position, vec3f_scale(projectile->speed * dt, projectile->direction));

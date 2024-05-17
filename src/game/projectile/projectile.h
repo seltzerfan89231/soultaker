@@ -15,7 +15,6 @@ typedef struct {
 } Projectile;
 
 Projectile* projectile_create(projtype type);
-void projectile_push_data(Projectile* projectile, f32* buffer, u32 offset);
 void projectile_update_position(Projectile* projectile, f32 dt);
 void projectile_destroy(Projectile* projectile);
 
