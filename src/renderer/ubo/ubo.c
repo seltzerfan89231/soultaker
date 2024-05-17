@@ -9,3 +9,8 @@ UBO ubo_create(size_t size)
     glBufferData(GL_UNIFORM_BUFFER, size, NULL, GL_STATIC_DRAW);
     return ubo;
 }
+
+void ubo_destroy(UBO ubo)
+{
+    glDeleteBuffers(1, &ubo.id);
+}

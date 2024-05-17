@@ -2,30 +2,43 @@
 layout (points) in;
 layout (triangle_strip, max_vertices = 4) out;
 
-uniform float ar;
-uniform float zoom;
+layout (std140) uniform AspectRatio
+{
+    float ar;
+};
+
+layout (std140) uniform Zoom
+{
+    float zoom;
+};
+
+out vec2 texCoord;
 
 void build_entity(vec4 position)
 {
     vec2 offset;
     
     // bottom left
-    offset = zoom * vec2(-0.55 * ar, 0.0);
+    offset = zoom * vec2(-0.55 * ar, -0.05);
+    texCoord = vec2(0.75f, 0.25f);
     gl_Position = position + vec4(offset, 0.0, 0.0);
     EmitVertex();
 
     // top left
-    offset = zoom * vec2(-0.55 * ar, 1.1);
+    offset = zoom * vec2(-0.55 * ar, 1.05);
+    texCoord = vec2(0.75f, 0.0f);
     gl_Position = position + vec4(offset, 0.0, 0.0);
     EmitVertex();
 
     // bottom right
-    offset = zoom * vec2(0.55 * ar, 0.0);
+    offset = zoom * vec2(0.55 * ar, -0.05);
+    texCoord = vec2(1.0f, 0.25f);
     gl_Position = position + vec4(offset, 0.0, 0.0);
     EmitVertex();
 
     // top right
-    offset = zoom * vec2( 0.55 * ar, 1.1);
+    offset = zoom * vec2( 0.55 * ar, 1.05);
+    texCoord = vec2(1.0f, 0.0f);
     gl_Position = position + vec4(offset, 0.0, 0.0);
     EmitVertex();
     

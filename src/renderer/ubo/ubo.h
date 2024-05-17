@@ -10,5 +10,6 @@ typedef struct {
 } UBO;
 
 UBO ubo_create(size_t size);
+void ubo_destroy(UBO ubo);
 
 #endif

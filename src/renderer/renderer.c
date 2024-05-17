@@ -41,8 +41,9 @@ void renderer_init(void)
 
     renderer.shaders[WALL] = shader_create("src/renderer/shaders/wall/wall.vert", "src/renderer/shaders/wall/wall.frag", "src/renderer/shaders/wall/wall.geom");
     renderer.vaos[WALL] = vao_create(GL_STATIC_DRAW);
-    renderer.vaos[WALL].length = 3;
-    vao_attr(&renderer.vaos[WALL], 0, 3, 3, 0);
+    renderer.vaos[WALL].length = 4;
+    vao_attr(&renderer.vaos[WALL], 0, 3, 4, 0);
+    vao_attr(&renderer.vaos[WALL], 1, 1, 4, 3);
 
     i = glGetUniformBlockIndex(renderer.shaders[WALL].id, "Matrices");
     glUniformBlockBinding(renderer.shaders[WALL].id, i, MATRICES);
@@ -63,6 +64,20 @@ void renderer_init(void)
 
     i = glGetUniformBlockIndex(renderer.shaders[ENTITY].id, "AspectRatio");
     glUniformBlockBinding(renderer.shaders[ENTITY].id, i, ASPECT_RATIO);
+    glBindBufferRange(GL_UNIFORM_BUFFER, ASPECT_RATIO, renderer.ubos[ASPECT_RATIO].id, 0, sizeof(f32));
+
+    renderer.shaders[ENTITY_OUTLINE] = shader_create("src/renderer/shaders/entity/entity_outline.vert", "src/renderer/shaders/entity/entity_outline.frag", "src/renderer/shaders/entity/entity_outline.geom");
+
+    i = glGetUniformBlockIndex(renderer.shaders[ENTITY_OUTLINE].id, "Matrices");
+    glUniformBlockBinding(renderer.shaders[ENTITY_OUTLINE].id, i, MATRICES);
+    glBindBufferRange(GL_UNIFORM_BUFFER, MATRICES, renderer.ubos[MATRICES].id, 0, 32 * sizeof(f32));
+
+    i = glGetUniformBlockIndex(renderer.shaders[ENTITY_OUTLINE].id, "Zoom");
+    glUniformBlockBinding(renderer.shaders[ENTITY_OUTLINE].id, i, ZOOM);
+    glBindBufferRange(GL_UNIFORM_BUFFER, ZOOM, renderer.ubos[ZOOM].id, 0, sizeof(f32));
+
+    i = glGetUniformBlockIndex(renderer.shaders[ENTITY_OUTLINE].id, "AspectRatio");
+    glUniformBlockBinding(renderer.shaders[ENTITY_OUTLINE].id, i, ASPECT_RATIO);
     glBindBufferRange(GL_UNIFORM_BUFFER, ASPECT_RATIO, renderer.ubos[ASPECT_RATIO].id, 0, sizeof(f32));
 
     renderer.shaders[PROJECTILE] = shader_create("src/renderer/shaders/projectile/projectile.vert", "src/renderer/shaders/projectile/projectile.frag", "src/renderer/shaders/projectile/projectile.geom");
@@ -101,8 +116,6 @@ void renderer_init(void)
     vao_attr(&renderer.vaos[GUIB], 0, 2, 5, 0);
     vao_attr(&renderer.vaos[GUIB], 1, 3, 5, 2);
 
-    //renderer.shaders[] = shader_create("src/renderer/shaders/entity/entity_outline.vert", "src/renderer/shaders/entity/entity_outline.frag", "src/renderer/shaders/entity/entity_outline.geom");
-
     renderer.atlas = texture_create("assets/atlas.png");
     renderer_uniform_update_texture(ENTITY, "tex", renderer.atlas);
     texture_bind(renderer.atlas);
@@ -137,17 +150,15 @@ void renderer_render(void)
     vao_draw(renderer.vaos[TILE], GL_POINTS);
     shader_use(renderer.shaders[WALL]);
     vao_draw(renderer.vaos[WALL], GL_POINTS);
-    glDepthFunc(GL_ALWAYS);
-
+    //glDepthFunc(GL_ALWAYS);
     glStencilFunc(GL_ALWAYS, 1, 0xFF); // all fragments should pass the stencil test
     glStencilMask(0xFF); // enable writing to the stencil buffer
     shader_use(renderer.shaders[ENTITY]);
     vao_draw(renderer.vaos[ENTITY], GL_POINTS);
-
     glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
     glStencilMask(0x00); // disable writing to the stencil buffer
     glDisable(GL_DEPTH_TEST);
-    shader_use(renderer.shaders[4]); 
+    shader_use(renderer.shaders[ENTITY_OUTLINE]); 
     vao_draw(renderer.vaos[ENTITY], GL_POINTS);
     glStencilMask(0xFF);
     glStencilFunc(GL_ALWAYS, 1, 0xFF);   
@@ -164,12 +175,10 @@ void renderer_render(void)
 
 void renderer_destroy(void)
 {
-    vao_destroy(renderer.vaos[TILE]);
-    vao_destroy(renderer.vaos[ENTITY]);
-    vao_destroy(renderer.vaos[GUIB]);
-    shader_destroy(renderer.shaders[TILE]);
-    shader_destroy(renderer.shaders[ENTITY]);
-    shader_destroy(renderer.shaders[GUIB]);
+    for (i32 i = 0; i < NUM_BUFFER_TYPES; i++) {
+        vao_destroy(renderer.vaos[i]);
+        shader_destroy(renderer.shaders[i]);
+    }
     texture_destroy(renderer.atlas);
     free(renderer.shaders);
     free(renderer.vaos);

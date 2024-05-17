@@ -8,13 +8,16 @@ extern Renderer renderer;
 extern Camera camera;
 extern Game game;
 extern GUI gui;
+f32 *buffer;
+i32 i;
 
 static void wall_push_data(Wall* wall, f32* buffer, u32 offset)
 {
-    offset *= 3;
+    offset *= 4;
     buffer[offset++] = wall->position.x;
     buffer[offset++] = wall->height;
     buffer[offset++] = wall->position.y;
+    buffer[offset++] = 0;
 }
 
 static void tile_push_data(Tile* tile, f32* buffer, u32 offset)
@@ -43,8 +46,6 @@ static void entity_push_data(Entity* entity, f32* buffer, u32 offset)
 
 static void state_setup(void)
 {
-    f32 *buffer = malloc(4000000 * sizeof(f32));
-    i32 i;
     game_setup();
 
     renderer_malloc(TILE, game.tiles.max_length);
@@ -66,27 +67,19 @@ static void state_setup(void)
     for (i = 0; i < game.projectiles.length; i++)
         projectile_push_data(game.projectiles.buffer[i], buffer, i);
     renderer_update(PROJECTILE, 0, i, buffer);
-    //renderer_malloc(GUIB, MAX_BUFFER_LENGTH);
-    //renderer_update(GUIB, 0, gui.length, gui.buffer);
-    free(buffer);
 }
 
 static void state_update(void)
 {
-    f32 *buffer = malloc(4000000 * sizeof(f32));
-    i32 i;
     game_update(window.dt);
 
-    renderer_malloc(ENTITY, game.entities.max_length);
     for (i = 0; i < game.entities.length; i++)
         entity_push_data(game.entities.buffer[i], buffer, i);
     renderer_update(ENTITY, 0, i, buffer);
 
-    renderer_malloc(PROJECTILE, game.projectiles.max_length);
     for (i = 0; i < game.projectiles.length; i++)
         projectile_push_data(game.projectiles.buffer[i], buffer, i);
     renderer_update(PROJECTILE, 0, i, buffer);
-    free(buffer);
 }
 
 static void update_proj_matrix(void)
@@ -150,6 +143,7 @@ static void process_input(void)
 
 void state_init(void) 
 {
+    buffer = malloc(5000000 * sizeof(f32));
     window_init();
     renderer_init();
     camera_init(vec3f_create(0.0f, 0.0f, 0.0f), window.aspect_ratio);
@@ -176,6 +170,7 @@ void state_loop(void)
 
 void state_exit(void)
 {
+    free(buffer);
     renderer_destroy();
     game_destroy();
     gui_destroy();

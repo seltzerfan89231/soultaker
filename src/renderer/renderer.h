@@ -11,7 +11,7 @@
 
 #define NUM_SAMPLES 4
 #define MAX_BUFFER_LENGTH 1000000
-#define NUM_BUFFER_TYPES 5
+#define NUM_BUFFER_TYPES 6
 #define NUM_UBO_TYPES 6
 
 typedef enum {
@@ -19,7 +19,7 @@ typedef enum {
 } ubotype;
 
 typedef enum {
-    TILE, WALL, ENTITY, PROJECTILE, GUIB
+    TILE, WALL, ENTITY, ENTITY_OUTLINE, PROJECTILE, GUIB
 } buffertype;
 
 typedef struct {
