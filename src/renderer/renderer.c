@@ -66,20 +66,6 @@ void renderer_init(void)
     glUniformBlockBinding(renderer.shaders[ENTITY].id, i, ASPECT_RATIO);
     glBindBufferRange(GL_UNIFORM_BUFFER, ASPECT_RATIO, renderer.ubos[ASPECT_RATIO].id, 0, sizeof(f32));
 
-    renderer.shaders[ENTITY_OUTLINE] = shader_create("src/renderer/shaders/entity/entity_outline.vert", "src/renderer/shaders/entity/entity_outline.frag", "src/renderer/shaders/entity/entity_outline.geom");
-
-    i = glGetUniformBlockIndex(renderer.shaders[ENTITY_OUTLINE].id, "Matrices");
-    glUniformBlockBinding(renderer.shaders[ENTITY_OUTLINE].id, i, MATRICES);
-    glBindBufferRange(GL_UNIFORM_BUFFER, MATRICES, renderer.ubos[MATRICES].id, 0, 32 * sizeof(f32));
-
-    i = glGetUniformBlockIndex(renderer.shaders[ENTITY_OUTLINE].id, "Zoom");
-    glUniformBlockBinding(renderer.shaders[ENTITY_OUTLINE].id, i, ZOOM);
-    glBindBufferRange(GL_UNIFORM_BUFFER, ZOOM, renderer.ubos[ZOOM].id, 0, sizeof(f32));
-
-    i = glGetUniformBlockIndex(renderer.shaders[ENTITY_OUTLINE].id, "AspectRatio");
-    glUniformBlockBinding(renderer.shaders[ENTITY_OUTLINE].id, i, ASPECT_RATIO);
-    glBindBufferRange(GL_UNIFORM_BUFFER, ASPECT_RATIO, renderer.ubos[ASPECT_RATIO].id, 0, sizeof(f32));
-
     renderer.shaders[PROJECTILE] = shader_create("src/renderer/shaders/projectile/projectile.vert", "src/renderer/shaders/projectile/projectile.frag", "src/renderer/shaders/projectile/projectile.geom");
     renderer.vaos[PROJECTILE] = vao_create(GL_DYNAMIC_DRAW);
     renderer.vaos[PROJECTILE].length = 4;
@@ -117,9 +103,11 @@ void renderer_init(void)
     vao_attr(&renderer.vaos[GUIB], 1, 3, 5, 2);
 
     renderer.atlas = texture_create("assets/atlas.png");
-    renderer_uniform_update_texture(ENTITY, "tex", renderer.atlas);
-    texture_bind(renderer.atlas);
-    renderer_settings();
+    renderer_uniform_update_texture(WALL, "tex", renderer.atlas, 1);
+    texture_bind(renderer.atlas, 1);
+    renderer.entity = texture_create("assets/test.png");
+    renderer_uniform_update_texture(ENTITY, "entity", renderer.entity, 2);
+    texture_bind(renderer.entity, 2);
 
     f32 pi, sqrt2;
     pi = 3.1415926535;
@@ -127,6 +115,8 @@ void renderer_init(void)
     glBindBuffer(GL_UNIFORM_BUFFER, renderer.ubos[CONSTANTS].id);
     glBufferSubData(GL_UNIFORM_BUFFER, 0 * sizeof(f32), sizeof(f32), &pi);
     glBufferSubData(GL_UNIFORM_BUFFER, 1 * sizeof(f32), sizeof(f32), &sqrt2);
+
+    renderer_settings();
 }
 
 void renderer_malloc(buffertype type, u32 length)
@@ -145,17 +135,23 @@ void renderer_render(void)
 {
     glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+
     glStencilMask(0x00);
+    texture_bind(renderer.atlas, 1);
     shader_use(renderer.shaders[TILE]);
     vao_draw(renderer.vaos[TILE], GL_POINTS);
     shader_use(renderer.shaders[WALL]);
     vao_draw(renderer.vaos[WALL], GL_POINTS);
-    //glDepthFunc(GL_ALWAYS);
-    glStencilFunc(GL_ALWAYS, 1, 0xFF); // all fragments should pass the stencil test
-    glStencilMask(0xFF); // enable writing to the stencil buffer
+
+    texture_bind(renderer.entity, 2);
     shader_use(renderer.shaders[ENTITY]);
     vao_draw(renderer.vaos[ENTITY], GL_POINTS);
-    glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
+
+    //glDepthFunc(GL_ALWAYS);
+    /* glStencilFunc(GL_ALWAYS, 1, 0xFF); // all fragments should pass the stencil test
+    glStencilMask(0xFF); // enable writing to the stencil buffer */
+    
+    /* glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
     glStencilMask(0x00); // disable writing to the stencil buffer
     glDisable(GL_DEPTH_TEST);
     shader_use(renderer.shaders[ENTITY_OUTLINE]); 
@@ -163,11 +159,13 @@ void renderer_render(void)
     glStencilMask(0xFF);
     glStencilFunc(GL_ALWAYS, 1, 0xFF);   
     glEnable(GL_DEPTH_TEST); 
-
+ */
+    texture_bind(renderer.atlas, 1);
     shader_use(renderer.shaders[PROJECTILE]);
     vao_draw(renderer.vaos[PROJECTILE], GL_POINTS);
     glDepthFunc(GL_LESS);
     glDisable(GL_DEPTH_TEST);
+    
     shader_use(renderer.shaders[GUIB]);
     vao_draw(renderer.vaos[GUIB], GL_TRIANGLES);
     glEnable(GL_DEPTH_TEST);
@@ -185,9 +183,9 @@ void renderer_destroy(void)
     free(renderer.ubos);
 }
 
-void renderer_uniform_update_texture(buffertype type, char* identifier, Texture texture) {
+void renderer_uniform_update_texture(buffertype type, char* identifier, Texture texture, u32 binding) {
     shader_use(renderer.shaders[type]);
-    glUniform1i(glGetUniformLocation(renderer.shaders[type].id, identifier), texture.id);
+    glUniform1i(glGetUniformLocation(renderer.shaders[type].id, identifier), binding);
 }
 
 void renderer_uniform_update_view(f32 *mat) {

@@ -18,9 +18,9 @@ Texture texture_create(const char* image_path)
     return texture;
 }
 
-void texture_bind(Texture texture)
+void texture_bind(Texture texture, u32 binding)
 {
-    glActiveTexture(GL_TEXTURE0 + texture.id);
+    glActiveTexture(GL_TEXTURE0 + binding);
     glBindTexture(GL_TEXTURE_2D, texture.id);
 }
 
