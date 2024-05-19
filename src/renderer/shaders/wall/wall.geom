@@ -44,32 +44,44 @@ void build_sides(vec4 position)
     EndPrimitive();
 
     gl_Position = proj * view * (position + vec4(0.0, -position.y, 1.0, 0.0));
+    texCoord = vec2(0.00f, 0.5f);
     EmitVertex();
     gl_Position = proj * view * (position + vec4(0.0, 0.0, 1.0, 0.0));
+    texCoord = vec2(0.00f, 0.25f);
     EmitVertex();   
     gl_Position = proj * view * (position + vec4(0.0, -position.y, 0.0, 0.0));
+    texCoord = vec2(0.25f, 0.5f);
     EmitVertex();
     gl_Position = proj * view * (position + vec4(0.0, 0.0, 0.0, 0.0));
+    texCoord = vec2(0.25f, 0.25);
     EmitVertex();
     EndPrimitive();
 
     gl_Position = proj * view * (position + vec4(1.0, -position.y, 0.0, 0.0));
+    texCoord = vec2(0.00f, 0.5f);
     EmitVertex();
     gl_Position = proj * view * (position + vec4(1.0, 0.0, 0.0, 0.0));
+    texCoord = vec2(0.00f, 0.25f);
     EmitVertex();   
     gl_Position = proj * view * (position + vec4(1.0, -position.y, 1.0, 0.0));
+    texCoord = vec2(0.25f, 0.5f);
     EmitVertex();
     gl_Position = proj * view * (position + vec4(1.0, 0.0, 1.0, 0.0));
+    texCoord = vec2(0.25f, 0.25);
     EmitVertex();
     EndPrimitive();
 
     gl_Position = proj * view * (position + vec4(1.0, -position.y, 1.0, 0.0));
+    texCoord = vec2(0.00f, 0.5f);
     EmitVertex();
     gl_Position = proj * view * (position + vec4(1.0, 0.0, 1.0, 0.0));
+    texCoord = vec2(0.00f, 0.25f);
     EmitVertex();
     gl_Position = proj * view * (position + vec4(0.0, -position.y, 1.0, 0.0));
+    texCoord = vec2(0.25f, 0.5f);
     EmitVertex();
     gl_Position = proj * view * (position + vec4(0.0, 0.0, 1.0, 0.0));
+    texCoord = vec2(0.25f, 0.25);
     EmitVertex();
     EndPrimitive();
 }

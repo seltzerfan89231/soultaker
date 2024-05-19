@@ -58,7 +58,7 @@ void camera_tilt(i32 mag, f32 dt)
 
 void camera_zoom(i32 mag, f32 dt, f32 ar)
 {
-    camera.zoom += mag * dt;
+    camera.zoom += mag * dt * 5;
     if (camera.zoom < MIN_ZOOM)
         camera.zoom = MIN_ZOOM;
     if (camera.zoom > MAX_ZOOM)

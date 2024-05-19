@@ -11,7 +11,7 @@
 
 #define NUM_SAMPLES 4
 #define MAX_BUFFER_LENGTH 1000000
-#define NUM_BUFFER_TYPES 6
+#define NUM_BUFFER_TYPES 5
 #define NUM_UBO_TYPES 6
 
 typedef enum {
@@ -19,7 +19,7 @@ typedef enum {
 } ubotype;
 
 typedef enum {
-    TILE, WALL, ENTITY, ENTITY_OUTLINE, PROJECTILE, GUIB
+    TILE, WALL, ENTITY, PROJECTILE, GUIB
 } buffertype;
 
 typedef struct {
@@ -27,6 +27,7 @@ typedef struct {
     Shader *shaders;
     UBO *ubos;
     Texture atlas;
+    Texture entity;
 } Renderer;
 
 extern Renderer renderer;
@@ -36,7 +37,7 @@ void renderer_malloc(buffertype type, u32 length);
 void renderer_update(buffertype type, u32 offset, u32 length, f32* buffer);
 void renderer_render(void);
 void renderer_destroy(void);
-void renderer_uniform_update_texture(buffertype type, char* identifier, Texture texture);
+void renderer_uniform_update_texture(buffertype type, char* identifier, Texture texture, u32 binding);
 void renderer_uniform_update_view(f32 *mat);
 void renderer_uniform_update_proj(f32 *mat);
 void renderer_uniform_update_zoom(f32 zoom);
