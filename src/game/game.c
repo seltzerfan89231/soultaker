@@ -23,7 +23,7 @@ void game_setup(void)
                 Wall *wall;
                 wall = wall_create(WALL2);
                 wall->position = vec2i_create(i - 15, j - 15);
-                wall->height = 3.0f;
+                wall->height = ((int)(i + j)) % 2 == 0 ? 3.0f : 0.8f;
                 wall_array_push(&game.walls, wall);
             }
             else {

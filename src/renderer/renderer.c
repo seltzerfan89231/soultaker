@@ -8,7 +8,7 @@ static void renderer_settings(void)
     glDepthFunc(GL_LESS);
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_STENCIL_TEST);
-    glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);  
+    glStencilOp(GL_KEEP, GL_REPLACE, GL_REPLACE);
     glEnable(GL_CULL_FACE); 
     glEnable(GL_MULTISAMPLE);
     glCullFace(GL_FRONT);
@@ -112,9 +112,8 @@ void renderer_init(void)
     f32 pi, sqrt2;
     pi = 3.1415926535;
     sqrt2 = sqrt(2);
-    glBindBuffer(GL_UNIFORM_BUFFER, renderer.ubos[CONSTANTS].id);
-    glBufferSubData(GL_UNIFORM_BUFFER, 0 * sizeof(f32), sizeof(f32), &pi);
-    glBufferSubData(GL_UNIFORM_BUFFER, 1 * sizeof(f32), sizeof(f32), &sqrt2);
+    ubo_update(renderer.ubos[CONSTANTS], 0, sizeof(f32), &pi);
+    ubo_update(renderer.ubos[CONSTANTS], sizeof(f32), sizeof(f32), &sqrt2);
 
     renderer_settings();
 }
@@ -136,10 +135,17 @@ void renderer_render(void)
     glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
-    glStencilMask(0x00);
+    glStencilOpSeparate(GL_FRONT, GL_KEEP, GL_REPLACE, GL_REPLACE);
+    //glStencilOpSeparate(GL_BACK, GL_KEEP, GL_REPLACE, GL_REPLACE);  
+
+    // glStencilMask(0x00);
     texture_bind(renderer.atlas, 1);
+    
+    glDisable(GL_DEPTH_TEST);
     shader_use(renderer.shaders[TILE]);
     vao_draw(renderer.vaos[TILE], GL_POINTS);
+    glEnable(GL_DEPTH_TEST);    
+
     shader_use(renderer.shaders[WALL]);
     vao_draw(renderer.vaos[WALL], GL_POINTS);
 
@@ -147,25 +153,11 @@ void renderer_render(void)
     shader_use(renderer.shaders[ENTITY]);
     vao_draw(renderer.vaos[ENTITY], GL_POINTS);
 
-    //glDepthFunc(GL_ALWAYS);
-    /* glStencilFunc(GL_ALWAYS, 1, 0xFF); // all fragments should pass the stencil test
-    glStencilMask(0xFF); // enable writing to the stencil buffer */
-    
-    /* glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
-    glStencilMask(0x00); // disable writing to the stencil buffer
-    glDisable(GL_DEPTH_TEST);
-    shader_use(renderer.shaders[ENTITY_OUTLINE]); 
-    vao_draw(renderer.vaos[ENTITY], GL_POINTS);
-    glStencilMask(0xFF);
-    glStencilFunc(GL_ALWAYS, 1, 0xFF);   
-    glEnable(GL_DEPTH_TEST); 
- */
     texture_bind(renderer.atlas, 1);
     shader_use(renderer.shaders[PROJECTILE]);
     vao_draw(renderer.vaos[PROJECTILE], GL_POINTS);
-    glDepthFunc(GL_LESS);
+
     glDisable(GL_DEPTH_TEST);
-    
     shader_use(renderer.shaders[GUIB]);
     vao_draw(renderer.vaos[GUIB], GL_TRIANGLES);
     glEnable(GL_DEPTH_TEST);

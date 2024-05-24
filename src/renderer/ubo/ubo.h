@@ -10,6 +10,8 @@ typedef struct {
 } UBO;
 
 UBO ubo_create(size_t size);
+void ubo_bind(UBO ubo);
+void ubo_update(UBO ubo, size_t offset, size_t size, f32 *data);
 void ubo_destroy(UBO ubo);
 
 #endif
