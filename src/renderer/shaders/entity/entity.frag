@@ -25,7 +25,7 @@ void main()
                 continue;
             col = texture(entity, newUV);
             if (col.a > 0.1) {
-                gl_FragColor = vec4(0.9f, 0.8f, 0.4f, 1.0f);
+                gl_FragColor = vec4(0.0f, 0.0f, 0.0f, 1.0f);
                 return;
             }
         }

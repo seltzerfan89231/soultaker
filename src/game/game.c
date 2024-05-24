@@ -17,19 +17,19 @@ void game_init(void)
 
 void game_setup(void)
 {
-    for (f32 i = 0; i < 30; i++) {
-        for (f32 j = 0; j < 30; j++) {
-            if (i == 0 || j == 0 || j == 29 || i == 29) {
+    for (f32 i = 0; i < MAP_SIZE; i++) {
+        for (f32 j = 0; j < MAP_SIZE; j++) {
+            if (i == 0 || j == 0 || j == MAP_SIZE - 1 || i == MAP_SIZE - 1) {
                 Wall *wall;
                 wall = wall_create(WALL2);
-                wall->position = vec2i_create(i - 15, j - 15);
+                wall->position = vec2i_create(i - MAP_SIZE / 2, j - MAP_SIZE / 2);
                 wall->height = ((int)(i + j)) % 2 == 0 ? 3.0f : 0.8f;
                 wall_array_push(&game.walls, wall);
             }
             else {
                 Tile *tile;
                 tile = tile_create(FLOOR);
-                tile->position = vec2i_create(i - 15, j - 15);
+                tile->position = vec2i_create(i - MAP_SIZE / 2, j - MAP_SIZE / 2);
                 tile_array_push(&game.tiles, tile);
             }
         }

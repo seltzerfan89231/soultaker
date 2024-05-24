@@ -3,6 +3,8 @@
 
 #include "array.h"
 
+#define MAP_SIZE 256
+
 typedef struct {
     ProjectileArray projectiles;
     EntityArray entities;

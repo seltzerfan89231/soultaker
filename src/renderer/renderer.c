@@ -16,6 +16,12 @@ static void renderer_settings(void)
     glfwWindowHint(GLFW_SAMPLES, NUM_SAMPLES);
 }
 
+static void link_shader_ubo(u32 shader_index, u32 ubo_index, char *identifier)
+{
+    shader_bind_block(renderer.shaders[shader_index], ubo_index, identifier);
+    ubo_bind_buffer_base(renderer.ubos[ubo_index], ubo_index);
+}
+
 void renderer_init(void) 
 {
     renderer.shaders = malloc(NUM_BUFFER_TYPES * sizeof(Shader));
@@ -34,67 +40,34 @@ void renderer_init(void)
     renderer.vaos[TILE] = vao_create(GL_STATIC_DRAW);
     renderer.vaos[TILE].length = 2;
     vao_attr(&renderer.vaos[TILE], 0, 2, 2, 0);
-
-    i = glGetUniformBlockIndex(renderer.shaders[TILE].id, "Matrices");
-    glUniformBlockBinding(renderer.shaders[TILE].id, i, MATRICES);
-    glBindBufferRange(GL_UNIFORM_BUFFER, MATRICES, renderer.ubos[MATRICES].id, 0, 32 * sizeof(f32));
+    link_shader_ubo(TILE, MATRICES, "Matrices");
 
     renderer.shaders[WALL] = shader_create("src/renderer/shaders/wall/wall.vert", "src/renderer/shaders/wall/wall.frag", "src/renderer/shaders/wall/wall.geom");
     renderer.vaos[WALL] = vao_create(GL_STATIC_DRAW);
     renderer.vaos[WALL].length = 4;
     vao_attr(&renderer.vaos[WALL], 0, 3, 4, 0);
     vao_attr(&renderer.vaos[WALL], 1, 1, 4, 3);
-
-    i = glGetUniformBlockIndex(renderer.shaders[WALL].id, "Matrices");
-    glUniformBlockBinding(renderer.shaders[WALL].id, i, MATRICES);
-    glBindBufferRange(GL_UNIFORM_BUFFER, MATRICES, renderer.ubos[MATRICES].id, 0, 32 * sizeof(f32));
+    link_shader_ubo(WALL, MATRICES, "Matrices");
 
     renderer.shaders[ENTITY] = shader_create("src/renderer/shaders/entity/entity.vert", "src/renderer/shaders/entity/entity.frag", "src/renderer/shaders/entity/entity.geom");
     renderer.vaos[ENTITY] = vao_create(GL_DYNAMIC_DRAW);
     renderer.vaos[ENTITY].length = 3;
     vao_attr(&renderer.vaos[ENTITY], 0, 3, 3, 0);
-
-    i = glGetUniformBlockIndex(renderer.shaders[ENTITY].id, "Matrices");
-    glUniformBlockBinding(renderer.shaders[ENTITY].id, i, MATRICES);
-    glBindBufferRange(GL_UNIFORM_BUFFER, MATRICES, renderer.ubos[MATRICES].id, 0, 32 * sizeof(f32));
-
-    i = glGetUniformBlockIndex(renderer.shaders[ENTITY].id, "Zoom");
-    glUniformBlockBinding(renderer.shaders[ENTITY].id, i, ZOOM);
-    glBindBufferRange(GL_UNIFORM_BUFFER, ZOOM, renderer.ubos[ZOOM].id, 0, sizeof(f32));
-
-    i = glGetUniformBlockIndex(renderer.shaders[ENTITY].id, "AspectRatio");
-    glUniformBlockBinding(renderer.shaders[ENTITY].id, i, ASPECT_RATIO);
-    glBindBufferRange(GL_UNIFORM_BUFFER, ASPECT_RATIO, renderer.ubos[ASPECT_RATIO].id, 0, sizeof(f32));
+    link_shader_ubo(ENTITY, MATRICES, "Matrices");
+    link_shader_ubo(ENTITY, ZOOM, "Zoom");
+    link_shader_ubo(ENTITY, ASPECT_RATIO, "AspectRatio");
 
     renderer.shaders[PROJECTILE] = shader_create("src/renderer/shaders/projectile/projectile.vert", "src/renderer/shaders/projectile/projectile.frag", "src/renderer/shaders/projectile/projectile.geom");
     renderer.vaos[PROJECTILE] = vao_create(GL_DYNAMIC_DRAW);
     renderer.vaos[PROJECTILE].length = 4;
     vao_attr(&renderer.vaos[PROJECTILE], 0, 3, 4, 0);
     vao_attr(&renderer.vaos[PROJECTILE], 1, 1, 4, 3);
-
-    i = glGetUniformBlockIndex(renderer.shaders[PROJECTILE].id, "Matrices");
-    glUniformBlockBinding(renderer.shaders[PROJECTILE].id, i, MATRICES);
-    glBindBufferRange(GL_UNIFORM_BUFFER, MATRICES, renderer.ubos[MATRICES].id, 0, 32 * sizeof(f32));
-
-    i = glGetUniformBlockIndex(renderer.shaders[PROJECTILE].id, "Zoom");
-    glUniformBlockBinding(renderer.shaders[PROJECTILE].id, i, ZOOM);
-    glBindBufferRange(GL_UNIFORM_BUFFER, ZOOM, renderer.ubos[ZOOM].id, 0, sizeof(f32));
-
-    i = glGetUniformBlockIndex(renderer.shaders[PROJECTILE].id, "AspectRatio");
-    glUniformBlockBinding(renderer.shaders[PROJECTILE].id, i, ASPECT_RATIO);
-    glBindBufferRange(GL_UNIFORM_BUFFER, ASPECT_RATIO, renderer.ubos[ASPECT_RATIO].id, 0, sizeof(f32));
-
-    i = glGetUniformBlockIndex(renderer.shaders[PROJECTILE].id, "Rotation");
-    glUniformBlockBinding(renderer.shaders[PROJECTILE].id, i, ROTATION);
-    glBindBufferRange(GL_UNIFORM_BUFFER, ROTATION, renderer.ubos[ROTATION].id, 0, sizeof(f32));
-
-    i = glGetUniformBlockIndex(renderer.shaders[PROJECTILE].id, "Tilt");
-    glUniformBlockBinding(renderer.shaders[PROJECTILE].id, i, TILT);
-    glBindBufferRange(GL_UNIFORM_BUFFER, TILT, renderer.ubos[TILT].id, 0, sizeof(f32));
-
-    i = glGetUniformBlockIndex(renderer.shaders[PROJECTILE].id, "Constants");
-    glUniformBlockBinding(renderer.shaders[PROJECTILE].id, i, CONSTANTS);
-    glBindBufferRange(GL_UNIFORM_BUFFER, CONSTANTS, renderer.ubos[CONSTANTS].id, 0, sizeof(f32));
+    link_shader_ubo(PROJECTILE, MATRICES, "Matrices");
+    link_shader_ubo(PROJECTILE, ZOOM, "Zoom");
+    link_shader_ubo(PROJECTILE, ASPECT_RATIO, "AspectRatio");
+    link_shader_ubo(PROJECTILE, ROTATION, "Rotation");
+    link_shader_ubo(PROJECTILE, TILT, "Tilt");
+    link_shader_ubo(PROJECTILE, CONSTANTS, "Constants");
 
     renderer.shaders[GUIB] = shader_create("src/renderer/shaders/gui/gui.vert", "src/renderer/shaders/gui/gui.frag", NULL);
     renderer.vaos[GUIB] = vao_create(GL_STATIC_DRAW);
