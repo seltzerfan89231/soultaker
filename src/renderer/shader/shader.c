@@ -67,6 +67,11 @@ Shader shader_create(char* vs_path, char* fs_path, char* gs_path)
     return shader;
 }
 
+void shader_bind_block(Shader shader, u32 index, char* identifier)
+{
+    glUniformBlockBinding(shader.id, glGetUniformBlockIndex(shader.id, identifier), index);
+}
+
 void shader_use(Shader shader)
 {
     glUseProgram(shader.id);

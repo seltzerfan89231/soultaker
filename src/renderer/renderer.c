@@ -8,12 +8,18 @@ static void renderer_settings(void)
     glDepthFunc(GL_LESS);
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_STENCIL_TEST);
-    glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);  
+    glStencilOp(GL_KEEP, GL_REPLACE, GL_REPLACE);
     glEnable(GL_CULL_FACE); 
     glEnable(GL_MULTISAMPLE);
     glCullFace(GL_FRONT);
     // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     glfwWindowHint(GLFW_SAMPLES, NUM_SAMPLES);
+}
+
+static void link_shader_ubo(u32 shader_index, u32 ubo_index, char *identifier)
+{
+    shader_bind_block(renderer.shaders[shader_index], ubo_index, identifier);
+    ubo_bind_buffer_base(renderer.ubos[ubo_index], ubo_index);
 }
 
 void renderer_init(void) 
@@ -34,67 +40,34 @@ void renderer_init(void)
     renderer.vaos[TILE] = vao_create(GL_STATIC_DRAW);
     renderer.vaos[TILE].length = 2;
     vao_attr(&renderer.vaos[TILE], 0, 2, 2, 0);
-
-    i = glGetUniformBlockIndex(renderer.shaders[TILE].id, "Matrices");
-    glUniformBlockBinding(renderer.shaders[TILE].id, i, MATRICES);
-    glBindBufferRange(GL_UNIFORM_BUFFER, MATRICES, renderer.ubos[MATRICES].id, 0, 32 * sizeof(f32));
+    link_shader_ubo(TILE, MATRICES, "Matrices");
 
     renderer.shaders[WALL] = shader_create("src/renderer/shaders/wall/wall.vert", "src/renderer/shaders/wall/wall.frag", "src/renderer/shaders/wall/wall.geom");
     renderer.vaos[WALL] = vao_create(GL_STATIC_DRAW);
     renderer.vaos[WALL].length = 4;
     vao_attr(&renderer.vaos[WALL], 0, 3, 4, 0);
     vao_attr(&renderer.vaos[WALL], 1, 1, 4, 3);
-
-    i = glGetUniformBlockIndex(renderer.shaders[WALL].id, "Matrices");
-    glUniformBlockBinding(renderer.shaders[WALL].id, i, MATRICES);
-    glBindBufferRange(GL_UNIFORM_BUFFER, MATRICES, renderer.ubos[MATRICES].id, 0, 32 * sizeof(f32));
+    link_shader_ubo(WALL, MATRICES, "Matrices");
 
     renderer.shaders[ENTITY] = shader_create("src/renderer/shaders/entity/entity.vert", "src/renderer/shaders/entity/entity.frag", "src/renderer/shaders/entity/entity.geom");
     renderer.vaos[ENTITY] = vao_create(GL_DYNAMIC_DRAW);
     renderer.vaos[ENTITY].length = 3;
     vao_attr(&renderer.vaos[ENTITY], 0, 3, 3, 0);
-
-    i = glGetUniformBlockIndex(renderer.shaders[ENTITY].id, "Matrices");
-    glUniformBlockBinding(renderer.shaders[ENTITY].id, i, MATRICES);
-    glBindBufferRange(GL_UNIFORM_BUFFER, MATRICES, renderer.ubos[MATRICES].id, 0, 32 * sizeof(f32));
-
-    i = glGetUniformBlockIndex(renderer.shaders[ENTITY].id, "Zoom");
-    glUniformBlockBinding(renderer.shaders[ENTITY].id, i, ZOOM);
-    glBindBufferRange(GL_UNIFORM_BUFFER, ZOOM, renderer.ubos[ZOOM].id, 0, sizeof(f32));
-
-    i = glGetUniformBlockIndex(renderer.shaders[ENTITY].id, "AspectRatio");
-    glUniformBlockBinding(renderer.shaders[ENTITY].id, i, ASPECT_RATIO);
-    glBindBufferRange(GL_UNIFORM_BUFFER, ASPECT_RATIO, renderer.ubos[ASPECT_RATIO].id, 0, sizeof(f32));
+    link_shader_ubo(ENTITY, MATRICES, "Matrices");
+    link_shader_ubo(ENTITY, ZOOM, "Zoom");
+    link_shader_ubo(ENTITY, ASPECT_RATIO, "AspectRatio");
 
     renderer.shaders[PROJECTILE] = shader_create("src/renderer/shaders/projectile/projectile.vert", "src/renderer/shaders/projectile/projectile.frag", "src/renderer/shaders/projectile/projectile.geom");
     renderer.vaos[PROJECTILE] = vao_create(GL_DYNAMIC_DRAW);
     renderer.vaos[PROJECTILE].length = 4;
     vao_attr(&renderer.vaos[PROJECTILE], 0, 3, 4, 0);
     vao_attr(&renderer.vaos[PROJECTILE], 1, 1, 4, 3);
-
-    i = glGetUniformBlockIndex(renderer.shaders[PROJECTILE].id, "Matrices");
-    glUniformBlockBinding(renderer.shaders[PROJECTILE].id, i, MATRICES);
-    glBindBufferRange(GL_UNIFORM_BUFFER, MATRICES, renderer.ubos[MATRICES].id, 0, 32 * sizeof(f32));
-
-    i = glGetUniformBlockIndex(renderer.shaders[PROJECTILE].id, "Zoom");
-    glUniformBlockBinding(renderer.shaders[PROJECTILE].id, i, ZOOM);
-    glBindBufferRange(GL_UNIFORM_BUFFER, ZOOM, renderer.ubos[ZOOM].id, 0, sizeof(f32));
-
-    i = glGetUniformBlockIndex(renderer.shaders[PROJECTILE].id, "AspectRatio");
-    glUniformBlockBinding(renderer.shaders[PROJECTILE].id, i, ASPECT_RATIO);
-    glBindBufferRange(GL_UNIFORM_BUFFER, ASPECT_RATIO, renderer.ubos[ASPECT_RATIO].id, 0, sizeof(f32));
-
-    i = glGetUniformBlockIndex(renderer.shaders[PROJECTILE].id, "Rotation");
-    glUniformBlockBinding(renderer.shaders[PROJECTILE].id, i, ROTATION);
-    glBindBufferRange(GL_UNIFORM_BUFFER, ROTATION, renderer.ubos[ROTATION].id, 0, sizeof(f32));
-
-    i = glGetUniformBlockIndex(renderer.shaders[PROJECTILE].id, "Tilt");
-    glUniformBlockBinding(renderer.shaders[PROJECTILE].id, i, TILT);
-    glBindBufferRange(GL_UNIFORM_BUFFER, TILT, renderer.ubos[TILT].id, 0, sizeof(f32));
-
-    i = glGetUniformBlockIndex(renderer.shaders[PROJECTILE].id, "Constants");
-    glUniformBlockBinding(renderer.shaders[PROJECTILE].id, i, CONSTANTS);
-    glBindBufferRange(GL_UNIFORM_BUFFER, CONSTANTS, renderer.ubos[CONSTANTS].id, 0, sizeof(f32));
+    link_shader_ubo(PROJECTILE, MATRICES, "Matrices");
+    link_shader_ubo(PROJECTILE, ZOOM, "Zoom");
+    link_shader_ubo(PROJECTILE, ASPECT_RATIO, "AspectRatio");
+    link_shader_ubo(PROJECTILE, ROTATION, "Rotation");
+    link_shader_ubo(PROJECTILE, TILT, "Tilt");
+    link_shader_ubo(PROJECTILE, CONSTANTS, "Constants");
 
     renderer.shaders[GUIB] = shader_create("src/renderer/shaders/gui/gui.vert", "src/renderer/shaders/gui/gui.frag", NULL);
     renderer.vaos[GUIB] = vao_create(GL_STATIC_DRAW);
@@ -112,9 +85,8 @@ void renderer_init(void)
     f32 pi, sqrt2;
     pi = 3.1415926535;
     sqrt2 = sqrt(2);
-    glBindBuffer(GL_UNIFORM_BUFFER, renderer.ubos[CONSTANTS].id);
-    glBufferSubData(GL_UNIFORM_BUFFER, 0 * sizeof(f32), sizeof(f32), &pi);
-    glBufferSubData(GL_UNIFORM_BUFFER, 1 * sizeof(f32), sizeof(f32), &sqrt2);
+    ubo_update(renderer.ubos[CONSTANTS], 0, sizeof(f32), &pi);
+    ubo_update(renderer.ubos[CONSTANTS], sizeof(f32), sizeof(f32), &sqrt2);
 
     renderer_settings();
 }
@@ -136,10 +108,17 @@ void renderer_render(void)
     glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
-    glStencilMask(0x00);
+    glStencilOpSeparate(GL_FRONT, GL_KEEP, GL_REPLACE, GL_REPLACE);
+    //glStencilOpSeparate(GL_BACK, GL_KEEP, GL_REPLACE, GL_REPLACE);  
+
+    // glStencilMask(0x00);
     texture_bind(renderer.atlas, 1);
+    
+    glDisable(GL_DEPTH_TEST);
     shader_use(renderer.shaders[TILE]);
     vao_draw(renderer.vaos[TILE], GL_POINTS);
+    glEnable(GL_DEPTH_TEST);    
+
     shader_use(renderer.shaders[WALL]);
     vao_draw(renderer.vaos[WALL], GL_POINTS);
 
@@ -147,25 +126,11 @@ void renderer_render(void)
     shader_use(renderer.shaders[ENTITY]);
     vao_draw(renderer.vaos[ENTITY], GL_POINTS);
 
-    //glDepthFunc(GL_ALWAYS);
-    /* glStencilFunc(GL_ALWAYS, 1, 0xFF); // all fragments should pass the stencil test
-    glStencilMask(0xFF); // enable writing to the stencil buffer */
-    
-    /* glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
-    glStencilMask(0x00); // disable writing to the stencil buffer
-    glDisable(GL_DEPTH_TEST);
-    shader_use(renderer.shaders[ENTITY_OUTLINE]); 
-    vao_draw(renderer.vaos[ENTITY], GL_POINTS);
-    glStencilMask(0xFF);
-    glStencilFunc(GL_ALWAYS, 1, 0xFF);   
-    glEnable(GL_DEPTH_TEST); 
- */
     texture_bind(renderer.atlas, 1);
     shader_use(renderer.shaders[PROJECTILE]);
     vao_draw(renderer.vaos[PROJECTILE], GL_POINTS);
-    glDepthFunc(GL_LESS);
+
     glDisable(GL_DEPTH_TEST);
-    
     shader_use(renderer.shaders[GUIB]);
     vao_draw(renderer.vaos[GUIB], GL_TRIANGLES);
     glEnable(GL_DEPTH_TEST);

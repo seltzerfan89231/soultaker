@@ -26,7 +26,7 @@ void window_init(void)
     glfwSetMouseButtonCallback(window.handle, mouse_button_callback);
     glfwSetCursorPosCallback(window.handle, mouse_callback);
 
-    gladLoadGL(glfwGetProcAddress);
+    gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
     glViewport(0, 0, window.size.x, window.size.y);
 
     window.aspect_ratio = (f32)window.size.x / window.size.y;

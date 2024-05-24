@@ -1,20 +1,20 @@
 #version 330 core
-out vec4 FragColor;
-
 // http://www.geoffprewett.com/blog/software/opengl-outline/index.html
 
 in vec2 texCoord;
 
 uniform sampler2D entity;
+in float depthValue;
 
 void main()
 {
     const float PIXEL_SIZE = 0.02;
-    float a = 1.1; // 1 + thickness * 2;
+    float a = 1.1; // 1 + buffer * 2;
     vec2 UV = vec2(texCoord.x - 0.5, texCoord.y - 0.5) * a + 0.5;
     vec4 col = texture(entity, UV);
+    gl_FragDepth = depthValue;
     if (!(UV.x > 1 || UV.x < 0 || UV.y > 1 || UV.y < 0) && (col.a > 0.1)) {
-        FragColor = col;
+        gl_FragColor = col;
         return;
     }
     for (int x = -1; x <= 1; ++x) {
@@ -25,7 +25,7 @@ void main()
                 continue;
             col = texture(entity, newUV);
             if (col.a > 0.1) {
-                FragColor = vec4(0.9f, 0.8f, 0.4f, 1.0f);
+                gl_FragColor = vec4(0.0f, 0.0f, 0.0f, 1.0f);
                 return;
             }
         }
