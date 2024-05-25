@@ -6,7 +6,7 @@ Entity* entity_create(entitytype type)
     Entity* entity = malloc(sizeof(Entity));
     entity->type = type;
     entity->scale = 1;
-    entity->speed = 1;
+    entity->speed = 8;
     entity->lifetime = 5;
     entity->rotation = 0;
     entity->direction = vec3f_create(0, 0, 0);

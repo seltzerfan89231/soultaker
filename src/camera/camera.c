@@ -20,15 +20,14 @@ static void update_orientation_vectors(void)
     camera.up = vec3f_cross(camera.facing, camera.right);
 }
 
-void camera_init(vec3f pos, f32 ar)
+void camera_init(f32 ar)
 {
     camera.yaw = DEFAULT_YAW;
     camera.pitch = DEFAULT_PITCH;
     camera.fov = DEFAULT_FOV;
     camera.rotate_speed = DEFAULT_ROTATE_SPEED;
-    camera.move_speed = DEFAULT_MOVE_SPEED;
     camera.zoom = DEFAULT_ZOOM;
-    camera.target = pos;
+    camera.target = vec3f_create(0.0f, 0.0f, 0.0f);
     update_orientation_vectors();
     update_view_matrix();
     update_proj_matrix(ar);
@@ -66,19 +65,21 @@ void camera_zoom(i32 mag, f32 dt, f32 ar)
     update_proj_matrix(ar);
 }
 
-vec3f camera_move(vec2i dir, f32 dt)
+void camera_set_target(vec3f target)
+{
+    camera.target = target;
+    camera.position = vec3f_add(camera.target, vec3f_scale(-DEFAULT_DISTANCE, camera.facing));
+    update_view_matrix();
+}
+
+vec3f camera_get_direction(vec2i dir)
 {
     vec3f vec, offset;
     vec2f v1, v2;
     v1 = vec2f_normalize(vec2f_create(camera.facing.x, camera.facing.z));
     v2 = vec2f_create(camera.right.x, camera.right.z);
     vec = vec3f_normalize(vec3f_create(v1.x * dir.x + v2.x * dir.y, 0, v1.y * dir.x + v2.y * dir.y));
-    offset = vec3f_scale(camera.move_speed * dt, vec);
-    camera.target = vec3f_add(camera.target, offset);
-    camera.position = vec3f_add(camera.position, offset);
-    update_view_matrix();
-    return camera.target;
+    return vec;
 }
-
 
 

@@ -44,9 +44,23 @@ static void entity_push_data(Entity* entity, f32* buffer, u32 offset)
     buffer[offset++] = entity->position.z;
 }
 
+static void update_proj_matrix(void)
+{
+    renderer_uniform_update_proj(camera.proj);
+    renderer_uniform_update_zoom(1 / camera.zoom);
+}
+
+static void update_view_matrix(void)
+{
+    renderer_uniform_update_view(camera.view);
+    renderer_uniform_update_rotation(camera.yaw);
+    renderer_uniform_update_tilt(-camera.pitch);
+}
+
 static void state_setup(void)
 {
     game_setup();
+    camera_set_target(game.entities.buffer[0]->position);
 
     renderer_malloc(TILE, game.tiles.max_length);
     for (i = 0; i < game.tiles.length; i++)
@@ -72,6 +86,7 @@ static void state_setup(void)
 static void state_update(void)
 {
     game_update(window.dt);
+    camera_set_target(game.entities.buffer[0]->position);
 
     for (i = 0; i < game.entities.length; i++)
         entity_push_data(game.entities.buffer[i], buffer, i);
@@ -80,19 +95,6 @@ static void state_update(void)
     for (i = 0; i < game.projectiles.length; i++)
         projectile_push_data(game.projectiles.buffer[i], buffer, i);
     renderer_update(PROJECTILE, 0, i, buffer);
-}
-
-static void update_proj_matrix(void)
-{
-    renderer_uniform_update_proj(camera.proj);
-    renderer_uniform_update_zoom(1 / camera.zoom);
-}
-
-static void update_view_matrix(void)
-{
-    renderer_uniform_update_view(camera.view);
-    renderer_uniform_update_rotation(camera.yaw);
-    renderer_uniform_update_tilt(-camera.pitch);
 }
 
 static void process_input(void)
@@ -126,8 +128,7 @@ static void process_input(void)
     if (window_mouse_button_pressed(MOUSE_LEFT))
         game_shoot(window.mouse.position, camera.yaw, camera.pitch, camera.zoom, window.aspect_ratio);
 
-    if (move_direction.x != 0 || move_direction.y != 0)
-        game_set_target(camera_move(move_direction, window.dt));
+    game_set_direction(camera_get_direction(move_direction));
     if (rotation_magnitude != 0)
         camera_rotate(rotation_magnitude, window.dt);
     if (tilt_magnitude != 0)
@@ -146,9 +147,10 @@ void state_init(void)
     buffer = malloc(5000000 * sizeof(f32));
     window_init();
     renderer_init();
-    camera_init(vec3f_create(0.0f, 0.0f, 0.0f), window.aspect_ratio);
+    camera_init(window.aspect_ratio);
     game_init();
     gui_init();
+
     renderer_uniform_update_aspect_ratio(1 / window.aspect_ratio);
     update_view_matrix();
     update_proj_matrix();
@@ -158,13 +160,16 @@ void state_init(void)
 void state_loop(void)
 {
     f32 time = glfwGetTime();
+    f32 game_time, game_dt;
     while (!window_closed()) {
         process_input();
+        game_time = glfwGetTime();
         state_update();
+        game_dt = glfwGetTime() - game_time;
         renderer_render();
         window_update();
         if (glfwGetTime() - time > 1)
-            printf("%d, %.0f, %f\n", window.mouse.left, window.fps, -camera.pitch), time = glfwGetTime();
+            printf("%d, %.0f, %.0f\n", window.mouse.left, window.fps, 1 / game_dt), time = glfwGetTime();
     }
 }
 

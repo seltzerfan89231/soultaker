@@ -68,6 +68,11 @@ void game_update(f32 dt)
     }
 }
 
+void game_set_direction(vec3f direction)
+{
+    player->direction = direction;
+}
+
 void game_set_target(vec3f target)
 {
     player->position = target;
