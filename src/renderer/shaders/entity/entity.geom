@@ -29,14 +29,11 @@ layout (std140) uniform Tilt
 };
 
 out vec2 texCoord;
-out float depthValue;
 
 void build_entity(vec4 position)
 {
     vec2 offset;
     float buffer = 0.05;
-    depthValue = 0.5 + 0.5 * position.z;
-    depthValue -= 0.001;
 
     // bottom left
     offset = zoom * vec2((-0.5 - buffer) * ar, 0.0 - buffer);

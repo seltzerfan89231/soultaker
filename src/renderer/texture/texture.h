@@ -6,6 +6,8 @@
 #include <stb_image.h>
 #include "../../util/type.h"
 
+#define NUM_SAMPLES 4
+
 typedef struct {
     u32 id;
 } Texture;

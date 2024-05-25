@@ -3,16 +3,14 @@
 
 #include <glad.h>
 #include <glfw.h>
+#include "../util/indices.h"
 #include "../util/vec.h"
 #include "vao/vao.h"
 #include "shader/shader.h"
 #include "texture/texture.h"
 #include "ubo/ubo.h"
 
-#define NUM_SAMPLES 4
 #define MAX_BUFFER_LENGTH 1000000
-#define NUM_BUFFER_TYPES 5
-#define NUM_UBO_TYPES 6
 
 typedef enum {
     MATRICES, ZOOM, ASPECT_RATIO, ROTATION, TILT, CONSTANTS
@@ -33,11 +31,11 @@ typedef struct {
 extern Renderer renderer;
 
 void renderer_init(void);
-void renderer_malloc(buffertype type, u32 length);
-void renderer_update(buffertype type, u32 offset, u32 length, f32* buffer);
+void renderer_malloc(u32 vao_index, u32 length);
+void renderer_update(u32 vao_index, u32 offset, u32 length, f32* buffer);
 void renderer_render(void);
 void renderer_destroy(void);
-void renderer_uniform_update_texture(buffertype type, char* identifier, Texture texture, u32 binding);
+void renderer_uniform_update_texture(u32 shader_index, char* identifier, Texture texture, u32 binding);
 void renderer_uniform_update_view(f32 *mat);
 void renderer_uniform_update_proj(f32 *mat);
 void renderer_uniform_update_zoom(f32 zoom);

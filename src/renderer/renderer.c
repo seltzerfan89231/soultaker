@@ -24,83 +24,83 @@ static void link_shader_ubo(u32 shader_index, u32 ubo_index, char *identifier)
 
 void renderer_init(void) 
 {
-    renderer.shaders = malloc(NUM_BUFFER_TYPES * sizeof(Shader));
-    renderer.vaos = malloc(NUM_BUFFER_TYPES * sizeof(VAO));
-    renderer.ubos = malloc(NUM_UBO_TYPES * sizeof(UBO));
+    renderer.shaders = malloc(NUM_SHADERS * sizeof(Shader));
+    renderer.vaos = malloc(NUM_VAOS * sizeof(VAO));
+    renderer.ubos = malloc(NUM_UBOS * sizeof(UBO));
 
     u32 i;
-    renderer.ubos[MATRICES] = ubo_create(32 * sizeof(f32));
-    renderer.ubos[ZOOM] = ubo_create(sizeof(f32));
-    renderer.ubos[ASPECT_RATIO] = ubo_create(sizeof(f32));
-    renderer.ubos[ROTATION] = ubo_create(sizeof(f32));
-    renderer.ubos[TILT] = ubo_create(sizeof(f32));
-    renderer.ubos[CONSTANTS] = ubo_create(2 * sizeof(f32));
+    renderer.ubos[MATRICES_UBO_INDEX] = ubo_create(32 * sizeof(f32));
+    renderer.ubos[ZOOM_UBO_INDEX] = ubo_create(sizeof(f32));
+    renderer.ubos[ASPECT_RATIO_UBO_INDEX] = ubo_create(sizeof(f32));
+    renderer.ubos[ROTATION_UBO_INDEX] = ubo_create(sizeof(f32));
+    renderer.ubos[TILT_UBO_INDEX] = ubo_create(sizeof(f32));
+    renderer.ubos[CONSTANTS_UBO_INDEX] = ubo_create(2 * sizeof(f32));
 
-    renderer.shaders[TILE] = shader_create("src/renderer/shaders/tile/tile.vert", "src/renderer/shaders/tile/tile.frag", "src/renderer/shaders/tile/tile.geom");
-    renderer.vaos[TILE] = vao_create(GL_STATIC_DRAW);
-    renderer.vaos[TILE].length = 2;
-    vao_attr(&renderer.vaos[TILE], 0, 2, 2, 0);
+    renderer.shaders[TILE_SHADER_INDEX] = shader_create("src/renderer/shaders/tile/tile.vert", "src/renderer/shaders/tile/tile.frag", "src/renderer/shaders/tile/tile.geom");
+    renderer.vaos[TILE_VAO_INDEX] = vao_create(GL_STATIC_DRAW);
+    renderer.vaos[TILE_VAO_INDEX].length = 2;
+    vao_attr(&renderer.vaos[TILE_VAO_INDEX], 0, 2, 2, 0);
     link_shader_ubo(TILE, MATRICES, "Matrices");
 
-    renderer.shaders[WALL] = shader_create("src/renderer/shaders/wall/wall.vert", "src/renderer/shaders/wall/wall.frag", "src/renderer/shaders/wall/wall.geom");
-    renderer.vaos[WALL] = vao_create(GL_STATIC_DRAW);
-    renderer.vaos[WALL].length = 4;
-    vao_attr(&renderer.vaos[WALL], 0, 3, 4, 0);
-    vao_attr(&renderer.vaos[WALL], 1, 1, 4, 3);
+    renderer.shaders[WALL_SHADER_INDEX] = shader_create("src/renderer/shaders/wall/wall.vert", "src/renderer/shaders/wall/wall.frag", "src/renderer/shaders/wall/wall.geom");
+    renderer.vaos[WALL_VAO_INDEX] = vao_create(GL_STATIC_DRAW);
+    renderer.vaos[WALL_VAO_INDEX].length = 4;
+    vao_attr(&renderer.vaos[WALL_VAO_INDEX], 0, 3, 4, 0);
+    vao_attr(&renderer.vaos[WALL_VAO_INDEX], 1, 1, 4, 3);
     link_shader_ubo(WALL, MATRICES, "Matrices");
 
-    renderer.shaders[ENTITY] = shader_create("src/renderer/shaders/entity/entity.vert", "src/renderer/shaders/entity/entity.frag", "src/renderer/shaders/entity/entity.geom");
-    renderer.vaos[ENTITY] = vao_create(GL_DYNAMIC_DRAW);
-    renderer.vaos[ENTITY].length = 3;
-    vao_attr(&renderer.vaos[ENTITY], 0, 3, 3, 0);
+    renderer.shaders[ENTITY_SHADER_INDEX] = shader_create("src/renderer/shaders/entity/entity.vert", "src/renderer/shaders/entity/entity.frag", "src/renderer/shaders/entity/entity.geom");
+    renderer.vaos[ENTITY_VAO_INDEX] = vao_create(GL_DYNAMIC_DRAW);
+    renderer.vaos[ENTITY_VAO_INDEX].length = 3;
+    vao_attr(&renderer.vaos[ENTITY_VAO_INDEX], 0, 3, 3, 0);
     link_shader_ubo(ENTITY, MATRICES, "Matrices");
     link_shader_ubo(ENTITY, ZOOM, "Zoom");
     link_shader_ubo(ENTITY, ASPECT_RATIO, "AspectRatio");
 
-    renderer.shaders[PROJECTILE] = shader_create("src/renderer/shaders/projectile/projectile.vert", "src/renderer/shaders/projectile/projectile.frag", "src/renderer/shaders/projectile/projectile.geom");
-    renderer.vaos[PROJECTILE] = vao_create(GL_DYNAMIC_DRAW);
-    renderer.vaos[PROJECTILE].length = 4;
-    vao_attr(&renderer.vaos[PROJECTILE], 0, 3, 4, 0);
-    vao_attr(&renderer.vaos[PROJECTILE], 1, 1, 4, 3);
-    link_shader_ubo(PROJECTILE, MATRICES, "Matrices");
-    link_shader_ubo(PROJECTILE, ZOOM, "Zoom");
-    link_shader_ubo(PROJECTILE, ASPECT_RATIO, "AspectRatio");
-    link_shader_ubo(PROJECTILE, ROTATION, "Rotation");
-    link_shader_ubo(PROJECTILE, TILT, "Tilt");
-    link_shader_ubo(PROJECTILE, CONSTANTS, "Constants");
+    renderer.shaders[PROJECTILE_SHADER_INDEX] = shader_create("src/renderer/shaders/projectile/projectile.vert", "src/renderer/shaders/projectile/projectile.frag", "src/renderer/shaders/projectile/projectile.geom");
+    renderer.vaos[PROJECTILE_VAO_INDEX] = vao_create(GL_DYNAMIC_DRAW);
+    renderer.vaos[PROJECTILE_VAO_INDEX].length = 4;
+    vao_attr(&renderer.vaos[PROJECTILE_VAO_INDEX], 0, 3, 4, 0);
+    vao_attr(&renderer.vaos[PROJECTILE_VAO_INDEX], 1, 1, 4, 3);
+    link_shader_ubo(PROJECTILE_SHADER_INDEX, MATRICES_UBO_INDEX, "Matrices");
+    link_shader_ubo(PROJECTILE_SHADER_INDEX, ZOOM_UBO_INDEX, "Zoom");
+    link_shader_ubo(PROJECTILE_SHADER_INDEX, ASPECT_RATIO_UBO_INDEX, "AspectRatio");
+    link_shader_ubo(PROJECTILE_SHADER_INDEX, ROTATION_UBO_INDEX, "Rotation");
+    link_shader_ubo(PROJECTILE_SHADER_INDEX, TILT_UBO_INDEX, "Tilt");
+    link_shader_ubo(PROJECTILE_SHADER_INDEX, CONSTANTS_UBO_INDEX, "Constants");
 
-    renderer.shaders[GUIB] = shader_create("src/renderer/shaders/gui/gui.vert", "src/renderer/shaders/gui/gui.frag", NULL);
-    renderer.vaos[GUIB] = vao_create(GL_STATIC_DRAW);
-    renderer.vaos[GUIB].length = 5;
-    vao_attr(&renderer.vaos[GUIB], 0, 2, 5, 0);
-    vao_attr(&renderer.vaos[GUIB], 1, 3, 5, 2);
+    renderer.shaders[GUI_SHADER_INDEX] = shader_create("src/renderer/shaders/gui/gui.vert", "src/renderer/shaders/gui/gui.frag", NULL);
+    renderer.vaos[GUI_VAO_INDEX] = vao_create(GL_STATIC_DRAW);
+    renderer.vaos[GUI_VAO_INDEX].length = 5;
+    vao_attr(&renderer.vaos[GUI_VAO_INDEX], 0, 2, 5, 0);
+    vao_attr(&renderer.vaos[GUI_VAO_INDEX], 1, 3, 5, 2);
 
     renderer.atlas = texture_create("assets/atlas.png");
-    renderer_uniform_update_texture(WALL, "tex", renderer.atlas, 1);
+    renderer_uniform_update_texture(WALL_SHADER_INDEX, "tex", renderer.atlas, 1);
     texture_bind(renderer.atlas, 1);
     renderer.entity = texture_create("assets/test.png");
-    renderer_uniform_update_texture(ENTITY, "entity", renderer.entity, 2);
+    renderer_uniform_update_texture(ENTITY_SHADER_INDEX, "entity", renderer.entity, 2);
     texture_bind(renderer.entity, 2);
 
     f32 pi, sqrt2;
     pi = 3.1415926535;
     sqrt2 = sqrt(2);
-    ubo_update(renderer.ubos[CONSTANTS], 0, sizeof(f32), &pi);
-    ubo_update(renderer.ubos[CONSTANTS], sizeof(f32), sizeof(f32), &sqrt2);
+    ubo_update(renderer.ubos[CONSTANTS_UBO_INDEX], 0, sizeof(f32), &pi);
+    ubo_update(renderer.ubos[CONSTANTS_UBO_INDEX], sizeof(f32), sizeof(f32), &sqrt2);
 
     renderer_settings();
 }
 
-void renderer_malloc(buffertype type, u32 length)
+void renderer_malloc(u32 vao_index, u32 length)
 {
-    length *= renderer.vaos[type].length;
-    vao_malloc(&renderer.vaos[type], length);
+    length *= renderer.vaos[vao_index].length;
+    vao_malloc(&renderer.vaos[vao_index], length);
 }
 
-void renderer_update(buffertype type, u32 offset, u32 length, f32* buffer)
+void renderer_update(u32 vao_index, u32 offset, u32 length, f32* buffer)
 {
-    length *= renderer.vaos[type].length;
-    vao_update(&renderer.vaos[type], offset, length, buffer);
+    length *= renderer.vaos[vao_index].length;
+    vao_update(&renderer.vaos[vao_index], offset, length, buffer);
 }
 
 void renderer_render(void)
@@ -115,70 +115,66 @@ void renderer_render(void)
     texture_bind(renderer.atlas, 1);
     
     glDisable(GL_DEPTH_TEST);
-    shader_use(renderer.shaders[TILE]);
-    vao_draw(renderer.vaos[TILE], GL_POINTS);
+    shader_use(renderer.shaders[TILE_SHADER_INDEX]);
+    vao_draw(renderer.vaos[TILE_VAO_INDEX], GL_POINTS);
     glEnable(GL_DEPTH_TEST);    
 
-    shader_use(renderer.shaders[WALL]);
-    vao_draw(renderer.vaos[WALL], GL_POINTS);
+    shader_use(renderer.shaders[WALL_SHADER_INDEX]);
+    vao_draw(renderer.vaos[WALL_VAO_INDEX], GL_POINTS);
 
     texture_bind(renderer.entity, 2);
-    shader_use(renderer.shaders[ENTITY]);
-    vao_draw(renderer.vaos[ENTITY], GL_POINTS);
+    shader_use(renderer.shaders[ENTITY_SHADER_INDEX]);
+    vao_draw(renderer.vaos[ENTITY_VAO_INDEX], GL_POINTS);
 
     texture_bind(renderer.atlas, 1);
-    shader_use(renderer.shaders[PROJECTILE]);
-    vao_draw(renderer.vaos[PROJECTILE], GL_POINTS);
+    shader_use(renderer.shaders[PROJECTILE_SHADER_INDEX]);
+    vao_draw(renderer.vaos[PROJECTILE_VAO_INDEX], GL_POINTS);
 
     glDisable(GL_DEPTH_TEST);
-    shader_use(renderer.shaders[GUIB]);
-    vao_draw(renderer.vaos[GUIB], GL_TRIANGLES);
+    shader_use(renderer.shaders[GUI_SHADER_INDEX]);
+    vao_draw(renderer.vaos[GUI_VAO_INDEX], GL_TRIANGLES);
     glEnable(GL_DEPTH_TEST);
 }
 
 void renderer_destroy(void)
 {
-    for (i32 i = 0; i < NUM_BUFFER_TYPES; i++) {
+    for (i32 i = 0; i < NUM_VAOS; i++)
         vao_destroy(renderer.vaos[i]);
+    for (i32 i = 0; i < NUM_SHADERS; i++)
         shader_destroy(renderer.shaders[i]);
-    }
+    for (i32 i = 0; i < NUM_UBOS; i++)
+        ubo_destroy(renderer.ubos[i]);
     texture_destroy(renderer.atlas);
     free(renderer.shaders);
     free(renderer.vaos);
     free(renderer.ubos);
 }
 
-void renderer_uniform_update_texture(buffertype type, char* identifier, Texture texture, u32 binding) {
-    shader_use(renderer.shaders[type]);
-    glUniform1i(glGetUniformLocation(renderer.shaders[type].id, identifier), binding);
+void renderer_uniform_update_texture(u32 shader_index, char* identifier, Texture texture, u32 binding) {
+    shader_use(renderer.shaders[shader_index]);
+    glUniform1i(glGetUniformLocation(renderer.shaders[shader_index].id, identifier), binding);
 }
 
 void renderer_uniform_update_view(f32 *mat) {
-    glBindBuffer(GL_UNIFORM_BUFFER, renderer.ubos[MATRICES].id);
-    glBufferSubData(GL_UNIFORM_BUFFER, 0, 16 * sizeof(f32), mat);
+    ubo_update(renderer.ubos[MATRICES_UBO_INDEX], 0, 16 * sizeof(f32), mat);
 }
 
 void renderer_uniform_update_proj(f32 *mat) {
-    glBindBuffer(GL_UNIFORM_BUFFER, renderer.ubos[MATRICES].id);
-    glBufferSubData(GL_UNIFORM_BUFFER, 16 * sizeof(f32), 16 * sizeof(f32), mat);
+    ubo_update(renderer.ubos[MATRICES_UBO_INDEX], 16 * sizeof(f32), 16 * sizeof(f32), mat);
 }
 
 void renderer_uniform_update_zoom(f32 zoom) {
-    glBindBuffer(GL_UNIFORM_BUFFER, renderer.ubos[ZOOM].id);
-    glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(f32), &zoom);
+    ubo_update(renderer.ubos[ZOOM_UBO_INDEX], 0, sizeof(f32), &zoom);
 }
 
 void renderer_uniform_update_rotation(f32 rotation) {
-    glBindBuffer(GL_UNIFORM_BUFFER, renderer.ubos[ROTATION].id);
-    glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(f32), &rotation);
+    ubo_update(renderer.ubos[ROTATION_UBO_INDEX], 0, sizeof(f32), &rotation);
 }
 
 void renderer_uniform_update_tilt(f32 tilt) {
-    glBindBuffer(GL_UNIFORM_BUFFER, renderer.ubos[TILT].id);
-    glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(f32), &tilt);
+    ubo_update(renderer.ubos[TILT_UBO_INDEX], 0, sizeof(f32), &tilt);
 }
 
 void renderer_uniform_update_aspect_ratio(f32 ar) {
-    glBindBuffer(GL_UNIFORM_BUFFER, renderer.ubos[ASPECT_RATIO].id);
-    glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(f32), &ar);
+    ubo_update(renderer.ubos[ASPECT_RATIO_UBO_INDEX], 0, sizeof(f32), &ar);
 }
