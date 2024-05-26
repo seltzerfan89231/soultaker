@@ -12,7 +12,7 @@
     void _ltype##_array_push(_type##Array *array, _type *_ltype) { \
         array->buffer[array->length++] = _ltype; \
     } \
-    void _ltype##_array_pop(_type##Array *array, u32 idx) { \
+    void _ltype##_array_cut(_type##Array *array, u32 idx) { \
         _ltype##_destroy(array->buffer[idx]); \
         array->buffer[idx] = array->buffer[--array->length];\
     } \

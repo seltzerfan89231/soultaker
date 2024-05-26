@@ -49,7 +49,7 @@ static void collide_objects(void)
             dx = entity->position.x - proj->position.x;
             dz = entity->position.z - proj->position.z;
             if (entity->friendly ^ proj->friendly && vec2f_mag(vec2f_create(dx, dz)) < entity->hitbox_radius + proj->hitbox_radius)
-                projectile_array_pop(&game.projectiles, j);
+                projectile_array_cut(&game.projectiles, j);
             else
                 j++;
         }
@@ -66,7 +66,7 @@ static void collide_objects(void)
               proj->position.x - proj->hitbox_radius < wall->position.x + 1 &&
               proj->position.z + proj->hitbox_radius > wall->position.y     &&
               proj->position.z - proj->hitbox_radius < wall->position.y + 1)
-                projectile_array_pop(&game.projectiles, j);
+                projectile_array_cut(&game.projectiles, j);
             else
                 j++;
         }
@@ -112,23 +112,26 @@ void game_init(void)
     game.entities = entity_array_create(1000000);
     game.tiles = tile_array_create(1000000);
     game.walls = wall_array_create(1000000);
+    game.map = malloc(MAP_WIDTH * sizeof(u8*));
+    for (i32 i = 0; i < MAP_WIDTH; i++)
+        game.map[i] = malloc(MAP_WIDTH * sizeof(u8));
 }
 
 void game_setup(void)
 {
-    for (f32 i = 0; i < MAP_SIZE; i++) {
-        for (f32 j = 0; j < MAP_SIZE; j++) {
-            if (i == 0 || j == 0 || j == MAP_SIZE - 1 || i == MAP_SIZE - 1) {
+    for (f32 i = 0; i < MAP_WIDTH; i++) {
+        for (f32 j = 0; j < MAP_WIDTH; j++) {
+            if (i == 0 || j == 0 || j == MAP_WIDTH - 1 || i == MAP_WIDTH - 1) {
                 Wall *wall;
                 wall = wall_create(WALL2);
-                wall->position = vec2i_create(i - MAP_SIZE / 2, j - MAP_SIZE / 2);
+                wall->position = vec2i_create(i - MAP_WIDTH / 2, j - MAP_WIDTH / 2);
                 wall->height = ((int)(i + j)) % 2 == 0 ? 3.0f : 0.8f;
                 wall_array_push(&game.walls, wall);
             }
             else {
                 Tile *tile;
                 tile = tile_create(FLOOR);
-                tile->position = vec2i_create(i - MAP_SIZE / 2, j - MAP_SIZE / 2);
+                tile->position = vec2i_create(i - MAP_WIDTH / 2, j - MAP_WIDTH / 2);
                 tile_array_push(&game.tiles, tile);
             }
         }
@@ -166,6 +169,9 @@ void game_destroy(void)
     wall_array_destroy(&game.walls);
     entity_array_destroy(&game.entities);
     projectile_array_destroy(&game.projectiles);
+    for (i32 i = 0; i < MAP_WIDTH; i++)
+        free(game.map[i]);
+    free(game.map);
 }
 
 void game_shoot(vec2f pos, f32 rotation, f32 tilt, f32 zoom, f32 ar)

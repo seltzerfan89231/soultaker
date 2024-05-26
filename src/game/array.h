@@ -14,7 +14,7 @@
     } _type##Array; \
     _type##Array _ltype##_array_create(u32 max_length); \
     void _ltype##_array_push(_type##Array *array, _type *_ltype); \
-    void _ltype##_array_pop(_type##Array *array, u32 idx); \
+    void _ltype##_array_cut(_type##Array *array, u32 idx); \
     bool _ltype##_array_empty(_type##Array *array); \
     void _ltype##_array_destroy(_type##Array *array);
 
