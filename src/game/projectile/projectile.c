@@ -1,7 +1,7 @@
 #include "projectile.h"
 #include <stdlib.h>
 
-Projectile* projectile_create(projtype type)
+Projectile* projectile_create(projtype type, bool friendly)
 {
     Projectile* projectile = malloc(sizeof(Projectile));
     projectile->type = type;
@@ -10,6 +10,8 @@ Projectile* projectile_create(projtype type)
     projectile->lifetime = 5;
     projectile->rotation = 0;
     projectile->direction = vec3f_create(0, 0, 0);
+    projectile->friendly = friendly;
+    projectile->hitbox_radius = 0.5;
     return projectile;
 }
 

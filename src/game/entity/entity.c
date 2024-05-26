@@ -1,7 +1,7 @@
 #include "entity.h"
 #include <stdlib.h>
 
-Entity* entity_create(entitytype type)
+Entity* entity_create(entitytype type, bool friendly)
 {
     Entity* entity = malloc(sizeof(Entity));
     entity->type = type;
@@ -10,6 +10,8 @@ Entity* entity_create(entitytype type)
     entity->lifetime = 5;
     entity->rotation = 0;
     entity->direction = vec3f_create(0, 0, 0);
+    entity->friendly = friendly;
+    entity->hitbox_radius = 0.5;
     return entity;
 }
 

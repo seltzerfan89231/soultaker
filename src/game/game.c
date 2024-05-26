@@ -12,7 +12,7 @@ static void create_objects(void)
     static f32 cooldown;
     if (glfwGetTime() - cooldown >= 0.5) {
         cooldown = glfwGetTime();
-        Projectile* proj = projectile_create(ONE);
+        Projectile* proj = projectile_create(ONE, 0);
         proj->position = game.entities.buffer[1]->position;
         proj->rotation = 1.1;
         proj->direction = vec3f_create(cos(proj->rotation), 0.0f, sin(proj->rotation));
@@ -41,9 +41,17 @@ static void collide_objects(void)
 
     i = 0;
     while (i < game.entities.length) {
+        Entity *entity = game.entities.buffer[i];
         j = 0;
         while (j < game.projectiles.length) {
-            j++;
+            f32 dx, dz;
+            Projectile *proj = game.projectiles.buffer[j];
+            dx = entity->position.x - proj->position.x;
+            dz = entity->position.z - proj->position.z;
+            if (entity->friendly ^ proj->friendly && vec2f_mag(vec2f_create(dx, dz)) < entity->hitbox_radius + proj->hitbox_radius)
+                projectile_array_pop(&game.projectiles, j);
+            else
+                j++;
         }
         i++;
     }
@@ -95,11 +103,11 @@ void game_setup(void)
         }
     }
 
-    player = entity_create(PLAYER);
+    player = entity_create(PLAYER, 1);
     player->position = vec3f_create(0.0f, 0.0f, 0.0f);
     entity_array_push(&game.entities, player);
 
-    Entity* entity = entity_create(ENEMY);
+    Entity* entity = entity_create(ENEMY, 0);
     entity->position = vec3f_create(5, 0, 0);
     entity_array_push(&game.entities, entity);
 }
@@ -136,7 +144,7 @@ void game_shoot(vec2f pos, f32 rotation, f32 tilt, f32 zoom, f32 ar)
         return;
     cooldown = glfwGetTime();
     assert(player != NULL);
-    Projectile* proj = projectile_create(ONE);
+    Projectile* proj = projectile_create(ONE, 1);
     proj->speed = 4;
     vec2f dir = vec2f_normalize(vec2f_create((pos.x - 0.5) * ar, pos.y - 0.5 + 1.0 / 4 / zoom));
     f32 dirx, dirz, a, b, c;
