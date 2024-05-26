@@ -38,6 +38,33 @@ static void update_objects(f32 dt)
 static void collide_objects(void)
 {
     i32 i, j;
+
+    i = 0;
+    while (i < game.entities.length) {
+        j = 0;
+        while (j < game.projectiles.length) {
+            j++;
+        }
+        i++;
+    }
+    
+    i = 0;
+    while (i < game.walls.length) {
+        j = 0;
+        while (j < game.projectiles.length) {
+            j++;
+        }
+        i++;
+    }
+
+    i = 0;
+    while (i < game.entities.length) {
+        j = 0;
+        while (j < game.walls.length) {
+            j++;
+        }
+        i++;
+    }
 }
 
 void game_init(void)
