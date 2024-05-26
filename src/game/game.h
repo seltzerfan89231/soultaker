@@ -3,13 +3,14 @@
 
 #include "array.h"
 
-#define MAP_SIZE 256
+#define MAP_SIZE 30
 
 typedef struct {
     ProjectileArray projectiles;
     EntityArray entities;
     TileArray tiles;
     WallArray walls;
+    u8 **map;
 } Game;
 
 extern Game game;

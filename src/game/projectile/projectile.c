@@ -1,7 +1,7 @@
 #include "projectile.h"
 #include <stdlib.h>
 
-Projectile* projectile_create(projtype type, bool friendly)
+Projectile* projectile_create(projtype type, u8 friendly)
 {
     Projectile* projectile = malloc(sizeof(Projectile));
     projectile->type = type;

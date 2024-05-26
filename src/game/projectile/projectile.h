@@ -9,13 +9,13 @@ typedef enum { ONE } projtype;
 
 typedef struct {
     f32 speed, scale, lifetime, rotation, hitbox_radius;
-    bool friendly;
+    u8 friendly;
     projtype type;
     vec3f position, direction;
     vec2f tex;
 } Projectile;
 
-Projectile* projectile_create(projtype type, bool friendly);
+Projectile* projectile_create(projtype type, u8 friendly);
 void projectile_update_position(Projectile* projectile, f32 dt);
 void projectile_destroy(Projectile* projectile);
 

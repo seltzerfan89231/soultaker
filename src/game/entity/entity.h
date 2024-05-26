@@ -9,13 +9,13 @@ typedef enum { PLAYER, ENEMY } entitytype;
 
 typedef struct {
     f32 speed, scale, lifetime, rotation, hitbox_radius;
-    bool friendly;
+    u8 friendly;
     entitytype type;
     vec3f position, direction;
     vec2f tex;
 } Entity;
 
-Entity* entity_create(entitytype type, bool friendly);
+Entity* entity_create(entitytype type, u8 friendly);
 void entity_update_position(Entity* entity, f32 dt);
 void entity_destroy(Entity* entity);
 

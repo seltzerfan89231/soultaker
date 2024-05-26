@@ -74,9 +74,32 @@ static void collide_objects(void)
     }
 
     i = 0;
-    while (i < game.entities.length) {
+    while (i < game.walls.length) {
+        Wall *wall = game.walls.buffer[i];
         j = 0;
-        while (j < game.walls.length) {
+        while (j < game.entities.length) {
+            Entity *entity = game.entities.buffer[j];
+            if (entity->position.x + entity->hitbox_radius > wall->position.x   &&
+              entity->position.x - entity->hitbox_radius < wall->position.x + 1 &&
+              entity->position.z + entity->hitbox_radius > wall->position.y     &&
+              entity->position.z - entity->hitbox_radius < wall->position.y + 1) {
+                if (entity->position.x <= wall->position.x) {
+                    entity->position.x = wall->position.x - entity->scale / 2;
+                    entity->direction.x = 0;
+                }
+                if (entity->position.x >= wall->position.x + 1) {
+                    entity->position.x = wall->position.x + 1 + entity->scale / 2;
+                    entity->direction.x = 0;
+                }
+                if (entity->position.z <= wall->position.y) {
+                    entity->position.z = wall->position.y - entity->scale / 2;
+                    entity->direction.z = 0;
+                }
+                if (entity->position.z <= wall->position.y + 1) {
+                    entity->position.z = wall->position.y + 1 + entity->scale / 2;
+                    entity->direction.z = 0;
+                }
+            }
             j++;
         }
         i++;

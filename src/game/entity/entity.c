@@ -1,7 +1,7 @@
 #include "entity.h"
 #include <stdlib.h>
 
-Entity* entity_create(entitytype type, bool friendly)
+Entity* entity_create(entitytype type, u8 friendly)
 {
     Entity* entity = malloc(sizeof(Entity));
     entity->type = type;
