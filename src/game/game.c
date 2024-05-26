@@ -58,9 +58,17 @@ static void collide_objects(void)
     
     i = 0;
     while (i < game.walls.length) {
+        Wall *wall = game.walls.buffer[i];  
         j = 0;
         while (j < game.projectiles.length) {
-            j++;
+            Projectile *proj = game.projectiles.buffer[j];
+            if (proj->position.x + proj->hitbox_radius > wall->position.x   &&
+              proj->position.x - proj->hitbox_radius < wall->position.x + 1 &&
+              proj->position.z + proj->hitbox_radius > wall->position.y     &&
+              proj->position.z - proj->hitbox_radius < wall->position.y + 1)
+                projectile_array_pop(&game.projectiles, j);
+            else
+                j++;
         }
         i++;
     }
