@@ -7,6 +7,39 @@
 Game game;
 Entity* player;
 
+static void create_objects(void)
+{
+    static f32 cooldown;
+    if (glfwGetTime() - cooldown >= 0.5) {
+        cooldown = glfwGetTime();
+        Projectile* proj = projectile_create(ONE);
+        proj->position = game.entities.buffer[1]->position;
+        proj->rotation = 1.1;
+        proj->direction = vec3f_create(cos(proj->rotation), 0.0f, sin(proj->rotation));
+        proj->position.y = 0.5f;
+        proj->speed = 4;
+        proj->tex = vec2f_create(0.5, 0);
+        projectile_array_push(&game.projectiles, proj);
+    }
+}
+
+static void update_objects(f32 dt)
+{
+    for (i32 i = 0; i < game.entities.length; i++) {
+        Entity *entity = game.entities.buffer[i];
+        entity_update_position(entity, dt);
+    }
+    for (i32 i = 0; i < game.projectiles.length; i++) {
+        Projectile *proj = game.projectiles.buffer[i];
+        projectile_update_position(proj, dt);
+    }
+}
+
+static void collide_objects(void)
+{
+    i32 i, j;
+}
+
 void game_init(void)
 {
     game.projectiles = projectile_array_create(1000000);
@@ -46,26 +79,9 @@ void game_setup(void)
 
 void game_update(f32 dt)
 {
-    static f32 cooldown;
-    if (glfwGetTime() - cooldown >= 0.5) {
-        cooldown = glfwGetTime();
-        Projectile* proj = projectile_create(ONE);
-        proj->position = game.entities.buffer[1]->position;
-        proj->rotation = 1.1;
-        proj->direction = vec3f_create(cos(proj->rotation), 0.0f, sin(proj->rotation));
-        proj->position.y = 0.5f;
-        proj->speed = 4;
-        proj->tex = vec2f_create(0.5, 0);
-        projectile_array_push(&game.projectiles, proj);
-    }
-    for (i32 i = 0; i < game.entities.length; i++) {
-        Entity *entity = game.entities.buffer[i];
-        entity_update_position(entity, dt);
-    }
-    for (i32 i = 0; i < game.projectiles.length; i++) {
-        Projectile *proj = game.projectiles.buffer[i];
-        projectile_update_position(proj, dt);
-    }
+    create_objects();
+    update_objects(dt);
+    collide_objects();
 }
 
 void game_set_direction(vec3f direction)
