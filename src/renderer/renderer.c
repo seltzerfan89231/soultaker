@@ -7,13 +7,11 @@ static void renderer_settings(void)
 {
     glDepthFunc(GL_LESS);
     glEnable(GL_DEPTH_TEST);
-    glEnable(GL_STENCIL_TEST);
-    glStencilOp(GL_KEEP, GL_REPLACE, GL_REPLACE);
+    //glEnable(GL_STENCIL_TEST);
     glEnable(GL_MULTISAMPLE);
     glEnable(GL_CULL_FACE); 
     glCullFace(GL_BACK);
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-    glfwWindowHint(GLFW_SAMPLES, NUM_SAMPLES);
 }
 
 static void link_shader_ubo(u32 shader_index, u32 ubo_index, char *identifier)
@@ -40,22 +38,25 @@ void renderer_init(void)
     renderer.vaos[TILE_VAO_INDEX] = vao_create(GL_STATIC_DRAW);
     renderer.vaos[TILE_VAO_INDEX].length = 2;
     vao_attr(&renderer.vaos[TILE_VAO_INDEX], 0, 2, 2, 0);
-    link_shader_ubo(TILE, MATRICES, "Matrices");
+    link_shader_ubo(TILE_SHADER_INDEX, MATRICES_UBO_INDEX, "Matrices");
 
     renderer.shaders[WALL_SHADER_INDEX] = shader_create("src/renderer/shaders/wall/wall.vert", "src/renderer/shaders/wall/wall.frag", "src/renderer/shaders/wall/wall.geom");
     renderer.vaos[WALL_VAO_INDEX] = vao_create(GL_STATIC_DRAW);
     renderer.vaos[WALL_VAO_INDEX].length = 4;
     vao_attr(&renderer.vaos[WALL_VAO_INDEX], 0, 3, 4, 0);
     vao_attr(&renderer.vaos[WALL_VAO_INDEX], 1, 1, 4, 3);
-    link_shader_ubo(WALL, MATRICES, "Matrices");
+    link_shader_ubo(WALL_SHADER_INDEX, MATRICES_UBO_INDEX, "Matrices");
+
+    //renderer.shaders[WALL_BACK_SHADER_INDEX] = shader_create("src/renderer/shaders/wall/wall.vert", "src/renderer/shaders/wall/wall_back.frag", "src/renderer/shaders/wall/wall_back.geom");
+    //link_shader_ubo(WALL_BACK_SHADER_INDEX, MATRICES_UBO_INDEX, "Matrices");
 
     renderer.shaders[ENTITY_SHADER_INDEX] = shader_create("src/renderer/shaders/entity/entity.vert", "src/renderer/shaders/entity/entity.frag", "src/renderer/shaders/entity/entity.geom");
     renderer.vaos[ENTITY_VAO_INDEX] = vao_create(GL_DYNAMIC_DRAW);
     renderer.vaos[ENTITY_VAO_INDEX].length = 3;
     vao_attr(&renderer.vaos[ENTITY_VAO_INDEX], 0, 3, 3, 0);
-    link_shader_ubo(ENTITY, MATRICES, "Matrices");
-    link_shader_ubo(ENTITY, ZOOM, "Zoom");
-    link_shader_ubo(ENTITY, ASPECT_RATIO, "AspectRatio");
+    link_shader_ubo(ENTITY_SHADER_INDEX, MATRICES_UBO_INDEX, "Matrices");
+    link_shader_ubo(ENTITY_SHADER_INDEX, ZOOM_UBO_INDEX, "Zoom");
+    link_shader_ubo(ENTITY_SHADER_INDEX, ASPECT_RATIO_UBO_INDEX, "AspectRatio");
 
     renderer.shaders[PROJECTILE_SHADER_INDEX] = shader_create("src/renderer/shaders/projectile/projectile.vert", "src/renderer/shaders/projectile/projectile.frag", "src/renderer/shaders/projectile/projectile.geom");
     renderer.vaos[PROJECTILE_VAO_INDEX] = vao_create(GL_DYNAMIC_DRAW);
@@ -108,24 +109,28 @@ void renderer_render(void)
     glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);  
 
-    // glStencilMask(0x00);
+    /* glStencilOpSeparate(GL_FRONT, GL_REPLACE, GL_REPLACE, GL_REPLACE);
+    glStencilOpSeparate(GL_BACK, GL_KEEP, GL_REPLACE, GL_REPLACE);
+    glStencilFuncSeparate(GL_FRONT, GL_NEVER, 1, 0xFF);
+    glStencilFuncSeparate(GL_BACK, GL_ALWAYS, 1, 0xFF);
+    glStencilMaskSeparate(GL_FRONT, 0xFF);
+    glStencilMaskSeparate(GL_BACK, 0xFF); */
+
+    //glStencilFunc(GL_NEVER, 1, 0xFF);
+    //shader_use(renderer.shaders[WALL_BACK_SHADER_INDEX]);
+    //vao_draw(renderer.vaos[WALL_VAO_INDEX], GL_POINTS);
+
+    /* glStencilOpSeparate(GL_FRONT, GL_KEEP, GL_REPLACE, GL_REPLACE);
+    glStencilFunc(GL_ALWAYS, 0, 0xFF);
+    glStencilMask(0x00);  */
+
     texture_bind(renderer.atlas, 1);
-    glStencilMask(0x00);
-    glDisable(GL_DEPTH_TEST);
     shader_use(renderer.shaders[TILE_SHADER_INDEX]);
     vao_draw(renderer.vaos[TILE_VAO_INDEX], GL_POINTS);
-    glEnable(GL_DEPTH_TEST);    
-
-    glStencilOpSeparate(GL_FRONT, GL_KEEP, GL_KEEP, GL_KEEP);
-    glStencilOpSeparate(GL_BACK, GL_KEEP, GL_REPLACE, GL_REPLACE);
-    glStencilFunc(GL_ALWAYS, 1, 0xFF);
-    glStencilMaskSeparate(GL_BACK, 0xFF);
     shader_use(renderer.shaders[WALL_SHADER_INDEX]);
     vao_draw(renderer.vaos[WALL_VAO_INDEX], GL_POINTS);
+    glClear(GL_DEPTH_BUFFER_BIT);
 
-    glStencilOpSeparate(GL_FRONT, GL_KEEP, GL_KEEP, GL_KEEP);
-    glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
-    glStencilMask(0x00); 
     texture_bind(renderer.entity, 2);
     shader_use(renderer.shaders[ENTITY_SHADER_INDEX]);
     vao_draw(renderer.vaos[ENTITY_VAO_INDEX], GL_POINTS);

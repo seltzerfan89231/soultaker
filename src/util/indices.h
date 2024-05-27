@@ -9,7 +9,7 @@
 #define TILT_UBO_INDEX         4
 #define CONSTANTS_UBO_INDEX    5
 
-#define NUM_SHADERS             5
+#define NUM_SHADERS             6
 #define TILE_SHADER_INDEX       0
 #define WALL_SHADER_INDEX       1
 #define ENTITY_SHADER_INDEX     2
