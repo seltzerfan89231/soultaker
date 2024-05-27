@@ -1,12 +1,17 @@
 #version 330 core
 // http://www.geoffprewett.com/blog/software/opengl-outline/index.html
 
+layout (std140) uniform Tilt
+{
+    float tilt;
+};
+
 in vec2 texCoord;
 
 uniform sampler2D entity;
 void main()
 {
-    const float PIXEL_SIZE = 0.02;
+    const float PIXEL_SIZE = 0.03;
     float a = 1.1; // 1 + buffer * 2;
     vec2 UV = vec2(texCoord.x - 0.5, texCoord.y - 0.5) * a + 0.5;
     vec4 col = texture(entity, UV);

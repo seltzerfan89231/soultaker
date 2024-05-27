@@ -29,11 +29,13 @@ layout (std140) uniform Tilt
 };
 
 out vec2 texCoord;
+out float depthValue;
 
 in float projectile_rotation[];
 
 void build_projectile(vec4 position) 
 {
+    depthValue = 0.5 + 0.5 * position.z;
     float drot = projectile_rotation[0] - rotation;
     drot = atan(tan(drot) / cos(pi / 2 + tilt)) + (cos(drot) > 0 ? 0 : pi);
     vec2 offset;
@@ -41,13 +43,13 @@ void build_projectile(vec4 position)
     gl_Position = position + vec4(offset, 0.0 , 0.0);    // 1:bottom-left
     texCoord = vec2(0.0f, 0.25f);
     EmitVertex();
-    offset = zoom * (1 / sqrt2) * vec2(ar * cos(drot + 3 * pi / 4), sin(drot + 3 * pi / 4));
-    gl_Position = position + vec4(offset, 0.0, 0.0);    // 3:top-left
-    texCoord = vec2(0.0f, 0.0f);
-    EmitVertex();
     offset = zoom * (1 / sqrt2) * vec2(ar * cos(drot - pi / 4), sin(drot - pi / 4));
     gl_Position = position + vec4(offset, 0.0, 0.0);    // 2:bottom-right
     texCoord = vec2(0.25f, 0.25f);
+    EmitVertex();
+    offset = zoom * (1 / sqrt2) * vec2(ar * cos(drot + 3 * pi / 4), sin(drot + 3 * pi / 4));
+    gl_Position = position + vec4(offset, 0.0, 0.0);    // 3:top-left
+    texCoord = vec2(0.0f, 0.0f);
     EmitVertex();
     offset = zoom * (1 / sqrt2) * vec2(ar * cos(drot + pi / 4), sin(drot + pi / 4));
     gl_Position = position + vec4(offset, 0.0, 0.0);    // 4:top-right

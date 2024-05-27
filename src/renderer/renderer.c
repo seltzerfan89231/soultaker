@@ -9,10 +9,10 @@ static void renderer_settings(void)
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_STENCIL_TEST);
     glStencilOp(GL_KEEP, GL_REPLACE, GL_REPLACE);
-    glEnable(GL_CULL_FACE); 
     glEnable(GL_MULTISAMPLE);
-    glCullFace(GL_FRONT);
-    // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    glEnable(GL_CULL_FACE); 
+    glCullFace(GL_BACK);
+    //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     glfwWindowHint(GLFW_SAMPLES, NUM_SAMPLES);
 }
 
@@ -106,22 +106,26 @@ void renderer_update(u32 vao_index, u32 offset, u32 length, f32* buffer)
 void renderer_render(void)
 {
     glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-
-    glStencilOpSeparate(GL_FRONT, GL_KEEP, GL_REPLACE, GL_REPLACE);
-    //glStencilOpSeparate(GL_BACK, GL_KEEP, GL_REPLACE, GL_REPLACE);  
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);  
 
     // glStencilMask(0x00);
     texture_bind(renderer.atlas, 1);
-    
+    glStencilMask(0x00);
     glDisable(GL_DEPTH_TEST);
     shader_use(renderer.shaders[TILE_SHADER_INDEX]);
     vao_draw(renderer.vaos[TILE_VAO_INDEX], GL_POINTS);
     glEnable(GL_DEPTH_TEST);    
 
+    glStencilOpSeparate(GL_FRONT, GL_KEEP, GL_KEEP, GL_KEEP);
+    glStencilOpSeparate(GL_BACK, GL_KEEP, GL_REPLACE, GL_REPLACE);
+    glStencilFunc(GL_ALWAYS, 1, 0xFF);
+    glStencilMaskSeparate(GL_BACK, 0xFF);
     shader_use(renderer.shaders[WALL_SHADER_INDEX]);
     vao_draw(renderer.vaos[WALL_VAO_INDEX], GL_POINTS);
 
+    glStencilOpSeparate(GL_FRONT, GL_KEEP, GL_KEEP, GL_KEEP);
+    glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
+    glStencilMask(0x00); 
     texture_bind(renderer.entity, 2);
     shader_use(renderer.shaders[ENTITY_SHADER_INDEX]);
     vao_draw(renderer.vaos[ENTITY_VAO_INDEX], GL_POINTS);
@@ -130,6 +134,8 @@ void renderer_render(void)
     shader_use(renderer.shaders[PROJECTILE_SHADER_INDEX]);
     vao_draw(renderer.vaos[PROJECTILE_VAO_INDEX], GL_POINTS);
 
+    glStencilMask(0xFF);
+    glStencilFunc(GL_ALWAYS, 1, 0xFF);  
     glDisable(GL_DEPTH_TEST);
     shader_use(renderer.shaders[GUI_SHADER_INDEX]);
     vao_draw(renderer.vaos[GUI_VAO_INDEX], GL_TRIANGLES);

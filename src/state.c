@@ -59,8 +59,11 @@ static void update_view_matrix(void)
 
 static void state_setup(void)
 {
+    renderer_uniform_update_aspect_ratio(1 / window.aspect_ratio);
     game_setup();
     camera_set_target(game.entities.buffer[0]->position);
+    update_view_matrix();
+    update_proj_matrix();
 
     renderer_malloc(TILE, game.tiles.max_length);
     for (i = 0; i < game.tiles.length; i++)
@@ -151,9 +154,6 @@ void state_init(void)
     game_init();
     gui_init();
 
-    renderer_uniform_update_aspect_ratio(1 / window.aspect_ratio);
-    update_view_matrix();
-    update_proj_matrix();
     state_setup();
 }
 

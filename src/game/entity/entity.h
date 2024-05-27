@@ -12,7 +12,6 @@ typedef struct {
     u8 friendly;
     entitytype type;
     vec3f position, direction;
-    vec2f tex;
 } Entity;
 
 Entity* entity_create(entitytype type, u8 friendly);

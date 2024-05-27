@@ -6,7 +6,7 @@ Projectile* projectile_create(projtype type, u8 friendly)
     Projectile* projectile = malloc(sizeof(Projectile));
     projectile->type = type;
     projectile->scale = 1;
-    projectile->speed = 1;
+    projectile->speed = 10;
     projectile->lifetime = 5;
     projectile->rotation = 0;
     projectile->direction = vec3f_create(0, 0, 0);

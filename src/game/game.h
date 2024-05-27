@@ -3,7 +3,7 @@
 
 #include "array.h"
 
-#define MAP_WIDTH 30
+#define MAP_WIDTH 50
 
 typedef struct {
     ProjectileArray projectiles;

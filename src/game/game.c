@@ -17,8 +17,6 @@ static void create_objects(void)
         proj->rotation = 1.1;
         proj->direction = vec3f_create(cos(proj->rotation), 0.0f, sin(proj->rotation));
         proj->position.y = 0.5f;
-        proj->speed = 4;
-        proj->tex = vec2f_create(0.5, 0);
         projectile_array_push(&game.projectiles, proj);
     }
 }
@@ -35,10 +33,9 @@ static void update_objects(f32 dt)
     }
 }
 
-static void collide_objects(void)
+static void collide_entities_projectiles(void)
 {
     i32 i, j;
-
     i = 0;
     while (i < game.entities.length) {
         Entity *entity = game.entities.buffer[i];
@@ -48,14 +45,18 @@ static void collide_objects(void)
             Projectile *proj = game.projectiles.buffer[j];
             dx = entity->position.x - proj->position.x;
             dz = entity->position.z - proj->position.z;
-            if (entity->friendly ^ proj->friendly && vec2f_mag(vec2f_create(dx, dz)) < entity->hitbox_radius + proj->hitbox_radius)
+            if (entity->friendly != proj->friendly && vec2f_mag(vec2f_create(dx, dz)) < entity->hitbox_radius + proj->hitbox_radius)
                 projectile_array_cut(&game.projectiles, j);
             else
                 j++;
         }
         i++;
     }
-    
+}
+
+static void collide_walls_projectiles(void)
+{
+    i32 i, j;
     i = 0;
     while (i < game.walls.length) {
         Wall *wall = game.walls.buffer[i];  
@@ -72,30 +73,42 @@ static void collide_objects(void)
         }
         i++;
     }
+}
 
+static void collide_walls_entities()
+{
+    i32 i, j;
     i = 0;
     while (i < game.walls.length) {
         Wall *wall = game.walls.buffer[i];
         j = 0;
         while (j < game.entities.length) {
             Entity *entity = game.entities.buffer[j];
-            if (entity->position.x + entity->hitbox_radius > wall->position.x   &&
-              entity->position.x - entity->hitbox_radius < wall->position.x + 1 &&
-              entity->position.z + entity->hitbox_radius > wall->position.y     &&
-              entity->position.z - entity->hitbox_radius < wall->position.y + 1) {
-                if (entity->position.x <= wall->position.x) {
+            if (entity->position.x + entity->hitbox_radius > wall->position.x
+              && entity->position.x - entity->hitbox_radius < wall->position.x + 1
+              && entity->position.z + entity->hitbox_radius > wall->position.y
+              && entity->position.z - entity->hitbox_radius < wall->position.y + 1) {
+                if (entity->position.x <= wall->position.x 
+                  && wall->position.x - 1 >= 0
+                  && game.map[wall->position.x-1][wall->position.y] == 0) {
                     entity->position.x = wall->position.x - entity->scale / 2;
                     entity->direction.x = 0;
                 }
-                if (entity->position.x >= wall->position.x + 1) {
+                else if (entity->position.x >= wall->position.x + 1
+                  && wall->position.x + 1 < MAP_WIDTH
+                  && game.map[wall->position.x+1][wall->position.y] == 0) {
                     entity->position.x = wall->position.x + 1 + entity->scale / 2;
                     entity->direction.x = 0;
                 }
-                if (entity->position.z <= wall->position.y) {
+                else if (entity->position.z <= wall->position.y
+                  && wall->position.y - 1 >= 0 
+                  && game.map[wall->position.x][wall->position.y-1] == 0) {
                     entity->position.z = wall->position.y - entity->scale / 2;
                     entity->direction.z = 0;
                 }
-                if (entity->position.z <= wall->position.y + 1) {
+                else if (entity->position.z >= wall->position.y + 1
+                  && wall->position.y + 1 < MAP_WIDTH 
+                  && game.map[wall->position.x][wall->position.y+1] == 0) {
                     entity->position.z = wall->position.y + 1 + entity->scale / 2;
                     entity->direction.z = 0;
                 }
@@ -106,6 +119,13 @@ static void collide_objects(void)
     }
 }
 
+static void collide_objects(void)
+{
+    collide_walls_entities();
+    collide_walls_projectiles();
+    collide_entities_projectiles();
+}
+
 void game_init(void)
 {
     game.projectiles = projectile_array_create(1000000);
@@ -114,35 +134,36 @@ void game_init(void)
     game.walls = wall_array_create(1000000);
     game.map = malloc(MAP_WIDTH * sizeof(u8*));
     for (i32 i = 0; i < MAP_WIDTH; i++)
-        game.map[i] = malloc(MAP_WIDTH * sizeof(u8));
+        game.map[i] = calloc(MAP_WIDTH, sizeof(u8));
 }
 
 void game_setup(void)
 {
-    for (f32 i = 0; i < MAP_WIDTH; i++) {
-        for (f32 j = 0; j < MAP_WIDTH; j++) {
-            if (i == 0 || j == 0 || j == MAP_WIDTH - 1 || i == MAP_WIDTH - 1) {
+    for (i32 i = 0; i < MAP_WIDTH; i++) {
+        for (i32 j = 0; j < MAP_WIDTH; j++) {
+            if (i == 0 || j == 0 || j == MAP_WIDTH - 1 || i == MAP_WIDTH - 1 || (i == 12 && j == 12)) {
                 Wall *wall;
                 wall = wall_create(WALL2);
-                wall->position = vec2i_create(i - MAP_WIDTH / 2, j - MAP_WIDTH / 2);
+                wall->position = vec2i_create(i, j);
                 wall->height = ((int)(i + j)) % 2 == 0 ? 3.0f : 0.8f;
                 wall_array_push(&game.walls, wall);
+                game.map[i][j] = 1;
             }
             else {
                 Tile *tile;
                 tile = tile_create(FLOOR);
-                tile->position = vec2i_create(i - MAP_WIDTH / 2, j - MAP_WIDTH / 2);
+                tile->position = vec2i_create(i, j);
                 tile_array_push(&game.tiles, tile);
             }
         }
     }
 
     player = entity_create(PLAYER, 1);
-    player->position = vec3f_create(0.0f, 0.0f, 0.0f);
+    player->position = vec3f_create(15.0f, 0.0f, 15.0f);
     entity_array_push(&game.entities, player);
 
     Entity* entity = entity_create(ENEMY, 0);
-    entity->position = vec3f_create(5, 0, 0);
+    entity->position = vec3f_create(20, 0, 15);
     entity_array_push(&game.entities, entity);
 }
 
@@ -197,6 +218,5 @@ void game_shoot(vec2f pos, f32 rotation, f32 tilt, f32 zoom, f32 ar)
     proj->rotation = t + (dirx > 0 ? 0 : PI);
     proj->direction = vec3f_normalize(vec3f_create(dirx, 0.0, dirz));
     proj->position.y = 0.5f;
-    proj->tex = vec2f_create(0.5, 0);
     projectile_array_push(&game.projectiles, proj);
 }

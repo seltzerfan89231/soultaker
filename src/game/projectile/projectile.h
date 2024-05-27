@@ -12,7 +12,6 @@ typedef struct {
     u8 friendly;
     projtype type;
     vec3f position, direction;
-    vec2f tex;
 } Projectile;
 
 Projectile* projectile_create(projtype type, u8 friendly);
