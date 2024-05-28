@@ -165,6 +165,13 @@ void game_setup(void)
     Entity* entity = entity_create(ENEMY, 0);
     entity->position = vec3f_create(20, 0, 15);
     entity_array_push(&game.entities, entity);
+
+    Projectile* proj = projectile_create(ONE, 1);
+    proj->position = vec3f_create(15.0f, 0.0f, 13.0f);
+    proj->speed = 0.5;
+    proj->direction = vec3f_create(0.0f, 1.0f, 0.0f);
+    proj->rotation = 0.0f;
+    projectile_array_push(&game.projectiles, proj);
 }
 
 void game_update(f32 dt)

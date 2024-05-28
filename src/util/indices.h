@@ -15,6 +15,7 @@
 #define ENTITY_SHADER_INDEX     2
 #define PROJECTILE_SHADER_INDEX 3
 #define GUI_SHADER_INDEX        4
+#define SHADOW_SHADER_INDEX     5
 
 #define NUM_VAOS             5
 #define TILE_VAO_INDEX       0

@@ -7,8 +7,8 @@ layout (std140) uniform Tilt
 };
 
 in vec2 texCoord;
-
 uniform sampler2D entity;
+
 void main()
 {
     const float PIXEL_SIZE = 0.03;

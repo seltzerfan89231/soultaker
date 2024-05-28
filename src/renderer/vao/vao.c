@@ -1,6 +1,6 @@
 #include "vao.h"
 
-VAO vao_create(GLenum usage)
+VAO vao_create(GLenum usage, GLenum mode)
 {
     VAO vao;
     glGenVertexArrays(1, &vao.id);
@@ -8,6 +8,7 @@ VAO vao_create(GLenum usage)
     vao.vbo = vbo_create();
     vao.length = 0;
     vao.usage = usage;
+    vao.mode = mode;
     return vao;
 }
 
@@ -30,10 +31,10 @@ void vao_malloc(VAO* vao, u32 length)
     vbo_malloc(&vao->vbo, length, vao->usage);
 }
 
-void vao_draw(VAO vao, GLenum mode)
+void vao_draw(VAO vao)
 {
     vao_bind(vao);
-    glDrawArrays(mode, 0, vao.vbo.length / vao.length);
+    glDrawArrays(vao.mode, 0, vao.vbo.length / vao.length);
 }
 
 void vao_bind(VAO vao)
