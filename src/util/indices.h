@@ -16,7 +16,7 @@
 #define PROJECTILE_SHADER 3
 #define GUI_SHADER        4
 #define SHADOW_SHADER     5
-#define HEALTH_BAR_SHADER 6
+#define HEALTHBAR_SHADER  6
 
 #define NUM_VAOS       5
 #define TILE_VAO       0

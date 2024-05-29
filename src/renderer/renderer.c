@@ -63,6 +63,11 @@ void renderer_init(void)
     renderer.shaders[SHADOW_SHADER] = shader_create("src/renderer/shaders/shadow/shadow.vert", "src/renderer/shaders/shadow/shadow.frag", "src/renderer/shaders/shadow/shadow.geom");
     link_shader_ubo(SHADOW_SHADER, MATRICES_UBO, "Matrices");
 
+    renderer.shaders[HEALTHBAR_SHADER] = shader_create("src/renderer/shaders/healthbar/healthbar.vert", "src/renderer/shaders/healthbar/healthbar.frag", "src/renderer/shaders/healthbar/healthbar.geom");
+    link_shader_ubo(HEALTHBAR_SHADER, MATRICES_UBO, "Matrices");
+    link_shader_ubo(HEALTHBAR_SHADER, ZOOM_UBO, "Zoom");
+    link_shader_ubo(HEALTHBAR_SHADER, ASPECT_RATIO_UBO, "AspectRatio");
+
     renderer.shaders[PROJECTILE_SHADER] = shader_create("src/renderer/shaders/projectile/projectile.vert", "src/renderer/shaders/projectile/projectile.frag", "src/renderer/shaders/projectile/projectile.geom");
     renderer.vaos[PROJECTILE_VAO] = vao_create(GL_DYNAMIC_DRAW, GL_POINTS);
     renderer.vaos[PROJECTILE_VAO].length = 4;
@@ -147,6 +152,10 @@ void renderer_render(void)
     vao_draw(renderer.vaos[ENTITY_VAO]);
     shader_use(renderer.shaders[SHADOW_SHADER]);
     vao_draw(renderer.vaos[ENTITY_VAO]);
+    glDepthFunc(GL_ALWAYS);
+    shader_use(renderer.shaders[HEALTHBAR_SHADER]);
+    vao_draw(renderer.vaos[ENTITY_VAO]);
+    glDepthFunc(GL_LESS);
 
     texture_bind(renderer.atlas, 1);
     shader_use(renderer.shaders[PROJECTILE_SHADER]);
