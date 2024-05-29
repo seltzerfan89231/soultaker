@@ -4,8 +4,8 @@
 #include "../util/type.h"
 
 typedef struct GUI {
+    u32 length, max_length;
     f32 *buffer;
-    u32 length;
 } GUI;
 
 extern GUI gui;

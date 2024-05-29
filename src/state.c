@@ -65,25 +65,29 @@ static void state_setup(void)
     update_view_matrix();
     update_proj_matrix();
 
-    renderer_malloc(TILE, game.tiles.max_length);
+    renderer_malloc(TILE_VAO, game.tiles.max_length);
     for (i = 0; i < game.tiles.length; i++)
         tile_push_data(game.tiles.buffer[i], buffer, i);
-    renderer_update(TILE, 0, i, buffer);
+    renderer_update(TILE_VAO, 0, i, buffer);
 
-    renderer_malloc(WALL, game.walls.max_length);
+    renderer_malloc(WALL_VAO, game.walls.max_length);
     for (i = 0; i < game.walls.length; i++)
         wall_push_data(game.walls.buffer[i], buffer, i);
-    renderer_update(WALL, 0, i, buffer);
+    renderer_update(WALL_VAO, 0, i, buffer);
 
-    renderer_malloc(ENTITY, game.entities.max_length);
+    renderer_malloc(ENTITY_VAO, game.entities.max_length);
     for (i = 0; i < game.entities.length; i++)
         entity_push_data(game.entities.buffer[i], buffer, i);
-    renderer_update(ENTITY, 0, i, buffer);
+    renderer_update(ENTITY_VAO, 0, i, buffer);
     
-    renderer_malloc(PROJECTILE, game.projectiles.max_length);
+    renderer_malloc(PROJECTILE_VAO, game.projectiles.max_length);
     for (i = 0; i < game.projectiles.length; i++)
         projectile_push_data(game.projectiles.buffer[i], buffer, i);
-    renderer_update(PROJECTILE, 0, i, buffer);
+    renderer_update(PROJECTILE_VAO, 0, i, buffer);
+
+    renderer_malloc(GUI_VAO, gui.max_length);
+    gui_push_data();
+    renderer_update(GUI_VAO, 0, 6, gui.buffer);
 }
 
 static void state_update(void)

@@ -5,16 +5,15 @@ GUI gui;
 
 static float gui_vertices[] = {
      -1.0f, 0.95f, 0.0f, 0.0f, 0.6f,
-     -1.0f, 1.0f, 0.0f, 0.0f, 0.6f,
-    -0.85f, 0.95f, 0.0f, 0.0f, 0.6f,
+     -0.85f, 0.95f, 0.0f, 0.0f, 0.6f,
      -1.0f, 1.0f, 0.0f, 0.0f, 0.6f,
      -0.85f, 1.0f, 0.0f, 0.0f, 0.6f,
-     -0.85f,  0.95f, 0.0f, 0.0f, 0.6f
 };
 
 void gui_init(void)
 {
-    gui.buffer = malloc(10000 * sizeof(f32));
+    gui.max_length = 1000;
+    gui.buffer = malloc(gui.max_length * sizeof(f32));
     gui.length = 0;
 }
 
