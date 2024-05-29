@@ -16,7 +16,7 @@ void window_init(void)
 
     window.size = vec2f_create(DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HEIGHT);
     window.mouse.position = vec2f_create(window.size.x / 2, window.size.y / 2);
-    window.handle = glfwCreateWindow(window.size.x, window.size.y, "untitled", NULL, NULL);
+    window.handle = glfwCreateWindow(window.size.x, window.size.y, "soultaker", NULL, NULL);
     glfwMakeContextCurrent(window.handle);
 
     window.mouse.left = UP;

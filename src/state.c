@@ -165,18 +165,15 @@ void state_loop(void)
 {
     f32 time = glfwGetTime();
     f32 game_time, game_dt;
-    f32 render_time, render_dt;
     while (!window_closed()) {
         process_input();
         game_time = glfwGetTime();
         state_update();
         game_dt = glfwGetTime() - game_time;
-        render_time = glfwGetTime();
         renderer_render();
-        render_dt = glfwGetTime() - render_time;
         window_update();
         if (glfwGetTime() - time > 1)
-            printf("%d, %.0f, %.0f, %.0f\n", window.mouse.left, window.fps, 1 / game_dt, 1 / render_dt), time = glfwGetTime();
+            printf("%d, %.0f, %.0f, %d\n", window.mouse.left, window.fps, 1 / game_dt, game.projectiles.length), time = glfwGetTime();
     }
 }
 

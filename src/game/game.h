@@ -10,7 +10,6 @@ typedef struct {
     EntityArray entities;
     TileArray tiles;
     WallArray walls;
-    u8 **map;
 } Game;
 
 extern Game game;
