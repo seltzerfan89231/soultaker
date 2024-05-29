@@ -57,6 +57,11 @@
         return vec; \
     }
 
+#define _VEC2_DOT(_type) \
+    static inline f32 vec2##_type##_dot(vec2##_type vec1, vec2##_type vec2) { \
+        return vec1.x * vec2.x + vec1.y * vec2.y; \
+    }
+
 _VEC2_STRUCT(u)
 _VEC2_STRUCT(f)
 _VEC2_STRUCT(i)
@@ -84,6 +89,8 @@ _VEC2_MAG(i)
 _VEC2_NORMALIZE(u)
 _VEC2_NORMALIZE(f)
 _VEC2_NORMALIZE(i)
+
+_VEC2_DOT(f)
 
 #define _VEC3_STRUCT(_type) \
     typedef struct vec3##_type { \

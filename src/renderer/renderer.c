@@ -111,12 +111,6 @@ void renderer_malloc(u32 vao, u32 length)
 void renderer_update(u32 vao, u32 offset, u32 length, f32* buffer)
 {
     length *= renderer.vaos[vao].length;
-    if (vao == GUI_VAO) {
-        printf("%d\n", length);
-        for (i32 i = 0; i < length; i++)
-            printf("%f ", buffer[i]);
-        printf("\n");
-    }
     vao_update(&renderer.vaos[vao], offset, length, buffer);
 }
 

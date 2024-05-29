@@ -4,8 +4,6 @@ multisampled textures
 
 FIX THE FUCKING WALL GLITCH
 
-shadows
-
 particles
 
 collision

@@ -75,7 +75,7 @@ static void collide_walls_projectiles(void)
     }
 }
 
-static void collide_walls_entities()
+static void collide_walls_entities(f32 dt)
 {
     i32 i, j;
     i = 0;
@@ -84,31 +84,36 @@ static void collide_walls_entities()
         j = 0;
         while (j < game.entities.length) {
             Entity *entity = game.entities.buffer[j];
+            vec3f prev_position = vec3f_sub(entity->position, vec3f_scale(entity->speed * dt, entity->direction));
             if (entity->position.x + entity->hitbox_radius > wall->position.x
               && entity->position.x - entity->hitbox_radius < wall->position.x + 1
               && entity->position.z + entity->hitbox_radius > wall->position.y
               && entity->position.z - entity->hitbox_radius < wall->position.y + 1) {
-                if (entity->position.x <= wall->position.x 
-                  && wall->position.x - 1 >= 0
-                  && game.map[wall->position.x-1][wall->position.y] == 0) {
+                if (prev_position.x < wall->position.x
+                  && entity->direction.x > 0
+                  && prev_position.z < wall->position.y + 1 + entity->hitbox_radius
+                  && prev_position.z > wall->position.y - entity->hitbox_radius) {
                     entity->position.x = wall->position.x - entity->scale / 2;
                     entity->direction.x = 0;
                 }
-                else if (entity->position.x >= wall->position.x + 1
-                  && wall->position.x + 1 < MAP_WIDTH
-                  && game.map[wall->position.x+1][wall->position.y] == 0) {
+                else if (prev_position.x > wall->position.x + 1
+                  && entity->direction.x < 0
+                  && prev_position.z < wall->position.y + 1 + entity->hitbox_radius
+                  && prev_position.z > wall->position.y - entity->hitbox_radius) {
                     entity->position.x = wall->position.x + 1 + entity->scale / 2;
                     entity->direction.x = 0;
                 }
-                else if (entity->position.z <= wall->position.y
-                  && wall->position.y - 1 >= 0 
-                  && game.map[wall->position.x][wall->position.y-1] == 0) {
+                else if (prev_position.z < wall->position.y
+                  && entity->direction.z > 0
+                  && prev_position.x < wall->position.x + 1 + entity->hitbox_radius
+                  && prev_position.x > wall->position.x - entity->hitbox_radius) {
                     entity->position.z = wall->position.y - entity->scale / 2;
                     entity->direction.z = 0;
                 }
-                else if (entity->position.z >= wall->position.y + 1
-                  && wall->position.y + 1 < MAP_WIDTH 
-                  && game.map[wall->position.x][wall->position.y+1] == 0) {
+                else if (prev_position.z > wall->position.y + 1
+                  && entity->direction.z < 0
+                  && prev_position.x < wall->position.x + 1 + entity->hitbox_radius
+                  && prev_position.x > wall->position.x - entity->hitbox_radius) {
                     entity->position.z = wall->position.y + 1 + entity->scale / 2;
                     entity->direction.z = 0;
                 }
@@ -119,9 +124,9 @@ static void collide_walls_entities()
     }
 }
 
-static void collide_objects(void)
+static void collide_objects(f32 dt)
 {
-    collide_walls_entities();
+    collide_walls_entities(dt);
     collide_walls_projectiles();
     collide_entities_projectiles();
 }
@@ -178,7 +183,7 @@ void game_update(f32 dt)
 {
     create_objects();
     update_objects(dt);
-    collide_objects();
+    collide_objects(dt);
 }
 
 void game_set_direction(vec3f direction)
