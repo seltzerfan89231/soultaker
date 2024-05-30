@@ -22,8 +22,25 @@ static void link_shader_ubo(u32 shader, u32 ubo, char *identifier)
     ubo_bind_buffer_base(renderer.ubos[ubo], ubo);
 }
 
+void GLAPIENTRY
+MessageCallback( GLenum source,
+                 GLenum type,
+                 GLuint id,
+                 GLenum severity,
+                 GLsizei length,
+                 const GLchar* message,
+                 const void* userParam )
+{
+  printf( "GL CALLBACK: %s type = 0x%x, severity = 0x%x, message = %s\n",
+           ( type == GL_DEBUG_TYPE_ERROR ? "** GL ERROR **" : "" ),
+            type, severity, message );
+}
+
 void renderer_init(void) 
 {
+    glEnable(GL_DEBUG_OUTPUT);
+    glDebugMessageCallback( MessageCallback, 0 );
+    
     renderer.shaders = malloc(NUM_SHADERS * sizeof(Shader));
     renderer.vaos = malloc(NUM_VAOS * sizeof(VAO));
     renderer.ubos = malloc(NUM_UBOS * sizeof(UBO));
@@ -91,14 +108,15 @@ void renderer_init(void)
     texture_bind(renderer.atlas, 1);
     renderer.entity = texture_create("assets/test.png");
     renderer_uniform_update_texture(ENTITY_SHADER, "entity", renderer.atlas, 2);
-    texture_bind(renderer.entity, 2);
+    texture_bind(renderer.entity, 1);
 
     // bindless stuff
     renderer.ssbo = ssbo_create(10 * sizeof(u64));
     renderer.handles = malloc(10 * sizeof(u64));
     renderer.handles[0] = glGetTextureHandleARB(renderer.entity.id);
+    exit(1);
     printf("%d\n", renderer.handles[0]);
-    glMakeTextureHandleResidentARB(renderer.handles[0]);
+    //glMakeTextureHandleResidentARB(renderer.handles[0]);
     shader_use(renderer.shaders[ENTITY_SHADER]);
     ssbo_bind_buffer_base(renderer.ssbo, 1);
     ssbo_update(renderer.ssbo, 0, 10 * sizeof(u64), renderer.handles);
@@ -183,7 +201,7 @@ void renderer_destroy(void)
         ubo_destroy(renderer.ubos[i]);
     ssbo_destroy(renderer.ssbo);
     free(renderer.handles);
-    glMakeTextureHandleNonResidentARB(renderer.handles[0]);
+    //glMakeTextureHandleNonResidentARB(renderer.handles[0]);
     texture_destroy(renderer.atlas);
     texture_destroy(renderer.entity);
     free(renderer.shaders);

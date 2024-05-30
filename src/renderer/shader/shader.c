@@ -53,7 +53,14 @@ Shader shader_create(char* vs_path, char* fs_path, char* gs_path)
     if (gs_path != NULL) {
         geometry = compile(gs_path, GL_GEOMETRY_SHADER);
         glAttachShader(shader.id, geometry);
+        
     }
+    GLenum err;
+    while ((err = glGetError()) != GL_NO_ERROR)
+    {
+        puts("A");
+    }
+    puts("B");
     glLinkProgram(shader.id); //bug here
     glGetProgramiv(shader.id, GL_LINK_STATUS, &success);
     if (!success)

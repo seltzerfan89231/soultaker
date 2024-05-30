@@ -20,7 +20,7 @@ void main()
     const float PIXEL_SIZE = 0.03;
     float a = 1.1; // 1 + buffer * 2;
     vec2 UV = vec2(texCoord.x - 0.5, texCoord.y - 0.5) * a + 0.5;
-    vec4 col = texture(tex[0], UV);
+    vec4 col = vec4(0.0f, 0.0f, 0.0f, 1.0f);
     if (!(UV.x > 1 || UV.x < 0 || UV.y > 1 || UV.y < 0) && (col.a > 0.1)) {
         gl_FragColor = col;
         return;

@@ -148,7 +148,6 @@ static void process_input(void)
     if (zoom_magnitude != 0)
         update_proj_matrix();
 }
-
 void state_init(void) 
 {
     buffer = malloc(5000000 * sizeof(f32));
