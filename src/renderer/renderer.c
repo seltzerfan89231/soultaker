@@ -114,9 +114,8 @@ void renderer_init(void)
     renderer.ssbo = ssbo_create(10 * sizeof(u64));
     renderer.handles = malloc(10 * sizeof(u64));
     renderer.handles[0] = glGetTextureHandleARB(renderer.entity.id);
-    exit(1);
-    printf("%d\n", renderer.handles[0]);
-    //glMakeTextureHandleResidentARB(renderer.handles[0]);
+    
+    glMakeTextureHandleResidentARB(renderer.handles[0]);
     shader_use(renderer.shaders[ENTITY_SHADER]);
     ssbo_bind_buffer_base(renderer.ssbo, 1);
     ssbo_update(renderer.ssbo, 0, 10 * sizeof(u64), renderer.handles);

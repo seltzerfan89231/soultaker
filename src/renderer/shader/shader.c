@@ -31,6 +31,7 @@ static unsigned int compile(char *s_path, GLenum type)
     glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
     if (!success)
     {
+        puts(s_path);
         glGetShaderInfoLog(shader, 512, NULL, info_log);
         printf(info_log);
         exit(1);
@@ -55,12 +56,6 @@ Shader shader_create(char* vs_path, char* fs_path, char* gs_path)
         glAttachShader(shader.id, geometry);
         
     }
-    GLenum err;
-    while ((err = glGetError()) != GL_NO_ERROR)
-    {
-        puts("A");
-    }
-    puts("B");
     glLinkProgram(shader.id); //bug here
     glGetProgramiv(shader.id, GL_LINK_STATUS, &success);
     if (!success)
@@ -70,11 +65,13 @@ Shader shader_create(char* vs_path, char* fs_path, char* gs_path)
         exit(1);
     }
     glDetachShader(shader.id, vertex);
-    glDetachShader(shader.id, fragment);
-    glDetachShader(shader.id, geometry);
     glDeleteShader(vertex);
     glDeleteShader(fragment);
-    glDeleteShader(geometry);
+    glDetachShader(shader.id, fragment);
+    if (gs_path != NULL) {
+        glDetachShader(shader.id, geometry);
+        glDeleteShader(geometry);
+    }
     return shader;
 }
 

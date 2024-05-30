@@ -1,2 +1,3 @@
 https://ktstephano.github.io/rendering/opengl/bindless
-// http://www.geoffprewett.com/blog/software/opengl-outline/index.html
+http://www.geoffprewett.com/blog/software/opengl-outline/index.html
+https://github.com/fendevel/Guide-to-Modern-OpenGL-Functions/blob/master/README.md#glcreatetextures

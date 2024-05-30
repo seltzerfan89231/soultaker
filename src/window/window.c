@@ -1,10 +1,12 @@
 #include "window.h"
+#include <stdio.h>
 
 Window window;
 
 static void framebuffer_size_callback();
 static void mouse_button_callback();
 static void mouse_callback();
+static void error_callback();
 
 void window_init(void) 
 {
@@ -26,6 +28,7 @@ void window_init(void)
     glfwSetFramebufferSizeCallback(window.handle, framebuffer_size_callback);
     glfwSetMouseButtonCallback(window.handle, mouse_button_callback);
     glfwSetCursorPosCallback(window.handle, mouse_callback);
+    glfwSetErrorCallback(error_callback);
 
     gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
     glViewport(0, 0, window.size.x, window.size.y);
@@ -61,6 +64,11 @@ void mouse_callback(GLFWwindow* handle, double xpos, double ypos)
 {
     window.mouse.position.x = xpos / window.size.x;
     window.mouse.position.y = ypos / window.size.y;
+}
+
+void error_callback(int x, const char *message)
+{
+    printf("%d\n%s\n", x, message);
 }
 
 bool window_mouse_button_pressed(mousebutton mb)
