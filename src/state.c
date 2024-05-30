@@ -97,11 +97,11 @@ static void state_update(void)
 
     for (i = 0; i < game.entities.length; i++)
         entity_push_data(game.entities.buffer[i], buffer, i);
-    renderer_update(ENTITY, 0, i, buffer);
+    renderer_update(ENTITY_VAO, 0, i, buffer);
 
     for (i = 0; i < game.projectiles.length; i++)
         projectile_push_data(game.projectiles.buffer[i], buffer, i);
-    renderer_update(PROJECTILE, 0, i, buffer);
+    renderer_update(PROJECTILE_VAO, 0, i, buffer);
 }
 
 static void process_input(void)

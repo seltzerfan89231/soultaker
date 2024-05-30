@@ -12,14 +12,6 @@
 
 #define MAX_BUFFER_LENGTH 1000000
 
-typedef enum {
-    MATRICES, ZOOM, ASPECT_RATIO, ROTATION, TILT, CONSTANTS
-} ubotype;
-
-typedef enum {
-    TILE, WALL, ENTITY, PROJECTILE, GUIB
-} buffertype;
-
 typedef struct {
     VAO *vaos;
     Shader *shaders;

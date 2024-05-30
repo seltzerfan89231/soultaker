@@ -12,7 +12,7 @@ static void create_objects(void)
     static f32 cooldown;
     if (glfwGetTime() - cooldown >= 0.05) {
         cooldown = glfwGetTime();
-        for (i32 i = 0; i < 10; i++) {
+        for (i32 i = 0; i < 1; i++) {
             Projectile* proj = projectile_create(ONE, 0);
             proj->position = game.entities.buffer[1]->position;
             proj->rotation = i * 0.8 + sin(glfwGetTime());
