@@ -1,0 +1,2 @@
+https://ktstephano.github.io/rendering/opengl/bindless
+// http://www.geoffprewett.com/blog/software/opengl-outline/index.html

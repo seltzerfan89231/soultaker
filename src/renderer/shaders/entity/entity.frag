@@ -1,9 +1,15 @@
-#version 330 core
-// http://www.geoffprewett.com/blog/software/opengl-outline/index.html
+#version 460 core
+
+#extension GL_ARB_bindless_texture : require
 
 layout (std140) uniform Tilt
 {
     float tilt;
+};
+
+layout (binding = 0, std430) readonly buffer ssbo
+{
+    sampler2D tex;
 };
 
 in vec2 texCoord;

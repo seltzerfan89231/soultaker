@@ -18,7 +18,7 @@ static void renderer_settings(void)
 
 static void link_shader_ubo(u32 shader, u32 ubo, char *identifier)
 {
-    shader_bind_block(renderer.shaders[shader], ubo, identifier);
+    shader_bind_uniform_block(renderer.shaders[shader], ubo, identifier);
     ubo_bind_buffer_base(renderer.ubos[ubo], ubo);
 }
 
@@ -85,13 +85,23 @@ void renderer_init(void)
     renderer.vaos[GUI_VAO].length = 5;
     vao_attr(&renderer.vaos[GUI_VAO], 0, 2, 5, 0);
     vao_attr(&renderer.vaos[GUI_VAO], 1, 3, 5, 2);
-
+    
     renderer.atlas = texture_create("assets/atlas.png");
     renderer_uniform_update_texture(WALL_SHADER, "tex", renderer.atlas, 1);
     texture_bind(renderer.atlas, 1);
     renderer.entity = texture_create("assets/test.png");
     renderer_uniform_update_texture(ENTITY_SHADER, "entity", renderer.entity, 2);
     texture_bind(renderer.entity, 2);
+
+    // bindless stuff
+    renderer.ssbo = ssbo_create(10 * sizeof(u64));
+    renderer.handles = malloc(10 * sizeof(u64));
+    renderer.handles[0] = glGetTextureHandleARB(renderer.entity.id);
+    printf("%d\n", renderer.handles[0]);
+    glMakeTextureHandleResidentARB(renderer.handles[0]);
+    shader_use(renderer.shaders[ENTITY_SHADER]);
+    ssbo_bind_buffer_base(renderer.ssbo, 0);
+    ssbo_update(renderer.ssbo, 0, 10 * sizeof(u64), renderer.handles);
 
     f32 pi, sqrt2;
     pi = 3.1415926535;
@@ -171,7 +181,11 @@ void renderer_destroy(void)
         shader_destroy(renderer.shaders[i]);
     for (i32 i = 0; i < NUM_UBOS; i++)
         ubo_destroy(renderer.ubos[i]);
+    ssbo_destroy(renderer.ssbo);
+    free(renderer.handles);
+    glMakeTextureHandleNonResidentARB(renderer.handles[0]);
     texture_destroy(renderer.atlas);
+    texture_destroy(renderer.entity);
     free(renderer.shaders);
     free(renderer.vaos);
     free(renderer.ubos);
