@@ -90,7 +90,7 @@ void renderer_init(void)
     renderer_uniform_update_texture(WALL_SHADER, "tex", renderer.atlas, 1);
     texture_bind(renderer.atlas, 1);
     renderer.entity = texture_create("assets/test.png");
-    renderer_uniform_update_texture(ENTITY_SHADER, "entity", renderer.entity, 2);
+    renderer_uniform_update_texture(ENTITY_SHADER, "entity", renderer.atlas, 2);
     texture_bind(renderer.entity, 2);
 
     // bindless stuff
@@ -100,7 +100,7 @@ void renderer_init(void)
     printf("%d\n", renderer.handles[0]);
     glMakeTextureHandleResidentARB(renderer.handles[0]);
     shader_use(renderer.shaders[ENTITY_SHADER]);
-    ssbo_bind_buffer_base(renderer.ssbo, 0);
+    ssbo_bind_buffer_base(renderer.ssbo, 1);
     ssbo_update(renderer.ssbo, 0, 10 * sizeof(u64), renderer.handles);
 
     f32 pi, sqrt2;

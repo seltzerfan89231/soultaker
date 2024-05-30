@@ -62,6 +62,9 @@ Shader shader_create(char* vs_path, char* fs_path, char* gs_path)
         printf(info_log);
         exit(1);
     }
+    glDetachShader(shader.id, vertex);
+    glDetachShader(shader.id, fragment);
+    glDetachShader(shader.id, geometry);
     glDeleteShader(vertex);
     glDeleteShader(fragment);
     glDeleteShader(geometry);
