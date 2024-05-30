@@ -111,14 +111,14 @@ void renderer_init(void)
     texture_bind(renderer.entity, 1);
 
     // bindless stuff
-    renderer.ssbo = ssbo_create(10 * sizeof(u64));
-    renderer.handles = malloc(10 * sizeof(u64));
+    renderer.ssbo = ssbo_create(1 * sizeof(u64));
+    renderer.handles = malloc(1 * sizeof(u64));
     renderer.handles[0] = glGetTextureHandleARB(renderer.entity.id);
     
     glMakeTextureHandleResidentARB(renderer.handles[0]);
     shader_use(renderer.shaders[ENTITY_SHADER]);
     ssbo_bind_buffer_base(renderer.ssbo, 1);
-    ssbo_update(renderer.ssbo, 0, 10 * sizeof(u64), renderer.handles);
+    ssbo_update(renderer.ssbo, 0, 1 * sizeof(u64), renderer.handles);
 
     f32 pi, sqrt2;
     pi = 3.1415926535;
