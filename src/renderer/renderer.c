@@ -114,7 +114,6 @@ void renderer_init(void)
     renderer.ssbo = ssbo_create(1 * sizeof(u64));
     renderer.handles = malloc(1 * sizeof(u64));
     renderer.handles[0] = glGetTextureHandleARB(renderer.entity.id);
-    
     glMakeTextureHandleResidentARB(renderer.handles[0]);
     shader_use(renderer.shaders[ENTITY_SHADER]);
     ssbo_bind_buffer_base(renderer.ssbo, 1);
@@ -143,7 +142,7 @@ void renderer_update(u32 vao, u32 offset, u32 length, f32* buffer)
 
 void renderer_render(void)
 {
-    glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+    glClearColor(0.7f, 0.7f, 0.7f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);  
 
     /* glStencilOpSeparate(GL_FRONT, GL_REPLACE, GL_REPLACE, GL_REPLACE);

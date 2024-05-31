@@ -13,10 +13,10 @@ Texture texture_create(const char* image_path)
     glTextureParameteri(texture.id, GL_TEXTURE_WRAP_T, GL_REPEAT);
     glTextureParameteri(texture.id, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTextureParameteri(texture.id, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, col);
+    glTextureParameterfv(texture.id, GL_TEXTURE_BORDER_COLOR, col);
     glTextureStorage2D(texture.id, 1, GL_RGBA8, width, height);
     glTextureSubImage2D(texture.id, 0, 0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, data);
-    glGenerateTextureMipmap(texture.id);
+    //glGenerateTextureMipmap(texture.id);
     stbi_image_free(data);
     return texture;
     /*

@@ -1,7 +1,19 @@
-bindless textures
+========================
+          TODO    
+========================
 
-multisampled textures
+renderer stuff
+- multisampled textures
+- wall / entity depth
 
-FIX THE FUCKING WALL GLITCH
+game stuff
+- particles
+- obstacles
+- spatial hash
 
-particles
+gui
+- buttons
+- simple hud
+
+general
+- refactor code
