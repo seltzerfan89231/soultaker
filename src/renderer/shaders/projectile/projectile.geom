@@ -1,4 +1,7 @@
 #version 460 core
+
+#extension GL_ARB_bindless_texture : require
+
 layout (points) in;
 layout (triangle_strip, max_vertices = 4) out;
 
@@ -41,11 +44,11 @@ void build_projectile(vec4 position)
     vec2 offset;
     offset = zoom * (1 / sqrt2) * vec2(ar * cos(drot - 3 * pi / 4), sin(drot - 3 * pi / 4));
     gl_Position = position + vec4(offset, 0.0 , 0.0);    // 1:bottom-left
-    texCoord = vec2(0.0f, 0.25f);
+    texCoord = vec2(0.0f, 1.0f);
     EmitVertex();
     offset = zoom * (1 / sqrt2) * vec2(ar * cos(drot - pi / 4), sin(drot - pi / 4));
     gl_Position = position + vec4(offset, 0.0, 0.0);    // 2:bottom-right
-    texCoord = vec2(0.25f, 0.25f);
+    texCoord = vec2(1.0f, 1.0f);
     EmitVertex();
     offset = zoom * (1 / sqrt2) * vec2(ar * cos(drot + 3 * pi / 4), sin(drot + 3 * pi / 4));
     gl_Position = position + vec4(offset, 0.0, 0.0);    // 3:top-left
@@ -53,7 +56,7 @@ void build_projectile(vec4 position)
     EmitVertex();
     offset = zoom * (1 / sqrt2) * vec2(ar * cos(drot + pi / 4), sin(drot + pi / 4));
     gl_Position = position + vec4(offset, 0.0, 0.0);    // 4:top-right
-    texCoord = vec2(0.25f, 0.0f);
+    texCoord = vec2(1.0f, 0.0f);
     EmitVertex();
     EndPrimitive();
 }

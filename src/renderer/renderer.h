@@ -17,8 +17,7 @@ typedef struct {
     VAO *vaos;
     Shader *shaders;
     UBO *ubos;
-    Texture atlas;
-    Texture entity;
+    Texture *textures;
     SSBO ssbo;
     u64 *handles;
 } Renderer;

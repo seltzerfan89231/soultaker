@@ -1,5 +1,12 @@
 #version 460 core
 
+#extension GL_ARB_bindless_texture : require
+
+layout (binding = 1, std430) readonly buffer ssbo
+{
+    uvec2 tex[5];
+};
+
 layout (std140) uniform Tilt
 {
     float tilt;
@@ -10,12 +17,10 @@ in float depthValue;
 
 in vec2 texCoord;
 
-uniform sampler2D tex;
-
 void main()
 {
     gl_FragDepth = depthValue;
-    vec4 texColor = texture(tex, texCoord);
+    vec4 texColor = texture(sampler2D(tex[1]), texCoord);
     if (texColor.a < 0.1)
         discard;
     FragColor = texColor;

@@ -1,5 +1,7 @@
 #version 460 core
 
+#extension GL_ARB_bindless_texture : require
+
 layout (location = 0) in vec3 aPos;
 layout (location = 1) in float aRotation;
 

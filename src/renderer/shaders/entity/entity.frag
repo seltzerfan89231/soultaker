@@ -4,7 +4,7 @@
 
 layout (binding = 1, std430) readonly buffer ssbo
 {
-    uvec2 tex[10];
+    uvec2 tex[5];
 };
 
 layout (std140) uniform Tilt
@@ -13,7 +13,6 @@ layout (std140) uniform Tilt
 };
 
 in vec2 texCoord;
-uniform sampler2D entity;
 
 void main()
 {
@@ -31,7 +30,7 @@ void main()
             vec2 newUV = UV + dUV;
             if (newUV.x > 1 || newUV.x < 0 || newUV.y > 1 || newUV.y < 0)
                 continue;
-            col = texture(entity, newUV);
+            col = texture(sampler2D(tex[0]), newUV);
             if (col.a > 0.1) {
                 gl_FragColor = vec4(0.0f, 0.0f, 0.0f, 1.0f);
                 return;

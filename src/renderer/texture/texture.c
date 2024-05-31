@@ -1,5 +1,6 @@
 #include "texture.h"
 #include <assert.h>
+#include <stdio.h>
 
 Texture texture_create(const char* image_path)
 {
@@ -14,9 +15,18 @@ Texture texture_create(const char* image_path)
     glTextureParameteri(texture.id, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTextureParameteri(texture.id, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTextureParameterfv(texture.id, GL_TEXTURE_BORDER_COLOR, col);
-    glTextureStorage2D(texture.id, 1, GL_RGBA8, width, height);
-    glTextureSubImage2D(texture.id, 0, 0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, data);
-    //glGenerateTextureMipmap(texture.id);
+
+    if (nrChannels == 3) {
+        glTextureStorage2D(texture.id, 1, GL_RGB8, width, height);
+        glTextureSubImage2D(texture.id, 0, 0, 0, width, height, GL_RGB, GL_UNSIGNED_BYTE, data);
+    }
+    else if (nrChannels == 4) {
+        glTextureStorage2D(texture.id, 1, GL_RGBA8, width, height);
+        glTextureSubImage2D(texture.id, 0, 0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, data);
+    }
+    else
+        printf("Unrecognized number of channels in texture %s\n", image_path);
+
     stbi_image_free(data);
     return texture;
     /*
