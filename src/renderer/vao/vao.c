@@ -15,6 +15,7 @@ VAO vao_create(GLenum usage, GLenum mode, u32 length)
 void vao_attr(VAO* vao, u32 index, u32 length, u32 offset)
 {
     vao_bind(*vao);
+    vbo_bind(vao->vbo);
     glVertexAttribPointer(index, length, GL_FLOAT, GL_FALSE, vao->length * sizeof(f32), (void*)(offset * sizeof(f32)));
     glEnableVertexAttribArray(index);
 }
