@@ -16,5 +16,8 @@ gui
 - simple hud
 - text
 
+window
+- framebuffer callback
+
 general
 - refactor code

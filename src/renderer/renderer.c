@@ -22,7 +22,6 @@ void renderer_init(void)
     glEnable(GL_CULL_FACE); 
     glCullFace(GL_BACK);
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-    
     /* --------------------- */
     renderer.shaders = malloc(NUM_SHADERS * sizeof(Shader));
     renderer.shaders[TILE_SHADER]       = shader_create("src/renderer/shaders/tile/tile.vert", "src/renderer/shaders/tile/tile.frag", "src/renderer/shaders/tile/tile.geom");
@@ -39,14 +38,14 @@ void renderer_init(void)
     renderer.vaos[ENTITY_VAO]     = vao_create(GL_DYNAMIC_DRAW, GL_POINTS, 3);
     renderer.vaos[PROJECTILE_VAO] = vao_create(GL_DYNAMIC_DRAW, GL_POINTS, 4);
     renderer.vaos[GUI_VAO]        = vao_create(GL_STATIC_DRAW, GL_TRIANGLE_STRIP, 5);
-    vao_attr(renderer.vaos[TILE_VAO], 0, 2, 0);
-    vao_attr(renderer.vaos[WALL_VAO], 0, 3, 0);
-    vao_attr(renderer.vaos[WALL_VAO], 1, 1, 3);
-    vao_attr(renderer.vaos[ENTITY_VAO], 0, 3, 0);
+    vao_attr(renderer.vaos[TILE_VAO]      , 0, 2, 0);
+    vao_attr(renderer.vaos[WALL_VAO]      , 0, 3, 0);
+    vao_attr(renderer.vaos[WALL_VAO]      , 1, 1, 3);
+    vao_attr(renderer.vaos[ENTITY_VAO]    , 0, 3, 0);
     vao_attr(renderer.vaos[PROJECTILE_VAO], 0, 3, 0);
     vao_attr(renderer.vaos[PROJECTILE_VAO], 1, 1, 3);
-    vao_attr(renderer.vaos[GUI_VAO], 0, 2, 0);
-    vao_attr(renderer.vaos[GUI_VAO], 1, 3, 2);
+    vao_attr(renderer.vaos[GUI_VAO]       , 0, 2, 0);
+    vao_attr(renderer.vaos[GUI_VAO]       , 1, 3, 2);
     /* --------------------- */
     renderer.textures = malloc(NUM_TEXTURES * sizeof(Texture));
     renderer.textures[KNIGHT_TEX]   = texture_create("assets/knight.png");
@@ -225,16 +224,7 @@ void set_constants_ubo(void)
     ubo_update(renderer.ubos[CONSTANTS_UBO], sizeof(f32), sizeof(f32), &sqrt2);
 }
 
-void GLAPIENTRY
-message_callback( GLenum source,
-                 GLenum type,
-                 GLuint id,
-                 GLenum severity,
-                 GLsizei length,
-                 const GLchar* message,
-                 const void* userParam )
+void GLAPIENTRY message_callback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam)
 {
-   printf( "GL CALLBACK: %s type = 0x%x, severity = 0x%x, message = %s\n",
-           ( type == GL_DEBUG_TYPE_ERROR ? "** GL ERROR **" : "" ),
-            type, severity, message );
+   printf("GL CALLBACK: %s type = 0x%x, severity = 0x%x, message = %s\n", ( type == GL_DEBUG_TYPE_ERROR ? "** GL ERROR **" : "" ), type, severity, message);
 }

@@ -18,6 +18,5 @@ void vao_update(VAO vao, u32 offset, u32 length, f32* buffer);
 void vao_malloc(VAO vao, u32 length);
 void vao_draw(VAO vao);
 void vao_destroy(VAO vao);
-void vao_bind(VAO vao);
 
 #endif

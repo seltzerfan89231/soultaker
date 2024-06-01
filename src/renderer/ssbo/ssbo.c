@@ -14,14 +14,9 @@ void ssbo_bind_buffer_base(SSBO ssbo, u32 index)
     glBindBufferBase(GL_SHADER_STORAGE_BUFFER, index, ssbo.id);
 }
 
-void ssbo_bind(SSBO ssbo)
-{
-    glBindBuffer(GL_SHADER_STORAGE_BUFFER, ssbo.id);
-}
-
 void ssbo_update(SSBO ssbo, size_t offset, size_t size, void *data)
 {
-    ssbo_bind(ssbo);
+    glBindBuffer(GL_SHADER_STORAGE_BUFFER, ssbo.id);
     glBufferSubData(GL_SHADER_STORAGE_BUFFER, offset, size, data);
 }
 

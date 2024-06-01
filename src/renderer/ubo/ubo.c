@@ -22,7 +22,7 @@ void ubo_bind(UBO ubo)
 
 void ubo_update(UBO ubo, size_t offset, size_t size, void *data)
 {
-    ubo_bind(ubo);
+    glBindBuffer(GL_UNIFORM_BUFFER, ubo.id);
     glBufferSubData(GL_UNIFORM_BUFFER, offset, size, data);
 }
 
