@@ -33,6 +33,28 @@ void renderer_init(void)
     renderer.shaders[PROJECTILE_SHADER] = shader_create("src/renderer/shaders/projectile/projectile.vert", "src/renderer/shaders/projectile/projectile.frag", "src/renderer/shaders/projectile/projectile.geom");
     renderer.shaders[GUI_SHADER]        = shader_create("src/renderer/shaders/gui/gui.vert", "src/renderer/shaders/gui/gui.frag", NULL);
     /* --------------------- */
+    renderer.vaos = malloc(NUM_VAOS * sizeof(VAO));
+    renderer.vaos[TILE_VAO]       = vao_create(GL_STATIC_DRAW, GL_POINTS, 2);
+    renderer.vaos[WALL_VAO]       = vao_create(GL_STATIC_DRAW, GL_POINTS, 4);
+    renderer.vaos[ENTITY_VAO]     = vao_create(GL_DYNAMIC_DRAW, GL_POINTS, 3);
+    renderer.vaos[PROJECTILE_VAO] = vao_create(GL_DYNAMIC_DRAW, GL_POINTS, 4);
+    renderer.vaos[GUI_VAO]        = vao_create(GL_STATIC_DRAW, GL_TRIANGLE_STRIP, 5);
+    vao_attr(renderer.vaos[TILE_VAO], 0, 2, 0);
+    vao_attr(renderer.vaos[WALL_VAO], 0, 3, 0);
+    vao_attr(renderer.vaos[WALL_VAO], 1, 1, 3);
+    vao_attr(renderer.vaos[ENTITY_VAO], 0, 3, 0);
+    vao_attr(renderer.vaos[PROJECTILE_VAO], 0, 3, 0);
+    vao_attr(renderer.vaos[PROJECTILE_VAO], 1, 1, 3);
+    vao_attr(renderer.vaos[GUI_VAO], 0, 2, 0);
+    vao_attr(renderer.vaos[GUI_VAO], 1, 3, 2);
+    /* --------------------- */
+    renderer.textures = malloc(NUM_TEXTURES * sizeof(Texture));
+    renderer.textures[KNIGHT_TEX]   = texture_create("assets/knight.png");
+    renderer.textures[BULLET_TEX]   = texture_create("assets/bullet.png");
+    renderer.textures[TILE_TEX]     = texture_create("assets/tile.png");
+    renderer.textures[WALL_TOP_TEX] = texture_create("assets/wall_top.png");
+    renderer.textures[WALL_TEX]     = texture_create("assets/wall.png");
+    /* --------------------- */
     renderer.ubos = malloc(NUM_UBOS * sizeof(UBO));
     renderer.ubos[MATRICES_UBO]     = ubo_create(32 * sizeof(f32));
     renderer.ubos[ZOOM_UBO]         = ubo_create(sizeof(f32));
@@ -42,30 +64,8 @@ void renderer_init(void)
     renderer.ubos[CONSTANTS_UBO]    = ubo_create(2 * sizeof(f32));
     set_constants_ubo();
     /* --------------------- */
-    renderer.vaos = malloc(NUM_VAOS * sizeof(VAO));
-    renderer.vaos[TILE_VAO]       = vao_create(GL_STATIC_DRAW, GL_POINTS, 2);
-    renderer.vaos[WALL_VAO]       = vao_create(GL_STATIC_DRAW, GL_POINTS, 4);
-    renderer.vaos[ENTITY_VAO]     = vao_create(GL_DYNAMIC_DRAW, GL_POINTS, 3);
-    renderer.vaos[PROJECTILE_VAO] = vao_create(GL_DYNAMIC_DRAW, GL_POINTS, 4);
-    renderer.vaos[GUI_VAO]        = vao_create(GL_STATIC_DRAW, GL_TRIANGLE_STRIP, 5);
-    vao_attr(&renderer.vaos[TILE_VAO], 0, 2, 0);
-    vao_attr(&renderer.vaos[WALL_VAO], 0, 3, 0);
-    vao_attr(&renderer.vaos[WALL_VAO], 1, 1, 3);
-    vao_attr(&renderer.vaos[ENTITY_VAO], 0, 3, 0);
-    vao_attr(&renderer.vaos[PROJECTILE_VAO], 0, 3, 0);
-    vao_attr(&renderer.vaos[PROJECTILE_VAO], 1, 1, 3);
-    vao_attr(&renderer.vaos[GUI_VAO], 0, 2, 0);
-    vao_attr(&renderer.vaos[GUI_VAO], 1, 3, 2);
-    /* --------------------- */
     renderer.ssbos = malloc(NUM_SSBOS * sizeof(SSBO));
     renderer.ssbos[TEXTURE_SSBO] = ssbo_create(NUM_TEXTURES * sizeof(u64));
-    /* --------------------- */
-    renderer.textures = malloc(NUM_TEXTURES * sizeof(Texture));
-    renderer.textures[KNIGHT_TEX]   = texture_create("assets/knight.png");
-    renderer.textures[BULLET_TEX]   = texture_create("assets/bullet.png");
-    renderer.textures[TILE_TEX]     = texture_create("assets/tile.png");
-    renderer.textures[WALL_TOP_TEX] = texture_create("assets/wall_top.png");
-    renderer.textures[WALL_TEX]     = texture_create("assets/wall.png");
     set_textures_ssbo();
     /* --------------------- */
     link_shader_ubo(TILE_SHADER, MATRICES_UBO, "Matrices");
@@ -93,13 +93,13 @@ void renderer_init(void)
 void renderer_malloc(u32 vao, u32 length)
 {
     length *= renderer.vaos[vao].length;
-    vao_malloc(&renderer.vaos[vao], length);
+    vao_malloc(renderer.vaos[vao], length);
 }
 
 void renderer_update(u32 vao, u32 offset, u32 length, f32* buffer)
 {
     length *= renderer.vaos[vao].length;
-    vao_update(&renderer.vaos[vao], offset, length, buffer);
+    vao_update(renderer.vaos[vao], offset, length, buffer);
 }
 
 void renderer_render(void)
@@ -219,8 +219,8 @@ void set_textures_ssbo(void)
 void set_constants_ubo(void)
 {
     f32 pi, sqrt2;
-    pi = 3.1415926535;
-    sqrt2 = sqrt(2);
+    pi = PI;
+    sqrt2 = SQRT2;
     ubo_update(renderer.ubos[CONSTANTS_UBO], 0, sizeof(f32), &pi);
     ubo_update(renderer.ubos[CONSTANTS_UBO], sizeof(f32), sizeof(f32), &sqrt2);
 }

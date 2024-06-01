@@ -5,6 +5,7 @@
 #include <glfw.h>
 #include "../util/indices.h"
 #include "../util/vec.h"
+#include "../util/constants.h"
 #include "vao/vao.h"
 #include "shader/shader.h"
 #include "texture/texture.h"
