@@ -16,16 +16,16 @@ static void renderer_settings(void)
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 }
 
-static void link_shader_ubo(u32 shader, u32 ubo, char *identifier)
+static void link_shader_ubo(u32 shader_index, u32 ubo_index, char *identifier)
 {
-    shader_bind_uniform_block(renderer.shaders[shader], ubo, identifier);
-    ubo_bind_buffer_base(renderer.ubos[ubo], ubo);
+    shader_bind_uniform_block(renderer.shaders[shader_index], ubo_index, identifier);
+    ubo_bind_buffer_base(renderer.ubos[ubo_index], ubo_index);
 }
 
 static void link_shader_ssbo(u32 shader_index, u32 ssbo_index)
 {
     shader_use(renderer.shaders[shader_index]);
-    ssbo_bind_buffer_base(renderer.ssbo, 1);
+    ssbo_bind_buffer_base(renderer.ssbos[ssbo_index], ssbo_index);
 }
 
 void GLAPIENTRY
@@ -50,6 +50,8 @@ void renderer_init(void)
     renderer.shaders = malloc(NUM_SHADERS * sizeof(Shader));
     renderer.vaos = malloc(NUM_VAOS * sizeof(VAO));
     renderer.ubos = malloc(NUM_UBOS * sizeof(UBO));
+    renderer.ssbos = malloc(NUM_SSBOS * sizeof(SSBO));
+    renderer.textures = malloc(NUM_TEXTURES * sizeof(Texture));
 
     renderer.ubos[MATRICES_UBO] = ubo_create(32 * sizeof(f32));
     renderer.ubos[ZOOM_UBO] = ubo_create(sizeof(f32));
@@ -58,15 +60,14 @@ void renderer_init(void)
     renderer.ubos[TILT_UBO] = ubo_create(sizeof(f32));
     renderer.ubos[CONSTANTS_UBO] = ubo_create(2 * sizeof(f32));
 
-    renderer.ssbo = ssbo_create(5 * sizeof(u64));
-    renderer.handles = malloc(5 * sizeof(u64));
+    renderer.ssbos[TEXTURE_SSBO] = ssbo_create(NUM_TEXTURES * sizeof(u64));
 
     renderer.shaders[TILE_SHADER] = shader_create("src/renderer/shaders/tile/tile.vert", "src/renderer/shaders/tile/tile.frag", "src/renderer/shaders/tile/tile.geom");
     renderer.vaos[TILE_VAO] = vao_create(GL_STATIC_DRAW, GL_POINTS);
     renderer.vaos[TILE_VAO].length = 2;
     vao_attr(&renderer.vaos[TILE_VAO], 0, 2, 2, 0);
     link_shader_ubo(TILE_SHADER, MATRICES_UBO, "Matrices");
-    link_shader_ssbo(TILE_SHADER, 0);
+    link_shader_ssbo(TILE_SHADER, TEXTURE_SSBO);
 
     renderer.shaders[WALL_SHADER] = shader_create("src/renderer/shaders/wall/wall.vert", "src/renderer/shaders/wall/wall.frag", "src/renderer/shaders/wall/wall.geom");
     renderer.vaos[WALL_VAO] = vao_create(GL_STATIC_DRAW, GL_POINTS);
@@ -74,10 +75,7 @@ void renderer_init(void)
     vao_attr(&renderer.vaos[WALL_VAO], 0, 3, 4, 0);
     vao_attr(&renderer.vaos[WALL_VAO], 1, 1, 4, 3);
     link_shader_ubo(WALL_SHADER, MATRICES_UBO, "Matrices");
-    link_shader_ssbo(WALL_SHADER, 0);
-
-    //renderer.shaders[WALL_BACK_SHADER] = shader_create("src/renderer/shaders/wall/wall.vert", "src/renderer/shaders/wall/wall_back.frag", "src/renderer/shaders/wall/wall_back.geom");
-    //link_shader_ubo(WALL_BACK_SHADER, MATRICES_UBO, "Matrices");
+    link_shader_ssbo(WALL_SHADER, TEXTURE_SSBO);
 
     renderer.shaders[ENTITY_SHADER] = shader_create("src/renderer/shaders/entity/entity.vert", "src/renderer/shaders/entity/entity.frag", "src/renderer/shaders/entity/entity.geom");
     renderer.vaos[ENTITY_VAO] = vao_create(GL_DYNAMIC_DRAW, GL_POINTS);
@@ -86,7 +84,7 @@ void renderer_init(void)
     link_shader_ubo(ENTITY_SHADER, MATRICES_UBO, "Matrices");
     link_shader_ubo(ENTITY_SHADER, ZOOM_UBO, "Zoom");
     link_shader_ubo(ENTITY_SHADER, ASPECT_RATIO_UBO, "AspectRatio");
-    link_shader_ssbo(ENTITY_SHADER, 0);
+    link_shader_ssbo(ENTITY_SHADER, TEXTURE_SSBO);
 
     renderer.shaders[SHADOW_SHADER] = shader_create("src/renderer/shaders/shadow/shadow.vert", "src/renderer/shaders/shadow/shadow.frag", "src/renderer/shaders/shadow/shadow.geom");
     link_shader_ubo(SHADOW_SHADER, MATRICES_UBO, "Matrices");
@@ -107,7 +105,7 @@ void renderer_init(void)
     link_shader_ubo(PROJECTILE_SHADER, ROTATION_UBO, "Rotation");
     link_shader_ubo(PROJECTILE_SHADER, TILT_UBO, "Tilt");
     link_shader_ubo(PROJECTILE_SHADER, CONSTANTS_UBO, "Constants");
-    link_shader_ssbo(PROJECTILE_SHADER, 0);
+    link_shader_ssbo(PROJECTILE_SHADER, TEXTURE_SSBO);
 
     renderer.shaders[GUI_SHADER] = shader_create("src/renderer/shaders/gui/gui.vert", "src/renderer/shaders/gui/gui.frag", NULL);
     renderer.vaos[GUI_VAO] = vao_create(GL_STATIC_DRAW, GL_TRIANGLE_STRIP);
@@ -115,17 +113,16 @@ void renderer_init(void)
     vao_attr(&renderer.vaos[GUI_VAO], 0, 2, 5, 0);
     vao_attr(&renderer.vaos[GUI_VAO], 1, 3, 5, 2);
     
-    renderer.textures = malloc(5 * sizeof(Texture));
-    renderer.textures[0] = texture_create("assets/knight.png");
-    renderer.textures[1] = texture_create("assets/bullet.png");
-    renderer.textures[2] = texture_create("assets/tile.png");
-    renderer.textures[3] = texture_create("assets/wall_top.png");
-    renderer.textures[4] = texture_create("assets/wall.png");
-    for (i32 i = 0; i < 5; i++) {
-        renderer.handles[i] = glGetTextureHandleARB(renderer.textures[i].id);
-        glMakeTextureHandleResidentARB(renderer.handles[i]);
-    }
-    ssbo_update(renderer.ssbo, 0, 5 * sizeof(u64), renderer.handles);
+    renderer.textures[KNIGHT_TEX] = texture_create("assets/knight.png");
+    renderer.textures[BULLET_TEX] = texture_create("assets/bullet.png");
+    renderer.textures[TILE_TEX] = texture_create("assets/tile.png");
+    renderer.textures[WALL_TOP_TEX] = texture_create("assets/wall_top.png");
+    renderer.textures[WALL_TEX] = texture_create("assets/wall.png");
+    u64 *handles = malloc(NUM_TEXTURES * sizeof(u64));
+    for (i32 i = 0; i < NUM_TEXTURES; i++)
+        handles[i] = renderer.textures[i].handle;
+    ssbo_update(renderer.ssbos[TEXTURE_SSBO], 0, NUM_TEXTURES * sizeof(u64), handles);
+    free(handles);
 
     f32 pi, sqrt2;
     pi = 3.1415926535;
@@ -198,25 +195,23 @@ void renderer_destroy(void)
 {
     for (i32 i = 0; i < NUM_VAOS; i++)
         vao_destroy(renderer.vaos[i]);
+    free(renderer.vaos);
+
     for (i32 i = 0; i < NUM_SHADERS; i++)
         shader_destroy(renderer.shaders[i]);
+    free(renderer.shaders);
+
     for (i32 i = 0; i < NUM_UBOS; i++)
         ubo_destroy(renderer.ubos[i]);
-    for (i32 i = 0; i < 5; i++) {
-        glMakeTextureHandleNonResidentARB(renderer.handles[i]);
-        texture_destroy(renderer.textures[i]);
-    }
-    ssbo_destroy(renderer.ssbo);
-    free(renderer.handles);
-    free(renderer.textures);
-    free(renderer.shaders);
-    free(renderer.vaos);
     free(renderer.ubos);
-}
 
-void renderer_uniform_update_texture(u32 shader, char* identifier, Texture texture, u32 binding) {
-    shader_use(renderer.shaders[shader]);
-    glUniform1i(glGetUniformLocation(renderer.shaders[shader].id, identifier), binding);
+    for (i32 i = 0; i < 5; i++)
+        texture_destroy(renderer.textures[i]);
+    free(renderer.textures);
+
+    for (i32 i = 0; i < NUM_SSBOS; i++)
+        ssbo_destroy(renderer.ssbos[i]);
+    free(renderer.ssbos);
 }
 
 void renderer_uniform_update_view(f32 *mat) {

@@ -9,6 +9,9 @@
 #define TILT_UBO         4
 #define CONSTANTS_UBO    5
 
+#define NUM_SSBOS    1
+#define TEXTURE_SSBO 0
+
 #define NUM_SHADERS       7
 #define TILE_SHADER       0
 #define WALL_SHADER       1
@@ -24,5 +27,12 @@
 #define ENTITY_VAO     2
 #define PROJECTILE_VAO 3
 #define GUI_VAO        4
+
+#define NUM_TEXTURES 5
+#define KNIGHT_TEX   0
+#define BULLET_TEX   1
+#define TILE_TEX     2
+#define WALL_TOP_TEX 3
+#define WALL_TEX     4
 
 #endif

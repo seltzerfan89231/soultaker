@@ -2,9 +2,9 @@
 
 #extension GL_ARB_bindless_texture : require
 
-layout (binding = 1, std430) readonly buffer ssbo
+layout (binding = 0, std430) readonly buffer ssbo
 {
-    uvec2 tex[5];
+    uvec2 tex[];
 };
 
 layout (std140) uniform Tilt

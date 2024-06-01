@@ -6,6 +6,7 @@ Texture texture_create(const char* image_path)
 {
     Texture texture;
     i32 width, height, nrChannels;
+    GLenum format1, format2;
     unsigned char *data = stbi_load(image_path, &width, &height, &nrChannels, 0);
     f32 col[4] = {0.0f, 0.0f, 0.0f, 0.0f};
     assert(data != NULL);
@@ -16,41 +17,23 @@ Texture texture_create(const char* image_path)
     glTextureParameteri(texture.id, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTextureParameterfv(texture.id, GL_TEXTURE_BORDER_COLOR, col);
 
-    if (nrChannels == 3) {
-        glTextureStorage2D(texture.id, 1, GL_RGB8, width, height);
-        glTextureSubImage2D(texture.id, 0, 0, 0, width, height, GL_RGB, GL_UNSIGNED_BYTE, data);
-    }
-    else if (nrChannels == 4) {
-        glTextureStorage2D(texture.id, 1, GL_RGBA8, width, height);
-        glTextureSubImage2D(texture.id, 0, 0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, data);
-    }
+    if (nrChannels == 3)
+        format1 = GL_RGB8, format2 = GL_RGB;
+    else if (nrChannels == 4)
+        format1 = GL_RGBA8, format2 = GL_RGBA;
     else
         printf("Unrecognized number of channels in texture %s\n", image_path);
 
+    glTextureStorage2D(texture.id, 1, format1, width, height);
+    glTextureSubImage2D(texture.id, 0, 0, 0, width, height, format2, GL_UNSIGNED_BYTE, data);
+    texture.handle = glGetTextureHandleARB(texture.id);
+    glMakeTextureHandleResidentARB(texture.handle);
     stbi_image_free(data);
     return texture;
-    /*
-    glGenTextures(1, &texture.id);
-    glBindTexture(GL_TEXTURE_2D, texture.id);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    f32 col[4] = {0.0f, 0.0f, 0.0f, 0.0f};
-    glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, col);
-    i32 width, height, nrChannels;
-    unsigned char *data = stbi_load(image_path, &width, &height, &nrChannels, 0); 
-    assert(data != NULL);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-    */
-}
-
-void texture_bind(Texture texture, u32 binding)
-{
-    glBindTextureUnit(binding, texture.id);
 }
 
 void texture_destroy(Texture texture)
 {
+    glMakeTextureHandleNonResidentARB(texture.handle);
     glDeleteTextures(1, &texture.id);
 }

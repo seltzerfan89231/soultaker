@@ -4,7 +4,7 @@
 #include <glad.h>
 #include <glfw.h>
 #include "../../util/type.h"
-#include "vbo/vbo.h"
+#include "../vbo/vbo.h"
 
 typedef struct {
     u32 id, length;
