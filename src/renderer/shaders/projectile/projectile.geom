@@ -5,40 +5,34 @@
 layout (points) in;
 layout (triangle_strip, max_vertices = 4) out;
 
-layout (std140) uniform AspectRatio
-{
+layout (std140) uniform AspectRatio {
     float ar;
 };
 
-layout (std140) uniform Zoom
-{
+layout (std140) uniform Zoom {
     float zoom;
 };
 
-layout (std140) uniform Constants
-{
+layout (std140) uniform Constants {
     float pi;
     float sqrt2;
 };
 
-layout (std140) uniform Rotation
-{
+layout (std140) uniform Rotation {
     float rotation;
 };
 
-layout (std140) uniform Tilt
-{
+layout (std140) uniform Tilt {
     float tilt;
 };
 
 out vec2 texCoord;
-out float depthValue;
 
 in float projectile_rotation[];
 
-void build_projectile(vec4 position) 
+void main() 
 {
-    depthValue = 0.5 + 0.5 * position.z;
+    vec4 position = gl_in[0].gl_Position;
     float drot = projectile_rotation[0] - rotation;
     drot = atan(tan(drot) / cos(pi / 2 + tilt)) + (cos(drot) > 0 ? 0 : pi);
     vec2 offset;
@@ -59,8 +53,4 @@ void build_projectile(vec4 position)
     texCoord = vec2(1.0f, 0.0f);
     EmitVertex();
     EndPrimitive();
-}
-
-void main() {
-    build_projectile(gl_in[0].gl_Position);
 }

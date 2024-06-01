@@ -2,23 +2,21 @@
 
 #extension GL_ARB_bindless_texture : require
 
-layout (binding = 0, std430) readonly buffer ssbo
-{
+layout (binding = 0, std430) readonly buffer ssbo {
     uvec2 tex[];
 };
 
-layout (std140) uniform Tilt
-{
+layout (std140) uniform Tilt {
     float tilt;
 };
 
 in vec2 texCoord;
 
-void main()
+void main() 
 {
     const float PIXEL_SIZE = 0.03;
-    float a = 1.1; // 1 + buffer * 2;
-    vec2 UV = vec2(texCoord.x - 0.5, texCoord.y - 0.5) * a + 0.5;
+    float scale = 1.1; // 1 + extra_space * 2;
+    vec2 UV = vec2(texCoord.x - 0.5, texCoord.y - 0.5) * scale + 0.5;
     vec4 col = texture(sampler2D(tex[0]), UV);
     if (!(UV.x > 1 || UV.x < 0 || UV.y > 1 || UV.y < 0) && (col.a > 0.1)) {
         gl_FragColor = col;

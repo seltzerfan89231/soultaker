@@ -2,7 +2,6 @@
 #define TEXTURE_H
 
 #include <glad.h>
-#include <glfw.h>
 #include <stb_image.h>
 #include "../../util/type.h"
 

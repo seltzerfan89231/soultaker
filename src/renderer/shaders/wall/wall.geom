@@ -5,8 +5,7 @@
 layout (points) in;
 layout (triangle_strip, max_vertices = 20) out;
 
-layout (std140) uniform Matrices
-{
+layout (std140) uniform Matrices {
     mat4 view;
     mat4 proj;
 };
