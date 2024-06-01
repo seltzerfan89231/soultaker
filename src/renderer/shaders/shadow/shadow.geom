@@ -1,14 +1,14 @@
 #version 460 core
-
 layout (points) in;
 layout (triangle_strip, max_vertices = 4) out;
 
-layout (std140) uniform Matrices {
+layout (std140) uniform Matrices
+{
     mat4 view;
     mat4 proj;
 };
 
-out flat float height;
+out float height;
 out vec2 texCoord;
 
 void main()

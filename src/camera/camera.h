@@ -35,5 +35,6 @@ void camera_tilt(i32 mag, f32 dt);
 void camera_zoom(i32 mag, f32 dt, f32 ar);
 void camera_set_target(vec3f target);
 vec3f camera_get_direction(vec2i dir);
+// vec3f camera_move(vec2i dir, f32 dt);
 
 #endif

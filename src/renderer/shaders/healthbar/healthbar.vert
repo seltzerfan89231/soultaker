@@ -2,7 +2,8 @@
 
 layout (location = 0) in vec3 aPos;
 
-layout (std140) uniform Matrices {
+layout (std140) uniform Matrices
+{
     mat4 view;
     mat4 proj;
 };

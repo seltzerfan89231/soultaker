@@ -5,19 +5,20 @@
 layout (points) in;
 layout (triangle_strip, max_vertices = 4) out;
 
-layout (std140) uniform AspectRatio {
+layout (std140) uniform AspectRatio
+{
     float ar;
 };
 
-layout (std140) uniform Zoom {
+layout (std140) uniform Zoom
+{
     float zoom;
 };
 
 out vec2 texCoord;
 
-void main() 
+void build_entity(vec4 position)
 {
-    vec4 position = gl_in[0].gl_Position;
     vec2 offset;
     float extra_space = 0.05;
 
@@ -46,4 +47,8 @@ void main()
     EmitVertex();
     
     EndPrimitive();
+}
+
+void main() {
+    build_entity(gl_in[0].gl_Position);
 }

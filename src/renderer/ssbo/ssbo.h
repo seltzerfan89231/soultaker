@@ -2,6 +2,7 @@
 #define SSBO_H
 
 #include <glad.h>
+#include <glfw.h>
 #include "../../util/type.h"
 
 typedef struct {

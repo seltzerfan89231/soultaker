@@ -3,8 +3,15 @@
 
 Renderer renderer;
 
-static void renderer_settings(void)
+static void link_shader_ubo(u32 shader_index, u32 ubo_index, char *identifier);
+static void link_shader_ssbo(u32 shader_index, u32 ssbo_index);
+static void link_textures_ssbo(void);
+static void message_callback();
+
+void renderer_init(void) 
 {
+    glEnable(GL_DEBUG_OUTPUT);
+    glDebugMessageCallback(message_callback, 0);
     glDepthFunc(GL_LESS);
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_BLEND);
@@ -14,38 +21,6 @@ static void renderer_settings(void)
     glEnable(GL_CULL_FACE); 
     glCullFace(GL_BACK);
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-}
-
-static void link_shader_ubo(u32 shader_index, u32 ubo_index, char *identifier)
-{
-    shader_bind_uniform_block(renderer.shaders[shader_index], ubo_index, identifier);
-    ubo_bind_buffer_base(renderer.ubos[ubo_index], ubo_index);
-}
-
-static void link_shader_ssbo(u32 shader_index, u32 ssbo_index)
-{
-    shader_use(renderer.shaders[shader_index]);
-    ssbo_bind_buffer_base(renderer.ssbos[ssbo_index], ssbo_index);
-}
-
-void GLAPIENTRY
-MessageCallback( GLenum source,
-                 GLenum type,
-                 GLuint id,
-                 GLenum severity,
-                 GLsizei length,
-                 const GLchar* message,
-                 const void* userParam )
-{
-  printf( "GL CALLBACK: %s type = 0x%x, severity = 0x%x, message = %s\n",
-           ( type == GL_DEBUG_TYPE_ERROR ? "** GL ERROR **" : "" ),
-            type, severity, message );
-}
-
-void renderer_init(void) 
-{
-    glEnable(GL_DEBUG_OUTPUT);
-    glDebugMessageCallback( MessageCallback, 0 );
     
     renderer.shaders = malloc(NUM_SHADERS * sizeof(Shader));
     renderer.vaos = malloc(NUM_VAOS * sizeof(VAO));
@@ -63,24 +38,21 @@ void renderer_init(void)
     renderer.ssbos[TEXTURE_SSBO] = ssbo_create(NUM_TEXTURES * sizeof(u64));
 
     renderer.shaders[TILE_SHADER] = shader_create("src/renderer/shaders/tile/tile.vert", "src/renderer/shaders/tile/tile.frag", "src/renderer/shaders/tile/tile.geom");
-    renderer.vaos[TILE_VAO] = vao_create(GL_STATIC_DRAW, GL_POINTS);
-    renderer.vaos[TILE_VAO].length = 2;
-    vao_attr(&renderer.vaos[TILE_VAO], 0, 2, 2, 0);
+    renderer.vaos[TILE_VAO] = vao_create(GL_STATIC_DRAW, GL_POINTS, 2);
+    vao_attr(&renderer.vaos[TILE_VAO], 0, 2, 0);
     link_shader_ubo(TILE_SHADER, MATRICES_UBO, "Matrices");
     link_shader_ssbo(TILE_SHADER, TEXTURE_SSBO);
 
     renderer.shaders[WALL_SHADER] = shader_create("src/renderer/shaders/wall/wall.vert", "src/renderer/shaders/wall/wall.frag", "src/renderer/shaders/wall/wall.geom");
-    renderer.vaos[WALL_VAO] = vao_create(GL_STATIC_DRAW, GL_POINTS);
-    renderer.vaos[WALL_VAO].length = 4;
-    vao_attr(&renderer.vaos[WALL_VAO], 0, 3, 4, 0);
-    vao_attr(&renderer.vaos[WALL_VAO], 1, 1, 4, 3);
+    renderer.vaos[WALL_VAO] = vao_create(GL_STATIC_DRAW, GL_POINTS, 4);
+    vao_attr(&renderer.vaos[WALL_VAO], 0, 3, 0);
+    vao_attr(&renderer.vaos[WALL_VAO], 1, 1, 3);
     link_shader_ubo(WALL_SHADER, MATRICES_UBO, "Matrices");
     link_shader_ssbo(WALL_SHADER, TEXTURE_SSBO);
 
     renderer.shaders[ENTITY_SHADER] = shader_create("src/renderer/shaders/entity/entity.vert", "src/renderer/shaders/entity/entity.frag", "src/renderer/shaders/entity/entity.geom");
-    renderer.vaos[ENTITY_VAO] = vao_create(GL_DYNAMIC_DRAW, GL_POINTS);
-    renderer.vaos[ENTITY_VAO].length = 3;
-    vao_attr(&renderer.vaos[ENTITY_VAO], 0, 3, 3, 0);
+    renderer.vaos[ENTITY_VAO] = vao_create(GL_DYNAMIC_DRAW, GL_POINTS, 3);
+    vao_attr(&renderer.vaos[ENTITY_VAO], 0, 3, 0);
     link_shader_ubo(ENTITY_SHADER, MATRICES_UBO, "Matrices");
     link_shader_ubo(ENTITY_SHADER, ZOOM_UBO, "Zoom");
     link_shader_ubo(ENTITY_SHADER, ASPECT_RATIO_UBO, "AspectRatio");
@@ -95,10 +67,9 @@ void renderer_init(void)
     link_shader_ubo(HEALTHBAR_SHADER, ASPECT_RATIO_UBO, "AspectRatio");
 
     renderer.shaders[PROJECTILE_SHADER] = shader_create("src/renderer/shaders/projectile/projectile.vert", "src/renderer/shaders/projectile/projectile.frag", "src/renderer/shaders/projectile/projectile.geom");
-    renderer.vaos[PROJECTILE_VAO] = vao_create(GL_DYNAMIC_DRAW, GL_POINTS);
-    renderer.vaos[PROJECTILE_VAO].length = 4;
-    vao_attr(&renderer.vaos[PROJECTILE_VAO], 0, 3, 4, 0);
-    vao_attr(&renderer.vaos[PROJECTILE_VAO], 1, 1, 4, 3);
+    renderer.vaos[PROJECTILE_VAO] = vao_create(GL_DYNAMIC_DRAW, GL_POINTS, 4);
+    vao_attr(&renderer.vaos[PROJECTILE_VAO], 0, 3, 0);
+    vao_attr(&renderer.vaos[PROJECTILE_VAO], 1, 1, 3);
     link_shader_ubo(PROJECTILE_SHADER, MATRICES_UBO, "Matrices");
     link_shader_ubo(PROJECTILE_SHADER, ZOOM_UBO, "Zoom");
     link_shader_ubo(PROJECTILE_SHADER, ASPECT_RATIO_UBO, "AspectRatio");
@@ -108,29 +79,22 @@ void renderer_init(void)
     link_shader_ssbo(PROJECTILE_SHADER, TEXTURE_SSBO);
 
     renderer.shaders[GUI_SHADER] = shader_create("src/renderer/shaders/gui/gui.vert", "src/renderer/shaders/gui/gui.frag", NULL);
-    renderer.vaos[GUI_VAO] = vao_create(GL_STATIC_DRAW, GL_TRIANGLE_STRIP);
-    renderer.vaos[GUI_VAO].length = 5;
-    vao_attr(&renderer.vaos[GUI_VAO], 0, 2, 5, 0);
-    vao_attr(&renderer.vaos[GUI_VAO], 1, 3, 5, 2);
+    renderer.vaos[GUI_VAO] = vao_create(GL_STATIC_DRAW, GL_TRIANGLE_STRIP, 5);
+    vao_attr(&renderer.vaos[GUI_VAO], 0, 2, 0);
+    vao_attr(&renderer.vaos[GUI_VAO], 1, 3, 2);
     
     renderer.textures[KNIGHT_TEX] = texture_create("assets/knight.png");
     renderer.textures[BULLET_TEX] = texture_create("assets/bullet.png");
     renderer.textures[TILE_TEX] = texture_create("assets/tile.png");
     renderer.textures[WALL_TOP_TEX] = texture_create("assets/wall_top.png");
     renderer.textures[WALL_TEX] = texture_create("assets/wall.png");
-    u64 *handles = malloc(NUM_TEXTURES * sizeof(u64));
-    for (i32 i = 0; i < NUM_TEXTURES; i++)
-        handles[i] = renderer.textures[i].handle;
-    ssbo_update(renderer.ssbos[TEXTURE_SSBO], 0, NUM_TEXTURES * sizeof(u64), handles);
-    free(handles);
+    link_textures_ssbo();
 
     f32 pi, sqrt2;
     pi = 3.1415926535;
     sqrt2 = sqrt(2);
     ubo_update(renderer.ubos[CONSTANTS_UBO], 0, sizeof(f32), &pi);
     ubo_update(renderer.ubos[CONSTANTS_UBO], sizeof(f32), sizeof(f32), &sqrt2);
-
-    renderer_settings();
 }
 
 void renderer_malloc(u32 vao, u32 length)
@@ -236,4 +200,39 @@ void renderer_uniform_update_tilt(f32 tilt) {
 
 void renderer_uniform_update_aspect_ratio(f32 ar) {
     ubo_update(renderer.ubos[ASPECT_RATIO_UBO], 0, sizeof(f32), &ar);
+}
+
+void link_shader_ubo(u32 shader_index, u32 ubo_index, char *identifier)
+{
+    shader_bind_uniform_block(renderer.shaders[shader_index], ubo_index, identifier);
+    ubo_bind_buffer_base(renderer.ubos[ubo_index], ubo_index);
+}
+
+void link_shader_ssbo(u32 shader_index, u32 ssbo_index)
+{
+    shader_use(renderer.shaders[shader_index]);
+    ssbo_bind_buffer_base(renderer.ssbos[ssbo_index], ssbo_index);
+}
+
+void link_textures_ssbo(void)
+{
+    u64 *handles = malloc(NUM_TEXTURES * sizeof(u64));
+    for (i32 i = 0; i < NUM_TEXTURES; i++)
+        handles[i] = renderer.textures[i].handle;
+    ssbo_update(renderer.ssbos[TEXTURE_SSBO], 0, NUM_TEXTURES * sizeof(u64), handles);
+    free(handles);
+}
+
+void GLAPIENTRY
+message_callback( GLenum source,
+                 GLenum type,
+                 GLuint id,
+                 GLenum severity,
+                 GLsizei length,
+                 const GLchar* message,
+                 const void* userParam )
+{
+   printf( "GL CALLBACK: %s type = 0x%x, severity = 0x%x, message = %s\n",
+           ( type == GL_DEBUG_TYPE_ERROR ? "** GL ERROR **" : "" ),
+            type, severity, message );
 }

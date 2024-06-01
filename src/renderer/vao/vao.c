@@ -1,21 +1,21 @@
 #include "vao.h"
 
-VAO vao_create(GLenum usage, GLenum mode)
+VAO vao_create(GLenum usage, GLenum mode, u32 length)
 {
     VAO vao;
     glGenVertexArrays(1, &vao.id);
     vao_bind(vao);
     vao.vbo = vbo_create();
-    vao.length = 0;
+    vao.length = length;
     vao.usage = usage;
     vao.mode = mode;
     return vao;
 }
 
-void vao_attr(VAO* vao, u32 index, u32 length, u32 stride, u32 offset)
+void vao_attr(VAO* vao, u32 index, u32 length, u32 offset)
 {
     vao_bind(*vao);
-    glVertexAttribPointer(index, length, GL_FLOAT, GL_FALSE, stride * sizeof(f32), (void*)(offset * sizeof(f32)));
+    glVertexAttribPointer(index, length, GL_FLOAT, GL_FALSE, vao->length * sizeof(f32), (void*)(offset * sizeof(f32)));
     glEnableVertexAttribArray(index);
 }
 

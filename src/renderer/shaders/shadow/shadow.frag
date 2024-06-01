@@ -1,6 +1,6 @@
 #version 460 core
 
-in flat float height;
+in float height;
 in vec2 texCoord;
 
 void main()

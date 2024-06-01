@@ -2,12 +2,16 @@
 #define RENDERER_H
 
 #include <glad.h>
+#include <glfw.h>
 #include "../util/indices.h"
+#include "../util/vec.h"
 #include "vao/vao.h"
 #include "shader/shader.h"
 #include "texture/texture.h"
 #include "ubo/ubo.h"
 #include "ssbo/ssbo.h"
+
+#define MAX_BUFFER_LENGTH 1000000
 
 typedef struct {
     VAO *vaos;

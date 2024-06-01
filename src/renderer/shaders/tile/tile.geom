@@ -5,16 +5,16 @@
 layout (points) in;
 layout (triangle_strip, max_vertices = 4) out;
 
-layout (std140) uniform Matrices {
+layout (std140) uniform Matrices
+{
     mat4 view;
     mat4 proj;
 };
 
 out vec2 texCoord;
 
-void main()
+void build_tile(vec4 position)
 {    
-    vec4 position = gl_in[0].gl_Position;
     gl_Position = proj * view * (position + vec4(0.0, 0.0, 0.0, 0.0));
     texCoord = vec2(0.0f, 0.0f);
     EmitVertex();
@@ -28,4 +28,9 @@ void main()
     texCoord = vec2(1.0f, 1.0f);
     EmitVertex();
     EndPrimitive();
+}
+
+void main()
+{    
+    build_tile(gl_in[0].gl_Position);
 }

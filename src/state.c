@@ -8,7 +8,6 @@ extern Renderer renderer;
 extern Camera camera;
 extern Game game;
 extern GUI gui;
-
 f32 *buffer;
 i32 i;
 
