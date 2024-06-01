@@ -38,10 +38,11 @@ static void projectile_push_data(Projectile* projectile, f32* buffer, u32 offset
 
 static void entity_push_data(Entity* entity, f32* buffer, u32 offset)
 {
-    offset *= 3;
+    offset *= 4;
     buffer[offset++] = entity->position.x;
     buffer[offset++] = entity->position.y;
     buffer[offset++] = entity->position.z;
+    buffer[offset++] = entity->health / entity->max_health;
 }
 
 static void update_proj_matrix(void)

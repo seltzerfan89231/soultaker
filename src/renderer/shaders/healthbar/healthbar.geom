@@ -1,4 +1,5 @@
 #version 460 core
+
 layout (points) in;
 layout (triangle_strip, max_vertices = 4) out;
 
@@ -12,10 +13,14 @@ layout (std140) uniform Zoom
     float zoom;
 };
 
-out vec2 texCoord;
+in float health_ratio[];
 
-void build_entity(vec4 position)
-{
+out vec2 texCoord;
+out float healthRatio;
+
+void main() {
+    vec4 position = gl_in[0].gl_Position;
+    healthRatio = health_ratio[0];
     vec2 offset;
 
     // bottom left
@@ -43,8 +48,4 @@ void build_entity(vec4 position)
     EmitVertex();
     
     EndPrimitive();
-}
-
-void main() {
-    build_entity(gl_in[0].gl_Position);
 }

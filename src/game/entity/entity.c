@@ -12,6 +12,8 @@ Entity* entity_create(entitytype type, u8 friendly)
     entity->direction = vec3f_create(0, 0, 0);
     entity->friendly = friendly;
     entity->hitbox_radius = 0.5;
+    entity->health = 100.0f;
+    entity->max_health = 100.0f;
     return entity;
 }
 
