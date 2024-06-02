@@ -1,9 +1,10 @@
 #version 460 core
 
 layout (location = 0) in vec2 aPos;
-layout (location = 1) in vec3 aCol;
+layout (location = 1) in vec4 aCol;
+layout (location = 1) in float texID;
 
-out vec3 Col;
+out vec4 Col;
 
 void main()
 {

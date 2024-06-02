@@ -37,7 +37,7 @@ void renderer_init(void)
     renderer.vaos[WALL_VAO]       = vao_create(GL_STATIC_DRAW, GL_POINTS, 4);
     renderer.vaos[ENTITY_VAO]     = vao_create(GL_DYNAMIC_DRAW, GL_POINTS, 4);
     renderer.vaos[PROJECTILE_VAO] = vao_create(GL_DYNAMIC_DRAW, GL_POINTS, 4);
-    renderer.vaos[GUI_VAO]        = vao_create(GL_STATIC_DRAW, GL_TRIANGLE_STRIP, 5);
+    renderer.vaos[GUI_VAO]        = vao_create(GL_STATIC_DRAW, GL_TRIANGLE_STRIP, 6);
     vao_attr(renderer.vaos[TILE_VAO]      , 0, 2, 0);
     vao_attr(renderer.vaos[WALL_VAO]      , 0, 3, 0);
     vao_attr(renderer.vaos[WALL_VAO]      , 1, 1, 3);
@@ -46,7 +46,7 @@ void renderer_init(void)
     vao_attr(renderer.vaos[PROJECTILE_VAO], 0, 3, 0);
     vao_attr(renderer.vaos[PROJECTILE_VAO], 1, 1, 3);
     vao_attr(renderer.vaos[GUI_VAO]       , 0, 2, 0);
-    vao_attr(renderer.vaos[GUI_VAO]       , 1, 3, 2);
+    vao_attr(renderer.vaos[GUI_VAO]       , 1, 4, 2);
     /* --------------------- */
     renderer.textures = malloc(NUM_TEXTURES * sizeof(Texture));
     renderer.textures[KNIGHT_TEX]   = texture_create("assets/knight.png");
@@ -92,13 +92,15 @@ void renderer_init(void)
 
 void renderer_malloc(u32 vao, u32 length)
 {
-    length *= renderer.vaos[vao].length;
+    if (renderer.vaos[vao].mode == GL_POINTS)
+        length *= renderer.vaos[vao].length;
     vao_malloc(renderer.vaos[vao], length);
 }
 
 void renderer_update(u32 vao, u32 offset, u32 length, f32* buffer)
 {
-    length *= renderer.vaos[vao].length;
+    if (renderer.vaos[vao].mode == GL_POINTS)
+        length *= renderer.vaos[vao].length;
     vao_update(renderer.vaos[vao], offset, length, buffer);
 }
 

@@ -88,7 +88,7 @@ static void state_setup(void)
 
     renderer_malloc(GUI_VAO, gui.max_length);
     gui_push_data();
-    renderer_update(GUI_VAO, 0, 6, gui.buffer);
+    renderer_update(GUI_VAO, 0, gui.length, gui.buffer);
 }
 
 static void state_update(void)
