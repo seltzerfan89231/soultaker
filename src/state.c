@@ -45,6 +45,15 @@ static void entity_push_data(Entity* entity, f32* buffer, u32 offset)
     buffer[offset++] = entity->health / entity->max_health;
 }
 
+static void particle_push_data(Particle *particle, f32 *buffer, u32 offset)
+{
+    offset *= 4;
+    buffer[offset++] = particle->position.x;
+    buffer[offset++] = particle->position.y;
+    buffer[offset++] = particle->position.z;
+    buffer[offset++] = particle->scale;
+}
+
 static void update_proj_matrix(void)
 {
     renderer_uniform_update_proj(camera.proj);
@@ -86,6 +95,11 @@ static void state_setup(void)
         projectile_push_data(game.projectiles.buffer[i], buffer, i);
     renderer_update(PROJECTILE_VAO, 0, i, buffer);
 
+    renderer_malloc(PARTICLE_VAO, game.particles.max_length);
+    for (i = 0; i < game.particles.length; i++)
+        particle_push_data(game.particles.buffer[i], buffer, i);
+    renderer_update(PARTICLE_VAO, 0, i, buffer);
+
     renderer_malloc(GUI_VAO, gui.max_length);
     gui_push_data();
     renderer_update(GUI_VAO, 0, gui.length, gui.buffer);
@@ -103,6 +117,10 @@ static void state_update(void)
     for (i = 0; i < game.projectiles.length; i++)
         projectile_push_data(game.projectiles.buffer[i], buffer, i);
     renderer_update(PROJECTILE_VAO, 0, i, buffer);
+
+    for (i = 0; i < game.particles.length; i++)
+        particle_push_data(game.particles.buffer[i], buffer, i);
+    renderer_update(PARTICLE_VAO, 0, i, buffer);
 }
 
 static void process_input(void)
@@ -175,7 +193,7 @@ void state_loop(void)
         renderer_render();
         window_update();
         if (glfwGetTime() - time > 1)
-            printf("%d, %.0f, %.0f, %d\n", window.mouse.left, window.fps, 1 / game_dt, game.projectiles.length), time = glfwGetTime();
+            printf("%d, %.0f, %.0f, %d\n", window.mouse.left, window.fps, 1 / game_dt, game.particles.length), time = glfwGetTime();
     }
 }
 

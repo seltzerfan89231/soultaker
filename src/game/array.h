@@ -3,6 +3,7 @@
 
 #include "entity/entity.h"
 #include "projectile/projectile.h"
+#include "particle/particle.h"
 #include "tile/tile.h"
 #include "wall/wall.h"
 #include "../util/type.h"
@@ -22,6 +23,6 @@ _ARRAY_DECLARE(Tile, tile)
 _ARRAY_DECLARE(Wall, wall)
 _ARRAY_DECLARE(Projectile, projectile)
 _ARRAY_DECLARE(Entity, entity)
-
+_ARRAY_DECLARE(Particle, particle)
 
 #endif

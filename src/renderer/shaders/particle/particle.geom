@@ -1,7 +1,5 @@
 #version 460 core
 
-#extension GL_ARB_bindless_texture : require
-
 layout (points) in;
 layout (triangle_strip, max_vertices = 4) out;
 
@@ -17,33 +15,34 @@ layout (std140) uniform Zoom
 
 out vec2 texCoord;
 
+in flat float scale[];
+
 void main() {
     vec4 position = gl_in[0].gl_Position;
     vec2 offset;
-    float extra_space = 0.05;
 
     // bottom left
-    offset = zoom * vec2((-0.5 - extra_space) * ar, 0.0 - extra_space);
+    offset = zoom * scale[0] * vec2(-0.5f * ar, -0.5f);
     texCoord = vec2(0.0f, 1.0f);
-    gl_Position = position + vec4(offset, 0.0, 0.0);
+    gl_Position = position + vec4(offset, 0.0f, 0.0f);
     EmitVertex();
 
     // bottom right
-    offset = zoom * vec2((0.5 + extra_space) * ar, 0.0 - extra_space);
+    offset = zoom * scale[0] * vec2(0.5f * ar, -0.5f);
     texCoord = vec2(1.0f, 1.0f);
-    gl_Position = position + vec4(offset, 0.0, 0.0);
+    gl_Position = position + vec4(offset, 0.0f, 0.0f);
     EmitVertex();
 
     // top left
-    offset = zoom * vec2((-0.5 - extra_space) * ar, 1.0 + extra_space);
+    offset = zoom * scale[0] * vec2(-0.5f * ar, 0.5f);
     texCoord = vec2(0.0f, 0.0f);
-    gl_Position = position + vec4(offset, 0.0, 0.0);
+    gl_Position = position + vec4(offset, 0.0f, 0.0f);
     EmitVertex();
 
     // top right
-    offset = zoom * vec2((0.5 + extra_space) * ar, 1.0 + extra_space);
+    offset = zoom * scale[0] * vec2(0.5f * ar, 0.5f);
     texCoord = vec2(1.0f, 0.0f);
-    gl_Position = position + vec4(offset, 0.0, 0.0);
+    gl_Position = position + vec4(offset, 0.0f, 0.0f);
     EmitVertex();
     
     EndPrimitive();

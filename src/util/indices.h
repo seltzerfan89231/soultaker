@@ -12,7 +12,7 @@
 #define NUM_SSBOS    1
 #define TEXTURE_SSBO 0
 
-#define NUM_SHADERS       7
+#define NUM_SHADERS       8
 #define TILE_SHADER       0
 #define WALL_SHADER       1
 #define ENTITY_SHADER     2
@@ -20,13 +20,15 @@
 #define GUI_SHADER        4
 #define SHADOW_SHADER     5
 #define HEALTHBAR_SHADER  6
+#define PARTICLE_SHADER   7
 
-#define NUM_VAOS       5
+#define NUM_VAOS       6
 #define TILE_VAO       0
 #define WALL_VAO       1
 #define ENTITY_VAO     2
 #define PROJECTILE_VAO 3
 #define GUI_VAO        4
+#define PARTICLE_VAO   5
 
 #define NUM_TEXTURES 5
 #define KNIGHT_TEX   0

@@ -21,6 +21,17 @@ static void create_objects(void)
             projectile_array_push(&game.projectiles, proj);
         }
     }
+    static f32 cooldown1;
+    if (glfwGetTime() - cooldown1 >= 0.05) {
+        cooldown1 = glfwGetTime();
+        for (i32 i = 0; i < 10; i++) {
+            Particle *particle = particle_create();
+            particle->position = vec3f_create(12.0f, 0.5f, 15.0f);
+            particle->direction = vec3f_create(cos(i), 0.0f, sin(i));
+            particle->speed = 5.0f;
+            particle_array_push(&game.particles, particle);
+        }
+    }
 }
 
 static void update_objects(f32 dt)
@@ -34,6 +45,12 @@ static void update_objects(f32 dt)
         projectile_update_position(proj, dt);
         if (proj->lifetime <= 0)
             projectile_array_cut(&game.projectiles, i), i--;
+    }
+    for (i32 i = 0; i < game.particles.length; i++) {
+        Particle *particle = game.particles.buffer[i];
+        particle_update_position(particle, dt);
+        if (particle->lifetime <= 0)
+            particle_array_cut(&game.particles, i), i--;
     }
 }
 
@@ -141,6 +158,7 @@ void game_init(void)
 {
     game.projectiles = projectile_array_create(1000000);
     game.entities = entity_array_create(1000000);
+    game.particles = particle_array_create(1000000);
     game.tiles = tile_array_create(1000000);
     game.walls = wall_array_create(1000000);
 }
@@ -204,6 +222,7 @@ void game_destroy(void)
     wall_array_destroy(&game.walls);
     entity_array_destroy(&game.entities);
     projectile_array_destroy(&game.projectiles);
+    particle_array_destroy(&game.particles);
 }
 
 void game_shoot(vec2f pos, f32 rotation, f32 tilt, f32 zoom, f32 ar)

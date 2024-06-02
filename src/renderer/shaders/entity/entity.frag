@@ -7,11 +7,6 @@ layout (binding = 0, std430) readonly buffer ssbo
     uvec2 tex[];
 };
 
-layout (std140) uniform Tilt
-{
-    float tilt;
-};
-
 in vec2 texCoord;
 
 void main()
