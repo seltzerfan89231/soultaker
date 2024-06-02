@@ -8,7 +8,7 @@
 typedef enum { PLAYER, ENEMY } entitytype;
 
 typedef struct {
-    f32 speed, scale, lifetime, rotation, hitbox_radius, health, max_health;
+    f32 speed, scale, lifetime, hitbox_radius, health, max_health;
     u8 friendly;
     entitytype type;
     vec3f position, direction;

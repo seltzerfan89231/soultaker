@@ -175,7 +175,7 @@ void state_loop(void)
         renderer_render();
         window_update();
         if (glfwGetTime() - time > 1)
-            printf("%d, %.0f, %.0f, %f, %f\n", window.mouse.left, window.fps, 1 / game_dt, window.mouse.position.x, window.mouse.position.y), time = glfwGetTime();
+            printf("%d, %.0f, %.0f, %d\n", window.mouse.left, window.fps, 1 / game_dt, game.projectiles.length), time = glfwGetTime();
     }
 }
 

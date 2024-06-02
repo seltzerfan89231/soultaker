@@ -15,6 +15,7 @@ gui
 - buttons
 - simple hud
 - text
+- hoverable, clickable, dragable
 
 window
 - framebuffer callback

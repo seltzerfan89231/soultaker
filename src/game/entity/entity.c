@@ -8,7 +8,6 @@ Entity* entity_create(entitytype type, u8 friendly)
     entity->scale = 1;
     entity->speed = 8;
     entity->lifetime = 5;
-    entity->rotation = 0;
     entity->direction = vec3f_create(0, 0, 0);
     entity->friendly = friendly;
     entity->hitbox_radius = 0.5;

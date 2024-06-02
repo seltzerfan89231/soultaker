@@ -32,6 +32,8 @@ static void update_objects(f32 dt)
     for (i32 i = 0; i < game.projectiles.length; i++) {
         Projectile *proj = game.projectiles.buffer[i];
         projectile_update_position(proj, dt);
+        if (proj->lifetime <= 0)
+            projectile_array_cut(&game.projectiles, i), i--;
     }
 }
 
