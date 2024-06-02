@@ -9,6 +9,7 @@ Component* component_create(f32 x1, f32 y1, f32 x2, f32 y2, f32 r, f32 g, f32 b,
     comp->r = r; comp->g = g; comp->b = b; comp->a = a;
     comp->children = NULL;
     comp->num_children = 0;
+    comp->interactable = 1;
     return comp;
 }
 

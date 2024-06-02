@@ -37,7 +37,7 @@ void renderer_init(void)
     renderer.vaos[WALL_VAO]       = vao_create(GL_STATIC_DRAW, GL_POINTS, 4);
     renderer.vaos[ENTITY_VAO]     = vao_create(GL_DYNAMIC_DRAW, GL_POINTS, 4);
     renderer.vaos[PROJECTILE_VAO] = vao_create(GL_DYNAMIC_DRAW, GL_POINTS, 4);
-    renderer.vaos[GUI_VAO]        = vao_create(GL_STATIC_DRAW, GL_TRIANGLE_STRIP, 6);
+    renderer.vaos[GUI_VAO]        = vao_create(GL_STATIC_DRAW, GL_TRIANGLES, 6);
     vao_attr(renderer.vaos[TILE_VAO]      , 0, 2, 0);
     vao_attr(renderer.vaos[WALL_VAO]      , 0, 3, 0);
     vao_attr(renderer.vaos[WALL_VAO]      , 1, 1, 3);
