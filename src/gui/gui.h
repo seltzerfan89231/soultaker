@@ -2,8 +2,10 @@
 #define GUI_H
 
 #include "../util/type.h"
+#include "component/component.h"
 
-typedef struct GUI {
+typedef struct {
+    Component *root;
     u32 length, max_length;
     f32 *buffer;
 } GUI;
