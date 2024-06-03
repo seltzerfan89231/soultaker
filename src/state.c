@@ -54,6 +54,15 @@ static void particle_push_data(Particle *particle, f32 *buffer, u32 offset)
     buffer[offset++] = particle->scale;
 }
 
+static void obstacle_push_data(Obstacle *obstacle, f32 *buffer, u32 offset)
+{
+    offset *= 3;
+    buffer[offset++] = obstacle->position.x;
+    buffer[offset++] = obstacle->position.y;
+    buffer[offset++] = obstacle->position.z;
+    printf("%f, %f, %f\n", buffer[offset-3], buffer[offset-2], buffer[offset-1]);
+}
+
 static void update_proj_matrix(void)
 {
     renderer_uniform_update_proj(camera.proj);
@@ -99,6 +108,11 @@ static void state_setup(void)
     for (i = 0; i < game.particles.length; i++)
         particle_push_data(game.particles.buffer[i], buffer, i);
     renderer_update(PARTICLE_VAO, 0, i, buffer);
+
+    renderer_malloc(OBSTACLE_VAO, game.obstacles.max_length);
+    for (i = 0; i < game.obstacles.length; i++)
+        obstacle_push_data(game.obstacles.buffer[i], buffer, i);
+    renderer_update(OBSTACLE_VAO, 0, i, buffer);
 
     renderer_malloc(GUI_VAO, gui.max_length);
     gui_push_data();

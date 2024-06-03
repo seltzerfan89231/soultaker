@@ -9,6 +9,7 @@ typedef struct {
     ProjectileArray projectiles;
     EntityArray entities;
     ParticleArray particles;
+    ObstacleArray obstacles;
     TileArray tiles;
     WallArray walls;
 } Game;

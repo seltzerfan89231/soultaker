@@ -159,6 +159,7 @@ void game_init(void)
     game.projectiles = projectile_array_create(1000000);
     game.entities = entity_array_create(1000000);
     game.particles = particle_array_create(1000000);
+    game.obstacles = obstacle_array_create(1000000);
     game.tiles = tile_array_create(1000000);
     game.walls = wall_array_create(1000000);
 }
@@ -197,6 +198,10 @@ void game_setup(void)
     proj->direction = vec3f_create(0.0f, 1.0f, 0.0f);
     proj->rotation = 0.0f;
     projectile_array_push(&game.projectiles, proj);
+
+    Obstacle *obstacle = obstacle_create();
+    obstacle->position = vec3f_create(15.0f, 0.0f, 20.0f);
+    obstacle_array_push(&game.obstacles, obstacle);
 }
 
 void game_update(f32 dt)
@@ -223,6 +228,7 @@ void game_destroy(void)
     entity_array_destroy(&game.entities);
     projectile_array_destroy(&game.projectiles);
     particle_array_destroy(&game.particles);
+    obstacle_array_destroy(&game.obstacles);
 }
 
 void game_shoot(vec2f pos, f32 rotation, f32 tilt, f32 zoom, f32 ar)

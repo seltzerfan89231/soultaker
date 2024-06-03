@@ -32,6 +32,7 @@ void renderer_init(void)
     renderer.shaders[PROJECTILE_SHADER] = shader_create("src/renderer/shaders/projectile/projectile.vert", "src/renderer/shaders/projectile/projectile.frag", "src/renderer/shaders/projectile/projectile.geom");
     renderer.shaders[GUI_SHADER]        = shader_create("src/renderer/shaders/gui/gui.vert", "src/renderer/shaders/gui/gui.frag", NULL);
     renderer.shaders[PARTICLE_SHADER]   = shader_create("src/renderer/shaders/particle/particle.vert", "src/renderer/shaders/particle/particle.frag", "src/renderer/shaders/particle/particle.geom");
+    renderer.shaders[OBSTACLE_SHADER]   = shader_create("src/renderer/shaders/obstacle/obstacle.vert", "src/renderer/shaders/obstacle/obstacle.frag", "src/renderer/shaders/obstacle/obstacle.geom");
     /* --------------------- */
     renderer.vaos = malloc(NUM_VAOS * sizeof(VAO));
     renderer.vaos[TILE_VAO]       = vao_create(GL_STATIC_DRAW, GL_POINTS, 2);
@@ -40,6 +41,7 @@ void renderer_init(void)
     renderer.vaos[PROJECTILE_VAO] = vao_create(GL_DYNAMIC_DRAW, GL_POINTS, 4);
     renderer.vaos[GUI_VAO]        = vao_create(GL_STATIC_DRAW, GL_TRIANGLES, 6);
     renderer.vaos[PARTICLE_VAO]   = vao_create(GL_DYNAMIC_DRAW, GL_POINTS, 4);
+    renderer.vaos[OBSTACLE_VAO]   = vao_create(GL_STATIC_DRAW, GL_POINTS, 3);
     vao_attr(renderer.vaos[TILE_VAO]      , 0, 2, 0);
     vao_attr(renderer.vaos[WALL_VAO]      , 0, 3, 0);
     vao_attr(renderer.vaos[WALL_VAO]      , 1, 1, 3);
@@ -51,6 +53,7 @@ void renderer_init(void)
     vao_attr(renderer.vaos[GUI_VAO]       , 1, 4, 2);
     vao_attr(renderer.vaos[PARTICLE_VAO]  , 0, 3, 0);
     vao_attr(renderer.vaos[PARTICLE_VAO]  , 1, 1, 3);
+    vao_attr(renderer.vaos[OBSTACLE_VAO]  , 0, 3, 0);
     /* --------------------- */
     renderer.textures = malloc(NUM_TEXTURES * sizeof(Texture));
     renderer.textures[KNIGHT_TEX]   = texture_create("assets/knight.png");
@@ -90,6 +93,9 @@ void renderer_init(void)
     link_shader_ubo(PARTICLE_SHADER, MATRICES_UBO, "Matrices");
     link_shader_ubo(PARTICLE_SHADER, ASPECT_RATIO_UBO, "AspectRatio");
     link_shader_ubo(PARTICLE_SHADER, ZOOM_UBO, "Zoom");
+    link_shader_ubo(OBSTACLE_SHADER, MATRICES_UBO, "Matrices");
+    link_shader_ubo(OBSTACLE_SHADER, ASPECT_RATIO_UBO, "AspectRatio");
+    link_shader_ubo(OBSTACLE_SHADER, ZOOM_UBO, "Zoom");
     /* --------------------- */
     link_shader_ssbo(TILE_SHADER, TEXTURE_SSBO);
     link_shader_ssbo(WALL_SHADER, TEXTURE_SSBO);
@@ -150,6 +156,11 @@ void renderer_render(void)
     vao_draw(renderer.vaos[PROJECTILE_VAO]);
     shader_use(renderer.shaders[SHADOW_SHADER]);
     vao_draw(renderer.vaos[PROJECTILE_VAO]);
+
+    shader_use(renderer.shaders[OBSTACLE_SHADER]);
+    vao_draw(renderer.vaos[OBSTACLE_VAO]);
+    shader_use(renderer.shaders[SHADOW_SHADER]);
+    vao_draw(renderer.vaos[OBSTACLE_VAO]);
     shader_use(renderer.shaders[PARTICLE_SHADER]);
     vao_draw(renderer.vaos[PARTICLE_VAO]);
 
