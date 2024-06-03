@@ -98,6 +98,52 @@ static void collide_walls_projectiles(void)
     }
 }
 
+static void collide_obstacles_projectiles()
+{
+    i32 i, j;
+    i = 0;
+    while (i < game.obstacles.length) {
+        Obstacle *obstacle = game.obstacles.buffer[i];
+        j = 0;
+        while (j < game.projectiles.length) {
+            f32 dx, dz;
+            Projectile *proj = game.projectiles.buffer[j];
+            dx = obstacle->position.x - proj->position.x;
+            dz = obstacle->position.z - proj->position.z;
+            if (vec2f_mag(vec2f_create(dx, dz)) < obstacle->hitbox_radius + proj->hitbox_radius)
+                projectile_array_cut(&game.projectiles, j);
+            else
+                j++;
+        }
+        i++;
+    }
+}
+
+static void collide_obstacles_entities()
+{
+    i32 i, j;
+    i = 0;
+    while (i < game.obstacles.length) {
+        Obstacle *obstacle = game.obstacles.buffer[i];
+        j = 0;
+        while (j < game.entities.length) {
+            f32 dx, dz;
+            vec2f dir;
+            Entity *entity = game.entities.buffer[j];
+            dx = entity->position.x - obstacle->position.x;
+            dz = entity->position.z - obstacle->position.z;
+            dir = vec2f_create(dx, dz);
+            if (vec2f_mag(dir) < obstacle->hitbox_radius + entity->hitbox_radius) {
+               dir = vec2f_scale(obstacle->hitbox_radius + entity->hitbox_radius, vec2f_normalize(dir));
+               entity->position.x = obstacle->position.x + dir.x;
+               entity->position.z = obstacle->position.z + dir.y;
+            }
+            j++;
+        }
+        i++;
+    }
+}
+
 static void collide_walls_entities(f32 dt)
 {
     i32 i, j;
@@ -151,6 +197,8 @@ static void collide_objects(f32 dt)
 {
     collide_walls_entities(dt);
     collide_walls_projectiles();
+    collide_obstacles_projectiles();
+    collide_obstacles_entities();
     collide_entities_projectiles();
 }
 
@@ -200,7 +248,7 @@ void game_setup(void)
     projectile_array_push(&game.projectiles, proj);
 
     Obstacle *obstacle = obstacle_create();
-    obstacle->position = vec3f_create(15.0f, 0.0f, 20.0f);
+    obstacle->position = vec3f_create(10.0f, 0.0f, 10.0f);
     obstacle_array_push(&game.obstacles, obstacle);
 }
 
