@@ -102,8 +102,8 @@ static void collide_obstacles_projectiles()
 {
     i32 i, j;
     i = 0;
-    while (i < game.obstacles.length) {
-        Obstacle *obstacle = game.obstacles.buffer[i];
+    while (i < game.obstacles2.length) {
+        Obstacle *obstacle = game.obstacles2.buffer[i];
         j = 0;
         while (j < game.projectiles.length) {
             f32 dx, dz;
@@ -123,8 +123,8 @@ static void collide_obstacles_entities()
 {
     i32 i, j;
     i = 0;
-    while (i < game.obstacles.length) {
-        Obstacle *obstacle = game.obstacles.buffer[i];
+    while (i < game.obstacles2.length) {
+        Obstacle *obstacle = game.obstacles2.buffer[i];
         j = 0;
         while (j < game.entities.length) {
             f32 dx, dz;
@@ -207,7 +207,7 @@ void game_init(void)
     game.projectiles = projectile_array_create(1000000);
     game.entities = entity_array_create(1000000);
     game.particles = particle_array_create(1000000);
-    game.obstacles = obstacle_array_create(1000000);
+    game.obstacles2 = obstacle_array_create(1000000);
     game.tiles = tile_array_create(1000000);
     game.walls = wall_array_create(1000000);
 }
@@ -249,7 +249,7 @@ void game_setup(void)
 
     Obstacle *obstacle = obstacle_create();
     obstacle->position = vec3f_create(10.0f, 0.0f, 10.0f);
-    obstacle_array_push(&game.obstacles, obstacle);
+    obstacle_array_push(&game.obstacles2, obstacle);
 }
 
 void game_update(f32 dt)
@@ -276,7 +276,7 @@ void game_destroy(void)
     entity_array_destroy(&game.entities);
     projectile_array_destroy(&game.projectiles);
     particle_array_destroy(&game.particles);
-    obstacle_array_destroy(&game.obstacles);
+    obstacle_array_destroy(&game.obstacles2);
 }
 
 void game_shoot(vec2f pos, f32 rotation, f32 tilt, f32 zoom, f32 ar)

@@ -5,6 +5,7 @@
 #include "projectile/projectile.h"
 #include "particle/particle.h"
 #include "obstacle/obstacle.h"
+#include "parjicle/parjicle.h"
 #include "tile/tile.h"
 #include "wall/wall.h"
 #include "../util/type.h"
@@ -26,5 +27,6 @@ _ARRAY_DECLARE(Projectile, projectile)
 _ARRAY_DECLARE(Entity, entity)
 _ARRAY_DECLARE(Particle, particle)
 _ARRAY_DECLARE(Obstacle, obstacle)
+_ARRAY_DECLARE(Parjicle, parjicle)
 
 #endif

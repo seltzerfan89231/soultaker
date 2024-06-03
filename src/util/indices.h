@@ -1,6 +1,7 @@
 #ifndef INDICES_H
 #define INDICES_H
 
+#pragma region UBOS
 #define NUM_UBOS         6
 #define MATRICES_UBO     0
 #define ZOOM_UBO         1
@@ -8,10 +9,14 @@
 #define ROTATION_UBO     3
 #define TILT_UBO         4
 #define CONSTANTS_UBO    5
+#pragma endregion
 
+#pragma region SSBOS
 #define NUM_SSBOS    1
 #define TEXTURE_SSBO 0
+#pragma endregion
 
+#pragma region SHADERS
 #define NUM_SHADERS       9
 #define TILE_SHADER       0
 #define WALL_SHADER       1
@@ -22,7 +27,9 @@
 #define HEALTHBAR_SHADER  6
 #define PARTICLE_SHADER   7
 #define OBSTACLE_SHADER   8
+#pragma endregion
 
+#pragma region VAOS
 #define NUM_VAOS       7
 #define TILE_VAO       0
 #define WALL_VAO       1
@@ -31,12 +38,15 @@
 #define GUI_VAO        4
 #define PARTICLE_VAO   5
 #define OBSTACLE_VAO   6
+#pragma endregion
 
+#pragma region TEXTURES
 #define NUM_TEXTURES 5
 #define KNIGHT_TEX   0
 #define BULLET_TEX   1
 #define TILE_TEX     2
 #define WALL_TOP_TEX 3
 #define WALL_TEX     4
+#pragma endregion
 
 #endif

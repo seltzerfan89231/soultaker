@@ -3,7 +3,6 @@
 
 #include "../../util/type.h"
 #include "../../util/vec.h"
-#include "../../util/constants.h"
 
 typedef struct {
     f32 scale, hitbox_radius;

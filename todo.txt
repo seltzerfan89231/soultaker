@@ -7,8 +7,6 @@ renderer stuff
 - wall / entity depth
 
 game stuff
-- particles
-- obstacles
 - spatial hash
 
 gui
@@ -19,6 +17,7 @@ gui
 
 window
 - framebuffer callback
+- timestep
 
 general
 - refactor code

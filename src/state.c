@@ -109,9 +109,9 @@ static void state_setup(void)
         particle_push_data(game.particles.buffer[i], buffer, i);
     renderer_update(PARTICLE_VAO, 0, i, buffer);
 
-    renderer_malloc(OBSTACLE_VAO, game.obstacles.max_length);
-    for (i = 0; i < game.obstacles.length; i++)
-        obstacle_push_data(game.obstacles.buffer[i], buffer, i);
+    renderer_malloc(OBSTACLE_VAO, game.obstacles2.max_length);
+    for (i = 0; i < game.obstacles2.length; i++)
+        obstacle_push_data(game.obstacles2.buffer[i], buffer, i);
     renderer_update(OBSTACLE_VAO, 0, i, buffer);
 
     renderer_malloc(GUI_VAO, gui.max_length);
@@ -121,7 +121,7 @@ static void state_setup(void)
 
 static void state_update(void)
 {
-    game_update(window.dt);
+    game_update(window.dt > 0.01 ? 0.01 : window.dt);
     camera_set_target(game.entities.buffer[0]->position);
 
     for (i = 0; i < game.entities.length; i++)
