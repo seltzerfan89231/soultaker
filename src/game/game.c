@@ -24,12 +24,20 @@ static void create_objects(void)
     static f32 cooldown1;
     if (glfwGetTime() - cooldown1 >= 0.05) {
         cooldown1 = glfwGetTime();
-        for (i32 i = 0; i < 10; i++) {
-            Particle *particle = particle_create();
-            particle->position = vec3f_create(12.0f, 0.5f, 15.0f);
-            particle->direction = vec3f_create(cos(i), 0.0f, sin(i));
-            particle->speed = 5.0f;
-            particle_array_push(&game.particles, particle);
+        for (i32 i = 0; i < 6; i++) {
+            if (i % 2) {
+                Particle *particle = particle_create();
+                particle->position = vec3f_create(12.0f, 0.5f, 15.0f);
+                particle->direction = vec3f_create(cos(i), 0.0f, sin(i));
+                particle->speed = 5.0f;
+                particle_array_push(&game.particles, particle);
+            } else {
+                Parjicle *parjicle = parjicle_create(i);
+                parjicle->position = vec3f_create(12.0f, 0.5f, 15.0f);
+                parjicle->direction = vec3f_create(cos(i), 0.0f, sin(i));
+                parjicle->speed = 5.0f;
+                parjicle_array_push(&game.parjicles, parjicle);
+            }
         }
     }
 }
@@ -51,6 +59,12 @@ static void update_objects(f32 dt)
         particle_update_position(particle, dt);
         if (particle->lifetime <= 0)
             particle_array_cut(&game.particles, i), i--;
+    }
+    for (i32 i = 0; i < game.parjicles.length; i++) {
+        Parjicle *parjicle = game.parjicles.buffer[i];
+        parjicle_update_position(parjicle, dt);
+        if (parjicle->lifetime <= 0)
+            parjicle_array_cut(&game.parjicles, i), i--;
     }
 }
 
@@ -102,8 +116,8 @@ static void collide_obstacles_projectiles()
 {
     i32 i, j;
     i = 0;
-    while (i < game.obstacles2.length) {
-        Obstacle *obstacle = game.obstacles2.buffer[i];
+    while (i < game.obstacles.length) {
+        Obstacle *obstacle = game.obstacles.buffer[i];
         j = 0;
         while (j < game.projectiles.length) {
             f32 dx, dz;
@@ -123,8 +137,8 @@ static void collide_obstacles_entities()
 {
     i32 i, j;
     i = 0;
-    while (i < game.obstacles2.length) {
-        Obstacle *obstacle = game.obstacles2.buffer[i];
+    while (i < game.obstacles.length) {
+        Obstacle *obstacle = game.obstacles.buffer[i];
         j = 0;
         while (j < game.entities.length) {
             f32 dx, dz;
@@ -204,12 +218,14 @@ static void collide_objects(f32 dt)
 
 void game_init(void)
 {
-    game.projectiles = projectile_array_create(1000000);
-    game.entities = entity_array_create(1000000);
-    game.particles = particle_array_create(1000000);
-    game.obstacles2 = obstacle_array_create(1000000);
-    game.tiles = tile_array_create(1000000);
-    game.walls = wall_array_create(1000000);
+    game.projectiles = projectile_array_create(100000);
+    game.entities = entity_array_create(100000);
+    game.particles = particle_array_create(100000);
+    game.parjicles = parjicle_array_create(100000);
+    game.parstacles = parstacle_array_create(100000);
+    game.obstacles = obstacle_array_create(100000);
+    game.tiles = tile_array_create(100000);
+    game.walls = wall_array_create(100000);
 }
 
 void game_setup(void)
@@ -249,7 +265,11 @@ void game_setup(void)
 
     Obstacle *obstacle = obstacle_create();
     obstacle->position = vec3f_create(10.0f, 0.0f, 10.0f);
-    obstacle_array_push(&game.obstacles2, obstacle);
+    obstacle_array_push(&game.obstacles, obstacle);
+
+    Parstacle *parstacle = parstacle_create();
+    parstacle->position = vec3f_create(20.0f, 0.0f, 20.0f);
+    parstacle_array_push(&game.parstacles, parstacle);
 }
 
 void game_update(f32 dt)
@@ -276,7 +296,7 @@ void game_destroy(void)
     entity_array_destroy(&game.entities);
     projectile_array_destroy(&game.projectiles);
     particle_array_destroy(&game.particles);
-    obstacle_array_destroy(&game.obstacles2);
+    obstacle_array_destroy(&game.obstacles);
 }
 
 void game_shoot(vec2f pos, f32 rotation, f32 tilt, f32 zoom, f32 ar)

@@ -13,8 +13,9 @@ layout (std140) uniform Matrices
 
 out vec2 texCoord;
 
-void build_tile(vec4 position)
+void main()
 {    
+    vec4 position = gl_in[0].gl_Position;
     gl_Position = proj * view * (position + vec4(0.0, 0.0, 0.0, 0.0));
     texCoord = vec2(0.0f, 0.0f);
     EmitVertex();
@@ -28,9 +29,4 @@ void build_tile(vec4 position)
     texCoord = vec2(1.0f, 1.0f);
     EmitVertex();
     EndPrimitive();
-}
-
-void main()
-{    
-    build_tile(gl_in[0].gl_Position);
 }

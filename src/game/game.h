@@ -10,8 +10,8 @@ typedef struct {
     EntityArray entities;
     ParticleArray particles;
     ParjicleArray parjicles;
-    ObstacleArray obstacles1;
-    ObstacleArray obstacles2;
+    ParstacleArray parstacles;
+    ObstacleArray obstacles;
     TileArray tiles;
     WallArray walls;
 } Game;

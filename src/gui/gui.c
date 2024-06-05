@@ -2,8 +2,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#define Z gui.buffer[gui.length++]
-
 GUI gui;
 
 static float gui_vertices[] = {
@@ -25,15 +23,17 @@ void gui_init(void)
     gui.length = 0;
     gui.root = component_create(0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f);
     gui.root->interactable = 0;
-    //Component *test = component_create(0.0, 0.0, 0.3, 0.3, 0.7f, 0.2f, 0.4f, 0.5f);
     Component *btn = component_create(0.1, 0.8, 0.2, 0.9, 0.7f, 0.2f, 0.4f, 0.5f);
-    //Component *test1 = component_create(0.0, 0.0, 0.9, 0.9, 0.7f, 0.2f, 0.4f, 0.5f);
-    //Component *test2 = component_create(0.0, 0.0, 0.9, 0.9, 0.7f, 0.2f, 0.4f, 0.5f);
-    //component_attach(gui.root, test);
-    //component_attach(test, test1);
-    //component_attach(test1, test2);
+    /* Component *test = component_create(0.0, 0.0, 0.3, 0.3, 0.7f, 0.2f, 0.4f, 0.5f);
+    Component *test1 = component_create(0.0, 0.0, 0.9, 0.9, 0.7f, 0.2f, 0.4f, 0.5f);
+    Component *test2 = component_create(0.0, 0.0, 0.9, 0.9, 0.7f, 0.2f, 0.4f, 0.5f);
+    component_attach(gui.root, test);
+    component_attach(test, test1);
+    component_attach(test1, test2); */
     component_attach(gui.root, btn);
 }
+
+#define Z gui.buffer[gui.length++]
 
 void gui_push_data_helper(Component *comp, f32 x1, f32 y1, f32 x2, f32 y2)
 {

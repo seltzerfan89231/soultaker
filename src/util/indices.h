@@ -17,7 +17,7 @@
 #pragma endregion
 
 #pragma region SHADERS
-#define NUM_SHADERS       9
+#define NUM_SHADERS       11
 #define TILE_SHADER       0
 #define WALL_SHADER       1
 #define ENTITY_SHADER     2
@@ -27,10 +27,12 @@
 #define HEALTHBAR_SHADER  6
 #define PARTICLE_SHADER   7
 #define OBSTACLE_SHADER   8
+#define PARJICLE_SHADER   9
+#define PARSTACLE_SHADER  10
 #pragma endregion
 
 #pragma region VAOS
-#define NUM_VAOS       7
+#define NUM_VAOS       9
 #define TILE_VAO       0
 #define WALL_VAO       1
 #define ENTITY_VAO     2
@@ -38,6 +40,8 @@
 #define GUI_VAO        4
 #define PARTICLE_VAO   5
 #define OBSTACLE_VAO   6
+#define PARJICLE_VAO   7
+#define PARSTACLE_VAO  8
 #pragma endregion
 
 #pragma region TEXTURES

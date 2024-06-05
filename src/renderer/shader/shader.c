@@ -1,8 +1,9 @@
 #include "shader.h"
-#include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <dirent.h>
+#include <errno.h>
 
 static const char* read_file(char *path)
 {
@@ -11,6 +12,10 @@ static const char* read_file(char *path)
     ptr = fopen(path, "r");
     fseek(ptr, 0, SEEK_END);
     i32 len = ftell(ptr);
+    if (len == 0) {
+        printf("File %s is empty", path);
+        exit(1);
+    }
     fseek(ptr, 0, SEEK_SET);
     content = calloc(len, sizeof(char));
     fread(content, 1, len, ptr);
@@ -24,6 +29,12 @@ static unsigned int compile(char *s_path, GLenum type)
     const char* shader_code;
     char info_log[512];
     i32 success;
+    DIR *dir = opendir(s_path);
+    if (ENOENT == errno) {
+        printf("File %s does not exist", s_path);
+        exit(1);
+    }
+    closedir(dir);
     shader = glCreateShader(type);
     shader_code = read_file(s_path);
     glShaderSource(shader, 1, &shader_code, NULL);

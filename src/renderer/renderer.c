@@ -33,27 +33,34 @@ void renderer_init(void)
     renderer.shaders[GUI_SHADER]        = shader_create("src/renderer/shaders/gui/gui.vert", "src/renderer/shaders/gui/gui.frag", NULL);
     renderer.shaders[PARTICLE_SHADER]   = shader_create("src/renderer/shaders/particle/particle.vert", "src/renderer/shaders/particle/particle.frag", "src/renderer/shaders/particle/particle.geom");
     renderer.shaders[OBSTACLE_SHADER]   = shader_create("src/renderer/shaders/obstacle/obstacle.vert", "src/renderer/shaders/obstacle/obstacle.frag", "src/renderer/shaders/obstacle/obstacle.geom");
+    renderer.shaders[PARJICLE_SHADER]   = shader_create("src/renderer/shaders/parjicle/parjicle.vert", "src/renderer/shaders/parjicle/parjicle.frag", "src/renderer/shaders/parjicle/parjicle.geom");
+    renderer.shaders[PARSTACLE_SHADER]  = shader_create("src/renderer/shaders/parstacle/parstacle.vert", "src/renderer/shaders/parstacle/parstacle.frag", "src/renderer/shaders/parstacle/parstacle.geom");
     /* --------------------- */
     renderer.vaos = malloc(NUM_VAOS * sizeof(VAO));
-    renderer.vaos[TILE_VAO]       = vao_create(GL_STATIC_DRAW, GL_POINTS, 2);
-    renderer.vaos[WALL_VAO]       = vao_create(GL_STATIC_DRAW, GL_POINTS, 4);
-    renderer.vaos[ENTITY_VAO]     = vao_create(GL_DYNAMIC_DRAW, GL_POINTS, 4);
-    renderer.vaos[PROJECTILE_VAO] = vao_create(GL_DYNAMIC_DRAW, GL_POINTS, 4);
-    renderer.vaos[GUI_VAO]        = vao_create(GL_STATIC_DRAW, GL_TRIANGLES, 6);
-    renderer.vaos[PARTICLE_VAO]   = vao_create(GL_DYNAMIC_DRAW, GL_POINTS, 4);
-    renderer.vaos[OBSTACLE_VAO]   = vao_create(GL_STATIC_DRAW, GL_POINTS, 3);
-    vao_attr(renderer.vaos[TILE_VAO]      , 0, 2, 0);
-    vao_attr(renderer.vaos[WALL_VAO]      , 0, 3, 0);
-    vao_attr(renderer.vaos[WALL_VAO]      , 1, 1, 3);
-    vao_attr(renderer.vaos[ENTITY_VAO]    , 0, 3, 0);
-    vao_attr(renderer.vaos[ENTITY_VAO]    , 1, 1, 3);
-    vao_attr(renderer.vaos[PROJECTILE_VAO], 0, 3, 0);
-    vao_attr(renderer.vaos[PROJECTILE_VAO], 1, 1, 3);
-    vao_attr(renderer.vaos[GUI_VAO]       , 0, 2, 0);
-    vao_attr(renderer.vaos[GUI_VAO]       , 1, 4, 2);
-    vao_attr(renderer.vaos[PARTICLE_VAO]  , 0, 3, 0);
-    vao_attr(renderer.vaos[PARTICLE_VAO]  , 1, 1, 3);
-    vao_attr(renderer.vaos[OBSTACLE_VAO]  , 0, 3, 0);
+    renderer.vaos[TILE_VAO]         = vao_create(GL_STATIC_DRAW, GL_POINTS, 2);
+    renderer.vaos[WALL_VAO]         = vao_create(GL_STATIC_DRAW, GL_POINTS, 4);
+    renderer.vaos[ENTITY_VAO]       = vao_create(GL_DYNAMIC_DRAW, GL_POINTS, 4);
+    renderer.vaos[PROJECTILE_VAO]   = vao_create(GL_DYNAMIC_DRAW, GL_POINTS, 4);
+    renderer.vaos[GUI_VAO]          = vao_create(GL_STATIC_DRAW, GL_TRIANGLES, 6);
+    renderer.vaos[PARTICLE_VAO]     = vao_create(GL_DYNAMIC_DRAW, GL_POINTS, 4);
+    renderer.vaos[OBSTACLE_VAO]     = vao_create(GL_STATIC_DRAW, GL_POINTS, 3);
+    renderer.vaos[PARJICLE_VAO]  = vao_create(GL_DYNAMIC_DRAW, GL_POINTS, 4);
+    renderer.vaos[PARSTACLE_VAO] = vao_create(GL_STATIC_DRAW, GL_POINTS, 3);
+    vao_attr(renderer.vaos[TILE_VAO]        , 0, 2, 0);
+    vao_attr(renderer.vaos[WALL_VAO]        , 0, 3, 0);
+    vao_attr(renderer.vaos[WALL_VAO]        , 1, 1, 3);
+    vao_attr(renderer.vaos[ENTITY_VAO]      , 0, 3, 0);
+    vao_attr(renderer.vaos[ENTITY_VAO]      , 1, 1, 3);
+    vao_attr(renderer.vaos[PROJECTILE_VAO]  , 0, 3, 0);
+    vao_attr(renderer.vaos[PROJECTILE_VAO]  , 1, 1, 3);
+    vao_attr(renderer.vaos[GUI_VAO]         , 0, 2, 0);
+    vao_attr(renderer.vaos[GUI_VAO]         , 1, 4, 2);
+    vao_attr(renderer.vaos[PARTICLE_VAO]    , 0, 3, 0);
+    vao_attr(renderer.vaos[PARTICLE_VAO]    , 1, 1, 3);
+    vao_attr(renderer.vaos[OBSTACLE_VAO]    , 0, 3, 0);
+    vao_attr(renderer.vaos[PARJICLE_VAO]    , 0, 3, 0);
+    vao_attr(renderer.vaos[PARJICLE_VAO]    , 1, 1, 3);
+    vao_attr(renderer.vaos[PARSTACLE_VAO], 0, 3, 0);
     /* --------------------- */
     renderer.textures = malloc(NUM_TEXTURES * sizeof(Texture));
     renderer.textures[KNIGHT_TEX]   = texture_create("assets/knight.png");
@@ -96,6 +103,15 @@ void renderer_init(void)
     link_shader_ubo(OBSTACLE_SHADER, MATRICES_UBO, "Matrices");
     link_shader_ubo(OBSTACLE_SHADER, ASPECT_RATIO_UBO, "AspectRatio");
     link_shader_ubo(OBSTACLE_SHADER, ZOOM_UBO, "Zoom");
+    link_shader_ubo(PARJICLE_SHADER, MATRICES_UBO, "Matrices");
+    link_shader_ubo(PARJICLE_SHADER, ASPECT_RATIO_UBO, "AspectRatio");
+    link_shader_ubo(PARJICLE_SHADER, ZOOM_UBO, "Zoom");
+    link_shader_ubo(PARJICLE_SHADER, ROTATION_UBO, "Rotation");
+    link_shader_ubo(PARJICLE_SHADER, TILT_UBO, "Tilt");
+    link_shader_ubo(PARJICLE_SHADER, CONSTANTS_UBO, "Constants");
+    link_shader_ubo(PARSTACLE_SHADER, MATRICES_UBO, "Matrices");
+    link_shader_ubo(PARSTACLE_SHADER, ASPECT_RATIO_UBO, "AspectRatio");
+    link_shader_ubo(PARSTACLE_SHADER, ZOOM_UBO, "Zoom");
     /* --------------------- */
     link_shader_ssbo(TILE_SHADER, TEXTURE_SSBO);
     link_shader_ssbo(WALL_SHADER, TEXTURE_SSBO);
@@ -121,49 +137,45 @@ void renderer_render(void)
 {
     glClearColor(0.7f, 0.7f, 0.7f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);  
-
     /* glStencilOpSeparate(GL_FRONT, GL_REPLACE, GL_REPLACE, GL_REPLACE);
     glStencilOpSeparate(GL_BACK, GL_KEEP, GL_REPLACE, GL_REPLACE);
     glStencilFuncSeparate(GL_FRONT, GL_NEVER, 1, 0xFF);
     glStencilFuncSeparate(GL_BACK, GL_ALWAYS, 1, 0xFF);
     glStencilMaskSeparate(GL_FRONT, 0xFF);
-    glStencilMaskSeparate(GL_BACK, 0xFF); */
-
-    //glStencilFunc(GL_NEVER, 1, 0xFF);
-    //shader_use(renderer.shaders[WALL_BACK_SHADER]);
-    //vao_draw(renderer.vaos[WALL_VAO], GL_POINTS);
-
-    /* glStencilOpSeparate(GL_FRONT, GL_KEEP, GL_REPLACE, GL_REPLACE);
+    glStencilMaskSeparate(GL_BACK, 0xFF);
+    glStencilFunc(GL_NEVER, 1, 0xFF);
+    shader_use(renderer.shaders[WALL_BACK_SHADER]);
+    vao_draw(renderer.vaos[WALL_VAO], GL_POINTS);
+    glStencilOpSeparate(GL_FRONT, GL_KEEP, GL_REPLACE, GL_REPLACE);
     glStencilFunc(GL_ALWAYS, 0, 0xFF);
     glStencilMask(0x00);  */
-
     shader_use(renderer.shaders[TILE_SHADER]);
     vao_draw(renderer.vaos[TILE_VAO]);
     shader_use(renderer.shaders[WALL_SHADER]);
     vao_draw(renderer.vaos[WALL_VAO]);
     glClear(GL_DEPTH_BUFFER_BIT);
-
     shader_use(renderer.shaders[ENTITY_SHADER]);
     vao_draw(renderer.vaos[ENTITY_VAO]);
+    shader_use(renderer.shaders[PROJECTILE_SHADER]);
+    vao_draw(renderer.vaos[PROJECTILE_VAO]);
     shader_use(renderer.shaders[SHADOW_SHADER]);
     vao_draw(renderer.vaos[ENTITY_VAO]);
+    shader_use(renderer.shaders[OBSTACLE_SHADER]);
+    vao_draw(renderer.vaos[OBSTACLE_VAO]);
+    shader_use(renderer.shaders[PARTICLE_SHADER]);
+    vao_draw(renderer.vaos[PARTICLE_VAO]);
+    shader_use(renderer.shaders[PARJICLE_SHADER]);
+    vao_draw(renderer.vaos[PARJICLE_VAO]);
+    shader_use(renderer.shaders[PARSTACLE_SHADER]);
+    vao_draw(renderer.vaos[PARSTACLE_VAO]);
     glDepthFunc(GL_ALWAYS);
     shader_use(renderer.shaders[HEALTHBAR_SHADER]);
     vao_draw(renderer.vaos[ENTITY_VAO]);
     glDepthFunc(GL_LESS);
-
-    shader_use(renderer.shaders[PROJECTILE_SHADER]);
-    vao_draw(renderer.vaos[PROJECTILE_VAO]);
     shader_use(renderer.shaders[SHADOW_SHADER]);
     vao_draw(renderer.vaos[PROJECTILE_VAO]);
-
-    shader_use(renderer.shaders[OBSTACLE_SHADER]);
     vao_draw(renderer.vaos[OBSTACLE_VAO]);
-    shader_use(renderer.shaders[SHADOW_SHADER]);
-    vao_draw(renderer.vaos[OBSTACLE_VAO]);
-    shader_use(renderer.shaders[PARTICLE_SHADER]);
-    vao_draw(renderer.vaos[PARTICLE_VAO]);
-
+    vao_draw(renderer.vaos[PARSTACLE_VAO]);
     glDisable(GL_DEPTH_TEST);
     shader_use(renderer.shaders[GUI_SHADER]);
     vao_draw(renderer.vaos[GUI_VAO]);
