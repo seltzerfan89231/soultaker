@@ -13,13 +13,11 @@ layout (std140) uniform Tilt
 };
 
 out vec4 FragColor;
-in float depthValue;
 
 in vec2 texCoord;
 
 void main()
 {
-    gl_FragDepth = depthValue;
     vec4 texColor = texture(sampler2D(tex[1]), texCoord);
     if (texColor.a < 0.1)
         discard;

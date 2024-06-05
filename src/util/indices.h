@@ -2,13 +2,14 @@
 #define INDICES_H
 
 #pragma region UBOS
-#define NUM_UBOS         6
+#define NUM_UBOS         7
 #define MATRICES_UBO     0
 #define ZOOM_UBO         1
 #define ASPECT_RATIO_UBO 2
 #define ROTATION_UBO     3
 #define TILT_UBO         4
 #define CONSTANTS_UBO    5
+#define OUTLINE_UBO      6
 #pragma endregion
 
 #pragma region SSBOS
@@ -45,12 +46,14 @@
 #pragma endregion
 
 #pragma region TEXTURES
-#define NUM_TEXTURES 5
+#define NUM_TEXTURES 7
 #define KNIGHT_TEX   0
 #define BULLET_TEX   1
 #define TILE_TEX     2
 #define WALL_TOP_TEX 3
 #define WALL_TEX     4
+#define BUSH_TEX     5
+#define ROCK_TEX     6
 #pragma endregion
 
 #endif

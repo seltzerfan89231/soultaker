@@ -265,6 +265,7 @@ void game_setup(void)
 
     Obstacle *obstacle = obstacle_create();
     obstacle->position = vec3f_create(10.0f, 0.0f, 10.0f);
+    obstacle->hitbox_radius = 0.3f;
     obstacle_array_push(&game.obstacles, obstacle);
 
     Parstacle *parstacle = parstacle_create();

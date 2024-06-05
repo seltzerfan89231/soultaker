@@ -7,6 +7,7 @@ static void link_shader_ubo(u32 shader_index, u32 ubo_index, char *identifier);
 static void link_shader_ssbo(u32 shader_index, u32 ssbo_index);
 static void set_textures_ssbo(void);
 static void set_constants_ubo(void);
+static void set_outline_ubo(void);
 static void message_callback();
 
 void renderer_init(void) 
@@ -14,7 +15,7 @@ void renderer_init(void)
     //glEnable(GL_DEBUG_OUTPUT);
     //glDebugMessageCallback(message_callback, 0);
     glDepthFunc(GL_LESS);
-    glEnable(GL_DEPTH_TEST);
+    //glEnable(GL_DEPTH_TEST);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     //glEnable(GL_STENCIL_TEST);
@@ -68,6 +69,8 @@ void renderer_init(void)
     renderer.textures[TILE_TEX]     = texture_create("assets/tile.png");
     renderer.textures[WALL_TOP_TEX] = texture_create("assets/wall_top.png");
     renderer.textures[WALL_TEX]     = texture_create("assets/wall.png");
+    renderer.textures[BUSH_TEX]     = texture_create("assets/bush.png");
+    renderer.textures[ROCK_TEX]     = texture_create("assets/rock.png");
     /* --------------------- */
     renderer.ubos = malloc(NUM_UBOS * sizeof(UBO));
     renderer.ubos[MATRICES_UBO]     = ubo_create(32 * sizeof(f32));
@@ -76,7 +79,9 @@ void renderer_init(void)
     renderer.ubos[ROTATION_UBO]     = ubo_create(sizeof(f32));
     renderer.ubos[TILT_UBO]         = ubo_create(sizeof(f32));
     renderer.ubos[CONSTANTS_UBO]    = ubo_create(2 * sizeof(f32));
+    renderer.ubos[OUTLINE_UBO]      = ubo_create(sizeof(f32));
     set_constants_ubo();
+    set_outline_ubo();
     /* --------------------- */
     renderer.ssbos = malloc(NUM_SSBOS * sizeof(SSBO));
     renderer.ssbos[TEXTURE_SSBO] = ssbo_create(NUM_TEXTURES * sizeof(u64));
@@ -87,9 +92,11 @@ void renderer_init(void)
     link_shader_ubo(ENTITY_SHADER, MATRICES_UBO, "Matrices");
     link_shader_ubo(ENTITY_SHADER, ASPECT_RATIO_UBO, "AspectRatio");
     link_shader_ubo(ENTITY_SHADER, ZOOM_UBO, "Zoom");
+    link_shader_ubo(ENTITY_SHADER, OUTLINE_UBO, "OutlineThickness");
     link_shader_ubo(HEALTHBAR_SHADER, MATRICES_UBO, "Matrices");
     link_shader_ubo(HEALTHBAR_SHADER, ZOOM_UBO, "Zoom");
     link_shader_ubo(HEALTHBAR_SHADER, ASPECT_RATIO_UBO, "AspectRatio");
+    link_shader_ubo(HEALTHBAR_SHADER, OUTLINE_UBO, "OutlineThickness");
     link_shader_ubo(PROJECTILE_SHADER, MATRICES_UBO, "Matrices");
     link_shader_ubo(PROJECTILE_SHADER, ZOOM_UBO, "Zoom");
     link_shader_ubo(PROJECTILE_SHADER, ASPECT_RATIO_UBO, "AspectRatio");
@@ -100,23 +107,29 @@ void renderer_init(void)
     link_shader_ubo(PARTICLE_SHADER, MATRICES_UBO, "Matrices");
     link_shader_ubo(PARTICLE_SHADER, ASPECT_RATIO_UBO, "AspectRatio");
     link_shader_ubo(PARTICLE_SHADER, ZOOM_UBO, "Zoom");
+    link_shader_ubo(PARTICLE_SHADER, OUTLINE_UBO, "OutlineThickness");
     link_shader_ubo(OBSTACLE_SHADER, MATRICES_UBO, "Matrices");
     link_shader_ubo(OBSTACLE_SHADER, ASPECT_RATIO_UBO, "AspectRatio");
     link_shader_ubo(OBSTACLE_SHADER, ZOOM_UBO, "Zoom");
+    link_shader_ubo(OBSTACLE_SHADER, OUTLINE_UBO, "OutlineThickness");
     link_shader_ubo(PARJICLE_SHADER, MATRICES_UBO, "Matrices");
     link_shader_ubo(PARJICLE_SHADER, ASPECT_RATIO_UBO, "AspectRatio");
     link_shader_ubo(PARJICLE_SHADER, ZOOM_UBO, "Zoom");
     link_shader_ubo(PARJICLE_SHADER, ROTATION_UBO, "Rotation");
     link_shader_ubo(PARJICLE_SHADER, TILT_UBO, "Tilt");
     link_shader_ubo(PARJICLE_SHADER, CONSTANTS_UBO, "Constants");
+    link_shader_ubo(PARJICLE_SHADER, OUTLINE_UBO, "OutlineThickness");
     link_shader_ubo(PARSTACLE_SHADER, MATRICES_UBO, "Matrices");
     link_shader_ubo(PARSTACLE_SHADER, ASPECT_RATIO_UBO, "AspectRatio");
     link_shader_ubo(PARSTACLE_SHADER, ZOOM_UBO, "Zoom");
+    link_shader_ubo(PARSTACLE_SHADER, OUTLINE_UBO, "OutlineThickness");
     /* --------------------- */
     link_shader_ssbo(TILE_SHADER, TEXTURE_SSBO);
     link_shader_ssbo(WALL_SHADER, TEXTURE_SSBO);
     link_shader_ssbo(ENTITY_SHADER, TEXTURE_SSBO);
     link_shader_ssbo(PROJECTILE_SHADER, TEXTURE_SSBO);
+    link_shader_ssbo(OBSTACLE_SHADER, TEXTURE_SSBO);
+    link_shader_ssbo(PARSTACLE_SHADER, TEXTURE_SSBO);
 }
 
 void renderer_malloc(u32 vao, u32 length)
@@ -149,37 +162,38 @@ void renderer_render(void)
     glStencilOpSeparate(GL_FRONT, GL_KEEP, GL_REPLACE, GL_REPLACE);
     glStencilFunc(GL_ALWAYS, 0, 0xFF);
     glStencilMask(0x00);  */
+    glEnable(GL_DEPTH_TEST);
     shader_use(renderer.shaders[TILE_SHADER]);
     vao_draw(renderer.vaos[TILE_VAO]);
     shader_use(renderer.shaders[WALL_SHADER]);
     vao_draw(renderer.vaos[WALL_VAO]);
     glClear(GL_DEPTH_BUFFER_BIT);
+    shader_use(renderer.shaders[SHADOW_SHADER]);
+    vao_draw(renderer.vaos[PROJECTILE_VAO]);
+    vao_draw(renderer.vaos[OBSTACLE_VAO]);
+    vao_draw(renderer.vaos[PARSTACLE_VAO]);
+    glClear(GL_DEPTH_BUFFER_BIT);
     shader_use(renderer.shaders[ENTITY_SHADER]);
     vao_draw(renderer.vaos[ENTITY_VAO]);
+    shader_use(renderer.shaders[PARTICLE_SHADER]);
+    vao_draw(renderer.vaos[PARTICLE_VAO]);
+    shader_use(renderer.shaders[PARJICLE_SHADER]);
+    vao_draw(renderer.vaos[PARJICLE_VAO]);
     shader_use(renderer.shaders[PROJECTILE_SHADER]);
     vao_draw(renderer.vaos[PROJECTILE_VAO]);
     shader_use(renderer.shaders[SHADOW_SHADER]);
     vao_draw(renderer.vaos[ENTITY_VAO]);
     shader_use(renderer.shaders[OBSTACLE_SHADER]);
     vao_draw(renderer.vaos[OBSTACLE_VAO]);
-    shader_use(renderer.shaders[PARTICLE_SHADER]);
-    vao_draw(renderer.vaos[PARTICLE_VAO]);
-    shader_use(renderer.shaders[PARJICLE_SHADER]);
-    vao_draw(renderer.vaos[PARJICLE_VAO]);
     shader_use(renderer.shaders[PARSTACLE_SHADER]);
     vao_draw(renderer.vaos[PARSTACLE_VAO]);
     glDepthFunc(GL_ALWAYS);
     shader_use(renderer.shaders[HEALTHBAR_SHADER]);
     vao_draw(renderer.vaos[ENTITY_VAO]);
     glDepthFunc(GL_LESS);
-    shader_use(renderer.shaders[SHADOW_SHADER]);
-    vao_draw(renderer.vaos[PROJECTILE_VAO]);
-    vao_draw(renderer.vaos[OBSTACLE_VAO]);
-    vao_draw(renderer.vaos[PARSTACLE_VAO]);
     glDisable(GL_DEPTH_TEST);
     shader_use(renderer.shaders[GUI_SHADER]);
     vao_draw(renderer.vaos[GUI_VAO]);
-    glEnable(GL_DEPTH_TEST);
 }
 
 void renderer_destroy(void)
@@ -257,6 +271,12 @@ void set_constants_ubo(void)
     sqrt2 = SQRT2;
     ubo_update(renderer.ubos[CONSTANTS_UBO], 0, sizeof(f32), &pi);
     ubo_update(renderer.ubos[CONSTANTS_UBO], sizeof(f32), sizeof(f32), &sqrt2);
+}
+
+void set_outline_ubo(void)
+{
+    f32 outline_thickness = 1.0f / 32.0f;
+    ubo_update(renderer.ubos[OUTLINE_UBO], 0, sizeof(f32), &outline_thickness);
 }
 
 void GLAPIENTRY message_callback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam)

@@ -32,13 +32,11 @@ layout (std140) uniform Tilt
 };
 
 out vec2 texCoord;
-out float depthValue;
 
 in float projectile_rotation[];
 
 void main() {
     vec4 position = gl_in[0].gl_Position;
-    depthValue = 0.5 + 0.5 * position.z;
     float drot = projectile_rotation[0] - rotation;
     drot = atan(tan(drot) / cos(pi / 2 + tilt)) + (cos(drot) > 0 ? 0 : pi);
     vec2 offset;

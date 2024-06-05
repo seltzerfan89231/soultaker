@@ -5,6 +5,7 @@
 renderer stuff
 - multisampled textures
 - wall / entity depth
+- replace clears with stenciling of some sort
 
 game stuff
 - spatial hash
