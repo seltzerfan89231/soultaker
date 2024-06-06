@@ -11,6 +11,7 @@
 #include "texture/texture.h"
 #include "ubo/ubo.h"
 #include "ssbo/ssbo.h"
+#include "fbo/fbo.h"
 
 #define MAX_BUFFER_LENGTH 1000000
 
@@ -19,6 +20,7 @@ typedef struct {
     Shader *shaders;
     UBO *ubos;
     SSBO *ssbos;
+    FBO fbo;
     Texture *textures;
 } Renderer;
 

@@ -23,6 +23,7 @@ void renderer_init(void)
     glEnable(GL_CULL_FACE); 
     glCullFace(GL_BACK);
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    renderer.fbo = fbo_create();
     /* --------------------- */
     renderer.shaders = malloc(NUM_SHADERS * sizeof(Shader));
     renderer.shaders[TILE_SHADER]       = shader_create("src/renderer/shaders/tile/tile.vert", "src/renderer/shaders/tile/tile.frag", "src/renderer/shaders/tile/tile.geom");

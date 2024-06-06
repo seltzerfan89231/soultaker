@@ -5,7 +5,7 @@
 renderer stuff
 - multisampled textures
 - wall / entity depth
-- replace clears with stenciling of some sort
+- replace glclears with stenciling
 
 game stuff
 - spatial hash
