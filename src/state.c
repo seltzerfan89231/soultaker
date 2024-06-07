@@ -150,6 +150,7 @@ static void state_update(void)
 {
     game_update(window.dt > 0.01 ? 0.01 : window.dt);
     camera_set_target(game.entities.buffer[0]->position);
+    update_view_matrix();
 
     for (i = 0; i < game.entities.length; i++)
         entity_push_data(game.entities.buffer[i], buffer, i);
@@ -209,8 +210,6 @@ static void process_input(void)
     if (zoom_magnitude != 0)
         camera_zoom(zoom_magnitude, window.dt, window.aspect_ratio);
 
-    if (move_direction.x != 0 || move_direction.y != 0 || rotation_magnitude != 0 || tilt_magnitude != 0)
-        update_view_matrix();
     if (zoom_magnitude != 0)
         update_proj_matrix();
 }
