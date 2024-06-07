@@ -169,6 +169,7 @@ void renderer_render(void)
     glEnable(GL_DEPTH_TEST);
     shader_use(renderer.shaders[WALL_SHADER]);
     vao_draw(renderer.vaos[WALL_VAO]);
+    glClear(GL_DEPTH_BUFFER_BIT);
     shader_use(renderer.shaders[SHADOW_SHADER]);
     vao_draw(renderer.vaos[PROJECTILE_VAO]);
     vao_draw(renderer.vaos[OBSTACLE_VAO]);
@@ -276,7 +277,7 @@ void set_constants_ubo(void)
 
 void set_outline_ubo(void)
 {
-    f32 outline_thickness = 1.0f / 32.0f;
+    f32 outline_thickness = 0.03;
     ubo_update(renderer.ubos[OUTLINE_UBO], 0, sizeof(f32), &outline_thickness);
 }
 

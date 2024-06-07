@@ -11,8 +11,8 @@ Texture texture_create(const char* image_path)
     f32 col[4] = {0.0f, 0.0f, 0.0f, 0.0f};
     assert(data != NULL);
     glCreateTextures(GL_TEXTURE_2D, 1, &texture.id);
-    glTextureParameteri(texture.id, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTextureParameteri(texture.id, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTextureParameteri(texture.id, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTextureParameteri(texture.id, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     glTextureParameteri(texture.id, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTextureParameteri(texture.id, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTextureParameterfv(texture.id, GL_TEXTURE_BORDER_COLOR, col);

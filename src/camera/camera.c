@@ -6,7 +6,7 @@ static void update_view_matrix(void) {
     view(camera.view, camera.right, camera.up, camera.facing, camera.position); 
 }
 
-static void update_proj_matrix(f32 ar) { 
+void camera_update_proj_matrix(f32 ar) { 
     ortho(camera.proj, ar, camera.zoom); 
 }
 
@@ -30,7 +30,7 @@ void camera_init(f32 ar)
     camera.target = vec3f_create(0.0f, 0.0f, 0.0f);
     update_orientation_vectors();
     update_view_matrix();
-    update_proj_matrix(ar);
+    camera_update_proj_matrix(ar);
 }
 
 void camera_rotate(i32 mag, f32 dt)
@@ -62,7 +62,7 @@ void camera_zoom(i32 mag, f32 dt, f32 ar)
         camera.zoom = MIN_ZOOM;
     if (camera.zoom > MAX_ZOOM)
         camera.zoom = MAX_ZOOM;
-    update_proj_matrix(ar);
+    camera_update_proj_matrix(ar);
 }
 
 void camera_set_target(vec3f target)

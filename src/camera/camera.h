@@ -15,7 +15,7 @@
 #define DEFAULT_YAW 0
 #define DEFAULT_PITCH PI / 3
 #define DEFAULT_FOV PI / 4
-#define DEFAULT_ZOOM 6
+#define DEFAULT_ZOOM 4.2
 #define MIN_PITCH 0.3
 #define MAX_PITCH 1.3
 #define MIN_ZOOM 1
@@ -35,6 +35,6 @@ void camera_tilt(i32 mag, f32 dt);
 void camera_zoom(i32 mag, f32 dt, f32 ar);
 void camera_set_target(vec3f target);
 vec3f camera_get_direction(vec2i dir);
-// vec3f camera_move(vec2i dir, f32 dt);
+void camera_update_proj_matrix(f32 ar);
 
 #endif

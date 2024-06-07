@@ -31,5 +31,6 @@ bool window_mouse_button_pressed(mousebutton mb);
 bool window_closed(void);
 void window_close(void);
 bool window_key_pressed(GLenum key);
+void framebuffer_size_callback(GLFWwindow* handle, i32 width, i32 height);
 
 #endif

@@ -2,11 +2,6 @@
           TODO    
 ========================
 
-renderer stuff
-- multisampled textures
-- wall / entity depth
-- replace glclears with stenciling
-
 game stuff
 - spatial hash
 

@@ -22,20 +22,20 @@ static void create_objects(void)
         }
     }
     static f32 cooldown1;
-    if (glfwGetTime() - cooldown1 >= 0.05) {
+    if (glfwGetTime() - cooldown1 >= 0.3) {
         cooldown1 = glfwGetTime();
         for (i32 i = 0; i < 6; i++) {
             if (i % 2) {
                 Particle *particle = particle_create();
                 particle->position = vec3f_create(12.0f, 0.5f, 15.0f);
                 particle->direction = vec3f_create(cos(i), 0.0f, sin(i));
-                particle->speed = 5.0f;
+                particle->speed = 2.0f;
                 particle_array_push(&game.particles, particle);
             } else {
                 Parjicle *parjicle = parjicle_create(i);
                 parjicle->position = vec3f_create(12.0f, 0.5f, 15.0f);
                 parjicle->direction = vec3f_create(cos(i), 0.0f, sin(i));
-                parjicle->speed = 5.0f;
+                parjicle->speed = 2.0f;
                 parjicle_array_push(&game.parjicles, parjicle);
             }
         }

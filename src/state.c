@@ -228,17 +228,11 @@ void state_init(void)
 
 void state_loop(void)
 {
-    f32 time = glfwGetTime();
-    f32 game_time, game_dt;
     while (!window_closed()) {
-        process_input();
-        game_time = glfwGetTime();
-        state_update();
-        game_dt = glfwGetTime() - game_time;
-        renderer_render();
         window_update();
-        if (glfwGetTime() - time > 1)
-            printf("%d, %.0f, %.0f, %d\n", window.mouse.left, window.fps, 1 / game_dt, game.particles.length), time = glfwGetTime();
+        process_input();
+        state_update();
+        renderer_render();
     }
 }
 
@@ -248,4 +242,15 @@ void state_exit(void)
     renderer_destroy();
     game_destroy();
     gui_destroy();
+}
+
+void framebuffer_size_callback(GLFWwindow* handle, i32 width, i32 height)
+{
+    window.size.x = width;
+    window.size.y = height;
+    window.aspect_ratio = (f32)window.size.x / window.size.y;
+    glViewport(0, 0, window.size.x, window.size.y);
+    renderer_uniform_update_aspect_ratio(1 / window.aspect_ratio);
+    camera_update_proj_matrix(window.aspect_ratio);
+    update_proj_matrix();
 }

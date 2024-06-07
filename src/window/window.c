@@ -3,7 +3,6 @@
 
 Window window;
 
-static void framebuffer_size_callback();
 static void mouse_button_callback();
 static void mouse_callback();
 static void error_callback();
@@ -14,7 +13,6 @@ void window_init(void)
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    glfwWindowHint(GLFW_SAMPLES, 4);
 
     window.size = vec2f_create(DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HEIGHT);
     window.mouse.position = vec2f_create(window.size.x / 2, window.size.y / 2);
@@ -49,8 +47,6 @@ void window_update(void)
         window.fps = 1 / window.dt;
     window.last_frame = cur_frame;
 }
-
-void framebuffer_size_callback() {}
 
 void mouse_button_callback(GLFWwindow* handle, int button, int action)
 {
