@@ -16,7 +16,7 @@ static void wall_push_data(Wall* wall, f32* buffer, u32 offset)
     offset *= 4;
     buffer[offset++] = wall->position.x;
     buffer[offset++] = wall->height;
-    buffer[offset++] = wall->position.y;
+    buffer[offset++] = wall->position.z;
     buffer[offset++] = 0;
 }
 
@@ -24,7 +24,7 @@ static void tile_push_data(Tile* tile, f32* buffer, u32 offset)
 {
     offset *= 2;
     buffer[offset++] = tile->position.x;
-    buffer[offset++] = tile->position.y;
+    buffer[offset++] = tile->position.z;
 }
 
 static void projectile_push_data(Projectile* projectile, f32* buffer, u32 offset)

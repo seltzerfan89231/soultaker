@@ -7,11 +7,13 @@
 typedef enum { FLOOR, WALL1 } tiletype;
 
 typedef struct {
-    vec2i position;
+    struct {
+        i32 x, z;
+    } position;
     tiletype type;
 } Tile;
 
-Tile* tile_create(tiletype type);
+Tile* tile_create(tiletype type, f32 x, f32 z);
 void tile_destroy(Tile* tile);
 
 #endif

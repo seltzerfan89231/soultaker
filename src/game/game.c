@@ -102,8 +102,8 @@ static void collide_walls_projectiles(void)
             Projectile *proj = game.projectiles.buffer[j];
             if (proj->position.x + proj->hitbox_radius > wall->position.x   &&
               proj->position.x - proj->hitbox_radius < wall->position.x + 1 &&
-              proj->position.z + proj->hitbox_radius > wall->position.y     &&
-              proj->position.z - proj->hitbox_radius < wall->position.y + 1)
+              proj->position.z + proj->hitbox_radius > wall->position.z     &&
+              proj->position.z - proj->hitbox_radius < wall->position.z + 1)
                 projectile_array_cut(&game.projectiles, j);
             else
                 j++;
@@ -170,34 +170,34 @@ static void collide_walls_entities(f32 dt)
             vec3f prev_position = vec3f_sub(entity->position, vec3f_scale(entity->speed * dt, entity->direction));
             if (entity->position.x + entity->hitbox_radius > wall->position.x
               && entity->position.x - entity->hitbox_radius < wall->position.x + 1
-              && entity->position.z + entity->hitbox_radius > wall->position.y
-              && entity->position.z - entity->hitbox_radius < wall->position.y + 1) {
+              && entity->position.z + entity->hitbox_radius > wall->position.z
+              && entity->position.z - entity->hitbox_radius < wall->position.z + 1) {
                 if (prev_position.x < wall->position.x
                   && entity->direction.x > 0
-                  && prev_position.z < wall->position.y + 1 + entity->hitbox_radius
-                  && prev_position.z > wall->position.y - entity->hitbox_radius) {
+                  && prev_position.z < wall->position.z + 1 + entity->hitbox_radius
+                  && prev_position.z > wall->position.z - entity->hitbox_radius) {
                     entity->position.x = wall->position.x - entity->hitbox_radius;
                     entity->direction.x = 0;
                 }
                 else if (prev_position.x > wall->position.x + 1
                   && entity->direction.x < 0
-                  && prev_position.z < wall->position.y + 1 + entity->hitbox_radius
-                  && prev_position.z > wall->position.y - entity->hitbox_radius) {
+                  && prev_position.z < wall->position.z + 1 + entity->hitbox_radius
+                  && prev_position.z > wall->position.z - entity->hitbox_radius) {
                     entity->position.x = wall->position.x + 1 + entity->hitbox_radius;
                     entity->direction.x = 0;
                 }
-                else if (prev_position.z < wall->position.y
+                else if (prev_position.z < wall->position.z
                   && entity->direction.z > 0
                   && prev_position.x < wall->position.x + 1 + entity->hitbox_radius
                   && prev_position.x > wall->position.x - entity->hitbox_radius) {
-                    entity->position.z = wall->position.y - entity->hitbox_radius;
+                    entity->position.z = wall->position.z - entity->hitbox_radius;
                     entity->direction.z = 0;
                 }
-                else if (prev_position.z > wall->position.y + 1
+                else if (prev_position.z > wall->position.z + 1
                   && entity->direction.z < 0
                   && prev_position.x < wall->position.x + 1 + entity->hitbox_radius
                   && prev_position.x > wall->position.x - entity->hitbox_radius) {
-                    entity->position.z = wall->position.y + 1 + entity->hitbox_radius;
+                    entity->position.z = wall->position.z + 1 + entity->hitbox_radius;
                     entity->direction.z = 0;
                 }
             }
@@ -232,19 +232,10 @@ void game_setup(void)
 {
     for (i32 i = 0; i < MAP_WIDTH; i++) {
         for (i32 j = 0; j < MAP_WIDTH; j++) {
-            if (i == 0 || j == 0 || j == MAP_WIDTH - 1 || i == MAP_WIDTH - 1 || (i == 12 && j == 12)) {
-                Wall *wall;
-                wall = wall_create(WALL2);
-                wall->position = vec2i_create(i, j);
-                wall->height = ((int)(i + j)) % 2 == 0 ? 3.0f : 0.8f;
-                wall_array_push(&game.walls, wall);
-            }
-            else {
-                Tile *tile;
-                tile = tile_create(FLOOR);
-                tile->position = vec2i_create(i, j);
-                tile_array_push(&game.tiles, tile);
-            }
+            if (i == 0 || j == 0 || j == MAP_WIDTH - 1 || i == MAP_WIDTH - 1 || (i == 12 && j == 12))
+                wall_array_push(&game.walls, wall_create(WALL2, i, j, ((int)(i + j)) % 2 == 0 ? 3.0f : 0.8f));
+            else
+                tile_array_push(&game.tiles, tile_create(FLOOR, i, j));
         }
     }
 
