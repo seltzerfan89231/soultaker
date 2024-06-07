@@ -68,6 +68,7 @@ static void update_objects(f32 dt)
     }
 }
 
+#pragma region collision
 static void collide_entities_projectiles(void)
 {
     i32 i, j;
@@ -215,6 +216,7 @@ static void collide_objects(f32 dt)
     collide_obstacles_entities();
     collide_entities_projectiles();
 }
+#pragma endregion
 
 void game_init(void)
 {
@@ -230,14 +232,12 @@ void game_init(void)
 
 void game_setup(void)
 {
-    for (i32 i = 0; i < MAP_WIDTH; i++) {
-        for (i32 j = 0; j < MAP_WIDTH; j++) {
+    for (i32 i = 0; i < MAP_WIDTH; i++)
+        for (i32 j = 0; j < MAP_WIDTH; j++)
             if (i == 0 || j == 0 || j == MAP_WIDTH - 1 || i == MAP_WIDTH - 1 || (i == 12 && j == 12))
                 wall_array_push(&game.walls, wall_create(WALL2, i, j, ((int)(i + j)) % 2 == 0 ? 3.0f : 0.8f));
             else
                 tile_array_push(&game.tiles, tile_create(FLOOR, i, j));
-        }
-    }
 
     player = entity_create(PLAYER, 1);
     player->position = vec3f_create(15.0f, 0.0f, 15.0f);

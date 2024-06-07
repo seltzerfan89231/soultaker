@@ -11,8 +11,10 @@ out vec4 FragColor;
 
 in vec2 texCoord;
 in flat int texID;
+in flat float depthValue;
 
 void main()
 {
+    gl_FragDepth = depthValue;
     FragColor = texture(sampler2D(tex[texID]), texCoord);
 }

@@ -13,6 +13,7 @@ layout (std140) uniform Matrices
 
 out vec2 texCoord;
 out flat int texID;
+out flat float depthValue;
 
 void build_top(vec4 position)
 {   
@@ -94,7 +95,9 @@ void build_sides(vec4 position)
 }
 
 void main() 
-{    
+{   
+    vec4 center = proj * view * (gl_in[0].gl_Position + vec4(0.5, -gl_in[0].gl_Position.y, 0.5, 0.0));
+    depthValue = 0.5 + 0.5 * center.z / center.w;
     build_top(gl_in[0].gl_Position);
     build_sides(gl_in[0].gl_Position);
 }

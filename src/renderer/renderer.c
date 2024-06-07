@@ -15,7 +15,7 @@ void renderer_init(void)
     //glEnable(GL_DEBUG_OUTPUT);
     //glDebugMessageCallback(message_callback, 0);
     glDepthFunc(GL_LESS);
-    //glEnable(GL_DEPTH_TEST);
+    glDisable(GL_DEPTH_TEST);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     //glEnable(GL_STENCIL_TEST);
@@ -46,8 +46,8 @@ void renderer_init(void)
     renderer.vaos[GUI_VAO]          = vao_create(GL_STATIC_DRAW, GL_TRIANGLES, 6);
     renderer.vaos[PARTICLE_VAO]     = vao_create(GL_DYNAMIC_DRAW, GL_POINTS, 4);
     renderer.vaos[OBSTACLE_VAO]     = vao_create(GL_STATIC_DRAW, GL_POINTS, 3);
-    renderer.vaos[PARJICLE_VAO]  = vao_create(GL_DYNAMIC_DRAW, GL_POINTS, 4);
-    renderer.vaos[PARSTACLE_VAO] = vao_create(GL_STATIC_DRAW, GL_POINTS, 3);
+    renderer.vaos[PARJICLE_VAO]     = vao_create(GL_DYNAMIC_DRAW, GL_POINTS, 4);
+    renderer.vaos[PARSTACLE_VAO]    = vao_create(GL_STATIC_DRAW, GL_POINTS, 3);
     vao_attr(renderer.vaos[TILE_VAO]        , 0, 2, 0);
     vao_attr(renderer.vaos[WALL_VAO]        , 0, 3, 0);
     vao_attr(renderer.vaos[WALL_VAO]        , 1, 1, 3);
@@ -163,17 +163,16 @@ void renderer_render(void)
     glStencilOpSeparate(GL_FRONT, GL_KEEP, GL_REPLACE, GL_REPLACE);
     glStencilFunc(GL_ALWAYS, 0, 0xFF);
     glStencilMask(0x00);  */
-    glEnable(GL_DEPTH_TEST);
+    
     shader_use(renderer.shaders[TILE_SHADER]);
     vao_draw(renderer.vaos[TILE_VAO]);
+    glEnable(GL_DEPTH_TEST);
     shader_use(renderer.shaders[WALL_SHADER]);
     vao_draw(renderer.vaos[WALL_VAO]);
-    glClear(GL_DEPTH_BUFFER_BIT);
     shader_use(renderer.shaders[SHADOW_SHADER]);
     vao_draw(renderer.vaos[PROJECTILE_VAO]);
     vao_draw(renderer.vaos[OBSTACLE_VAO]);
     vao_draw(renderer.vaos[PARSTACLE_VAO]);
-    glClear(GL_DEPTH_BUFFER_BIT);
     shader_use(renderer.shaders[ENTITY_SHADER]);
     vao_draw(renderer.vaos[ENTITY_VAO]);
     shader_use(renderer.shaders[PARTICLE_SHADER]);
@@ -192,6 +191,7 @@ void renderer_render(void)
     shader_use(renderer.shaders[HEALTHBAR_SHADER]);
     vao_draw(renderer.vaos[ENTITY_VAO]);
     glDepthFunc(GL_LESS);
+
     glDisable(GL_DEPTH_TEST);
     shader_use(renderer.shaders[GUI_SHADER]);
     vao_draw(renderer.vaos[GUI_VAO]);
