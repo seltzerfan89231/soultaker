@@ -142,7 +142,7 @@ static void state_setup(void)
     renderer_update(PARJICLE_VAO, 0, i, buffer);
 
     renderer_malloc(GUI_VAO, gui.max_length);
-    gui_push_data();
+    gui_push_data(1 / window.aspect_ratio);
     renderer_update(GUI_VAO, 0, gui.length, gui.buffer);
 }
 
@@ -198,7 +198,7 @@ static void process_input(void)
     if (window_key_pressed(GLFW_KEY_P))
         zoom_magnitude--;
     if (window_mouse_button_pressed(MOUSE_LEFT)) {
-        if (!gui_interact(window.mouse.position))
+        if (!gui_interact(window.aspect_ratio, window.mouse.position))
             game_shoot(window.mouse.position, camera.yaw, camera.pitch, camera.zoom, window.aspect_ratio);
     }
 
@@ -209,7 +209,6 @@ static void process_input(void)
         camera_tilt(tilt_magnitude, window.dt);
     if (zoom_magnitude != 0)
         camera_zoom(zoom_magnitude, window.dt, window.aspect_ratio);
-
     if (zoom_magnitude != 0)
         update_proj_matrix();
 }
@@ -252,4 +251,6 @@ void framebuffer_size_callback(GLFWwindow* handle, i32 width, i32 height)
     renderer_uniform_update_aspect_ratio(1 / window.aspect_ratio);
     camera_update_proj_matrix(window.aspect_ratio);
     update_proj_matrix();
+    gui_push_data(1 / window.aspect_ratio);
+    renderer_update(GUI_VAO, 0, gui.length, gui.buffer);
 }

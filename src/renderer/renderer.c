@@ -23,7 +23,6 @@ void renderer_init(void)
     glEnable(GL_CULL_FACE); 
     glCullFace(GL_BACK);
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-    renderer.fbo = fbo_create();
     /* --------------------- */
     renderer.shaders = malloc(NUM_SHADERS * sizeof(Shader));
     renderer.shaders[TILE_SHADER]       = shader_create("src/renderer/shaders/tile/tile.vert", "src/renderer/shaders/tile/tile.frag", "src/renderer/shaders/tile/tile.geom");
@@ -169,11 +168,11 @@ void renderer_render(void)
     glEnable(GL_DEPTH_TEST);
     shader_use(renderer.shaders[WALL_SHADER]);
     vao_draw(renderer.vaos[WALL_VAO]);
-    glClear(GL_DEPTH_BUFFER_BIT);
     shader_use(renderer.shaders[SHADOW_SHADER]);
     vao_draw(renderer.vaos[PROJECTILE_VAO]);
     vao_draw(renderer.vaos[OBSTACLE_VAO]);
     vao_draw(renderer.vaos[PARSTACLE_VAO]);
+    glClear(GL_DEPTH_BUFFER_BIT);
     shader_use(renderer.shaders[ENTITY_SHADER]);
     vao_draw(renderer.vaos[ENTITY_VAO]);
     shader_use(renderer.shaders[PARTICLE_SHADER]);

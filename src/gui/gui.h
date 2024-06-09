@@ -3,6 +3,7 @@
 
 #include "../util/type.h"
 #include "../util/vec.h"
+#include "../window/window.h"
 #include "component/component.h"
 
 typedef struct {
@@ -14,8 +15,8 @@ typedef struct {
 extern GUI gui;
 
 void gui_init(void);
-void gui_push_data(void);
-bool gui_interact(vec2f mouse_pos);
+void gui_push_data(f32 ar);
+bool gui_interact(f32 ar, vec2f mouse_pos);
 void gui_destroy(void);
 
 #endif
