@@ -245,6 +245,7 @@ void game_setup(void)
 
     Entity* entity = entity_create(ENEMY, 0);
     entity->position = vec3f_create(20, 0, 15);
+    entity->scale = 5.0f;
     entity_array_push(&game.entities, entity);
 
     Projectile* proj = projectile_create(ONE, 1);

@@ -3,6 +3,7 @@
 #extension GL_ARB_bindless_texture : require
 
 layout (location = 0) in vec3 aPos;
+layout (location = 1) in float aScale;
 
 layout (std140) uniform Matrices
 {
@@ -10,7 +11,10 @@ layout (std140) uniform Matrices
     mat4 proj;
 };
 
+out float inputVars;
+
 void main()
 {
     gl_Position = proj * view * vec4(aPos, 1.0f);
+    inputVars = aScale;
 }

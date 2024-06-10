@@ -13,15 +13,20 @@ layout (std140) uniform Zoom
     float zoom;
 };
 
-in float health_ratio[];
+in VertexData
+{
+    float scale;
+    float health_ratio;
+} inData[];
 
 out vec2 texCoord;
 out float healthRatio;
 
 void main() {
     vec4 position = gl_in[0].gl_Position;
-    healthRatio = health_ratio[0];
     vec2 offset;
+    float scale = inData[0].scale;
+    healthRatio = inData[0].health_ratio;
 
     // bottom left
     offset = zoom * vec2(-0.5 * ar, -0.30);

@@ -38,11 +38,13 @@ static void projectile_push_data(Projectile* projectile, f32* buffer, u32 offset
 
 static void entity_push_data(Entity* entity, f32* buffer, u32 offset)
 {
-    offset *= 4;
+    offset *= 5;
     buffer[offset++] = entity->position.x;
     buffer[offset++] = entity->position.y;
     buffer[offset++] = entity->position.z;
+    buffer[offset++] = entity->scale;
     buffer[offset++] = entity->health / entity->max_health;
+    
 }
 
 static void particle_push_data(Particle *particle, f32 *buffer, u32 offset)
@@ -197,10 +199,9 @@ static void process_input(void)
         zoom_magnitude++;
     if (window_key_pressed(GLFW_KEY_P))
         zoom_magnitude--;
-    if (window_mouse_button_pressed(MOUSE_LEFT)) {
+    if (window_mouse_button_pressed(MOUSE_LEFT))
         if (!gui_interact(window.aspect_ratio, window.mouse.position))
             game_shoot(window.mouse.position, camera.yaw, camera.pitch, camera.zoom, window.aspect_ratio);
-    }
 
     game_set_direction(camera_get_direction(move_direction));
     if (rotation_magnitude != 0)
