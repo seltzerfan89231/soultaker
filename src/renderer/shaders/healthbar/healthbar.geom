@@ -16,38 +16,41 @@ layout (std140) uniform Zoom
 in VertexData
 {
     float scale;
-    float health_ratio;
+    float healthRatio;
 } inData[];
 
-out vec2 texCoord;
-out float healthRatio;
+out VertexData
+{
+    vec2 texCoord;
+    flat float healthRatio;
+};
 
 void main() {
     vec4 position = gl_in[0].gl_Position;
     vec2 offset;
     float scale = inData[0].scale;
-    healthRatio = inData[0].health_ratio;
+    healthRatio = inData[0].healthRatio;
 
     // bottom left
-    offset = zoom * vec2(-0.5 * ar, -0.30);
+    offset = scale * zoom * vec2(-0.5 * ar, -0.30);
     texCoord = vec2(0.0f, 1.0f);
     gl_Position = position + vec4(offset, 0.0, 0.0);
     EmitVertex();
 
     // bottom right
-    offset = zoom * vec2(0.5 * ar, -0.30);
+    offset = scale * zoom * vec2(0.5 * ar, -0.30);
     texCoord = vec2(1.0f, 1.0f);
     gl_Position = position + vec4(offset, 0.0, 0.0);
     EmitVertex();
 
     // top left
-    offset = zoom * vec2(-0.5 * ar, -0.15);
+    offset = scale * zoom * vec2(-0.5 * ar, -0.15);
     texCoord = vec2(0.0f, 0.0f);
     gl_Position = position + vec4(offset, 0.0, 0.0);
     EmitVertex();
 
     // top right
-    offset = zoom * vec2(0.5 * ar, -0.15);
+    offset = scale * zoom * vec2(0.5 * ar, -0.15);
     texCoord = vec2(1.0f, 0.0f);
     gl_Position = position + vec4(offset, 0.0, 0.0);
     EmitVertex();

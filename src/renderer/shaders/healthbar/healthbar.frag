@@ -5,8 +5,11 @@ layout (std140) uniform OutlineThickness
     float ot;
 };
 
-in float healthRatio;
-in vec2 texCoord;
+in VertexData
+{
+    vec2 texCoord;
+    flat float healthRatio;
+};
 
 void main()
 {

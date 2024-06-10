@@ -13,12 +13,12 @@ layout (std140) uniform Matrices
 out VertexData
 {
     float scale;
-    float health_ratio;
-} outData;
+    float healthRatio;
+};
 
 void main()
 {
     gl_Position = proj * view * vec4(aPos, 1.0f);
-    outData.scale = aScale;
-    outData.health_ratio = aRatio;
+    scale = aScale;
+    healthRatio = aRatio;
 }
