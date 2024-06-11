@@ -41,12 +41,12 @@ void renderer_init(void)
     renderer.vaos[TILE_VAO]         = vao_create(GL_STATIC_DRAW, GL_POINTS, 2);
     renderer.vaos[WALL_VAO]         = vao_create(GL_STATIC_DRAW, GL_POINTS, 4);
     renderer.vaos[ENTITY_VAO]       = vao_create(GL_DYNAMIC_DRAW, GL_POINTS, 5);
-    renderer.vaos[PROJECTILE_VAO]   = vao_create(GL_DYNAMIC_DRAW, GL_POINTS, 4);
+    renderer.vaos[PROJECTILE_VAO]   = vao_create(GL_DYNAMIC_DRAW, GL_POINTS, 5);
     renderer.vaos[GUI_VAO]          = vao_create(GL_STATIC_DRAW, GL_TRIANGLES, 6);
     renderer.vaos[PARTICLE_VAO]     = vao_create(GL_DYNAMIC_DRAW, GL_POINTS, 4);
-    renderer.vaos[OBSTACLE_VAO]     = vao_create(GL_STATIC_DRAW, GL_POINTS, 3);
-    renderer.vaos[PARJICLE_VAO]     = vao_create(GL_DYNAMIC_DRAW, GL_POINTS, 4);
-    renderer.vaos[PARSTACLE_VAO]    = vao_create(GL_STATIC_DRAW, GL_POINTS, 3);
+    renderer.vaos[OBSTACLE_VAO]     = vao_create(GL_STATIC_DRAW, GL_POINTS, 4);
+    renderer.vaos[PARJICLE_VAO]     = vao_create(GL_DYNAMIC_DRAW, GL_POINTS, 5);
+    renderer.vaos[PARSTACLE_VAO]    = vao_create(GL_STATIC_DRAW, GL_POINTS, 4);
     vao_attr(renderer.vaos[TILE_VAO]        , 0, 2, 0);
     vao_attr(renderer.vaos[WALL_VAO]        , 0, 3, 0);
     vao_attr(renderer.vaos[WALL_VAO]        , 1, 1, 3);
@@ -55,14 +55,18 @@ void renderer_init(void)
     vao_attr(renderer.vaos[ENTITY_VAO]      , 2, 1, 4);
     vao_attr(renderer.vaos[PROJECTILE_VAO]  , 0, 3, 0);
     vao_attr(renderer.vaos[PROJECTILE_VAO]  , 1, 1, 3);
+    vao_attr(renderer.vaos[PROJECTILE_VAO]  , 2, 1, 4);
     vao_attr(renderer.vaos[GUI_VAO]         , 0, 2, 0);
     vao_attr(renderer.vaos[GUI_VAO]         , 1, 4, 2);
     vao_attr(renderer.vaos[PARTICLE_VAO]    , 0, 3, 0);
     vao_attr(renderer.vaos[PARTICLE_VAO]    , 1, 1, 3);
     vao_attr(renderer.vaos[OBSTACLE_VAO]    , 0, 3, 0);
+    vao_attr(renderer.vaos[OBSTACLE_VAO]    , 1, 1, 3);
     vao_attr(renderer.vaos[PARJICLE_VAO]    , 0, 3, 0);
     vao_attr(renderer.vaos[PARJICLE_VAO]    , 1, 1, 3);
-    vao_attr(renderer.vaos[PARSTACLE_VAO], 0, 3, 0);
+    vao_attr(renderer.vaos[PARJICLE_VAO]    , 2, 1, 4);
+    vao_attr(renderer.vaos[PARSTACLE_VAO]   , 0, 3, 0);
+    vao_attr(renderer.vaos[PARSTACLE_VAO]   , 1, 1, 3);
     /* --------------------- */
     renderer.textures = malloc(NUM_TEXTURES * sizeof(Texture));
     renderer.textures[KNIGHT_TEX]   = texture_create("assets/knight.png");

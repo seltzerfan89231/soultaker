@@ -29,10 +29,11 @@ static void tile_push_data(Tile* tile, f32* buffer, u32 offset)
 
 static void projectile_push_data(Projectile* projectile, f32* buffer, u32 offset)
 {
-    offset *= 4;
+    offset *= 5;
     buffer[offset++] = projectile->position.x;
     buffer[offset++] = projectile->position.y;
     buffer[offset++] = projectile->position.z;
+    buffer[offset++] = projectile->scale;
     buffer[offset++] = projectile->rotation;
 }
 
@@ -58,28 +59,31 @@ static void particle_push_data(Particle *particle, f32 *buffer, u32 offset)
 
 static void parstacle_push_data(Parstacle *parstacle, f32 *buffer, u32 offset)
 {
-    offset *= 3;
+    offset *= 4;
     buffer[offset++] = parstacle->position.x;
     buffer[offset++] = parstacle->position.y;
     buffer[offset++] = parstacle->position.z;
+    buffer[offset++] = parstacle->scale;
 }
 
 static void parjicle_push_data(Parjicle *parjicle, f32 *buffer, u32 offset)
 {
-    offset *= 4;
+    offset *= 5;
     buffer[offset++] = parjicle->position.x;
     buffer[offset++] = parjicle->position.y;
     buffer[offset++] = parjicle->position.z;
+    buffer[offset++] = parjicle->scale;
     buffer[offset++] = parjicle->rotation;
 }
 
 
 static void obstacle_push_data(Obstacle *obstacle, f32 *buffer, u32 offset)
 {
-    offset *= 3;
+    offset *= 4;
     buffer[offset++] = obstacle->position.x;
     buffer[offset++] = obstacle->position.y;
     buffer[offset++] = obstacle->position.z;
+    buffer[offset++] = obstacle->scale;
 }
 
 static void update_proj_matrix(void)

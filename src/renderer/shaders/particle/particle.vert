@@ -9,7 +9,10 @@ layout (std140) uniform Matrices
     mat4 proj;
 };
 
-out flat float scale;
+out VertexData
+{
+    float scale;
+};
 
 void main()
 {

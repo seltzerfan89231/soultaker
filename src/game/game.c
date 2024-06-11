@@ -17,6 +17,8 @@ static void create_objects(void)
             proj->position = game.entities.buffer[1]->position;
             proj->rotation = i * 0.8 + sin(glfwGetTime());
             proj->direction = vec3f_create(cos(proj->rotation), 0.0f, sin(proj->rotation));
+            proj->scale = 2.0f;
+            proj->hitbox_radius = (proj->scale - 0.4) / 2;
             proj->position.y = 0.5f;
             projectile_array_push(&game.projectiles, proj);
         }
@@ -35,6 +37,7 @@ static void create_objects(void)
                 Parjicle *parjicle = parjicle_create(i);
                 parjicle->position = vec3f_create(12.0f, 0.5f, 15.0f);
                 parjicle->direction = vec3f_create(cos(i), 0.0f, sin(i));
+                parjicle->scale = 0.3f;
                 parjicle->speed = 2.0f;
                 parjicle_array_push(&game.parjicles, parjicle);
             }
@@ -258,10 +261,12 @@ void game_setup(void)
     Obstacle *obstacle = obstacle_create();
     obstacle->position = vec3f_create(10.0f, 0.0f, 10.0f);
     obstacle->hitbox_radius = 0.3f;
+    obstacle->scale = 3.0f;
     obstacle_array_push(&game.obstacles, obstacle);
 
     Parstacle *parstacle = parstacle_create();
     parstacle->position = vec3f_create(20.0f, 0.0f, 20.0f);
+    parstacle->scale = 1.8f;
     parstacle_array_push(&game.parstacles, parstacle);
 }
 

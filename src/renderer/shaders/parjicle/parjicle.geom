@@ -31,26 +31,31 @@ layout (std140) uniform Tilt
 
 out vec2 texCoord;
 
-in float projectile_rotation[];
+in VertexData
+{
+    float scale;
+    float projectileRotation;
+} inData[];
 
 void main() {
     vec4 position = gl_in[0].gl_Position;
-    float drot = projectile_rotation[0] - rotation;
+    float scale = inData[0].scale;
+    float drot = inData[0].projectileRotation - rotation;
     drot = atan(tan(drot) / cos(pi / 2 + tilt)) + (cos(drot) > 0 ? 0 : pi);
     vec2 offset;
-    offset = zoom * (1 / sqrt2) * vec2(ar * cos(drot - 3 * pi / 4), sin(drot - 3 * pi / 4));
+    offset = scale * zoom * (1 / sqrt2) * vec2(ar * cos(drot - 3 * pi / 4), sin(drot - 3 * pi / 4));
     gl_Position = position + vec4(offset, 0.0 , 0.0);    // 1:bottom-left
     texCoord = vec2(0.0f, 1.0f);
     EmitVertex();
-    offset = zoom * (1 / sqrt2) * vec2(ar * cos(drot - pi / 4), sin(drot - pi / 4));
+    offset = scale * zoom * (1 / sqrt2) * vec2(ar * cos(drot - pi / 4), sin(drot - pi / 4));
     gl_Position = position + vec4(offset, 0.0, 0.0);    // 2:bottom-right
     texCoord = vec2(1.0f, 1.0f);
     EmitVertex();
-    offset = zoom * (1 / sqrt2) * vec2(ar * cos(drot + 3 * pi / 4), sin(drot + 3 * pi / 4));
+    offset = scale * zoom * (1 / sqrt2) * vec2(ar * cos(drot + 3 * pi / 4), sin(drot + 3 * pi / 4));
     gl_Position = position + vec4(offset, 0.0, 0.0);    // 3:top-left
     texCoord = vec2(0.0f, 0.0f);
     EmitVertex();
-    offset = zoom * (1 / sqrt2) * vec2(ar * cos(drot + pi / 4), sin(drot + pi / 4));
+    offset = scale * zoom * (1 / sqrt2) * vec2(ar * cos(drot + pi / 4), sin(drot + pi / 4));
     gl_Position = position + vec4(offset, 0.0, 0.0);    // 4:top-right
     texCoord = vec2(1.0f, 0.0f);
     EmitVertex();

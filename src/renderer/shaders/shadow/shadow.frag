@@ -1,7 +1,10 @@
 #version 460 core
 
-in float height;
-in vec2 texCoord;
+in VertexData
+{
+    float height;
+    vec2 texCoord;
+};
 
 void main()
 {
