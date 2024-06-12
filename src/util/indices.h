@@ -13,8 +13,9 @@
 #pragma endregion
 
 #pragma region SSBOS
-#define NUM_SSBOS    1
-#define TEXTURE_SSBO 0
+#define NUM_SSBOS 2
+#define GAME_SSBO 0
+#define GUI_SSBO  1
 #pragma endregion
 
 #pragma region SHADERS
@@ -45,15 +46,20 @@
 #define PARSTACLE_VAO  8
 #pragma endregion
 
-#pragma region TEXTURES
-#define NUM_TEXTURES 7
-#define KNIGHT_TEX   0
-#define BULLET_TEX   1
-#define TILE_TEX     2
-#define WALL_TOP_TEX 3
-#define WALL_TEX     4
-#define BUSH_TEX     5
-#define ROCK_TEX     6
+#pragma region GAME_TEXTURES
+#define NUM_GAME_TEXTURES 7
+#define KNIGHT_TEX        0
+#define BULLET_TEX        1
+#define TILE_TEX          2
+#define WALL_TOP_TEX      3
+#define WALL_TEX          4
+#define BUSH_TEX          5
+#define ROCK_TEX          6
+#pragma endregion
+
+#pragma region GUI_TEXTURES
+#define NUM_GUI_TEXTURES 1
+#define A_TEX            0
 #pragma endregion
 
 #endif

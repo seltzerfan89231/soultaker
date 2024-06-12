@@ -5,7 +5,8 @@ Renderer renderer;
 
 static void link_shader_ubo(u32 shader_index, u32 ubo_index, char *identifier);
 static void link_shader_ssbo(u32 shader_index, u32 ssbo_index);
-static void set_textures_ssbo(void);
+static void set_game_ssbo(void);
+static void set_gui_ssbo(void);
 static void set_constants_ubo(void);
 static void set_outline_ubo(void);
 static void message_callback();
@@ -57,7 +58,9 @@ void renderer_init(void)
     vao_attr(renderer.vaos[PROJECTILE_VAO]  , 1, 1, 3);
     vao_attr(renderer.vaos[PROJECTILE_VAO]  , 2, 1, 4);
     vao_attr(renderer.vaos[GUI_VAO]         , 0, 2, 0);
-    vao_attr(renderer.vaos[GUI_VAO]         , 1, 4, 2);
+    vao_attr(renderer.vaos[GUI_VAO]         , 1, 2, 2);
+    vao_attr(renderer.vaos[GUI_VAO]         , 2, 1, 4);
+    vao_attr(renderer.vaos[GUI_VAO]         , 3, 1, 5);
     vao_attr(renderer.vaos[PARTICLE_VAO]    , 0, 3, 0);
     vao_attr(renderer.vaos[PARTICLE_VAO]    , 1, 1, 3);
     vao_attr(renderer.vaos[OBSTACLE_VAO]    , 0, 3, 0);
@@ -68,7 +71,7 @@ void renderer_init(void)
     vao_attr(renderer.vaos[PARSTACLE_VAO]   , 0, 3, 0);
     vao_attr(renderer.vaos[PARSTACLE_VAO]   , 1, 1, 3);
     /* --------------------- */
-    renderer.textures = malloc(NUM_TEXTURES * sizeof(Texture));
+    renderer.textures = malloc(NUM_GAME_TEXTURES * sizeof(Texture));
     renderer.textures[KNIGHT_TEX]   = texture_create("assets/knight.png");
     renderer.textures[BULLET_TEX]   = texture_create("assets/bullet.png");
     renderer.textures[TILE_TEX]     = texture_create("assets/tile.png");
@@ -76,6 +79,9 @@ void renderer_init(void)
     renderer.textures[WALL_TEX]     = texture_create("assets/wall.png");
     renderer.textures[BUSH_TEX]     = texture_create("assets/bush.png");
     renderer.textures[ROCK_TEX]     = texture_create("assets/rock.png");
+    /* --------------------- */
+    renderer.gui_textures = malloc(NUM_GUI_TEXTURES * sizeof(Texture));
+    renderer.gui_textures[A_TEX]    = texture_create("assets/text/A.png");
     /* --------------------- */
     renderer.ubos = malloc(NUM_UBOS * sizeof(UBO));
     renderer.ubos[MATRICES_UBO]     = ubo_create(32 * sizeof(f32));
@@ -89,8 +95,10 @@ void renderer_init(void)
     set_outline_ubo();
     /* --------------------- */
     renderer.ssbos = malloc(NUM_SSBOS * sizeof(SSBO));
-    renderer.ssbos[TEXTURE_SSBO] = ssbo_create(NUM_TEXTURES * sizeof(u64));
-    set_textures_ssbo();
+    renderer.ssbos[GAME_SSBO] = ssbo_create(NUM_GAME_TEXTURES * sizeof(u64));
+    renderer.ssbos[GUI_SSBO] = ssbo_create(NUM_GUI_TEXTURES * sizeof(u64));
+    set_game_ssbo();
+    set_gui_ssbo();
     /* --------------------- */
     link_shader_ubo(TILE_SHADER, MATRICES_UBO, "Matrices");
     link_shader_ubo(WALL_SHADER, MATRICES_UBO, "Matrices");
@@ -129,12 +137,13 @@ void renderer_init(void)
     link_shader_ubo(PARSTACLE_SHADER, ZOOM_UBO, "Zoom");
     link_shader_ubo(PARSTACLE_SHADER, OUTLINE_UBO, "OutlineThickness");
     /* --------------------- */
-    link_shader_ssbo(TILE_SHADER, TEXTURE_SSBO);
-    link_shader_ssbo(WALL_SHADER, TEXTURE_SSBO);
-    link_shader_ssbo(ENTITY_SHADER, TEXTURE_SSBO);
-    link_shader_ssbo(PROJECTILE_SHADER, TEXTURE_SSBO);
-    link_shader_ssbo(OBSTACLE_SHADER, TEXTURE_SSBO);
-    link_shader_ssbo(PARSTACLE_SHADER, TEXTURE_SSBO);
+    link_shader_ssbo(TILE_SHADER, GAME_SSBO);
+    link_shader_ssbo(WALL_SHADER, GAME_SSBO);
+    link_shader_ssbo(ENTITY_SHADER, GAME_SSBO);
+    link_shader_ssbo(PROJECTILE_SHADER, GAME_SSBO);
+    link_shader_ssbo(OBSTACLE_SHADER, GAME_SSBO);
+    link_shader_ssbo(PARSTACLE_SHADER, GAME_SSBO);
+    link_shader_ssbo(GUI_SHADER, GUI_SSBO);
 }
 
 void renderer_malloc(u32 vao, u32 length)
@@ -191,10 +200,10 @@ void renderer_render(void)
     vao_draw(renderer.vaos[OBSTACLE_VAO]);
     shader_use(renderer.shaders[PARSTACLE_SHADER]);
     vao_draw(renderer.vaos[PARSTACLE_VAO]);
-    glDepthFunc(GL_ALWAYS);
+    //glDepthFunc(GL_ALWAYS);
     shader_use(renderer.shaders[HEALTHBAR_SHADER]);
     vao_draw(renderer.vaos[ENTITY_VAO]);
-    glDepthFunc(GL_LESS);
+    //glDepthFunc(GL_LESS);
 
     glDisable(GL_DEPTH_TEST);
     shader_use(renderer.shaders[GUI_SHADER]);
@@ -203,23 +212,28 @@ void renderer_render(void)
 
 void renderer_destroy(void)
 {
-    for (i32 i = 0; i < NUM_VAOS; i++)
+    i32 i;
+    for (i = 0; i < NUM_VAOS; i++)
         vao_destroy(renderer.vaos[i]);
     free(renderer.vaos);
 
-    for (i32 i = 0; i < NUM_SHADERS; i++)
+    for (i = 0; i < NUM_SHADERS; i++)
         shader_destroy(renderer.shaders[i]);
     free(renderer.shaders);
 
-    for (i32 i = 0; i < NUM_UBOS; i++)
+    for (i = 0; i < NUM_UBOS; i++)
         ubo_destroy(renderer.ubos[i]);
     free(renderer.ubos);
 
-    for (i32 i = 0; i < 5; i++)
+    for (i = 0; i < NUM_GAME_TEXTURES; i++)
         texture_destroy(renderer.textures[i]);
     free(renderer.textures);
 
-    for (i32 i = 0; i < NUM_SSBOS; i++)
+    for (i = 0; i < NUM_GUI_TEXTURES; i++)
+        texture_destroy(renderer.gui_textures[i]);
+    free(renderer.gui_textures);
+
+    for (i = 0; i < NUM_SSBOS; i++)
         ssbo_destroy(renderer.ssbos[i]);
     free(renderer.ssbos);
 }
@@ -260,12 +274,21 @@ void link_shader_ssbo(u32 shader_index, u32 ssbo_index)
     ssbo_bind_buffer_base(renderer.ssbos[ssbo_index], ssbo_index);
 }
 
-void set_textures_ssbo(void)
+void set_game_ssbo(void)
 {
-    u64 *handles = malloc(NUM_TEXTURES * sizeof(u64));
-    for (i32 i = 0; i < NUM_TEXTURES; i++)
+    u64 *handles = malloc(NUM_GAME_TEXTURES * sizeof(u64));
+    for (i32 i = 0; i < NUM_GAME_TEXTURES; i++)
         handles[i] = renderer.textures[i].handle;
-    ssbo_update(renderer.ssbos[TEXTURE_SSBO], 0, NUM_TEXTURES * sizeof(u64), handles);
+    ssbo_update(renderer.ssbos[GAME_SSBO], 0, NUM_GAME_TEXTURES * sizeof(u64), handles);
+    free(handles);
+}
+
+void set_gui_ssbo(void)
+{
+    u64 *handles = malloc(NUM_GUI_TEXTURES * sizeof(u64));
+    for (i32 i = 0; i < NUM_GUI_TEXTURES; i++)
+        handles[i] = renderer.gui_textures[i].handle;
+    ssbo_update(renderer.ssbos[GUI_SSBO], 0, NUM_GUI_TEXTURES * sizeof(u64), handles);
     free(handles);
 }
 

@@ -23,15 +23,15 @@ void gui_init(void)
     gui.length = 0;
     gui.root = component_create(0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f);
     gui.root->interactable = 0;
-    Component *btn = component_create(0.1, 0.5, 0.5, 0.9, 0.7f, 0.2f, 0.4f, 0.5f);
-    Component *test = component_create(0.1, 0.1, 0.6, 0.6, 0.7f, 0.2f, 0.4f, 0.5f);
+    Component *btn = component_create(0.1, 0.5, 0.5, 0.9, 0.7f, 0.2f, 0.4f, 1.0f);
+    //Component *test = component_create(0.1, 0.1, 0.6, 0.6, 0.7f, 0.2f, 0.4f, 0.5f);
     /* Component *test1 = component_create(0.0, 0.0, 0.9, 0.9, 0.7f, 0.2f, 0.4f, 0.5f);
     Component *test2 = component_create(0.0, 0.0, 0.9, 0.9, 0.7f, 0.2f, 0.4f, 0.5f);
     component_attach(gui.root, test);
     component_attach(test, test1);
     component_attach(test1, test2); */
     component_attach(gui.root, btn);
-    component_attach(btn, test);
+    //component_attach(btn, test);
 }
 
 #define Z gui.buffer[gui.length++]
@@ -43,12 +43,12 @@ void gui_push_data_helper(f32 ar, Component *comp, f32 x1, f32 y1, f32 x2, f32 y
     new_x2 = comp->x2 * (x2 - x1) + x1, new_y2 = comp->y2 * (y2 - y1) + y1;
     win_x1 = 2 * (new_x1 * (comp == gui.root ? 1 : ar) - 0.5f), win_y1 = 2 * (new_y1 - 0.5f);
     win_x2 = 2 * (new_x2 * (comp == gui.root ? 1 : ar) - 0.5f), win_y2 = 2 * (new_y2 - 0.5f);
-    Z = win_x1, Z = win_y1, Z = comp->r, Z = comp->g, Z = comp->b, Z = comp->a;
-    Z = win_x2, Z = win_y1, Z = comp->r, Z = comp->g, Z = comp->b, Z = comp->a;
-    Z = win_x1, Z = win_y2, Z = comp->r, Z = comp->g, Z = comp->b, Z = comp->a;
-    Z = win_x1, Z = win_y2, Z = comp->r, Z = comp->g, Z = comp->b, Z = comp->a;
-    Z = win_x2, Z = win_y1, Z = comp->r, Z = comp->g, Z = comp->b, Z = comp->a;
-    Z = win_x2, Z = win_y2, Z = comp->r, Z = comp->g, Z = comp->b, Z = comp->a;
+    Z = win_x1, Z = win_y1, Z = 0.0f, Z = 1.0f, Z = 0, Z = comp->a;
+    Z = win_x2, Z = win_y1, Z = 1.0f, Z = 1.0f, Z = 0, Z = comp->a;
+    Z = win_x1, Z = win_y2, Z = 0.0f, Z = 0.0f, Z = 0, Z = comp->a;
+    Z = win_x1, Z = win_y2, Z = 0.0f, Z = 0.0f, Z = 0, Z = comp->a;
+    Z = win_x2, Z = win_y1, Z = 1.0f, Z = 1.0f, Z = 0, Z = comp->a;
+    Z = win_x2, Z = win_y2, Z = 1.0f, Z = 0.0f, Z = 0, Z = comp->a;
     for (i32 i = 0; i < comp->num_children; i++)
         gui_push_data_helper(ar, comp->children[i], new_x1, new_y1, new_x2, new_y2);
 }

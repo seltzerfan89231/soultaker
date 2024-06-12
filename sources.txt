@@ -3,3 +3,4 @@ http://www.geoffprewett.com/blog/software/opengl-outline/index.html
 https://github.com/fendevel/Guide-to-Modern-OpenGL-Functions/blob/master/README.md#glcreatetextures
 https://gafferongames.com/post/fix_your_timestep/
 https://litherum.blogspot.com/2014/01/how-multisampling-works-in-opengl.html
+https://www.khronos.org/opengl/wiki/Interface_Block_(GLSL)

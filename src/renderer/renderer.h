@@ -20,6 +20,7 @@ typedef struct {
     UBO *ubos;
     SSBO *ssbos;
     Texture *textures;
+    Texture *gui_textures;
 } Renderer;
 
 extern Renderer renderer;
