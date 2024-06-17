@@ -1,7 +1,21 @@
 #include "component.h"
 #include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
 
-Component* component_create(f32 x, f32 y, f32 w, f32 h, f32 a, f32 id)
+extern Window window;
+
+static char char_map[128];
+
+void component_init(void)
+{
+    char_map[' '] = NO_TEX;
+    char_map['A'] = A_TEX;
+    char_map['B'] = B_TEX;
+    //char_map['C'] = C_TEX;
+}
+
+Component* component_create(f32 x, f32 y, f32 w, f32 h, f32 a, u32 id)
 {
     Component *comp = malloc(sizeof(Component));
     comp->x = x;
@@ -40,4 +54,15 @@ void component_destroy(Component *comp)
         component_destroy(comp->children[i]);
     free(comp->children);
     free(comp);
+}
+
+void component_add_text(Component *comp, char *text, u32 font_size, f32 gw, f32 gh)
+{
+    f32 w = font_size / window.size.x / gw, h = font_size / window.size.y / gh;
+    u32 length = strlen(text);
+    printf("%f, %f, %d\n", w, h, length);
+    for (i32 i = 0; i < length; i++) {
+        Component *letter = component_create((w + 0.005 / gw) * i, 0.0f, w, h, 1.0f, char_map[text[i]]);
+        component_attach(comp, letter);
+    }
 }

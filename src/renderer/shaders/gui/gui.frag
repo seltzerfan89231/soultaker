@@ -11,7 +11,7 @@ in flat float opacity;
 
 void main()
 {
-    vec4 col = texture(sampler2D(tex[int(round(texID))]), texCoord) * vec4(1.0f, 0.0f, 0.0f, 1.0f);
+    vec4 col = texture(sampler2D(tex[int(round(texID))]), texCoord) * vec4(0.0f, 0.0f, 0.0f, 1.0f);
     if (col.a < 0.1)
         discard;
     gl_FragColor = col;

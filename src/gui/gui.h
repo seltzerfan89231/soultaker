@@ -3,6 +3,7 @@
 
 #include "../util/type.h"
 #include "../util/vec.h"
+#include "../util/indices.h"
 #include "../window/window.h"
 #include "component/component.h"
 
@@ -13,10 +14,11 @@ typedef struct {
 } GUI;
 
 extern GUI gui;
+extern Window window;
 
 void gui_init(void);
-void gui_push_data(f32 ar);
-bool gui_interact(f32 ar, vec2f mouse_pos);
+void gui_push_data(void);
+bool gui_interact(void);
 void gui_destroy(void);
 
 #endif

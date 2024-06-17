@@ -72,17 +72,20 @@ void renderer_init(void)
     vao_attr(renderer.vaos[PARSTACLE_VAO]   , 1, 1, 3);
     /* --------------------- */
     renderer.textures = malloc(NUM_GAME_TEXTURES * sizeof(Texture));
-    renderer.textures[KNIGHT_TEX]   = texture_create("assets/textures/game/knight.png");
-    renderer.textures[BULLET_TEX]   = texture_create("assets/textures/game/bullet.png");
-    renderer.textures[TILE_TEX]     = texture_create("assets/textures/game/tile.png");
-    renderer.textures[WALL_TOP_TEX] = texture_create("assets/textures/game/wall_top.png");
-    renderer.textures[WALL_TEX]     = texture_create("assets/textures/game/wall.png");
-    renderer.textures[BUSH_TEX]     = texture_create("assets/textures/game/bush.png");
-    renderer.textures[ROCK_TEX]     = texture_create("assets/textures/game/rock.png");
+    renderer.textures[KNIGHT_TEX]   = texture_create("assets/textures/game/knight.png", GL_NEAREST);
+    renderer.textures[BULLET_TEX]   = texture_create("assets/textures/game/bullet.png", GL_NEAREST);
+    renderer.textures[TILE_TEX]     = texture_create("assets/textures/game/tile.png", GL_NEAREST);
+    renderer.textures[WALL_TOP_TEX] = texture_create("assets/textures/game/wall_top.png", GL_NEAREST);
+    renderer.textures[WALL_TEX]     = texture_create("assets/textures/game/wall.png", GL_NEAREST);
+    renderer.textures[BUSH_TEX]     = texture_create("assets/textures/game/bush.png", GL_NEAREST);
+    renderer.textures[ROCK_TEX]     = texture_create("assets/textures/game/rock.png", GL_NEAREST);
     /* --------------------- */
     renderer.gui_textures = malloc(NUM_GUI_TEXTURES * sizeof(Texture));
-    renderer.gui_textures[A_TEX]      = texture_create("assets/textures/gui/text/A.png");
-    renderer.gui_textures[BUTTON_TEX] = texture_create("assets/textures/gui/button.png");
+    renderer.gui_textures[NO_TEX]     = texture_create("assets/textures/gui/none.png", GL_LINEAR);
+    renderer.gui_textures[EMPTY_TEX]  = texture_create("assets/textures/gui/empty.png", GL_LINEAR);
+    renderer.gui_textures[A_TEX]      = texture_create("assets/textures/gui/text/A.png", GL_LINEAR);
+    renderer.gui_textures[B_TEX]      = texture_create("assets/textures/gui/text/B.png", GL_LINEAR);
+    renderer.gui_textures[BUTTON_TEX] = texture_create("assets/textures/gui/button.png", GL_LINEAR);
     /* --------------------- */
     renderer.ubos = malloc(NUM_UBOS * sizeof(UBO));
     renderer.ubos[MATRICES_UBO]     = ubo_create(32 * sizeof(f32));

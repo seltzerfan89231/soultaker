@@ -2,7 +2,7 @@
 #include <assert.h>
 #include <stdio.h>
 
-Texture texture_create(const char* image_path)
+Texture texture_create(const char* image_path, GLenum filter_param)
 {
     Texture texture;
     i32 width, height, nrChannels;
@@ -13,8 +13,8 @@ Texture texture_create(const char* image_path)
     glCreateTextures(GL_TEXTURE_2D, 1, &texture.id);
     glTextureParameteri(texture.id, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTextureParameteri(texture.id, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    glTextureParameteri(texture.id, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTextureParameteri(texture.id, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTextureParameteri(texture.id, GL_TEXTURE_MIN_FILTER, filter_param);
+    glTextureParameteri(texture.id, GL_TEXTURE_MAG_FILTER, filter_param);
     glTextureParameterfv(texture.id, GL_TEXTURE_BORDER_COLOR, col);
 
     if (nrChannels == 3)
