@@ -72,16 +72,17 @@ void renderer_init(void)
     vao_attr(renderer.vaos[PARSTACLE_VAO]   , 1, 1, 3);
     /* --------------------- */
     renderer.textures = malloc(NUM_GAME_TEXTURES * sizeof(Texture));
-    renderer.textures[KNIGHT_TEX]   = texture_create("assets/knight.png");
-    renderer.textures[BULLET_TEX]   = texture_create("assets/bullet.png");
-    renderer.textures[TILE_TEX]     = texture_create("assets/tile.png");
-    renderer.textures[WALL_TOP_TEX] = texture_create("assets/wall_top.png");
-    renderer.textures[WALL_TEX]     = texture_create("assets/wall.png");
-    renderer.textures[BUSH_TEX]     = texture_create("assets/bush.png");
-    renderer.textures[ROCK_TEX]     = texture_create("assets/rock.png");
+    renderer.textures[KNIGHT_TEX]   = texture_create("assets/textures/game/knight.png");
+    renderer.textures[BULLET_TEX]   = texture_create("assets/textures/game/bullet.png");
+    renderer.textures[TILE_TEX]     = texture_create("assets/textures/game/tile.png");
+    renderer.textures[WALL_TOP_TEX] = texture_create("assets/textures/game/wall_top.png");
+    renderer.textures[WALL_TEX]     = texture_create("assets/textures/game/wall.png");
+    renderer.textures[BUSH_TEX]     = texture_create("assets/textures/game/bush.png");
+    renderer.textures[ROCK_TEX]     = texture_create("assets/textures/game/rock.png");
     /* --------------------- */
     renderer.gui_textures = malloc(NUM_GUI_TEXTURES * sizeof(Texture));
-    renderer.gui_textures[A_TEX]    = texture_create("assets/text/A.png");
+    renderer.gui_textures[A_TEX]      = texture_create("assets/textures/gui/text/A.png");
+    renderer.gui_textures[BUTTON_TEX] = texture_create("assets/textures/gui/button.png");
     /* --------------------- */
     renderer.ubos = malloc(NUM_UBOS * sizeof(UBO));
     renderer.ubos[MATRICES_UBO]     = ubo_create(32 * sizeof(f32));

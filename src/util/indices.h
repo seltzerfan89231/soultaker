@@ -58,8 +58,9 @@
 #pragma endregion
 
 #pragma region GUI_TEXTURES
-#define NUM_GUI_TEXTURES 1
+#define NUM_GUI_TEXTURES 2
 #define A_TEX            0
+#define BUTTON_TEX       1
 #pragma endregion
 
 #endif

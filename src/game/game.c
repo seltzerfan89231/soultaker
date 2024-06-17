@@ -17,7 +17,7 @@ static void create_objects(void)
             proj->position = game.entities.buffer[1]->position;
             proj->rotation = i * 0.8 + sin(glfwGetTime());
             proj->direction = vec3f_create(cos(proj->rotation), 0.0f, sin(proj->rotation));
-            proj->scale = 2.0f;
+            proj->scale = 1.0f;
             proj->hitbox_radius = (proj->scale - 0.4) / 2;
             proj->position.y = 0.5f;
             projectile_array_push(&game.projectiles, proj);
@@ -248,7 +248,7 @@ void game_setup(void)
 
     Entity* entity = entity_create(ENEMY, 0);
     entity->position = vec3f_create(20, 0, 15);
-    entity->scale = 5.0f;
+    entity->scale = 1.0f;
     entity_array_push(&game.entities, entity);
 
     Projectile* proj = projectile_create(ONE, 1);

@@ -1,12 +1,15 @@
 #include "component.h"
 #include <stdlib.h>
 
-Component* component_create(f32 x1, f32 y1, f32 x2, f32 y2, f32 r, f32 g, f32 b, f32 a)
+Component* component_create(f32 x, f32 y, f32 w, f32 h, f32 a, f32 id)
 {
     Component *comp = malloc(sizeof(Component));
-    comp->x1 = x1; comp->x2 = x2;
-    comp->y1 = y1; comp->y2 = y2;
-    comp->r = r; comp->g = g; comp->b = b; comp->a = a;
+    comp->x = x;
+    comp->y = y;
+    comp->w = w;
+    comp->h = h;
+    comp->a = a;
+    comp->id = id;
     comp->children = NULL;
     comp->num_children = 0;
     comp->interactable = 1;

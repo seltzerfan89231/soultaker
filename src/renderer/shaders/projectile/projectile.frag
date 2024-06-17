@@ -12,8 +12,6 @@ layout (std140) uniform Tilt
     float tilt;
 };
 
-out vec4 FragColor;
-
 in vec2 texCoord;
 
 void main()
@@ -21,5 +19,5 @@ void main()
     vec4 texColor = texture(sampler2D(tex[1]), texCoord);
     if (texColor.a < 0.1)
         discard;
-    FragColor = texColor;
+    gl_FragColor = texColor;
 }

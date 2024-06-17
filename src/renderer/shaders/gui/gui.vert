@@ -2,11 +2,11 @@
 
 layout (location = 0) in vec2 aPos;
 layout (location = 1) in vec2 aTexCoord;
-layout (location = 2) in int aTexID;
+layout (location = 2) in float aTexID;
 layout (location = 3) in float aOpacity;
 
 out vec2 texCoord;
-out flat int texID;
+out flat float texID;
 out flat float opacity;
 
 void main()
