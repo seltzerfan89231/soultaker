@@ -18,11 +18,8 @@ void component_init(void)
 Component* component_create(f32 x, f32 y, f32 w, f32 h, f32 a, u32 id)
 {
     Component *comp = malloc(sizeof(Component));
-    comp->x = x;
-    comp->y = y;
-    comp->w = w;
-    comp->h = h;
-    comp->a = a;
+    comp->x = x, comp->y = y, comp->w = w, comp->h = h;
+    comp->r = comp->g = comp->b = 1.0f, comp->a = a;
     comp->id = id;
     comp->children = NULL;
     comp->num_children = 0;
@@ -61,7 +58,8 @@ void component_add_text(Component *comp, char *text, u32 font_size, f32 gw, f32 
     f32 w = font_size / window.size.x / gw, h = font_size / window.size.y / gh;
     u32 length = strlen(text);
     for (i32 i = 0; i < length; i++) {
-        Component *letter = component_create((w + 0.005 / gw) * i, 0.0f, w, h, 1.0f, char_map[text[i]]);
+        Component *letter = component_create((w + 0.005 / gw) * i, 1.0f - h, w, h, 1.0f, char_map[text[i]]);
+        letter->r = letter->g = letter->b = 0.0f;
         component_attach(comp, letter);
     }
 }

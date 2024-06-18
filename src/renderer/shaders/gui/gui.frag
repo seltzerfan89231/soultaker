@@ -7,13 +7,12 @@ layout (binding = 1, std430) readonly buffer ssbo
 
 in vec2 texCoord;
 in flat float texID;
-in flat float opacity;
+in flat vec4 color;
 
 void main()
 {
-    vec4 col = texture(sampler2D(tex[int(round(texID))]), texCoord) * vec4(0.0f, 0.0f, 0.0f, 1.0f);
+    vec4 col = texture(sampler2D(tex[int(round(texID))]), texCoord);
     if (col.a < 0.1)
         discard;
-    gl_FragColor = col;
-    gl_FragColor.a *= opacity;
+    gl_FragColor = col * color;
 }

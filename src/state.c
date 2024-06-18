@@ -147,8 +147,8 @@ static void state_setup(void)
         parjicle_push_data(game.parjicles.buffer[i], buffer, i);
     renderer_update(PARJICLE_VAO, 0, i, buffer);
 
-    renderer_malloc(GUI_VAO, gui.max_length);
     gui_push_data();
+    renderer_malloc(GUI_VAO, gui.max_length);
     renderer_update(GUI_VAO, 0, gui.length, gui.buffer);
 }
 

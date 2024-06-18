@@ -8,7 +8,7 @@
 typedef struct Component Component;
 
 typedef struct Component {
-    f32 x, y, w, h, a;
+    f32 x, y, w, h, r, g, b, a;
     Component **children;
     u32 num_children, id;
     bool interactable;

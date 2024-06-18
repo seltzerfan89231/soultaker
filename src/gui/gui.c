@@ -20,20 +20,21 @@ void confirm_click(void)
 void gui_init(void)
 {
     component_init();
-    gui.max_length = 2000;
+    gui.max_length = 1000;
     gui.buffer = malloc(gui.max_length * sizeof(f32));
     gui.length = 0;
     gui.root = component_create(0.0f, 0.0f, 1.0f, 1.0f, 0.0f, NO_TEX);
     gui.root->interactable = 0;
-    Component *btn = component_create(0.1, 0.5, 0.5, 0.5, 0.2f, EMPTY_TEX);
-    Component *btn2 = component_create(0.1, 0.5, 0.5, 0.5, 0.2f, EMPTY_TEX);
-    //Component *txt = component_create(0.1, 0.1, 0.15, 0.17, 0, 1.0f);
+    Component *btn = component_create(0.1, 0.5, 0.5, 0.5, 1.0f, BUTTON_TEX);
+    //Component *btn2 = component_create(0.1, 0.5, 0.5, 0.5, 0.2f, EMPTY_TEX);
+    //Component *btn3 = component_create(0.6, 0.7, 0.4, 0.4, 0.2f, EMPTY_TEX);
     component_attach(gui.root, btn);
-    component_attach(btn, btn2);
-    component_add_text(gui.root, "ABABABABABABABAB", 15, 1.0f, 1.0f);
+    //component_attach(btn, btn2);
+    //component_attach(gui.root, btn3);
+    //component_add_text(gui.root, "ABABABABABABABAB", 15, 1.0f, 1.0f);
     component_add_text(btn, "ABABABABABABABAB", 15, 0.5f, 0.5f);
-    component_add_text(btn2, "ABABABABABABABAB", 15, 0.25f, 0.25f);
-    //component_attach(btn, txt);
+    //component_add_text(btn2, "ABABABABABABABAB", 15, 0.25f, 0.25f);
+    //component_add_text(btn3, "ABABABABABABABABABA", 15, 0.4f, 0.4f);
 }
 
 #define Z gui.buffer[gui.length++]
@@ -45,12 +46,16 @@ void gui_push_data_helper(Component *comp, f32 x, f32 y, f32 w, f32 h)
     new_y1 = comp->y * h + y, new_y2 = (comp->y + comp->h) * h + y;
     win_x1 = 2 * (new_x1 / (comp == gui.root ? 1 : window.aspect_ratio) - 0.5f), win_y1 = 2 * (new_y1 - 0.5f);
     win_x2 = 2 * (new_x2 / (comp == gui.root ? 1 : window.aspect_ratio) - 0.5f), win_y2 = 2 * (new_y2 - 0.5f);
-    Z = win_x1, Z = win_y1, Z = 0.0f, Z = 1.0f, Z = comp->id, Z = comp->a;
-    Z = win_x2, Z = win_y1, Z = 1.0f, Z = 1.0f, Z = comp->id, Z = comp->a;
-    Z = win_x1, Z = win_y2, Z = 0.0f, Z = 0.0f, Z = comp->id, Z = comp->a;
-    Z = win_x1, Z = win_y2, Z = 0.0f, Z = 0.0f, Z = comp->id, Z = comp->a;
-    Z = win_x2, Z = win_y1, Z = 1.0f, Z = 1.0f, Z = comp->id, Z = comp->a;
-    Z = win_x2, Z = win_y2, Z = 1.0f, Z = 0.0f, Z = comp->id, Z = comp->a;
+    if (gui.length + 36 >= gui.max_length) {
+        gui.max_length += 1000;
+        gui.buffer = realloc(gui.buffer, gui.max_length * sizeof(f32));
+    }
+    Z = win_x1, Z = win_y1, Z = 0.0f, Z = 1.0f, Z = comp->id, Z = comp->r, Z = comp->g, Z = comp->b, Z = comp->a;
+    Z = win_x2, Z = win_y1, Z = 1.0f, Z = 1.0f, Z = comp->id, Z = comp->r, Z = comp->g, Z = comp->b, Z = comp->a;
+    Z = win_x1, Z = win_y2, Z = 0.0f, Z = 0.0f, Z = comp->id, Z = comp->r, Z = comp->g, Z = comp->b, Z = comp->a;
+    Z = win_x1, Z = win_y2, Z = 0.0f, Z = 0.0f, Z = comp->id, Z = comp->r, Z = comp->g, Z = comp->b, Z = comp->a;
+    Z = win_x2, Z = win_y1, Z = 1.0f, Z = 1.0f, Z = comp->id, Z = comp->r, Z = comp->g, Z = comp->b, Z = comp->a;
+    Z = win_x2, Z = win_y2, Z = 1.0f, Z = 0.0f, Z = comp->id, Z = comp->r, Z = comp->g, Z = comp->b, Z = comp->a;
     for (i32 i = 0; i < comp->num_children; i++)
         gui_push_data_helper(comp->children[i], new_x1, new_y1, new_x2 - new_x1, new_y2 - new_y1);
 }

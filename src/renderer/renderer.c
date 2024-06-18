@@ -43,7 +43,7 @@ void renderer_init(void)
     renderer.vaos[WALL_VAO]         = vao_create(GL_STATIC_DRAW, GL_POINTS, 4);
     renderer.vaos[ENTITY_VAO]       = vao_create(GL_DYNAMIC_DRAW, GL_POINTS, 5);
     renderer.vaos[PROJECTILE_VAO]   = vao_create(GL_DYNAMIC_DRAW, GL_POINTS, 5);
-    renderer.vaos[GUI_VAO]          = vao_create(GL_STATIC_DRAW, GL_TRIANGLES, 6);
+    renderer.vaos[GUI_VAO]          = vao_create(GL_STATIC_DRAW, GL_TRIANGLES, 9);
     renderer.vaos[PARTICLE_VAO]     = vao_create(GL_DYNAMIC_DRAW, GL_POINTS, 4);
     renderer.vaos[OBSTACLE_VAO]     = vao_create(GL_STATIC_DRAW, GL_POINTS, 4);
     renderer.vaos[PARJICLE_VAO]     = vao_create(GL_DYNAMIC_DRAW, GL_POINTS, 5);
@@ -60,7 +60,7 @@ void renderer_init(void)
     vao_attr(renderer.vaos[GUI_VAO]         , 0, 2, 0);
     vao_attr(renderer.vaos[GUI_VAO]         , 1, 2, 2);
     vao_attr(renderer.vaos[GUI_VAO]         , 2, 1, 4);
-    vao_attr(renderer.vaos[GUI_VAO]         , 3, 1, 5);
+    vao_attr(renderer.vaos[GUI_VAO]         , 3, 4, 5);
     vao_attr(renderer.vaos[PARTICLE_VAO]    , 0, 3, 0);
     vao_attr(renderer.vaos[PARTICLE_VAO]    , 1, 1, 3);
     vao_attr(renderer.vaos[OBSTACLE_VAO]    , 0, 3, 0);
@@ -85,7 +85,7 @@ void renderer_init(void)
     renderer.gui_textures[EMPTY_TEX]  = texture_create("assets/textures/gui/empty.png", GL_LINEAR);
     renderer.gui_textures[A_TEX]      = texture_create("assets/textures/gui/text/A.png", GL_LINEAR);
     renderer.gui_textures[B_TEX]      = texture_create("assets/textures/gui/text/B.png", GL_LINEAR);
-    renderer.gui_textures[BUTTON_TEX] = texture_create("assets/textures/gui/button.png", GL_LINEAR);
+    renderer.gui_textures[BUTTON_TEX] = texture_create("assets/textures/gui/button.png", GL_NEAREST);
     /* --------------------- */
     renderer.ubos = malloc(NUM_UBOS * sizeof(UBO));
     renderer.ubos[MATRICES_UBO]     = ubo_create(32 * sizeof(f32));
@@ -183,15 +183,15 @@ void renderer_render(void)
     
     shader_use(renderer.shaders[TILE_SHADER]);
     vao_draw(renderer.vaos[TILE_VAO]);
-    glEnable(GL_DEPTH_TEST);
-    shader_use(renderer.shaders[WALL_SHADER]);
-    vao_draw(renderer.vaos[WALL_VAO]);
     shader_use(renderer.shaders[SHADOW_SHADER]);
     vao_draw(renderer.vaos[PROJECTILE_VAO]);
     vao_draw(renderer.vaos[OBSTACLE_VAO]);
     vao_draw(renderer.vaos[PARSTACLE_VAO]);
     vao_draw(renderer.vaos[ENTITY_VAO]);
-    glClear(GL_DEPTH_BUFFER_BIT);
+    glEnable(GL_DEPTH_TEST);
+    shader_use(renderer.shaders[WALL_SHADER]);
+    vao_draw(renderer.vaos[WALL_VAO]);
+    //glClear(GL_DEPTH_BUFFER_BIT);
     shader_use(renderer.shaders[ENTITY_SHADER]);
     vao_draw(renderer.vaos[ENTITY_VAO]);
     shader_use(renderer.shaders[PARTICLE_SHADER]);
