@@ -60,7 +60,6 @@ void component_add_text(Component *comp, char *text, u32 font_size, f32 gw, f32 
 {
     f32 w = font_size / window.size.x / gw, h = font_size / window.size.y / gh;
     u32 length = strlen(text);
-    printf("%f, %f, %d\n", w, h, length);
     for (i32 i = 0; i < length; i++) {
         Component *letter = component_create((w + 0.005 / gw) * i, 0.0f, w, h, 1.0f, char_map[text[i]]);
         component_attach(comp, letter);

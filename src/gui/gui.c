@@ -20,16 +20,19 @@ void confirm_click(void)
 void gui_init(void)
 {
     component_init();
-    gui.max_length = 1000;
+    gui.max_length = 2000;
     gui.buffer = malloc(gui.max_length * sizeof(f32));
     gui.length = 0;
     gui.root = component_create(0.0f, 0.0f, 1.0f, 1.0f, 0.0f, NO_TEX);
     gui.root->interactable = 0;
-    Component *btn = component_create(0.1, 0.5, 0.4, 0.4, 0.2f, EMPTY_TEX);
+    Component *btn = component_create(0.1, 0.5, 0.5, 0.5, 0.2f, EMPTY_TEX);
+    Component *btn2 = component_create(0.1, 0.5, 0.5, 0.5, 0.2f, EMPTY_TEX);
     //Component *txt = component_create(0.1, 0.1, 0.15, 0.17, 0, 1.0f);
     component_attach(gui.root, btn);
-    component_add_text(gui.root, "ABC BAB", 15, 1.0f, 1.0f);
-    component_add_text(btn, "ABABABABABABABAB", 15, 0.4f, 0.4f);
+    component_attach(btn, btn2);
+    component_add_text(gui.root, "ABABABABABABABAB", 15, 1.0f, 1.0f);
+    component_add_text(btn, "ABABABABABABABAB", 15, 0.5f, 0.5f);
+    component_add_text(btn2, "ABABABABABABABAB", 15, 0.25f, 0.25f);
     //component_attach(btn, txt);
 }
 
