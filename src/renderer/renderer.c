@@ -71,14 +71,14 @@ void renderer_init(void)
     vao_attr(renderer.vaos[PARSTACLE_VAO]   , 0, 3, 0);
     vao_attr(renderer.vaos[PARSTACLE_VAO]   , 1, 1, 3);
     /* --------------------- */
-    renderer.textures = malloc(NUM_GAME_TEXTURES * sizeof(Texture));
-    renderer.textures[KNIGHT_TEX]   = texture_create("assets/textures/game/knight.png", GL_NEAREST);
-    renderer.textures[BULLET_TEX]   = texture_create("assets/textures/game/bullet.png", GL_NEAREST);
-    renderer.textures[TILE_TEX]     = texture_create("assets/textures/game/tile.png", GL_NEAREST);
-    renderer.textures[WALL_TOP_TEX] = texture_create("assets/textures/game/wall_top.png", GL_NEAREST);
-    renderer.textures[WALL_TEX]     = texture_create("assets/textures/game/wall.png", GL_NEAREST);
-    renderer.textures[BUSH_TEX]     = texture_create("assets/textures/game/bush.png", GL_NEAREST);
-    renderer.textures[ROCK_TEX]     = texture_create("assets/textures/game/rock.png", GL_NEAREST);
+    renderer.game_textures = malloc(NUM_GAME_TEXTURES * sizeof(Texture));
+    renderer.game_textures[KNIGHT_TEX]   = texture_create("assets/textures/game/knight.png", GL_NEAREST);
+    renderer.game_textures[BULLET_TEX]   = texture_create("assets/textures/game/bullet.png", GL_NEAREST);
+    renderer.game_textures[TILE_TEX]     = texture_create("assets/textures/game/tile.png", GL_NEAREST);
+    renderer.game_textures[WALL_TOP_TEX] = texture_create("assets/textures/game/wall_top.png", GL_NEAREST);
+    renderer.game_textures[WALL_TEX]     = texture_create("assets/textures/game/wall.png", GL_NEAREST);
+    renderer.game_textures[BUSH_TEX]     = texture_create("assets/textures/game/bush.png", GL_NEAREST);
+    renderer.game_textures[ROCK_TEX]     = texture_create("assets/textures/game/rock.png", GL_NEAREST);
     /* --------------------- */
     renderer.gui_textures = malloc(NUM_GUI_TEXTURES * sizeof(Texture));
     renderer.gui_textures[NO_TEX]     = texture_create("assets/textures/gui/none.png", GL_LINEAR);
@@ -230,8 +230,8 @@ void renderer_destroy(void)
     free(renderer.ubos);
 
     for (i = 0; i < NUM_GAME_TEXTURES; i++)
-        texture_destroy(renderer.textures[i]);
-    free(renderer.textures);
+        texture_destroy(renderer.game_textures[i]);
+    free(renderer.game_textures);
 
     for (i = 0; i < NUM_GUI_TEXTURES; i++)
         texture_destroy(renderer.gui_textures[i]);
@@ -282,7 +282,7 @@ void set_game_ssbo(void)
 {
     u64 *handles = malloc(NUM_GAME_TEXTURES * sizeof(u64));
     for (i32 i = 0; i < NUM_GAME_TEXTURES; i++)
-        handles[i] = renderer.textures[i].handle;
+        handles[i] = renderer.game_textures[i].handle;
     ssbo_update(renderer.ssbos[GAME_SSBO], 0, NUM_GAME_TEXTURES * sizeof(u64), handles);
     free(handles);
 }

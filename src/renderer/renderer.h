@@ -12,14 +12,12 @@
 #include "ubo/ubo.h"
 #include "ssbo/ssbo.h"
 
-#define MAX_BUFFER_LENGTH 1000000
-
 typedef struct {
     VAO *vaos;
     Shader *shaders;
     UBO *ubos;
     SSBO *ssbos;
-    Texture *textures;
+    Texture *game_textures;
     Texture *gui_textures;
 } Renderer;
 

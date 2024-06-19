@@ -25,14 +25,14 @@ void gui_init(void)
     gui.length = 0;
     gui.root = component_create(0.0f, 0.0f, 1.0f, 1.0f, 0.0f, NO_TEX);
     gui.root->interactable = 0;
-    Component *btn = component_create(0.1, 0.5, 0.5, 0.5, 1.0f, BUTTON_TEX);
+    Component *btn = component_create(0.05f, 0.05f, 0.1f, 0.1f, 1.0f, BUTTON_TEX);
     //Component *btn2 = component_create(0.1, 0.5, 0.5, 0.5, 0.2f, EMPTY_TEX);
     //Component *btn3 = component_create(0.6, 0.7, 0.4, 0.4, 0.2f, EMPTY_TEX);
     component_attach(gui.root, btn);
     //component_attach(btn, btn2);
     //component_attach(gui.root, btn3);
     //component_add_text(gui.root, "ABABABABABABABAB", 15, 1.0f, 1.0f);
-    component_add_text(btn, "ABABABABABABABAB", 15, 0.5f, 0.5f);
+    //component_add_text(btn, "ABABABABABABABAB", 15, 0.1f, 0.1f);
     //component_add_text(btn2, "ABABABABABABABAB", 15, 0.25f, 0.25f);
     //component_add_text(btn3, "ABABABABABABABABABA", 15, 0.4f, 0.4f);
 }

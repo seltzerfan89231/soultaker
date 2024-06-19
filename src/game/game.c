@@ -223,14 +223,14 @@ static void collide_objects(f32 dt)
 
 void game_init(void)
 {
-    game.projectiles = projectile_array_create(100000);
-    game.entities = entity_array_create(100000);
-    game.particles = particle_array_create(100000);
-    game.parjicles = parjicle_array_create(100000);
-    game.parstacles = parstacle_array_create(100000);
-    game.obstacles = obstacle_array_create(100000);
-    game.tiles = tile_array_create(100000);
-    game.walls = wall_array_create(100000);
+    game.projectiles = projectile_array_create(10000);
+    game.entities = entity_array_create(10000);
+    game.particles = particle_array_create(10000);
+    game.parjicles = parjicle_array_create(10000);
+    game.parstacles = parstacle_array_create(10000);
+    game.obstacles = obstacle_array_create(10000);
+    game.tiles = tile_array_create(10000);
+    game.walls = wall_array_create(10000);
 }
 
 void game_setup(void)
