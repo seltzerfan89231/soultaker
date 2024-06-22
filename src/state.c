@@ -51,14 +51,13 @@ static void entity_push_data(Entity* entity, f32* buffer, u32 offset)
         dif -= 2 * PI;
     if (dif < 0)
         dif += 2 * PI;
-    printf("%f\n", dif);
-    if (dif < PI / 4 - 0.0001)
+    if (dif < PI / 4 - 0.01)
         buffer[offset++] = KNIGHT_DOWN_TEX;
-    else if (dif < 3 * PI / 4 + 0.0001)
+    else if (dif < 3 * PI / 4 + 0.01)
         buffer[offset++] = KNIGHT_RIGHT_TEX;
-    else if (dif < 5 * PI / 4 - 0.0001)
+    else if (dif < 5 * PI / 4 - 0.01)
         buffer[offset++] = KNIGHT_UP_TEX;
-    else if (dif < 7 * PI / 4 + 0.0001)
+    else if (dif < 7 * PI / 4 + 0.01)
         buffer[offset++] = KNIGHT_LEFT_TEX;
     else
         buffer[offset++] = KNIGHT_DOWN_TEX;

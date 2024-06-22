@@ -1,5 +1,4 @@
 #include "state.h"
-#include <pthread.h>
 
 int main()
 {
