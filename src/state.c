@@ -39,13 +39,29 @@ static void projectile_push_data(Projectile* projectile, f32* buffer, u32 offset
 
 static void entity_push_data(Entity* entity, f32* buffer, u32 offset)
 {
-    offset *= 5;
+    offset *= 6;
     buffer[offset++] = entity->position.x;
     buffer[offset++] = entity->position.y;
     buffer[offset++] = entity->position.z;
     buffer[offset++] = entity->scale;
     buffer[offset++] = entity->health / entity->max_health;
-    
+    f32 theta = atan(entity->facing.z / entity->facing.x) + (entity->facing.x >= 0 ? 0 : PI);
+    f32 dif = theta + PI - camera.yaw;
+    if (dif > 2 * PI)
+        dif -= 2 * PI;
+    if (dif < 0)
+        dif += 2 * PI;
+    printf("%f\n", dif);
+    if (dif < PI / 4 - 0.0001)
+        buffer[offset++] = KNIGHT_DOWN_TEX;
+    else if (dif < 3 * PI / 4 + 0.0001)
+        buffer[offset++] = KNIGHT_RIGHT_TEX;
+    else if (dif < 5 * PI / 4 - 0.0001)
+        buffer[offset++] = KNIGHT_UP_TEX;
+    else if (dif < 7 * PI / 4 + 0.0001)
+        buffer[offset++] = KNIGHT_LEFT_TEX;
+    else
+        buffer[offset++] = KNIGHT_DOWN_TEX;
 }
 
 static void particle_push_data(Particle *particle, f32 *buffer, u32 offset)

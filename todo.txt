@@ -1,16 +1,17 @@
-========================
-          TODO    
-========================
-
-game stuff
-- spatial hash
-
-gui
-- buttons
-- simple hud
-- text
-- hoverable, clickable, dragable
-
-window
-- framebuffer callback
+TODO
 - timestep
+
+ROADMAP
+- entity animations
+- lever loader
+- first level
+- alternate weapon
+- ability
+- gui
+    - hud
+    - debug
+    - text (pain)
+- character selection area
+- home menu
+
+

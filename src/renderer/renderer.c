@@ -41,7 +41,7 @@ void renderer_init(void)
     renderer.vaos = malloc(NUM_VAOS * sizeof(VAO));
     renderer.vaos[TILE_VAO]         = vao_create(GL_STATIC_DRAW, GL_POINTS, 2);
     renderer.vaos[WALL_VAO]         = vao_create(GL_STATIC_DRAW, GL_POINTS, 4);
-    renderer.vaos[ENTITY_VAO]       = vao_create(GL_DYNAMIC_DRAW, GL_POINTS, 5);
+    renderer.vaos[ENTITY_VAO]       = vao_create(GL_DYNAMIC_DRAW, GL_POINTS, 6);
     renderer.vaos[PROJECTILE_VAO]   = vao_create(GL_DYNAMIC_DRAW, GL_POINTS, 5);
     renderer.vaos[GUI_VAO]          = vao_create(GL_STATIC_DRAW, GL_TRIANGLES, 9);
     renderer.vaos[PARTICLE_VAO]     = vao_create(GL_DYNAMIC_DRAW, GL_POINTS, 4);
@@ -54,6 +54,7 @@ void renderer_init(void)
     vao_attr(renderer.vaos[ENTITY_VAO]      , 0, 3, 0);
     vao_attr(renderer.vaos[ENTITY_VAO]      , 1, 1, 3);
     vao_attr(renderer.vaos[ENTITY_VAO]      , 2, 1, 4);
+    vao_attr(renderer.vaos[ENTITY_VAO]      , 3, 1, 5);
     vao_attr(renderer.vaos[PROJECTILE_VAO]  , 0, 3, 0);
     vao_attr(renderer.vaos[PROJECTILE_VAO]  , 1, 1, 3);
     vao_attr(renderer.vaos[PROJECTILE_VAO]  , 2, 1, 4);
@@ -72,13 +73,16 @@ void renderer_init(void)
     vao_attr(renderer.vaos[PARSTACLE_VAO]   , 1, 1, 3);
     /* --------------------- */
     renderer.game_textures = malloc(NUM_GAME_TEXTURES * sizeof(Texture));
-    renderer.game_textures[KNIGHT_TEX]   = texture_create("assets/textures/game/knight.png", GL_NEAREST);
-    renderer.game_textures[BULLET_TEX]   = texture_create("assets/textures/game/bullet.png", GL_NEAREST);
-    renderer.game_textures[TILE_TEX]     = texture_create("assets/textures/game/tile.png", GL_NEAREST);
-    renderer.game_textures[WALL_TOP_TEX] = texture_create("assets/textures/game/wall_top.png", GL_NEAREST);
-    renderer.game_textures[WALL_TEX]     = texture_create("assets/textures/game/wall.png", GL_NEAREST);
-    renderer.game_textures[BUSH_TEX]     = texture_create("assets/textures/game/bush.png", GL_NEAREST);
-    renderer.game_textures[ROCK_TEX]     = texture_create("assets/textures/game/rock.png", GL_NEAREST);
+    renderer.game_textures[KNIGHT_DOWN_TEX]  = texture_create("assets/textures/game/knight/knight_down_1.png", GL_NEAREST);
+    renderer.game_textures[KNIGHT_RIGHT_TEX] = texture_create("assets/textures/game/knight/knight_right_1.png", GL_NEAREST);
+    renderer.game_textures[KNIGHT_UP_TEX]    = texture_create("assets/textures/game/knight/knight_up_1.png", GL_NEAREST);
+    renderer.game_textures[KNIGHT_LEFT_TEX]  = texture_create("assets/textures/game/knight/knight_left_1.png", GL_NEAREST);
+    renderer.game_textures[BULLET_TEX]       = texture_create("assets/textures/game/bullet.png", GL_NEAREST);
+    renderer.game_textures[TILE_TEX]         = texture_create("assets/textures/game/tile.png", GL_NEAREST);
+    renderer.game_textures[WALL_TOP_TEX]     = texture_create("assets/textures/game/wall_top.png", GL_NEAREST);
+    renderer.game_textures[WALL_TEX]         = texture_create("assets/textures/game/wall.png", GL_NEAREST);
+    renderer.game_textures[BUSH_TEX]         = texture_create("assets/textures/game/bush.png", GL_NEAREST);
+    renderer.game_textures[ROCK_TEX]         = texture_create("assets/textures/game/rock.png", GL_NEAREST);
     /* --------------------- */
     renderer.gui_textures = malloc(NUM_GUI_TEXTURES * sizeof(Texture));
     renderer.gui_textures[NO_TEX]     = texture_create("assets/textures/gui/none.png", GL_LINEAR);
@@ -307,7 +311,7 @@ void set_constants_ubo(void)
 
 void set_outline_ubo(void)
 {
-    f32 outline_thickness = 0.03;
+    f32 outline_thickness = 1 / 32.0f;
     ubo_update(renderer.ubos[OUTLINE_UBO], 0, sizeof(f32), &outline_thickness);
 }
 

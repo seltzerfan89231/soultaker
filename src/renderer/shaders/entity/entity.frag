@@ -12,13 +12,17 @@ layout (std140) uniform OutlineThickness
     float ot;
 };
 
-in vec2 texCoord;
+in VertexData
+{
+    vec2 texCoord;
+    flat int texID;
+};
 
 void main()
 {
     float a = 1 + 2 * ot; // 1 + buffer * 2;
     vec2 UV = vec2(texCoord.x - 0.5, texCoord.y - 0.5) * a + 0.5;
-    vec4 col = texture(sampler2D(tex[0]), UV);
+    vec4 col = texture(sampler2D(tex[texID]), UV);
     if (!(UV.x > 1 || UV.x < 0 || UV.y > 1 || UV.y < 0) && (col.a > 0.1)) {
         gl_FragColor = col;
         return;
@@ -29,7 +33,7 @@ void main()
             vec2 newUV = UV + dUV;
             if (newUV.x > 1 || newUV.x < 0 || newUV.y > 1 || newUV.y < 0)
                 continue;
-            col = texture(sampler2D(tex[0]), newUV);
+            col = texture(sampler2D(tex[texID]), newUV);
             if (col.a > 0.1) {
                 gl_FragColor = vec4(0.0f, 0.0f, 0.0f, 1.0f);
                 return;

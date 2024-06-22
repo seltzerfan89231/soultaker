@@ -15,15 +15,23 @@ layout (std140) uniform Zoom
     float zoom;
 };
 
-in float inputVars[];
+in VertexData
+{
+    float scale;
+    int texID;
+} inData[];
 
-out vec2 texCoord;
-out flat float scale;
+out VertexData
+{
+    vec2 texCoord;
+    flat int texID;
+};
 
 void main() {
     vec4 position = gl_in[0].gl_Position;
     vec2 offset;
-    scale = inputVars[0];
+    float scale = inData[0].scale;
+    texID = inData[0].texID;
 
     // bottom left
     offset = scale * zoom * vec2(-0.5 * ar, 0.0);

@@ -15,11 +15,11 @@
 #define DEFAULT_YAW 0
 #define DEFAULT_PITCH PI / 3
 #define DEFAULT_FOV PI / 4
-#define DEFAULT_ZOOM 4.2
+#define DEFAULT_ZOOM 8
 #define MIN_PITCH 0.3
 #define MAX_PITCH 1.3
 #define MIN_ZOOM 1
-#define MAX_ZOOM 10
+#define MAX_ZOOM 30
 
 typedef struct {
     f32 yaw, pitch, fov, rotate_speed, zoom;

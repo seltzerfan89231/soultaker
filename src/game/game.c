@@ -18,6 +18,7 @@ static void create_objects(void)
             proj->rotation = i * 0.8 + sin(glfwGetTime());
             proj->direction = vec3f_create(cos(proj->rotation), 0.0f, sin(proj->rotation));
             proj->scale = 1.0f;
+            proj->lifetime = 3.0f;
             proj->hitbox_radius = (proj->scale - 0.4) / 2;
             proj->position.y = 0.5f;
             projectile_array_push(&game.projectiles, proj);
@@ -49,7 +50,7 @@ static void update_objects(f32 dt)
 {
     for (i32 i = 0; i < game.entities.length; i++) {
         Entity *entity = game.entities.buffer[i];
-        entity_update_position(entity, dt);
+        entity_update(entity, dt);
     }
     for (i32 i = 0; i < game.projectiles.length; i++) {
         Projectile *proj = game.projectiles.buffer[i];
@@ -279,7 +280,7 @@ void game_update(f32 dt)
 
 void game_set_direction(vec3f direction)
 {
-    player->direction = direction;
+    entity_set_direction(player, direction);
 }
 
 void game_set_target(vec3f target)
@@ -295,6 +296,8 @@ void game_destroy(void)
     projectile_array_destroy(&game.projectiles);
     particle_array_destroy(&game.particles);
     obstacle_array_destroy(&game.obstacles);
+    parstacle_array_destroy(&game.parstacles);
+    parjicle_array_destroy(&game.parjicles);
 }
 
 void game_shoot(vec2f pos, f32 rotation, f32 tilt, f32 zoom, f32 ar)
