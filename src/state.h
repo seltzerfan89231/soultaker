@@ -6,6 +6,7 @@
 #include "renderer/renderer.h"
 #include "camera/camera.h"
 #include "gui/gui.h"
+#include "data.h"
 
 void state_init(void);
 void state_loop(void);

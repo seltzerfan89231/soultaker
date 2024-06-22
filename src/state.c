@@ -8,98 +8,6 @@ extern Renderer renderer;
 extern Camera camera;
 extern Game game;
 extern GUI gui;
-f32 *buffer;
-i32 i;
-
-static void wall_push_data(Wall* wall, f32* buffer, u32 offset)
-{
-    offset *= 4;
-    buffer[offset++] = wall->position.x;
-    buffer[offset++] = wall->height;
-    buffer[offset++] = wall->position.z;
-    buffer[offset++] = 0;
-}
-
-static void tile_push_data(Tile* tile, f32* buffer, u32 offset)
-{
-    offset *= 2;
-    buffer[offset++] = tile->position.x;
-    buffer[offset++] = tile->position.z;
-}
-
-static void projectile_push_data(Projectile* projectile, f32* buffer, u32 offset)
-{
-    offset *= 5;
-    buffer[offset++] = projectile->position.x;
-    buffer[offset++] = projectile->position.y;
-    buffer[offset++] = projectile->position.z;
-    buffer[offset++] = projectile->scale;
-    buffer[offset++] = projectile->rotation;
-}
-
-static void entity_push_data(Entity* entity, f32* buffer, u32 offset)
-{
-    offset *= 6;
-    buffer[offset++] = entity->position.x;
-    buffer[offset++] = entity->position.y;
-    buffer[offset++] = entity->position.z;
-    buffer[offset++] = entity->scale;
-    buffer[offset++] = entity->health / entity->max_health;
-    f32 theta = atan(entity->facing.z / entity->facing.x) + (entity->facing.x >= 0 ? 0 : PI);
-    f32 dif = theta + PI - camera.yaw;
-    if (dif > 2 * PI)
-        dif -= 2 * PI;
-    if (dif < 0)
-        dif += 2 * PI;
-    if (dif < PI / 4 - 0.01)
-        buffer[offset++] = KNIGHT_DOWN_TEX;
-    else if (dif < 3 * PI / 4 + 0.01)
-        buffer[offset++] = KNIGHT_RIGHT_TEX;
-    else if (dif < 5 * PI / 4 - 0.01)
-        buffer[offset++] = KNIGHT_UP_TEX;
-    else if (dif < 7 * PI / 4 + 0.01)
-        buffer[offset++] = KNIGHT_LEFT_TEX;
-    else
-        buffer[offset++] = KNIGHT_DOWN_TEX;
-}
-
-static void particle_push_data(Particle *particle, f32 *buffer, u32 offset)
-{
-    offset *= 4;
-    buffer[offset++] = particle->position.x;
-    buffer[offset++] = particle->position.y;
-    buffer[offset++] = particle->position.z;
-    buffer[offset++] = particle->scale;
-}
-
-static void parstacle_push_data(Parstacle *parstacle, f32 *buffer, u32 offset)
-{
-    offset *= 4;
-    buffer[offset++] = parstacle->position.x;
-    buffer[offset++] = parstacle->position.y;
-    buffer[offset++] = parstacle->position.z;
-    buffer[offset++] = parstacle->scale;
-}
-
-static void parjicle_push_data(Parjicle *parjicle, f32 *buffer, u32 offset)
-{
-    offset *= 5;
-    buffer[offset++] = parjicle->position.x;
-    buffer[offset++] = parjicle->position.y;
-    buffer[offset++] = parjicle->position.z;
-    buffer[offset++] = parjicle->scale;
-    buffer[offset++] = parjicle->rotation;
-}
-
-
-static void obstacle_push_data(Obstacle *obstacle, f32 *buffer, u32 offset)
-{
-    offset *= 4;
-    buffer[offset++] = obstacle->position.x;
-    buffer[offset++] = obstacle->position.y;
-    buffer[offset++] = obstacle->position.z;
-    buffer[offset++] = obstacle->scale;
-}
 
 static void update_proj_matrix(void)
 {
@@ -121,50 +29,7 @@ static void state_setup(void)
     camera_set_target(game.entities.buffer[0]->position);
     update_view_matrix();
     update_proj_matrix();
-
-    renderer_malloc(TILE_VAO, game.tiles.max_length);
-    for (i = 0; i < game.tiles.length; i++)
-        tile_push_data(game.tiles.buffer[i], buffer, i);
-    renderer_update(TILE_VAO, 0, i, buffer);
-
-    renderer_malloc(WALL_VAO, game.walls.max_length);
-    for (i = 0; i < game.walls.length; i++)
-        wall_push_data(game.walls.buffer[i], buffer, i);
-    renderer_update(WALL_VAO, 0, i, buffer);
-
-    renderer_malloc(ENTITY_VAO, game.entities.max_length);
-    for (i = 0; i < game.entities.length; i++)
-        entity_push_data(game.entities.buffer[i], buffer, i);
-    renderer_update(ENTITY_VAO, 0, i, buffer);
-    
-    renderer_malloc(PROJECTILE_VAO, game.projectiles.max_length);
-    for (i = 0; i < game.projectiles.length; i++)
-        projectile_push_data(game.projectiles.buffer[i], buffer, i);
-    renderer_update(PROJECTILE_VAO, 0, i, buffer);
-
-    renderer_malloc(PARTICLE_VAO, game.particles.max_length);
-    for (i = 0; i < game.particles.length; i++)
-        particle_push_data(game.particles.buffer[i], buffer, i);
-    renderer_update(PARTICLE_VAO, 0, i, buffer);
-
-    renderer_malloc(OBSTACLE_VAO, game.obstacles.max_length);
-    for (i = 0; i < game.obstacles.length; i++)
-        obstacle_push_data(game.obstacles.buffer[i], buffer, i);
-    renderer_update(OBSTACLE_VAO, 0, i, buffer);
-
-    renderer_malloc(PARSTACLE_VAO, game.parstacles.max_length);
-    for (i = 0; i < game.parstacles.length; i++)
-        parstacle_push_data(game.parstacles.buffer[i], buffer, i);
-    renderer_update(PARSTACLE_VAO, 0, i, buffer);
-
-    renderer_malloc(PARJICLE_VAO, game.parjicles.max_length);
-    for (i = 0; i < game.parjicles.length; i++)
-        parjicle_push_data(game.parjicles.buffer[i], buffer, i);
-    renderer_update(PARJICLE_VAO, 0, i, buffer);
-
-    gui_push_data();
-    renderer_malloc(GUI_VAO, gui.max_length);
-    renderer_update(GUI_VAO, 0, gui.length, gui.buffer);
+    data_setup();
 }
 
 static void state_update(void)
@@ -172,22 +37,10 @@ static void state_update(void)
     game_update(window.dt > 0.01 ? 0.01 : window.dt);
     camera_set_target(game.entities.buffer[0]->position);
     update_view_matrix();
-
-    for (i = 0; i < game.entities.length; i++)
-        entity_push_data(game.entities.buffer[i], buffer, i);
-    renderer_update(ENTITY_VAO, 0, i, buffer);
-
-    for (i = 0; i < game.projectiles.length; i++)
-        projectile_push_data(game.projectiles.buffer[i], buffer, i);
-    renderer_update(PROJECTILE_VAO, 0, i, buffer);
-
-    for (i = 0; i < game.particles.length; i++)
-        particle_push_data(game.particles.buffer[i], buffer, i);
-    renderer_update(PARTICLE_VAO, 0, i, buffer);
-
-    for (i = 0; i < game.parjicles.length; i++)
-        parjicle_push_data(game.parjicles.buffer[i], buffer, i);
-    renderer_update(PARJICLE_VAO, 0, i, buffer);
+    data_update_entities();
+    data_update_projectiles();
+    data_update_particles();
+    data_update_parjicles();
 }
 
 static void process_input(void)
@@ -234,13 +87,12 @@ static void process_input(void)
 }
 void state_init(void) 
 {
-    buffer = malloc(5000000 * sizeof(f32));
     window_init();
     renderer_init();
     camera_init(window.aspect_ratio);
     game_init();
     gui_init();
-    
+    data_init();
     state_setup();
 }
 
@@ -261,9 +113,9 @@ void state_loop(void)
 
 void state_exit(void)
 {
-    free(buffer);
     renderer_destroy();
     game_destroy();
+    data_destroy();
     gui_destroy();
 }
 
