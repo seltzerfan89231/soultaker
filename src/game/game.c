@@ -232,6 +232,7 @@ void game_init(void)
     game.obstacles = obstacle_array_create(10000);
     game.tiles = tile_array_create(10000);
     game.walls = wall_array_create(10000);
+    entity_frames_init();
 }
 
 void game_setup(void)
@@ -243,11 +244,11 @@ void game_setup(void)
             else
                 tile_array_push(&game.tiles, tile_create(FLOOR, i, j));
 
-    player = entity_create(PLAYER, 1);
+    player = entity_create(KNIGHT, 1);
     player->position = vec3f_create(15.0f, 0.0f, 15.0f);
     entity_array_push(&game.entities, player);
 
-    Entity* entity = entity_create(ENEMY, 0);
+    Entity* entity = entity_create(KNIGHT, 0);
     entity->position = vec3f_create(20, 0, 15);
     entity->scale = 1.0f;
     entity_array_push(&game.entities, entity);
@@ -298,6 +299,7 @@ void game_destroy(void)
     obstacle_array_destroy(&game.obstacles);
     parstacle_array_destroy(&game.parstacles);
     parjicle_array_destroy(&game.parjicles);
+    entity_frames_destroy();
 }
 
 void game_shoot(vec2f pos, f32 rotation, f32 tilt, f32 zoom, f32 ar)

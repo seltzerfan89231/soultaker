@@ -47,7 +47,7 @@
 #pragma endregion
 
 #pragma region GAME_TEXTURES
-#define NUM_GAME_TEXTURES 10
+#define NUM_GAME_TEXTURES 14
 #define KNIGHT_DOWN_TEX   0
 #define BULLET_TEX        1
 #define TILE_TEX          2
@@ -58,6 +58,10 @@
 #define KNIGHT_RIGHT_TEX  7
 #define KNIGHT_UP_TEX     8
 #define KNIGHT_LEFT_TEX   9
+#define KNIGHT_SHOOT_LEFT_TEX 10
+#define KNIGHT_SHOOT_RIGHT_TEX 11
+#define KNIGHT_SHOOT_DOWN_TEX 12
+#define KNIGHT_SHOOT_UP_TEX 13
 #pragma endregion
 
 #pragma region GUI_TEXTURES

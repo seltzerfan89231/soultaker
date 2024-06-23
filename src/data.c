@@ -37,22 +37,18 @@ static void entity_push_data(Entity* entity, u32 offset)
     data.buffer[offset++] = entity->position.z;
     data.buffer[offset++] = entity->scale;
     data.buffer[offset++] = entity->health / entity->max_health;
-    f32 theta = atan(entity->facing.z / entity->facing.x) + (entity->facing.x >= 0 ? 0 : PI);
+    f32 theta = atan(entity->facing.y / entity->facing.x) + (entity->facing.x >= 0 ? 0 : PI);
     f32 dif = theta + PI - camera.yaw;
-    if (dif > 2 * PI)
-        dif -= 2 * PI;
-    if (dif < 0)
-        dif += 2 * PI;
-    if (dif < PI / 4 - 0.01)
-        data.buffer[offset++] = KNIGHT_DOWN_TEX;
-    else if (dif < 3 * PI / 4 + 0.01)
-        data.buffer[offset++] = KNIGHT_RIGHT_TEX;
-    else if (dif < 5 * PI / 4 - 0.01)
-        data.buffer[offset++] = KNIGHT_UP_TEX;
-    else if (dif < 7 * PI / 4 + 0.01)
-        data.buffer[offset++] = KNIGHT_LEFT_TEX;
-    else
-        data.buffer[offset++] = KNIGHT_DOWN_TEX;
+    u8 dir;
+    if (dif > 2 * PI) dif -= 2 * PI;
+    if (dif < 0) dif += 2 * PI;
+
+    if      (dif < PI / 4 - 0.01)     dir = 0;
+    else if (dif < 3 * PI / 4 + 0.01) dir = 1;
+    else if (dif < 5 * PI / 4 - 0.01) dir = 2;
+    else if (dif < 7 * PI / 4 + 0.01) dir = 3;
+    else                              dir = 0;
+    data.buffer[offset++] = frames[entity->id][4 * entity->frame + dir];
 }
 
 static void particle_push_data(Particle *particle, u32 offset)

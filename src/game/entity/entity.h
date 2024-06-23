@@ -6,18 +6,30 @@
 #include "../../util/constants.h"
 #include "../../util/indices.h"
 
-typedef enum { PLAYER, ENEMY } entitytype;
+#include "knight.h"
+
+#define MAX_ENTITY_ID 2
+
+typedef enum {
+    KNIGHT = 0,
+    ENEMY = 1
+} EntityID;
 
 typedef struct {
-    f32 speed, scale, lifetime, hitbox_radius, health, max_health;
-    u8 friendly;
-    entitytype type;
-    vec3f position, direction, facing;
+    f32 speed, scale, hitbox_radius, health, max_health;
+    u8 friendly, frame;
+    EntityID id;
+    vec3f position, direction;
+    vec2f facing;
 } Entity;
 
-Entity* entity_create(entitytype type, u8 friendly);
+extern u32 **frames;
+
+Entity* entity_create(EntityID id, u8 friendly);
 void entity_update(Entity* entity, f32 dt);
 void entity_set_direction(Entity *entity, vec3f direction);
 void entity_destroy(Entity* entity);
+void entity_frames_init(void);
+void entity_frames_destroy(void);
 
 #endif
