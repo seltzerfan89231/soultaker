@@ -6,13 +6,6 @@
 #include "../../util/constants.h"
 #include "../../util/indices.h"
 
-#define MAX_ENTITY_ID 2
-#define KNIGHT 0
-#define ENEMY  1
-
-#define ENEMY_IDLE  0
-#define ENEMY_SHOOT 1
-
 typedef struct {
     f32 speed, scale, hitbox_radius, health, max_health;
     u8 friendly, state;

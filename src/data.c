@@ -48,7 +48,7 @@ static void entity_push_data(Entity* entity, u32 offset)
     else if (dif < 5 * PI / 4 - 0.01) dir = UP;
     else if (dif < 7 * PI / 4 + 0.01) dir = LEFT;
     else                              dir = DOWN;
-    data.buffer[offset++] = animation.frames[entity->id][dir][entity->state];
+    data.buffer[offset++] = renderer.animations[ENTITY_ANIMATION].frames[entity->id][dir][entity->state];
 }
 
 static void particle_push_data(Particle *particle, u32 offset)

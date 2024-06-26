@@ -73,4 +73,26 @@
 #define BUTTON_TEX       4
 #pragma endregion
 
+#pragma region ANIMATIONS
+#define NUM_ANIMATIONS 1
+#define ENTITY_ANIMATION 0
+#pragma endregion
+
+#define MAX_ENTITY_ID 2
+#define KNIGHT 0
+#define ENEMY  1
+
+#define KNIGHT_STATES 2
+#define KNIGHT_IDLE   0
+#define KNIGHT_SHOOT  1
+
+#define ENEMY_STATES 2
+#define ENEMY_IDLE   0
+#define ENEMY_SHOOT  1
+
+#define DOWN  0
+#define RIGHT 1
+#define UP    2
+#define LEFT  3
+
 #endif
