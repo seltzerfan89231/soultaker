@@ -43,12 +43,12 @@ static void entity_push_data(Entity* entity, u32 offset)
     if (dif > 2 * PI) dif -= 2 * PI;
     if (dif < 0) dif += 2 * PI;
 
-    if      (dif < PI / 4 - 0.01)     dir = 0;
-    else if (dif < 3 * PI / 4 + 0.01) dir = 1;
-    else if (dif < 5 * PI / 4 - 0.01) dir = 2;
-    else if (dif < 7 * PI / 4 + 0.01) dir = 3;
-    else                              dir = 0;
-    data.buffer[offset++] = frames[entity->id][4 * entity->frame + dir];
+    if      (dif < PI / 4 - 0.01)     dir = DOWN;
+    else if (dif < 3 * PI / 4 + 0.01) dir = RIGHT;
+    else if (dif < 5 * PI / 4 - 0.01) dir = UP;
+    else if (dif < 7 * PI / 4 + 0.01) dir = LEFT;
+    else                              dir = DOWN;
+    data.buffer[offset++] = animation.frames[entity->id][dir][entity->state];
 }
 
 static void particle_push_data(Particle *particle, u32 offset)

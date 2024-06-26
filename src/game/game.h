@@ -2,6 +2,7 @@
 #define GAME_H
 
 #include "array.h"
+#include "animation.h"
 
 #define MAP_WIDTH 50
 

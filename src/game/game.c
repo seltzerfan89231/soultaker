@@ -232,7 +232,7 @@ void game_init(void)
     game.obstacles = obstacle_array_create(10000);
     game.tiles = tile_array_create(10000);
     game.walls = wall_array_create(10000);
-    entity_frames_init();
+    animation_init();
 }
 
 void game_setup(void)
@@ -299,7 +299,7 @@ void game_destroy(void)
     obstacle_array_destroy(&game.obstacles);
     parstacle_array_destroy(&game.parstacles);
     parjicle_array_destroy(&game.parjicles);
-    entity_frames_destroy();
+    animation_destroy();
 }
 
 void game_shoot(vec2f pos, f32 rotation, f32 tilt, f32 zoom, f32 ar)

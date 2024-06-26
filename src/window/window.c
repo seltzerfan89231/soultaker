@@ -19,9 +19,9 @@ void window_init(void)
     window.handle = glfwCreateWindow(window.size.x, window.size.y, "soultaker", NULL, NULL);
     glfwMakeContextCurrent(window.handle);
 
-    window.mouse.left = UP;
-    window.mouse.middle = UP;
-    window.mouse.right = UP;
+    window.mouse.left = MOUSE_UP;
+    window.mouse.middle = MOUSE_UP;
+    window.mouse.right = MOUSE_UP;
 
     glfwSetFramebufferSizeCallback(window.handle, framebuffer_size_callback);
     glfwSetMouseButtonCallback(window.handle, mouse_button_callback);
@@ -51,9 +51,9 @@ void window_update(void)
 void mouse_button_callback(GLFWwindow* handle, int button, int action)
 {
     if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
-        window.mouse.left = DOWN;
+        window.mouse.left = MOUSE_DOWN;
     if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_RELEASE)
-        window.mouse.left = UP;
+        window.mouse.left = MOUSE_UP;
 }
 
 void mouse_callback(GLFWwindow* handle, double xpos, double ypos)
@@ -72,13 +72,13 @@ bool window_mouse_button_pressed(mousebutton mb)
     switch (mb) 
     {
         case MOUSE_LEFT:
-            return window.mouse.left == DOWN;
+            return window.mouse.left == MOUSE_DOWN;
         case MOUSE_MIDDLE:
-            return window.mouse.middle == DOWN;
+            return window.mouse.middle == MOUSE_DOWN;
         case MOUSE_RIGHT:
-            return window.mouse.right == DOWN;
+            return window.mouse.right == MOUSE_DOWN;
     }
-    return UP;
+    return MOUSE_UP;
 }
 
 bool window_closed(void) { return glfwWindowShouldClose(window.handle); }

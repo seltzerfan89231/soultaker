@@ -10,7 +10,7 @@
 #define DEFAULT_WINDOW_HEIGHT 1080/2
 
 typedef enum { MOUSE_LEFT, MOUSE_MIDDLE, MOUSE_RIGHT } mousebutton;
-typedef enum { UP, DOWN } mbstate;
+typedef enum { MOUSE_UP, MOUSE_DOWN } mbstate;
 
 typedef struct {
     GLFWwindow *handle;
