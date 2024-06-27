@@ -11,13 +11,22 @@ layout (std140) uniform Matrices
     mat4 proj;
 };
 
-out vec2 texCoord;
-out flat int texID;
-out flat float depthValue;
+in VertexData
+{
+    int top_texID;
+    int side_texID;
+} inData[];
+
+out VertexData
+{
+    vec2 texCoord;
+    flat int texID;
+    flat float depthValue;
+};
 
 void build_top(vec4 position)
 {   
-    texID = 3;
+    texID = inData[0].top_texID;
     gl_Position = proj * view * (position + vec4(0.0, 0.0, 0.0, 0.0));
     texCoord = vec2(0.0f, 0.0f);
     EmitVertex();
@@ -35,7 +44,7 @@ void build_top(vec4 position)
 
 void build_sides(vec4 position)
 {
-    texID = 4;
+    texID = inData[0].side_texID;
     gl_Position = proj * view * (position + vec4(1.0, -position.y, 0.0, 0.0));
     texCoord = vec2(1.0f, 1.0f);
     EmitVertex();

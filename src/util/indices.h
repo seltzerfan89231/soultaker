@@ -55,21 +55,27 @@
 #pragma endregion
 
 #pragma region GAME_TEXTURES
-#define NUM_GAME_TEXTURES 14
-#define KNIGHT_DOWN_TEX   0
-#define BULLET_TEX        1
-#define TILE_TEX          2
-#define WALL_TOP_TEX      3
-#define WALL_TEX          4
-#define BUSH_TEX          5
-#define ROCK_TEX          6
-#define KNIGHT_RIGHT_TEX  7
-#define KNIGHT_UP_TEX     8
-#define KNIGHT_LEFT_TEX   9
+#define NUM_GAME_TEXTURES 20
+#define BULLET_TEX        0
+#define TILE_TEX          1
+#define WALL_TOP_TEX      2
+#define WALL_TEX          3
+#define BUSH_TEX          4
+#define ROCK_TEX          5
+#define KNIGHT_IDLE_DOWN_TEX   6
+#define KNIGHT_IDLE_RIGHT_TEX  7
+#define KNIGHT_IDLE_UP_TEX     8
+#define KNIGHT_IDLE_LEFT_TEX   9
 #define KNIGHT_SHOOT_LEFT_TEX 10
 #define KNIGHT_SHOOT_RIGHT_TEX 11
 #define KNIGHT_SHOOT_DOWN_TEX 12
 #define KNIGHT_SHOOT_UP_TEX 13
+#define KNIGHT_WALK_1_DOWN_TEX 14
+#define KNIGHT_WALK_RIGHT_TEX 15
+#define KNIGHT_WALK_1_UP_TEX 16
+#define KNIGHT_WALK_LEFT_TEX 17
+#define KNIGHT_WALK_2_DOWN_TEX 18
+#define KNIGHT_WALK_2_UP_TEX 19
 #pragma endregion
 
 #pragma region GUI_TEXTURES
@@ -93,9 +99,12 @@
 #pragma endregion
 
 #pragma region ENTITY_STATES
-#define KNIGHT_STATES 2
-#define KNIGHT_IDLE   0
-#define KNIGHT_SHOOT  1
+#define KNIGHT_STATES  5
+#define KNIGHT_IDLE    0
+#define KNIGHT_WALK_1  1
+#define KNIGHT_WALK_2  2
+#define KNIGHT_SHOOT_1 3
+#define KNIGHT_SHOOT_2 4
 #define ENEMY_STATES 2
 #define ENEMY_IDLE   0
 #define ENEMY_SHOOT  1

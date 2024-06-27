@@ -5,28 +5,31 @@ i32 i;
 
 static void wall_push_data(Wall* wall, u32 offset)
 {
-    offset *= 4;
+    offset *= 5;
     data.buffer[offset++] = wall->position.x;
     data.buffer[offset++] = wall->height;
     data.buffer[offset++] = wall->position.z;
-    data.buffer[offset++] = 0;
+    data.buffer[offset++] = WALL_TOP_TEX;
+    data.buffer[offset++] = WALL_TEX;
 }
 
 static void tile_push_data(Tile* tile, u32 offset)
 {
-    offset *= 2;
+    offset *= 3;
     data.buffer[offset++] = tile->position.x;
     data.buffer[offset++] = tile->position.z;
+    data.buffer[offset++] = TILE_TEX;
 }
 
 static void projectile_push_data(Projectile* projectile, u32 offset)
 {
-    offset *= 5;
+    offset *= 6;
     data.buffer[offset++] = projectile->position.x;
     data.buffer[offset++] = projectile->position.y;
     data.buffer[offset++] = projectile->position.z;
     data.buffer[offset++] = projectile->scale;
     data.buffer[offset++] = projectile->rotation;
+    data.buffer[offset++] = BULLET_TEX;
 }
 
 static void entity_push_data(Entity* entity, u32 offset)
@@ -62,11 +65,12 @@ static void particle_push_data(Particle *particle, u32 offset)
 
 static void parstacle_push_data(Parstacle *parstacle, u32 offset)
 {
-    offset *= 4;
+    offset *= 5;
     data.buffer[offset++] = parstacle->position.x;
     data.buffer[offset++] = parstacle->position.y;
     data.buffer[offset++] = parstacle->position.z;
     data.buffer[offset++] = parstacle->scale;
+    data.buffer[offset++] = BUSH_TEX;
 }
 
 static void parjicle_push_data(Parjicle *parjicle, u32 offset)
@@ -82,11 +86,12 @@ static void parjicle_push_data(Parjicle *parjicle, u32 offset)
 
 static void obstacle_push_data(Obstacle *obstacle, u32 offset)
 {
-    offset *= 4;
+    offset *= 5;
     data.buffer[offset++] = obstacle->position.x;
     data.buffer[offset++] = obstacle->position.y;
     data.buffer[offset++] = obstacle->position.z;
     data.buffer[offset++] = obstacle->scale;
+    data.buffer[offset++] = ROCK_TEX;
 }
 
 void data_init(void)

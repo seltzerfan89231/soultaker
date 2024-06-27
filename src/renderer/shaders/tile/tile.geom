@@ -11,11 +11,22 @@ layout (std140) uniform Matrices
     mat4 proj;
 };
 
-out vec2 texCoord;
+in VertexData
+{
+    int texID;
+} inData[];
+
+out VertexData
+{
+    vec2 texCoord;
+    flat int texID;
+};
+
 
 void main()
 {    
     vec4 position = gl_in[0].gl_Position;
+    texID = inData[0].texID;
     gl_Position = proj * view * (position + vec4(0.0, 0.0, 0.0, 0.0));
     texCoord = vec2(0.0f, 0.0f);
     EmitVertex();

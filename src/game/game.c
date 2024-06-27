@@ -312,7 +312,7 @@ void game_shoot(vec2f pos, f32 rotation, f32 tilt, f32 zoom, f32 ar)
     dir.y = -dir.y > 0 ? sqrt(1 - 1 / c) : -sqrt(1 - 1 / c);
     dirx = dir.x * cos(rotation - HALFPI) - dir.y * sin(rotation - HALFPI);
     dirz = dir.x * sin(rotation - HALFPI) + dir.y * cos(rotation - HALFPI);
-    player->state = KNIGHT_SHOOT;
+    game_set_state(KNIGHT_SHOOT_1);
     player->face_dir = FALSE;
     player->facing = vec2f_normalize(vec2f_create(dirx, dirz));
     if (glfwGetTime() - cooldown < 0.5)
@@ -331,6 +331,18 @@ void game_shoot(vec2f pos, f32 rotation, f32 tilt, f32 zoom, f32 ar)
 
 void game_idle(void)
 {
-    player->state = KNIGHT_IDLE;
-    player->face_dir = TRUE;
+    game_set_state(KNIGHT_IDLE);
+}
+
+void game_set_state(u32 state)
+{
+    player->state = state;
+    switch (state) {
+        case KNIGHT_SHOOT_1:
+            player->face_dir = FALSE;
+            break;
+        default:
+            player->face_dir = TRUE;
+            break;
+    }
 }

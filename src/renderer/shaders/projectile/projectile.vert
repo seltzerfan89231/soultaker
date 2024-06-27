@@ -5,6 +5,7 @@
 layout (location = 0) in vec3 aPos;
 layout (location = 1) in float aScale;
 layout (location = 2) in float aRotation;
+layout (location = 3) in float aTexID;
 
 out float projectile_rotation;
 
@@ -21,6 +22,7 @@ layout (std140) uniform Zoom
 
 out VertexData
 {
+    int texID;
     float scale;
     float projectileRotation;
 };
@@ -31,4 +33,5 @@ void main()
     gl_Position.y += zoom * aPos.y;
     scale = aScale;
     projectileRotation = aRotation;
+    texID = int(round(aTexID));
 }

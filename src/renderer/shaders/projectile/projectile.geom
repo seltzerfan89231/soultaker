@@ -33,13 +33,19 @@ layout (std140) uniform Tilt
 
 in VertexData
 {
+    int texID;
     float scale;
     float projectileRotation;
 } inData[];
 
-out vec2 texCoord;
+out VertexData
+{
+    vec2 texCoord;
+    flat int texID;
+};
 
 void main() {
+    texID = inData[0].texID;
     vec4 position = gl_in[0].gl_Position;
     float scale = inData[0].scale;
     float drot = inData[0].projectileRotation - rotation;

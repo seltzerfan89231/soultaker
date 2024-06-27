@@ -39,18 +39,19 @@ void renderer_init(void)
     renderer.shaders[PARSTACLE_SHADER]  = shader_create("src/renderer/shaders/parstacle/parstacle.vert", "src/renderer/shaders/parstacle/parstacle.frag", "src/renderer/shaders/parstacle/parstacle.geom");
     /* --------------------- */
     renderer.vaos = malloc(NUM_VAOS * sizeof(VAO));
-    renderer.vaos[TILE_VAO]         = vao_create(GL_STATIC_DRAW, GL_POINTS, 2);
-    renderer.vaos[WALL_VAO]         = vao_create(GL_STATIC_DRAW, GL_POINTS, 4);
+    renderer.vaos[TILE_VAO]         = vao_create(GL_STATIC_DRAW, GL_POINTS, 3);
+    renderer.vaos[WALL_VAO]         = vao_create(GL_STATIC_DRAW, GL_POINTS, 5);
     renderer.vaos[ENTITY_VAO]       = vao_create(GL_DYNAMIC_DRAW, GL_POINTS, 6);
-    renderer.vaos[PROJECTILE_VAO]   = vao_create(GL_DYNAMIC_DRAW, GL_POINTS, 5);
+    renderer.vaos[PROJECTILE_VAO]   = vao_create(GL_DYNAMIC_DRAW, GL_POINTS, 6);
     renderer.vaos[GUI_VAO]          = vao_create(GL_STATIC_DRAW, GL_TRIANGLES, 9);
     renderer.vaos[PARTICLE_VAO]     = vao_create(GL_DYNAMIC_DRAW, GL_POINTS, 4);
-    renderer.vaos[OBSTACLE_VAO]     = vao_create(GL_STATIC_DRAW, GL_POINTS, 4);
+    renderer.vaos[OBSTACLE_VAO]     = vao_create(GL_STATIC_DRAW, GL_POINTS, 5);
     renderer.vaos[PARJICLE_VAO]     = vao_create(GL_DYNAMIC_DRAW, GL_POINTS, 5);
-    renderer.vaos[PARSTACLE_VAO]    = vao_create(GL_STATIC_DRAW, GL_POINTS, 4);
+    renderer.vaos[PARSTACLE_VAO]    = vao_create(GL_STATIC_DRAW, GL_POINTS, 5);
     vao_attr(renderer.vaos[TILE_VAO]        , 0, 2, 0);
+    vao_attr(renderer.vaos[TILE_VAO]        , 1, 1, 2);
     vao_attr(renderer.vaos[WALL_VAO]        , 0, 3, 0);
-    vao_attr(renderer.vaos[WALL_VAO]        , 1, 1, 3);
+    vao_attr(renderer.vaos[WALL_VAO]        , 1, 2, 3);
     vao_attr(renderer.vaos[ENTITY_VAO]      , 0, 3, 0);
     vao_attr(renderer.vaos[ENTITY_VAO]      , 1, 1, 3);
     vao_attr(renderer.vaos[ENTITY_VAO]      , 2, 1, 4);
@@ -58,6 +59,7 @@ void renderer_init(void)
     vao_attr(renderer.vaos[PROJECTILE_VAO]  , 0, 3, 0);
     vao_attr(renderer.vaos[PROJECTILE_VAO]  , 1, 1, 3);
     vao_attr(renderer.vaos[PROJECTILE_VAO]  , 2, 1, 4);
+    vao_attr(renderer.vaos[PROJECTILE_VAO]  , 3, 1, 5);
     vao_attr(renderer.vaos[GUI_VAO]         , 0, 2, 0);
     vao_attr(renderer.vaos[GUI_VAO]         , 1, 2, 2);
     vao_attr(renderer.vaos[GUI_VAO]         , 2, 1, 4);
@@ -66,17 +68,19 @@ void renderer_init(void)
     vao_attr(renderer.vaos[PARTICLE_VAO]    , 1, 1, 3);
     vao_attr(renderer.vaos[OBSTACLE_VAO]    , 0, 3, 0);
     vao_attr(renderer.vaos[OBSTACLE_VAO]    , 1, 1, 3);
+    vao_attr(renderer.vaos[OBSTACLE_VAO]    , 2, 1, 4);
     vao_attr(renderer.vaos[PARJICLE_VAO]    , 0, 3, 0);
     vao_attr(renderer.vaos[PARJICLE_VAO]    , 1, 1, 3);
     vao_attr(renderer.vaos[PARJICLE_VAO]    , 2, 1, 4);
     vao_attr(renderer.vaos[PARSTACLE_VAO]   , 0, 3, 0);
     vao_attr(renderer.vaos[PARSTACLE_VAO]   , 1, 1, 3);
+    vao_attr(renderer.vaos[PARSTACLE_VAO]   , 2, 1, 4);
     /* --------------------- */
     renderer.game_textures = malloc(NUM_GAME_TEXTURES * sizeof(Texture));
-    renderer.game_textures[KNIGHT_DOWN_TEX]  = texture_create("assets/textures/game/knight/knight_down_1.png", GL_NEAREST);
-    renderer.game_textures[KNIGHT_RIGHT_TEX] = texture_create("assets/textures/game/knight/knight_right_1.png", GL_NEAREST);
-    renderer.game_textures[KNIGHT_UP_TEX]    = texture_create("assets/textures/game/knight/knight_up_1.png", GL_NEAREST);
-    renderer.game_textures[KNIGHT_LEFT_TEX]  = texture_create("assets/textures/game/knight/knight_left_1.png", GL_NEAREST);
+    renderer.game_textures[KNIGHT_IDLE_DOWN_TEX]  = texture_create("assets/textures/game/knight/knight_idle_down.png", GL_NEAREST);
+    renderer.game_textures[KNIGHT_IDLE_RIGHT_TEX] = texture_create("assets/textures/game/knight/knight_idle_right.png", GL_NEAREST);
+    renderer.game_textures[KNIGHT_IDLE_UP_TEX]    = texture_create("assets/textures/game/knight/knight_idle_up.png", GL_NEAREST);
+    renderer.game_textures[KNIGHT_IDLE_LEFT_TEX]  = texture_create("assets/textures/game/knight/knight_idle_left.png", GL_NEAREST);
     renderer.game_textures[KNIGHT_SHOOT_DOWN_TEX]  = texture_create("assets/textures/game/knight/knight_shoot_down_1.png", GL_NEAREST);
     renderer.game_textures[KNIGHT_SHOOT_RIGHT_TEX] = texture_create("assets/textures/game/knight/knight_shoot_right_1.png", GL_NEAREST);
     renderer.game_textures[KNIGHT_SHOOT_UP_TEX]    = texture_create("assets/textures/game/knight/knight_shoot_up_1.png", GL_NEAREST);

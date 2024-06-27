@@ -4,12 +4,15 @@
 
 layout (binding = 0, std430) readonly buffer ssbo
 {
-    uvec2 tex[5];
+    uvec2 tex[];
 };
 
-in vec2 texCoord;
-in flat int texID;
-in flat float depthValue;
+in VertexData
+{
+    vec2 texCoord;
+    flat int texID;
+    flat float depthValue;
+};
 
 void main()
 {

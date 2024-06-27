@@ -12,11 +12,15 @@ layout (std140) uniform Tilt
     float tilt;
 };
 
-in vec2 texCoord;
+in VertexData
+{
+    vec2 texCoord;
+    flat int texID;
+};
 
 void main()
 {
-    vec4 texColor = texture(sampler2D(tex[1]), texCoord);
+    vec4 texColor = texture(sampler2D(tex[texID]), texCoord);
     if (texColor.a < 0.1)
         discard;
     gl_FragColor = texColor;
