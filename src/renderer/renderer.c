@@ -178,19 +178,7 @@ void renderer_update(u32 vao, u32 offset, u32 length, f32* buffer)
 void renderer_render(void)
 {
     glClearColor(0.7f, 0.7f, 0.7f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);  
-    /* glStencilOpSeparate(GL_FRONT, GL_REPLACE, GL_REPLACE, GL_REPLACE);
-    glStencilOpSeparate(GL_BACK, GL_KEEP, GL_REPLACE, GL_REPLACE);
-    glStencilFuncSeparate(GL_FRONT, GL_NEVER, 1, 0xFF);
-    glStencilFuncSeparate(GL_BACK, GL_ALWAYS, 1, 0xFF);
-    glStencilMaskSeparate(GL_FRONT, 0xFF);
-    glStencilMaskSeparate(GL_BACK, 0xFF);
-    glStencilFunc(GL_NEVER, 1, 0xFF);
-    shader_use(renderer.shaders[WALL_BACK_SHADER]);
-    vao_draw(renderer.vaos[WALL_VAO], GL_POINTS);
-    glStencilOpSeparate(GL_FRONT, GL_KEEP, GL_REPLACE, GL_REPLACE);
-    glStencilFunc(GL_ALWAYS, 0, 0xFF);
-    glStencilMask(0x00);  */
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
     
     shader_use(renderer.shaders[TILE_SHADER]);
     vao_draw(renderer.vaos[TILE_VAO]);
@@ -202,7 +190,6 @@ void renderer_render(void)
     glEnable(GL_DEPTH_TEST);
     shader_use(renderer.shaders[WALL_SHADER]);
     vao_draw(renderer.vaos[WALL_VAO]);
-    //glClear(GL_DEPTH_BUFFER_BIT);
     shader_use(renderer.shaders[ENTITY_SHADER]);
     vao_draw(renderer.vaos[ENTITY_VAO]);
     shader_use(renderer.shaders[PARTICLE_SHADER]);
@@ -219,7 +206,6 @@ void renderer_render(void)
     shader_use(renderer.shaders[HEALTHBAR_SHADER]);
     vao_draw(renderer.vaos[ENTITY_VAO]);
     //glDepthFunc(GL_LESS);
-
     glDisable(GL_DEPTH_TEST);
     shader_use(renderer.shaders[GUI_SHADER]);
     vao_draw(renderer.vaos[GUI_VAO]);

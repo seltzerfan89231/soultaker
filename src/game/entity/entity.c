@@ -10,7 +10,8 @@ Entity* entity_create(u32 id, u8 friendly)
     entity->id = id;
     entity->scale = 1;
     entity->speed = 8;
-    entity->state = 0;
+    entity->state = KNIGHT_IDLE;
+    entity->face_dir = TRUE;
     entity->direction = vec3f_create(0, 0, 0);
     entity->friendly = friendly;
     entity->hitbox_radius = 0.5;
@@ -27,7 +28,7 @@ void entity_update(Entity* entity, f32 dt)
 void entity_set_direction(Entity *entity, vec3f direction)
 {
     entity->direction = direction;
-    if (vec3f_mag(direction) != 0)
+    if (entity->face_dir && vec3f_mag(direction) != 0)
         entity->facing.x = direction.x, entity->facing.y = direction.z;
 }
 

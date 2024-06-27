@@ -71,9 +71,14 @@ static void process_input(void)
         zoom_magnitude++;
     if (window_key_pressed(GLFW_KEY_P))
         zoom_magnitude--;
+
     if (window_mouse_button_pressed(MOUSE_LEFT))
         if (!gui_interact())
             game_shoot(window.mouse.position, camera.yaw, camera.pitch, camera.zoom, window.aspect_ratio);
+        else
+            game_idle();
+    else
+        game_idle();
 
     game_set_direction(camera_get_direction(move_direction));
     if (rotation_magnitude != 0)

@@ -303,13 +303,6 @@ void game_destroy(void)
 void game_shoot(vec2f pos, f32 rotation, f32 tilt, f32 zoom, f32 ar)
 {
     static f32 cooldown;
-    player->state = KNIGHT_SHOOT;
-    if (glfwGetTime() - cooldown < 0.5)
-        return;
-    cooldown = glfwGetTime();
-    assert(player != NULL);
-    Projectile* proj = projectile_create(ONE, 1);
-    proj->speed = 4;
     vec2f dir = vec2f_normalize(vec2f_create((pos.x - 0.5) * ar, pos.y - 0.5 + 1.0 / 4 / zoom));
     f32 dirx, dirz, a, b, c;
     a = atan(-dir.y/dir.x);
@@ -319,10 +312,25 @@ void game_shoot(vec2f pos, f32 rotation, f32 tilt, f32 zoom, f32 ar)
     dir.y = -dir.y > 0 ? sqrt(1 - 1 / c) : -sqrt(1 - 1 / c);
     dirx = dir.x * cos(rotation - HALFPI) - dir.y * sin(rotation - HALFPI);
     dirz = dir.x * sin(rotation - HALFPI) + dir.y * cos(rotation - HALFPI);
+    player->state = KNIGHT_SHOOT;
+    player->face_dir = FALSE;
+    player->facing = vec2f_normalize(vec2f_create(dirx, dirz));
+    if (glfwGetTime() - cooldown < 0.5)
+        return;
+    cooldown = glfwGetTime();
+    assert(player != NULL);
+    Projectile* proj = projectile_create(ONE, 1);
+    proj->speed = 4;
     proj->position = player->position;
     f32 t = atan(dirz / dirx);
     proj->rotation = t + (dirx > 0 ? 0 : PI);
     proj->direction = vec3f_normalize(vec3f_create(dirx, 0.0, dirz));
     proj->position.y = 0.5f;
     projectile_array_push(&game.projectiles, proj);
+}
+
+void game_idle(void)
+{
+    player->state = KNIGHT_IDLE;
+    player->face_dir = TRUE;
 }

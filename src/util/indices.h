@@ -1,6 +1,14 @@
 #ifndef INDICES_H
 #define INDICES_H
 
+#define DOWN  0
+#define RIGHT 1
+#define UP    2
+#define LEFT  3
+
+#define FALSE 0
+#define TRUE 1
+
 #pragma region UBOS
 #define NUM_UBOS         7
 #define MATRICES_UBO     0
@@ -78,21 +86,19 @@
 #define ENTITY_ANIMATION 0
 #pragma endregion
 
+#pragma region ENTITY_IDS
 #define MAX_ENTITY_ID 2
 #define KNIGHT 0
 #define ENEMY  1
+#pragma endregion
 
+#pragma region ENTITY_STATES
 #define KNIGHT_STATES 2
 #define KNIGHT_IDLE   0
 #define KNIGHT_SHOOT  1
-
 #define ENEMY_STATES 2
 #define ENEMY_IDLE   0
 #define ENEMY_SHOOT  1
-
-#define DOWN  0
-#define RIGHT 1
-#define UP    2
-#define LEFT  3
+#pragma endregion
 
 #endif

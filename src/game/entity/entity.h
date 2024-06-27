@@ -7,8 +7,8 @@
 #include "../../util/indices.h"
 
 typedef struct {
-    f32 speed, scale, hitbox_radius, health, max_health;
-    u8 friendly, state;
+    f32 speed, scale, hitbox_radius, health, max_health, timer;
+    u8 friendly, face_dir, state;
     u32 id;
     vec3f position, direction;
     vec2f facing;
