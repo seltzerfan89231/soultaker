@@ -26,6 +26,5 @@ void game_set_direction(vec3f direction);
 void game_destroy(void);
 void game_shoot(vec2f pos, f32 rotation, f32 tilt, f32 zoom, f32 ar);
 void game_idle(void);
-void game_set_state(u32 state);
 
 #endif
