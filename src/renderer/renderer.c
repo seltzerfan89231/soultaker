@@ -41,7 +41,7 @@ void renderer_init(void)
     renderer.vaos = malloc(NUM_VAOS * sizeof(VAO));
     renderer.vaos[TILE_VAO]         = vao_create(GL_STATIC_DRAW, GL_POINTS, 3);
     renderer.vaos[WALL_VAO]         = vao_create(GL_STATIC_DRAW, GL_POINTS, 5);
-    renderer.vaos[ENTITY_VAO]       = vao_create(GL_DYNAMIC_DRAW, GL_POINTS, 6);
+    renderer.vaos[ENTITY_VAO]       = vao_create(GL_DYNAMIC_DRAW, GL_POINTS, 10);
     renderer.vaos[PROJECTILE_VAO]   = vao_create(GL_DYNAMIC_DRAW, GL_POINTS, 6);
     renderer.vaos[GUI_VAO]          = vao_create(GL_STATIC_DRAW, GL_TRIANGLES, 9);
     renderer.vaos[PARTICLE_VAO]     = vao_create(GL_DYNAMIC_DRAW, GL_POINTS, 4);
@@ -56,6 +56,7 @@ void renderer_init(void)
     vao_attr(renderer.vaos[ENTITY_VAO]      , 1, 1, 3);
     vao_attr(renderer.vaos[ENTITY_VAO]      , 2, 1, 4);
     vao_attr(renderer.vaos[ENTITY_VAO]      , 3, 1, 5);
+    vao_attr(renderer.vaos[ENTITY_VAO]      , 4, 4, 6);
     vao_attr(renderer.vaos[PROJECTILE_VAO]  , 0, 3, 0);
     vao_attr(renderer.vaos[PROJECTILE_VAO]  , 1, 1, 3);
     vao_attr(renderer.vaos[PROJECTILE_VAO]  , 2, 1, 4);
@@ -320,7 +321,7 @@ void set_constants_ubo(void)
 
 void set_outline_ubo(void)
 {
-    f32 outline_thickness = 1 / 32.0f;
+    f32 outline_thickness = OUTLINE_THICKNESS;
     ubo_update(renderer.ubos[OUTLINE_UBO], 0, sizeof(f32), &outline_thickness);
 }
 

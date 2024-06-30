@@ -13,6 +13,8 @@
 #include "ssbo/ssbo.h"
 #include "animation/animation.h"
 
+#define OUTLINE_THICKNESS 0.03125
+
 typedef struct {
     VAO *vaos;
     Shader *shaders;

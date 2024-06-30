@@ -36,28 +36,30 @@ void entity_update(Entity* entity, f32 dt)
 
     switch (entity->state) {
         case KNIGHT_WALK_1:
-            if (entity->timer > 0.2) {
+            if (entity->timer > 0.15) {
                 entity->timer = 0;
                 entity->state = KNIGHT_WALK_2;
             }
             break;
         case KNIGHT_WALK_2:
-            if (entity->timer > 0.2) {
+            if (entity->timer > 0.15) {
                 entity->timer = 0;
                 entity->state = KNIGHT_WALK_1;
             }
             break;
         case KNIGHT_SHOOT_1:
-            if (entity->timer > 0.2) {
+            if (entity->timer > 0.15) {
                 entity->timer = 0;
                 entity->state = KNIGHT_SHOOT_2;
             }
             break;
         case KNIGHT_SHOOT_2:
-            if (entity->timer > 0.2) {
+            if (entity->timer > 0.15) {
                 entity->timer = 0;
                 entity->state = KNIGHT_SHOOT_1;
             }
+            break;
+        default:
             break;
     }
 
@@ -77,12 +79,9 @@ void entity_set_state(Entity *entity, u32 state)
         case KNIGHT_IDLE:
             if (entity->state == KNIGHT_WALK_1 || entity->state == KNIGHT_WALK_2)
                 break;
-            entity->state = 0;
-            entity->face_dir = TRUE;
-            break;
         default:
-            entity->face_dir = TRUE;
             entity->state = state;
+            entity->face_dir = TRUE;
             break;
     }
 }

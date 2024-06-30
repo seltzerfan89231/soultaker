@@ -3,10 +3,11 @@
 
 #include "../../util/type.h"
 #include "../../util/indices.h"
+#include "framedata.h"
 #include "entities/entities.h"
 
 typedef struct {
-    u32 ***frames;
+    FrameData ***frame_data;
 } Animation;
 
 void animation_init_entities(Animation *animation);

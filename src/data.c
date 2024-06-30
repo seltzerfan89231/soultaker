@@ -34,7 +34,7 @@ static void projectile_push_data(Projectile* projectile, u32 offset)
 
 static void entity_push_data(Entity* entity, u32 offset)
 {
-    offset *= 6;
+    offset *= 10;
     data.buffer[offset++] = entity->position.x;
     data.buffer[offset++] = entity->position.y;
     data.buffer[offset++] = entity->position.z;
@@ -51,7 +51,11 @@ static void entity_push_data(Entity* entity, u32 offset)
     else if (dif < 5 * PI / 4 - 0.01) dir = UP;
     else if (dif < 7 * PI / 4 + 0.01) dir = LEFT;
     else                              dir = DOWN;
-    data.buffer[offset++] = renderer.animations[ENTITY_ANIMATION].frames[entity->id][dir][entity->state];
+    data.buffer[offset++] = renderer.animations[ENTITY_ANIMATION].frame_data[entity->id][dir][entity->state].frame;
+    data.buffer[offset++] = renderer.animations[ENTITY_ANIMATION].frame_data[entity->id][dir][entity->state].x;
+    data.buffer[offset++] = renderer.animations[ENTITY_ANIMATION].frame_data[entity->id][dir][entity->state].y;
+    data.buffer[offset++] = renderer.animations[ENTITY_ANIMATION].frame_data[entity->id][dir][entity->state].w;
+    data.buffer[offset++] = renderer.animations[ENTITY_ANIMATION].frame_data[entity->id][dir][entity->state].h;  
 }
 
 static void particle_push_data(Particle *particle, u32 offset)

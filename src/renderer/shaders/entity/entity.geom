@@ -19,6 +19,7 @@ in VertexData
 {
     float scale;
     int texID;
+    float x, y, w, h;
 } inData[];
 
 out VertexData
@@ -32,27 +33,30 @@ void main() {
     vec2 offset;
     float scale = inData[0].scale;
     texID = inData[0].texID;
+    float x, y, w, h;
+    x = inData[0].x, y = inData[0].y;
+    w = inData[0].w, h = inData[0].h;
 
     // bottom left
-    offset = scale * zoom * vec2(-0.5 * ar, 0.0);
+    offset = scale * zoom * vec2((x - w / 2) * ar, y);
     texCoord = vec2(0.0f, 1.0f);
     gl_Position = position + vec4(offset, 0.0, 0.0);
     EmitVertex();
 
     // bottom right
-    offset = scale * zoom * vec2(0.5 * ar, 0.0);
+    offset = scale * zoom * vec2((x + w / 2) * ar, y);
     texCoord = vec2(1.0f, 1.0f);
     gl_Position = position + vec4(offset, 0.0, 0.0);
     EmitVertex();
 
     // top left
-    offset = scale * zoom * vec2(-0.5 * ar, 1.0);
+    offset = scale * zoom * vec2((x - w / 2) * ar, y + h);
     texCoord = vec2(0.0f, 0.0f);
     gl_Position = position + vec4(offset, 0.0, 0.0);
     EmitVertex();
 
     // top right
-    offset = scale * zoom * vec2(0.5 * ar, 1.0);
+    offset = scale * zoom * vec2((x + w / 2) * ar, y + h);
     texCoord = vec2(1.0f, 0.0f);
     gl_Position = position + vec4(offset, 0.0, 0.0);
     EmitVertex();
