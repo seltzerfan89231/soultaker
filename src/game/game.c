@@ -224,12 +224,12 @@ static void collide_objects(f32 dt)
 
 void game_init(void)
 {
-    game.projectiles = projectile_array_create(10000);
-    game.entities = entity_array_create(10000);
-    game.particles = particle_array_create(10000);
-    game.parjicles = parjicle_array_create(10000);
-    game.parstacles = parstacle_array_create(10000);
-    game.obstacles = obstacle_array_create(10000);
+    game.projectiles = projectile_array_create(1000);
+    game.entities = entity_array_create(1000);
+    game.particles = particle_array_create(1000);
+    game.parjicles = parjicle_array_create(1000);
+    game.parstacles = parstacle_array_create(1000);
+    game.obstacles = obstacle_array_create(1000);
     game.tiles = tile_array_create(10000);
     game.walls = wall_array_create(10000);
 }
@@ -261,6 +261,12 @@ void game_setup(void)
 
     Obstacle *obstacle = obstacle_create();
     obstacle->position = vec3f_create(10.0f, 0.0f, 10.0f);
+    obstacle->hitbox_radius = 0.3f;
+    obstacle->scale = 3.0f;
+    obstacle_array_push(&game.obstacles, obstacle);
+
+    obstacle = obstacle_create();
+    obstacle->position = vec3f_create(12.0f, 0.0f, 10.0f);
     obstacle->hitbox_radius = 0.3f;
     obstacle->scale = 3.0f;
     obstacle_array_push(&game.obstacles, obstacle);

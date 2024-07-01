@@ -20,11 +20,19 @@
 #define OUTLINE_UBO      6
 #pragma endregion
 
+
+
+
+
 #pragma region SSBOS
 #define NUM_SSBOS 2
 #define GAME_SSBO 0
 #define GUI_SSBO  1
 #pragma endregion
+
+
+
+
 
 #pragma region SHADERS
 #define NUM_SHADERS       11
@@ -41,6 +49,10 @@
 #define PARSTACLE_SHADER  10
 #pragma endregion
 
+
+
+
+
 #pragma region VAOS
 #define NUM_VAOS       9
 #define TILE_VAO       0
@@ -54,8 +66,12 @@
 #define PARSTACLE_VAO  8
 #pragma endregion
 
+
+
+
+
 #pragma region GAME_TEXTURES
-#define NUM_GAME_TEXTURES 24
+#define NUM_GAME_TEXTURES 2400
 #define BULLET_TEX        0
 #define TILE_TEX          1
 #define WALL_TOP_TEX      2
@@ -82,6 +98,10 @@
 #define KNIGHT_SHOOT_UP_2_TEX 23
 #pragma endregion
 
+
+
+
+
 #pragma region GUI_TEXTURES
 #define NUM_GUI_TEXTURES 5
 #define NO_TEX           0
@@ -91,10 +111,18 @@
 #define BUTTON_TEX       4
 #pragma endregion
 
+
+
+
+
 #pragma region ANIMATIONS
 #define NUM_ANIMATIONS 1
 #define ENTITY_ANIMATION 0
 #pragma endregion
+
+
+
+
 
 #pragma region ENTITY_IDS
 #define MAX_ENTITY_ID 2
