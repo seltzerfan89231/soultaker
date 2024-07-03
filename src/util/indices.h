@@ -111,25 +111,4 @@
 #define BUTTON_TEX       4
 #pragma endregion
 
-
-
-
-
-#pragma region ENTITY_IDS
-#define MAX_ENTITY_ID 2
-#define KNIGHT 0
-#define ENEMY  1
-#pragma endregion
-
-#pragma region ENTITY_STATES
-#define KNIGHT_STATES  5
-#define KNIGHT_IDLE    0
-#define KNIGHT_WALK_1  1
-#define KNIGHT_WALK_2  2
-#define KNIGHT_SHOOT_1 3
-#define KNIGHT_SHOOT_2 4
-#define ENEMY_STATES 1
-#define ENEMY_IDLE   0
-#pragma endregion
-
 #endif

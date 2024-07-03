@@ -1,29 +1,15 @@
-#ifndef KNIGHT_H
-#define KNIGHT_H
+#include "../entity.h"
+#include <stdio.h>
 
-#include "../../../util/framedata.h"
-
-inline static void knight_init_frame_data(FrameData ***frame_data)
+void knight_init_frame_data(FrameData ***frame_data)
 {
     frame_data[KNIGHT] = malloc(4 * sizeof(FrameData*));
     for (i32 i = 0; i < 4; i++)
         frame_data[KNIGHT][i] = malloc(KNIGHT_STATES * sizeof(FrameData));
-    frame_data[KNIGHT][DOWN][KNIGHT_IDLE] = (FrameData) {
-        .x = 0.0f, .y = 0.0f, .w = 1.0f, .h = 1.0f,
-        .frame = KNIGHT_IDLE_DOWN_TEX
-    };
-    frame_data[KNIGHT][RIGHT][KNIGHT_IDLE] = (FrameData) {
-        .x = 0.0f, .y = 0.0f, .w = 1.0f, .h = 1.0f,
-        .frame = KNIGHT_IDLE_RIGHT_TEX
-    };
-    frame_data[KNIGHT][UP][KNIGHT_IDLE] = (FrameData) {
-        .x = 0.0f, .y = 0.0f, .w = 1.0f, .h = 1.0f,
-        .frame = KNIGHT_IDLE_UP_TEX
-    };
-    frame_data[KNIGHT][LEFT][KNIGHT_IDLE] = (FrameData) {
-        .x = 0.0f, .y = 0.0f, .w = 1.0f, .h = 1.0f,
-        .frame = KNIGHT_IDLE_LEFT_TEX
-    };
+    frame_data[KNIGHT][DOWN][KNIGHT_IDLE]  = _FDdef(KNIGHT_IDLE_DOWN_TEX);
+    frame_data[KNIGHT][RIGHT][KNIGHT_IDLE] = _FDdef(KNIGHT_IDLE_RIGHT_TEX);
+    frame_data[KNIGHT][UP][KNIGHT_IDLE]    = _FDdef(KNIGHT_IDLE_UP_TEX);
+    frame_data[KNIGHT][LEFT][KNIGHT_IDLE]  = _FDdef(KNIGHT_IDLE_LEFT_TEX);
 
     frame_data[KNIGHT][DOWN][KNIGHT_WALK_1] = (FrameData) {
         .x = 0.0f, .y = 0.0f, .w = 1.0f, .h = 1.0f,
@@ -94,11 +80,55 @@ inline static void knight_init_frame_data(FrameData ***frame_data)
     };
 }
 
-inline static void knight_destroy_frame_data(FrameData ***frame_data)
+void knight_destroy_frame_data(FrameData ***frame_data)
 {
     for (i32 i = 0; i < 4; i++)
         free(frame_data[KNIGHT][i]);
     free(frame_data[KNIGHT]);
 }
 
-#endif
+void knight_update_state(Entity *entity)
+{
+    if (entity->flag == 1) {
+        //printf("A\n");
+        entity->flag = 0;
+    }
+    
+    if (vec3f_mag(entity->direction) == 0) {
+        if (entity->state == KNIGHT_WALK_1 || entity->state == KNIGHT_WALK_2)
+            entity->state = KNIGHT_IDLE;
+    }
+    else {
+        if (entity->state == KNIGHT_IDLE)
+            entity->state = KNIGHT_WALK_1;
+    }
+
+    switch (entity->state) {
+        case KNIGHT_WALK_1:
+            if (entity->timer > 0.15) {
+                entity->timer = 0;
+                entity->state = KNIGHT_WALK_2;
+            }
+            break;
+        case KNIGHT_WALK_2:
+            if (entity->timer > 0.15) {
+                entity->timer = 0;
+                entity->state = KNIGHT_WALK_1;
+            }
+            break;
+        case KNIGHT_SHOOT_1:
+            if (entity->timer > 0.15) {
+                entity->timer = 0;
+                entity->state = KNIGHT_SHOOT_2;
+            }
+            break;
+        case KNIGHT_SHOOT_2:
+            if (entity->timer > 0.15) {
+                entity->timer = 0;
+                entity->state = KNIGHT_SHOOT_1;
+            }
+            break;
+        default:
+            break;
+    }
+}

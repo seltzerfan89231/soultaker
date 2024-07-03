@@ -6,12 +6,16 @@
 #include "../../util/vec.h"
 #include "../../util/constants.h"
 #include "../../util/indices.h"
+#include "../../util/framedata.h"
+#include "../projectile/projectile.h"
 
-#include "entities/entities.h"
+#define FRIENDLY_BIT 1
+#define FACE_DIR_BIT 2
+#define FLAG_BIT     3
 
 typedef struct {
     f32 speed, scale, hitbox_radius, health, max_health, timer;
-    u8 friendly, face_dir, state;
+    u8 friendly, face_dir, state, flag;
     u32 id;
     vec3f position, direction;
     vec2f facing;
@@ -19,10 +23,32 @@ typedef struct {
 
 Entity* entity_create(u32 id, u8 friendly);
 void entity_update(Entity* entity, f32 dt);
-void entity_set_state(Entity *entity, u32 state);
 void entity_set_direction(Entity *entity, vec3f direction);
 void entity_destroy(Entity* entity);
 
 _ARRAY_DECLARE(Entity, entity)
+
+#define MAX_ENTITY_ID 2
+#define KNIGHT 0
+#define ENEMY  1
+
+#define _ENTITY_INIT(_type) \
+    void _type##_init_frame_data(FrameData ***frame_data); \
+    void _type##_destroy_frame_data(FrameData ***frame_data); \
+    void _type##_update_state(Entity *entity);
+
+#define KNIGHT_STATES  5
+#define KNIGHT_IDLE    0
+#define KNIGHT_WALK_1  1
+#define KNIGHT_WALK_2  2
+#define KNIGHT_SHOOT_1 3
+#define KNIGHT_SHOOT_2 4
+
+_ENTITY_INIT(knight)
+
+#define ENEMY_STATES 1
+#define ENEMY_IDLE   0
+
+_ENTITY_INIT(enemy)
 
 #endif

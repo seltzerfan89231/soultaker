@@ -1,9 +1,6 @@
-#ifndef ENEMY_H
-#define ENEMY_H
+#include "../entity.h"
 
-#include "../../../util/framedata.h"
-
-inline static void enemy_init_frame_data(FrameData ***frame_data)
+void enemy_init_frame_data(FrameData ***frame_data)
 {
     frame_data[ENEMY] = malloc(4 * sizeof(FrameData*));
     for (i32 i = 0; i < 4; i++)
@@ -26,11 +23,9 @@ inline static void enemy_init_frame_data(FrameData ***frame_data)
     };
 }
 
-inline static void enemy_destroy_frame_data(FrameData ***frame_data)
+void enemy_destroy_frame_data(FrameData ***frame_data)
 {
     for (i32 i = 0; i < 4; i++)
         free(frame_data[ENEMY][i]);
     free(frame_data[ENEMY]);
 }
-
-#endif
