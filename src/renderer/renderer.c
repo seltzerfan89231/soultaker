@@ -172,8 +172,6 @@ void renderer_init(void)
     link_shader_ssbo(PARSTACLE_SHADER, GAME_SSBO);
     link_shader_ssbo(GUI_SHADER, GUI_SSBO);
     /* --------------------- */
-    renderer.animations = malloc(NUM_ANIMATIONS * sizeof(Animation));
-    animation_init_entities(&renderer.animations[ENTITY_ANIMATION]);
 }
 
 void renderer_malloc(u32 vao, u32 length)
@@ -252,8 +250,6 @@ void renderer_destroy(void)
     for (i = 0; i < NUM_SSBOS; i++)
         ssbo_destroy(renderer.ssbos[i]);
     free(renderer.ssbos);
-
-    animation_destroy_entities(&renderer.animations[ENTITY_ANIMATION]);
 }
 
 void renderer_uniform_update_view(f32 *mat) {

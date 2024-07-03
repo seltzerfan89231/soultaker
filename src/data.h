@@ -5,9 +5,12 @@
 #include "camera/camera.h"
 #include "renderer/renderer.h"
 #include "gui/gui.h"
+#include "util/framedata.h"
+#include "util/indices.h"
 
 typedef struct {
     f32 *buffer;
+    FrameData ***frame_data;
 } Data;
 
 extern Data data;

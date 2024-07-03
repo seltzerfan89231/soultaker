@@ -1,11 +1,10 @@
-#include "animation.h"
-#include <stdlib.h>
+#ifndef KNIGHT_H
+#define KNIGHT_H
 
-void animation_init_entities(Animation *animation)
+#include "../../../util/framedata.h"
+
+inline static void knight_init_frame_data(FrameData ***frame_data)
 {
-    animation->frame_data = malloc(MAX_ENTITY_ID * sizeof(FrameData**));
-    FrameData ***frame_data = animation->frame_data;
-    /* ---------------- */
     frame_data[KNIGHT] = malloc(4 * sizeof(FrameData*));
     for (i32 i = 0; i < 4; i++)
         frame_data[KNIGHT][i] = malloc(KNIGHT_STATES * sizeof(FrameData));
@@ -93,38 +92,13 @@ void animation_init_entities(Animation *animation)
         .x = -1.5f / 8.0f, .y = 0.0f, .w = 11.0f / 8.0f, .h = 1.0f,
         .frame = KNIGHT_SHOOT_LEFT_2_TEX
     };
-
-    /* ---------------- */
-    frame_data[ENEMY] = malloc(4 * sizeof(FrameData*));
-    for (i32 i = 0; i < 4; i++)
-        frame_data[ENEMY][i] = malloc(ENEMY_STATES * sizeof(FrameData));
-    frame_data[ENEMY][DOWN][ENEMY_IDLE] = (FrameData) {
-        .x = 0.0f, .y = 0.0f, .w = 1.0f, .h = 1.0f,
-        .frame = KNIGHT_IDLE_DOWN_TEX
-    };
-    frame_data[ENEMY][RIGHT][ENEMY_IDLE] = (FrameData) {
-        .x = 0.0f, .y = 0.0f, .w = 1.0f, .h = 1.0f,
-        .frame = KNIGHT_IDLE_RIGHT_TEX
-    };
-    frame_data[ENEMY][UP][ENEMY_IDLE] = (FrameData) {
-        .x = 0.0f, .y = 0.0f, .w = 1.0f, .h = 1.0f,
-        .frame = KNIGHT_IDLE_UP_TEX
-    };
-    frame_data[ENEMY][LEFT][ENEMY_IDLE] = (FrameData) {
-        .x = 0.0f, .y = 0.0f, .w = 1.0f, .h = 1.0f,
-        .frame = KNIGHT_IDLE_LEFT_TEX
-    };
 }
 
-void animation_destroy_entities(Animation *animation)
+inline static void knight_destroy_frame_data(FrameData ***frame_data)
 {
     for (i32 i = 0; i < 4; i++)
-        free(animation->frame_data[KNIGHT][i]);
-    free(animation->frame_data[KNIGHT]);
-
-    for (i32 i = 0; i < 4; i++)
-        free(animation->frame_data[ENEMY][i]);
-    free(animation->frame_data[ENEMY]);
-
-    free(animation->frame_data);
+        free(frame_data[KNIGHT][i]);
+    free(frame_data[KNIGHT]);
 }
+
+#endif

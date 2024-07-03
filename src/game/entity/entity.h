@@ -7,6 +7,8 @@
 #include "../../util/constants.h"
 #include "../../util/indices.h"
 
+#include "entities/entities.h"
+
 typedef struct {
     f32 speed, scale, hitbox_radius, health, max_health, timer;
     u8 friendly, face_dir, state;

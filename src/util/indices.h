@@ -115,15 +115,6 @@
 
 
 
-#pragma region ANIMATIONS
-#define NUM_ANIMATIONS 1
-#define ENTITY_ANIMATION 0
-#pragma endregion
-
-
-
-
-
 #pragma region ENTITY_IDS
 #define MAX_ENTITY_ID 2
 #define KNIGHT 0

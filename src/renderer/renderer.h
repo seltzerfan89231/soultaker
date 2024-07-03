@@ -11,7 +11,6 @@
 #include "texture/texture.h"
 #include "ubo/ubo.h"
 #include "ssbo/ssbo.h"
-#include "animation/animation.h"
 
 #define OUTLINE_THICKNESS 0
 
@@ -20,7 +19,6 @@ typedef struct {
     Shader *shaders;
     UBO *ubos;
     SSBO *ssbos;
-    Animation *animations;
     Texture *game_textures;
     Texture *gui_textures;
 } Renderer;

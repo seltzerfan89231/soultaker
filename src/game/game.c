@@ -326,7 +326,7 @@ void game_shoot(vec2f pos, f32 rotation, f32 tilt, f32 zoom, f32 ar)
     cooldown = glfwGetTime();
     assert(player != NULL);
     Projectile* proj = projectile_create(ONE, 1);
-    proj->speed = 4;
+    proj->speed = 10;
     proj->position = player->position;
     f32 t = atan(dirz / dirx);
     proj->rotation = t + (dirx > 0 ? 0 : PI);
