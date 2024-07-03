@@ -22,3 +22,5 @@ void parjicle_destroy(Parjicle *parj)
 {
     free(parj);
 }
+
+_ARRAY_DEFINE(Parjicle, parjicle)

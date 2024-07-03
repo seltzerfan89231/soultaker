@@ -10,7 +10,10 @@ Entity* entity_create(u32 id, u8 friendly)
     entity->id = id;
     entity->scale = 1;
     entity->speed = 8;
-    entity->state = KNIGHT_IDLE;
+    if (entity->id == KNIGHT)
+        entity->state = KNIGHT_IDLE;
+    if (entity->id == ENEMY)
+        entity->state = ENEMY_IDLE;
     entity->face_dir = TRUE;
     entity->timer = 0.0f;
     entity->direction = vec3f_create(0, 0, 0);
@@ -24,6 +27,8 @@ Entity* entity_create(u32 id, u8 friendly)
 void entity_update(Entity* entity, f32 dt)
 {
     entity->position = vec3f_add(entity->position, vec3f_scale(entity->speed * dt, entity->direction));
+    if (entity->id == ENEMY)
+        return;
     
     if (vec3f_mag(entity->direction) == 0) {
         if (entity->state == KNIGHT_WALK_1 || entity->state == KNIGHT_WALK_2)
@@ -97,3 +102,5 @@ void entity_destroy(Entity* entity)
 {
     free(entity);
 }
+
+_ARRAY_DEFINE(Entity, entity)

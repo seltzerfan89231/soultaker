@@ -1,6 +1,7 @@
 #ifndef PARJICLE_H
 #define PARJICLE_H
 
+#include "../../util/array.h"
 #include "../../util/type.h"
 #include "../../util/vec.h"
 
@@ -12,5 +13,7 @@ typedef struct {
 Parjicle *parjicle_create(f32 rotation);
 void parjicle_update_position(Parjicle *parjicle, f32 dt);
 void parjicle_destroy(Parjicle *parj);
+
+_ARRAY_DECLARE(Parjicle, parjicle)
 
 #endif

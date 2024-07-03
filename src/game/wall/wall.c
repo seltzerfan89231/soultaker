@@ -15,3 +15,5 @@ void wall_destroy(Wall* wall)
 {
     free(wall);
 }
+
+_ARRAY_DEFINE(Wall, wall)

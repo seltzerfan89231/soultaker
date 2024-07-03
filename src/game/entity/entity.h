@@ -1,6 +1,7 @@
 #ifndef ENTITY_H
 #define ENTITY_H
 
+#include "../../util/array.h"
 #include "../../util/type.h"
 #include "../../util/vec.h"
 #include "../../util/constants.h"
@@ -19,5 +20,7 @@ void entity_update(Entity* entity, f32 dt);
 void entity_set_state(Entity *entity, u32 state);
 void entity_set_direction(Entity *entity, vec3f direction);
 void entity_destroy(Entity* entity);
+
+_ARRAY_DECLARE(Entity, entity)
 
 #endif

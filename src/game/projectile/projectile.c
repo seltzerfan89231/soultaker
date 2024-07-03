@@ -25,3 +25,5 @@ void projectile_destroy(Projectile* projectile)
 {
     free(projectile);
 }
+
+_ARRAY_DEFINE(Projectile, projectile)

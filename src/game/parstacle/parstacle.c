@@ -12,3 +12,5 @@ void parstacle_destroy(Parstacle* parstacle)
 {
     free(parstacle);
 }
+
+_ARRAY_DEFINE(Parstacle, parstacle)

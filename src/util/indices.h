@@ -137,9 +137,8 @@
 #define KNIGHT_WALK_2  2
 #define KNIGHT_SHOOT_1 3
 #define KNIGHT_SHOOT_2 4
-#define ENEMY_STATES 2
+#define ENEMY_STATES 1
 #define ENEMY_IDLE   0
-#define ENEMY_SHOOT  1
 #pragma endregion
 
 #endif

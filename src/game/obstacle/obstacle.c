@@ -13,3 +13,5 @@ void obstacle_destroy(Obstacle* obstacle)
 {
     free(obstacle);
 }
+
+_ARRAY_DEFINE(Obstacle, obstacle)

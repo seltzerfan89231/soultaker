@@ -14,3 +14,5 @@ void tile_destroy(Tile* tile)
 {
     free(tile);
 }
+
+_ARRAY_DEFINE(Tile, tile)

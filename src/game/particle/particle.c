@@ -21,3 +21,5 @@ void particle_destroy(Particle *particle)
 {
     free(particle);
 }
+
+_ARRAY_DEFINE(Particle, particle)

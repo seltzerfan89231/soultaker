@@ -1,6 +1,7 @@
 #ifndef WALL_H
 #define WALL_H
 
+#include "../../util/array.h"
 #include "../../util/type.h"
 #include "../../util/vec.h"
 
@@ -16,5 +17,7 @@ typedef struct {
 
 Wall* wall_create(walltype type, f32 x, f32 z, f32 height);
 void wall_destroy(Wall* wall);
+
+_ARRAY_DECLARE(Wall, wall)
 
 #endif

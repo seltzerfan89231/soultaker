@@ -22,7 +22,6 @@ out VertexData
     flat int texID;
 };
 
-
 void main()
 {    
     vec4 position = gl_in[0].gl_Position;

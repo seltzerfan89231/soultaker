@@ -2,7 +2,6 @@ TODO
 - timestep
 
 ROADMAP
-- entity animations
 - lever loader
 - first level
 - alternate weapon

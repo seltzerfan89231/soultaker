@@ -1,6 +1,7 @@
 #ifndef PARTICLE_H
 #define PARTICLE_H
 
+#include "../../util/array.h"
 #include "../../util/type.h"
 #include "../../util/vec.h"
 #include "../../util/constants.h"
@@ -13,5 +14,7 @@ typedef struct {
 Particle* particle_create(void);
 void particle_update_position(Particle *particle, f32 dt);
 void particle_destroy(Particle *particle);
+
+_ARRAY_DECLARE(Particle, particle)
 
 #endif

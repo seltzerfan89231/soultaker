@@ -1,6 +1,7 @@
 #ifndef PARSTACLE_H
 #define PARSTACLE_H
 
+#include "../../util/array.h"
 #include "../../util/type.h"
 #include "../../util/vec.h"
 
@@ -11,5 +12,7 @@ typedef struct {
 
 Parstacle* parstacle_create(void);
 void parstacle_destroy(Parstacle* parstacle);
+
+_ARRAY_DECLARE(Parstacle, parstacle)
 
 #endif

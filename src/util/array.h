@@ -1,5 +1,19 @@
-#include "array.h"
+#ifndef ARRAY_H
+#define ARRAY_H
+
+#include "type.h"
 #include <stdlib.h>
+
+#define _ARRAY_DECLARE(_type, _ltype) \
+    typedef struct { \
+        u32 length, max_length; \
+        _type **buffer; \
+    } _type##Array; \
+    _type##Array _ltype##_array_create(u32 max_length); \
+    void _ltype##_array_push(_type##Array *array, _type *_ltype); \
+    void _ltype##_array_cut(_type##Array *array, u32 idx); \
+    bool _ltype##_array_empty(_type##Array *array); \
+    void _ltype##_array_destroy(_type##Array *array);
 
 #define _ARRAY_DEFINE(_type, _ltype) \
     _type##Array _ltype##_array_create(u32 max_length) { \
@@ -25,11 +39,4 @@
         free(array->buffer); \
     }
 
-_ARRAY_DEFINE(Tile, tile)
-_ARRAY_DEFINE(Wall, wall)
-_ARRAY_DEFINE(Projectile, projectile)
-_ARRAY_DEFINE(Entity, entity)
-_ARRAY_DEFINE(Particle, particle)
-_ARRAY_DEFINE(Obstacle, obstacle)
-_ARRAY_DEFINE(Parjicle, parjicle)
-_ARRAY_DEFINE(Parstacle, parstacle)
+#endif

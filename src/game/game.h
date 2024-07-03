@@ -1,7 +1,15 @@
 #ifndef GAME_H
 #define GAME_H
 
-#include "array.h"
+#include "entity/entity.h"
+#include "projectile/projectile.h"
+#include "particle/particle.h"
+#include "obstacle/obstacle.h"
+#include "parjicle/parjicle.h"
+#include "parstacle/parstacle.h"
+#include "tile/tile.h"
+#include "wall/wall.h"
+#include "../util/array.h"
 
 #define MAP_WIDTH 50
 

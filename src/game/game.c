@@ -247,7 +247,7 @@ void game_setup(void)
     player->position = vec3f_create(15.0f, 0.0f, 15.0f);
     entity_array_push(&game.entities, player);
 
-    Entity* entity = entity_create(KNIGHT, 0);
+    Entity* entity = entity_create(ENEMY, 0);
     entity->position = vec3f_create(20, 0, 15);
     entity->scale = 1.0f;
     entity_array_push(&game.entities, entity);

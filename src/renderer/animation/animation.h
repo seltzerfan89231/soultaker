@@ -4,7 +4,6 @@
 #include "../../util/type.h"
 #include "../../util/indices.h"
 #include "framedata.h"
-#include "entities/entities.h"
 
 typedef struct {
     FrameData ***frame_data;
