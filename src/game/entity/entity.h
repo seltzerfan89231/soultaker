@@ -21,6 +21,8 @@ typedef struct {
     vec2f facing;
 } Entity;
 
+extern ProjectileArray *projectiles_ptr;
+
 Entity* entity_create(u32 id, u8 friendly);
 void entity_update(Entity* entity, f32 dt);
 void entity_set_direction(Entity *entity, vec3f direction);
@@ -35,20 +37,9 @@ _ARRAY_DECLARE(Entity, entity)
 #define _ENTITY_INIT(_type) \
     void _type##_init_frame_data(FrameData ***frame_data); \
     void _type##_destroy_frame_data(FrameData ***frame_data); \
-    void _type##_update_state(Entity *entity);
-
-#define KNIGHT_STATES  5
-#define KNIGHT_IDLE    0
-#define KNIGHT_WALK_1  1
-#define KNIGHT_WALK_2  2
-#define KNIGHT_SHOOT_1 3
-#define KNIGHT_SHOOT_2 4
+    void _type##_update(Entity *entity);
 
 _ENTITY_INIT(knight)
-
-#define ENEMY_STATES 1
-#define ENEMY_IDLE   0
-
 _ENTITY_INIT(enemy)
 
 #endif

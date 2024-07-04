@@ -9,21 +9,6 @@ Entity* player;
 
 static void create_objects(void)
 {
-    static f32 cooldown;
-    if (glfwGetTime() - cooldown >= 0.05) {
-        cooldown = glfwGetTime();
-        for (i32 i = 0; i < 1; i++) {
-            Projectile* proj = projectile_create(ONE, 0);
-            proj->position = game.entities.buffer[1]->position;
-            proj->rotation = i * 0.8 + sin(glfwGetTime());
-            proj->direction = vec3f_create(cos(proj->rotation), 0.0f, sin(proj->rotation));
-            proj->scale = 1.0f;
-            proj->lifetime = 3.0f;
-            proj->hitbox_radius = (proj->scale - 0.4) / 2;
-            proj->position.y = 0.5f;
-            projectile_array_push(&game.projectiles, proj);
-        }
-    }
     static f32 cooldown1;
     if (glfwGetTime() - cooldown1 >= 0.3) {
         cooldown1 = glfwGetTime();
@@ -232,6 +217,7 @@ void game_init(void)
     game.obstacles = obstacle_array_create(1000);
     game.tiles = tile_array_create(10000);
     game.walls = wall_array_create(10000);
+    projectile_init(&game.projectiles);
 }
 
 void game_setup(void)
@@ -332,9 +318,4 @@ void game_shoot(vec2f pos, f32 rotation, f32 tilt, f32 zoom, f32 ar)
     proj->direction = vec3f_normalize(vec3f_create(dirx, 0.0, dirz));
     proj->position.y = 0.5f;
     projectile_array_push(&game.projectiles, proj);
-}
-
-void game_idle(void)
-{
-    
 }

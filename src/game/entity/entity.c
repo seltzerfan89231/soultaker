@@ -20,13 +20,16 @@ Entity* entity_create(u32 id, u8 friendly)
     return entity;
 }
 
+#define _UPDATE(_id, _lid) \
+    case _id : _lid##_update(entity); break;
+
 void entity_update(Entity* entity, f32 dt)
 {
     entity->position = vec3f_add(entity->position, vec3f_scale(entity->speed * dt, entity->direction));
-    if (entity->id == ENEMY)
-        return;
-    if (entity->id == KNIGHT)
-        knight_update_state(entity);
+    switch (entity->id) {
+        _UPDATE(ENEMY, enemy)
+        _UPDATE(KNIGHT, knight)
+    }
     entity->timer += dt;
 }
 

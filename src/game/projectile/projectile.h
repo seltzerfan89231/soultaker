@@ -21,4 +21,8 @@ void projectile_destroy(Projectile* projectile);
 
 _ARRAY_DECLARE(Projectile, projectile)
 
+extern ProjectileArray *projectiles_ptr;
+
+void projectile_init(ProjectileArray *ptr);
+
 #endif

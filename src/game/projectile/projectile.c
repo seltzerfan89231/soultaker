@@ -1,6 +1,13 @@
 #include "projectile.h"
 #include <stdlib.h>
 
+ProjectileArray *projectiles_ptr;
+
+void projectile_init(ProjectileArray *ptr)
+{
+    projectiles_ptr = ptr;
+}
+
 Projectile* projectile_create(projtype type, u8 friendly)
 {
     Projectile* projectile = malloc(sizeof(Projectile));
