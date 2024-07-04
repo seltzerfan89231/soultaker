@@ -319,10 +319,9 @@ void game_shoot(vec2f pos, f32 rotation, f32 tilt, f32 zoom, f32 ar)
     dirx = dir.x * cos(rotation - HALFPI) - dir.y * sin(rotation - HALFPI);
     dirz = dir.x * sin(rotation - HALFPI) + dir.y * cos(rotation - HALFPI);
     player->facing = vec2f_normalize(vec2f_create(dirx, dirz));
-    player->flag = 1;
+    player->flag = TRUE;
     if (glfwGetTime() - cooldown < 0.5)
         return;
-    
     cooldown = glfwGetTime();
     assert(player != NULL);
     Projectile* proj = projectile_create(ONE, 1);

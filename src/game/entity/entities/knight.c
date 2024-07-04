@@ -89,9 +89,21 @@ void knight_destroy_frame_data(FrameData ***frame_data)
 
 void knight_update_state(Entity *entity)
 {
-    if (entity->flag == 1) {
-        //printf("A\n");
-        entity->flag = 0;
+    if (entity->flag == TRUE) {
+        if (entity->state != KNIGHT_SHOOT_1 && entity->state != KNIGHT_SHOOT_2) {
+            entity->state = KNIGHT_SHOOT_1;
+            entity->timer = 0;
+            entity->face_dir = FALSE;
+        }
+        entity->flag = FALSE;
+    } else {
+        if (entity->state == KNIGHT_SHOOT_2) {
+            if (entity->timer > 0.15) {
+                entity->state = KNIGHT_IDLE;
+                entity->timer = 0;
+                entity->face_dir = TRUE;
+            }
+        }
     }
     
     if (vec3f_mag(entity->direction) == 0) {
