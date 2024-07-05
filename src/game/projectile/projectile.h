@@ -5,6 +5,7 @@
 #include "../../util/type.h"
 #include "../../util/vec.h"
 #include "../../util/constants.h"
+#include "../particle/particle.h"
 
 typedef enum { ONE } projtype;
 
@@ -16,7 +17,7 @@ typedef struct {
 } Projectile;
 
 Projectile* projectile_create(projtype type, u8 friendly);
-void projectile_update_position(Projectile* projectile, f32 dt);
+void projectile_update(Projectile* projectile, f32 dt);
 void projectile_destroy(Projectile* projectile);
 
 _ARRAY_DECLARE(Projectile, projectile)

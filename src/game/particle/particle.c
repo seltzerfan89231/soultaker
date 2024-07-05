@@ -1,5 +1,6 @@
 #include "particle.h"
 #include <stdlib.h>
+#include <stdio.h>
 
 ParticleArray particles;
 
@@ -14,7 +15,7 @@ Particle* particle_create(void)
     return particle;
 }
 
-void particle_update_position(Particle* particle, f32 dt)
+void particle_update(Particle* particle, f32 dt)
 {
     particle->position = vec3f_add(particle->position, vec3f_scale(particle->speed * dt, particle->direction));
     particle->lifetime -= dt;

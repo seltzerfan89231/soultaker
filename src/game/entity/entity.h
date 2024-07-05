@@ -21,8 +21,6 @@ typedef struct {
     vec2f facing;
 } Entity;
 
-extern ProjectileArray *projectiles_ptr;
-
 Entity* entity_create(u32 id, u8 friendly);
 void entity_update(Entity* entity, f32 dt);
 void entity_set_direction(Entity *entity, vec3f direction);

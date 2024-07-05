@@ -1,5 +1,6 @@
 #include "projectile.h"
 #include <stdlib.h>
+#include <glfw.h>
 
 ProjectileArray projectiles;
 
@@ -18,7 +19,7 @@ Projectile* projectile_create(projtype type, u8 friendly)
     return projectile;
 }
 
-void projectile_update_position(Projectile* projectile, f32 dt)
+void projectile_update(Projectile* projectile, f32 dt)
 {
     projectile->position = vec3f_add(projectile->position, vec3f_scale(projectile->speed * dt, projectile->direction));
     projectile->lifetime -= dt;

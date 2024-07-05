@@ -14,28 +14,6 @@ extern TileArray tiles;
 extern WallArray walls;
 Entity* player;
 
-static void create_objects(void)
-{
-    static f32 cooldown1;
-    if (glfwGetTime() - cooldown1 >= 0.3) {
-        cooldown1 = glfwGetTime();
-        for (i32 i = 0; i < 6; i++) {
-            if (i % 2) {
-                Particle *particle = particle_create();
-                particle->position = vec3f_create(12.0f, 0.5f, 15.0f);
-                particle->direction = vec3f_create(cos(i), 0.0f, sin(i));
-                particle->speed = 2.0f;
-            } else {
-                Parjicle *parjicle = parjicle_create(i);
-                parjicle->position = vec3f_create(12.0f, 0.5f, 15.0f);
-                parjicle->direction = vec3f_create(cos(i), 0.0f, sin(i));
-                parjicle->scale = 0.3f;
-                parjicle->speed = 2.0f;
-            }
-        }
-    }
-}
-
 static void update_objects(f32 dt)
 {
     for (i32 i = 0; i < entities.length; i++) {
@@ -44,19 +22,19 @@ static void update_objects(f32 dt)
     }
     for (i32 i = 0; i < projectiles.length; i++) {
         Projectile *proj = projectiles.buffer[i];
-        projectile_update_position(proj, dt);
+        projectile_update(proj, dt);
         if (proj->lifetime <= 0)
             projectile_array_cut(&projectiles, i), i--;
     }
     for (i32 i = 0; i < particles.length; i++) {
         Particle *particle = particles.buffer[i];
-        particle_update_position(particle, dt);
+        particle_update(particle, dt);
         if (particle->lifetime <= 0)
             particle_array_cut(&particles, i), i--;
     }
     for (i32 i = 0; i < parjicles.length; i++) {
         Parjicle *parjicle = parjicles.buffer[i];
-        parjicle_update_position(parjicle, dt);
+        parjicle_update(parjicle, dt);
         if (parjicle->lifetime <= 0)
             parjicle_array_cut(&parjicles, i), i--;
     }
@@ -214,14 +192,14 @@ static void collide_objects(f32 dt)
 
 void game_init(void)
 {
-    projectiles = projectile_array_create(1000);
-    entities = entity_array_create(1000);
-    particles = particle_array_create(1000);
-    parjicles = parjicle_array_create(1000);
-    parstacles = parstacle_array_create(1000);
-    obstacles = obstacle_array_create(1000);
-    tiles = tile_array_create(10000);
-    walls = wall_array_create(10000);
+    projectiles = projectile_array_create(0);
+    entities = entity_array_create(0);
+    particles = particle_array_create(0);
+    parjicles = parjicle_array_create(0);
+    parstacles = parstacle_array_create(0);
+    obstacles = obstacle_array_create(0);
+    tiles = tile_array_create(0);
+    walls = wall_array_create(0);
 }
 
 void game_setup(void)
@@ -263,7 +241,6 @@ void game_setup(void)
 
 void game_update(f32 dt)
 {
-    create_objects();
     update_objects(dt);
     collide_objects(dt);
 }
@@ -280,6 +257,7 @@ void game_set_target(vec3f target)
 
 void game_destroy(void)
 {
+    printf("%d\n", entities.max_length);
     tile_array_destroy(&tiles);
     wall_array_destroy(&walls);
     entity_array_destroy(&entities);
@@ -304,6 +282,9 @@ void game_shoot(vec2f pos, f32 rotation, f32 tilt, f32 zoom, f32 ar)
     dirz = dir.x * sin(rotation - HALFPI) + dir.y * cos(rotation - HALFPI);
     player->facing = vec2f_normalize(vec2f_create(dirx, dirz));
     player->flag = TRUE;
+    Particle *part = particle_create();
+    part->position = player->position;
+    part->position.y = 0.5;
     if (glfwGetTime() - cooldown < 0.5)
         return;
     cooldown = glfwGetTime();
@@ -319,5 +300,5 @@ void game_shoot(vec2f pos, f32 rotation, f32 tilt, f32 zoom, f32 ar)
 
 vec3f game_get_player_position(void)
 {
-    return entities.buffer[0]->position;
+    return player->position;
 }

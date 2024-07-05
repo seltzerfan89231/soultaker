@@ -15,7 +15,7 @@ Parjicle *parjicle_create(f32 rotation)
     return parjicle;
 }
 
-void parjicle_update_position(Parjicle* parjicle, f32 dt)
+void parjicle_update(Parjicle* parjicle, f32 dt)
 {
     parjicle->position = vec3f_add(parjicle->position, vec3f_scale(parjicle->speed * dt, parjicle->direction));
     parjicle->lifetime -= dt;

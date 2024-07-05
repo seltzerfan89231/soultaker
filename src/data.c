@@ -117,14 +117,6 @@ void data_destroy(void)
 
 void data_setup(void)
 {
-    renderer_malloc(TILE_VAO, tiles.max_length);
-    renderer_malloc(WALL_VAO, walls.max_length);
-    renderer_malloc(ENTITY_VAO, entities.max_length);
-    renderer_malloc(PROJECTILE_VAO, projectiles.max_length);
-    renderer_malloc(PARTICLE_VAO, particles.max_length);
-    renderer_malloc(OBSTACLE_VAO, obstacles.max_length);
-    renderer_malloc(PARSTACLE_VAO, parstacles.max_length);
-    renderer_malloc(PARJICLE_VAO, parjicles.max_length);
     gui_push_data();
     renderer_malloc(GUI_VAO, gui.max_length);
     data_update_tiles();
@@ -138,58 +130,22 @@ void data_setup(void)
     renderer_update(GUI_VAO, 0, gui.length, gui.buffer);
 }
 
-void data_update_tiles(void)
-{
-    for (i = 0; i < tiles.length; i++)
-        tile_push_data(tiles.buffer[i], i);
-    renderer_update(TILE_VAO, 0, i, data.buffer);
-}
+#define _DATA_UPDATE(_utype, _ltype, _ltypes) \
+    void data_update_##_ltypes(void) { \
+        for (i = 0; i < _ltypes.length; i++) \
+            _ltype##_push_data(_ltypes.buffer[i], i); \
+        if (_ltypes.changed_size) { \
+            renderer_malloc(_utype##_VAO, _ltypes.max_length); \
+            _ltypes.changed_size = 0; \
+        } \
+        renderer_update(_utype##_VAO, 0, i, data.buffer); \
+    }
 
-void data_update_walls(void)
-{
-    for (i = 0; i < walls.length; i++)
-        wall_push_data(walls.buffer[i], i);
-    renderer_update(WALL_VAO, 0, i, data.buffer);
-}
-
-void data_update_entities(void)
-{
-    for (i = 0; i < entities.length; i++)
-        entity_push_data(entities.buffer[i], i);
-    renderer_update(ENTITY_VAO, 0, i, data.buffer);
-}
-
-void data_update_projectiles(void)
-{
-    for (i = 0; i < projectiles.length; i++)
-        projectile_push_data(projectiles.buffer[i], i);
-    renderer_update(PROJECTILE_VAO, 0, i, data.buffer);
-}
-
-void data_update_parjicles(void)
-{
-    for (i = 0; i < parjicles.length; i++)
-        parjicle_push_data(parjicles.buffer[i], i);
-    renderer_update(PARJICLE_VAO, 0, i, data.buffer);
-}
-
-void data_update_particles(void)
-{
-    for (i = 0; i < particles.length; i++)
-        particle_push_data(particles.buffer[i], i);
-    renderer_update(PARTICLE_VAO, 0, i, data.buffer);
-}
-
-void data_update_parstacles(void)
-{
-    for (i = 0; i < parstacles.length; i++)
-        parstacle_push_data(parstacles.buffer[i], i);
-    renderer_update(PARSTACLE_VAO, 0, i, data.buffer);
-}
-
-void data_update_obstacles(void)
-{
-    for (i = 0; i < obstacles.length; i++)
-        obstacle_push_data(obstacles.buffer[i], i);
-    renderer_update(OBSTACLE_VAO, 0, i, data.buffer);
-}
+_DATA_UPDATE(PARJICLE, parjicle, parjicles)
+_DATA_UPDATE(PARTICLE, particle, particles)
+_DATA_UPDATE(PROJECTILE, projectile, projectiles)
+_DATA_UPDATE(ENTITY, entity, entities)
+_DATA_UPDATE(TILE, tile, tiles)
+_DATA_UPDATE(WALL, wall, walls)
+_DATA_UPDATE(PARSTACLE, parstacle, parstacles)
+_DATA_UPDATE(OBSTACLE, obstacle, obstacles)

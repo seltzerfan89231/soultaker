@@ -11,7 +11,7 @@ typedef struct {
 } Parjicle;
 
 Parjicle *parjicle_create(f32 rotation);
-void parjicle_update_position(Parjicle *parjicle, f32 dt);
+void parjicle_update(Parjicle *parjicle, f32 dt);
 void parjicle_destroy(Parjicle *parj);
 
 _ARRAY_DECLARE(Parjicle, parjicle)

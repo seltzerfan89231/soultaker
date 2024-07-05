@@ -25,6 +25,7 @@ void enemy_destroy_frame_data(FrameData ***frame_data)
 
 void enemy_update(Entity *entity)
 {
+    return;
     static f32 cooldown;
     if (glfwGetTime() - cooldown >= 0.05) {
         cooldown = glfwGetTime();

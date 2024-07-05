@@ -12,7 +12,7 @@ typedef struct {
 } Particle;
 
 Particle* particle_create(void);
-void particle_update_position(Particle *particle, f32 dt);
+void particle_update(Particle *particle, f32 dt);
 void particle_destroy(Particle *particle);
 
 _ARRAY_DECLARE(Particle, particle)

@@ -7,6 +7,7 @@
 #define _ARRAY_DECLARE(_type, _ltype) \
     typedef struct { \
         u32 length, max_length; \
+        u8 changed_size; \
         _type **buffer; \
     } _type##Array; \
     _type##Array _ltype##_array_create(u32 max_length); \
@@ -20,10 +21,15 @@
         _type##Array array; \
         array.length = 0; \
         array.max_length = max_length; \
+        array.changed_size = 1; \
         array.buffer = malloc(max_length * sizeof(_type*)); \
         return array; \
     } \
     void _ltype##_array_push(_type##Array *array, _type *_ltype) { \
+        if (array->length >= array->max_length) { \
+            array->buffer = realloc(array->buffer, (array->max_length += 100) * sizeof(_type*)); \
+            array->changed_size = 1; \
+        } \
         array->buffer[array->length++] = _ltype; \
     } \
     void _ltype##_array_cut(_type##Array *array, u32 idx) { \
