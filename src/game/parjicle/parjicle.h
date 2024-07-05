@@ -15,5 +15,6 @@ void parjicle_update_position(Parjicle *parjicle, f32 dt);
 void parjicle_destroy(Parjicle *parj);
 
 _ARRAY_DECLARE(Parjicle, parjicle)
+extern ParjicleArray parjicles;
 
 #endif

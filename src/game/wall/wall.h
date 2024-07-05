@@ -19,5 +19,6 @@ Wall* wall_create(walltype type, f32 x, f32 z, f32 height);
 void wall_destroy(Wall* wall);
 
 _ARRAY_DECLARE(Wall, wall)
+extern WallArray walls;
 
 #endif

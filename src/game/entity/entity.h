@@ -29,6 +29,7 @@ void entity_set_direction(Entity *entity, vec3f direction);
 void entity_destroy(Entity* entity);
 
 _ARRAY_DECLARE(Entity, entity)
+extern EntityArray entities;
 
 #define MAX_ENTITY_ID 2
 #define KNIGHT 0

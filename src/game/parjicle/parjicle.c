@@ -1,6 +1,8 @@
 #include "parjicle.h"
 #include <stdlib.h>
 
+ParjicleArray parjicles;
+
 Parjicle *parjicle_create(f32 rotation)
 {
     Parjicle *parjicle = malloc(sizeof(Parjicle));

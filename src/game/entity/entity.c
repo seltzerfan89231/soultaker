@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+EntityArray entities;
+
 Entity* entity_create(u32 id, u8 friendly)
 {
     Entity* entity = malloc(sizeof(Entity));

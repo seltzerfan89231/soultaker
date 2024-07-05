@@ -1,12 +1,7 @@
 #include "projectile.h"
 #include <stdlib.h>
 
-ProjectileArray *projectiles_ptr;
-
-void projectile_init(ProjectileArray *ptr)
-{
-    projectiles_ptr = ptr;
-}
+ProjectileArray projectiles;
 
 Projectile* projectile_create(projtype type, u8 friendly)
 {

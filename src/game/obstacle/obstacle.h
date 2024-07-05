@@ -14,5 +14,6 @@ Obstacle* obstacle_create(void);
 void obstacle_destroy(Obstacle* Obstacle);
 
 _ARRAY_DECLARE(Obstacle, obstacle)
+extern ObstacleArray obstacles;
 
 #endif

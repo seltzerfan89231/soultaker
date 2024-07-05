@@ -14,5 +14,6 @@ Parstacle* parstacle_create(void);
 void parstacle_destroy(Parstacle* parstacle);
 
 _ARRAY_DECLARE(Parstacle, parstacle)
+extern ParstacleArray parstacles;
 
 #endif

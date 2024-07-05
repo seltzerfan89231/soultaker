@@ -1,6 +1,8 @@
 #include "particle.h"
 #include <stdlib.h>
 
+ParticleArray particles;
+
 Particle* particle_create(void)
 {
     Particle *particle = malloc(sizeof(Particle));

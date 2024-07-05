@@ -16,5 +16,6 @@ void particle_update_position(Particle *particle, f32 dt);
 void particle_destroy(Particle *particle);
 
 _ARRAY_DECLARE(Particle, particle)
+extern ParticleArray particles;
 
 #endif

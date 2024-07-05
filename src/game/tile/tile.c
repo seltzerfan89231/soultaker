@@ -1,6 +1,8 @@
 #include "tile.h"
 #include <stdlib.h>
 
+TileArray tiles;
+
 Tile* tile_create(tiletype type, f32 x, f32 z)
 {
     Tile* tile = malloc(sizeof(Tile));

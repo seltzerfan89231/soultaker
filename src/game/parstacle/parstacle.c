@@ -1,6 +1,8 @@
 #include "parstacle.h"
 #include <stdlib.h>
 
+ParstacleArray parstacles;
+
 Parstacle* parstacle_create(void)
 {
     Parstacle *parstacle = malloc(sizeof(Parstacle));

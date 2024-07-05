@@ -18,5 +18,6 @@ Tile* tile_create(tiletype type, f32 x, f32 z);
 void tile_destroy(Tile* tile);
 
 _ARRAY_DECLARE(Tile, tile)
+extern TileArray tiles;
 
 #endif

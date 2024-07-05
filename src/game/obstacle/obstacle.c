@@ -1,6 +1,8 @@
 #include "obstacle.h"
 #include <stdlib.h>
 
+ObstacleArray obstacles;
+
 Obstacle* obstacle_create(void)
 {
     Obstacle *obstacle = malloc(sizeof(Obstacle));

@@ -117,14 +117,14 @@ void data_destroy(void)
 
 void data_setup(void)
 {
-    renderer_malloc(TILE_VAO, game.tiles.max_length);
-    renderer_malloc(WALL_VAO, game.walls.max_length);
-    renderer_malloc(ENTITY_VAO, game.entities.max_length);
-    renderer_malloc(PROJECTILE_VAO, game.projectiles.max_length);
-    renderer_malloc(PARTICLE_VAO, game.particles.max_length);
-    renderer_malloc(OBSTACLE_VAO, game.obstacles.max_length);
-    renderer_malloc(PARSTACLE_VAO, game.parstacles.max_length);
-    renderer_malloc(PARJICLE_VAO, game.parjicles.max_length);
+    renderer_malloc(TILE_VAO, tiles.max_length);
+    renderer_malloc(WALL_VAO, walls.max_length);
+    renderer_malloc(ENTITY_VAO, entities.max_length);
+    renderer_malloc(PROJECTILE_VAO, projectiles.max_length);
+    renderer_malloc(PARTICLE_VAO, particles.max_length);
+    renderer_malloc(OBSTACLE_VAO, obstacles.max_length);
+    renderer_malloc(PARSTACLE_VAO, parstacles.max_length);
+    renderer_malloc(PARJICLE_VAO, parjicles.max_length);
     gui_push_data();
     renderer_malloc(GUI_VAO, gui.max_length);
     data_update_tiles();
@@ -140,56 +140,56 @@ void data_setup(void)
 
 void data_update_tiles(void)
 {
-    for (i = 0; i < game.tiles.length; i++)
-        tile_push_data(game.tiles.buffer[i], i);
+    for (i = 0; i < tiles.length; i++)
+        tile_push_data(tiles.buffer[i], i);
     renderer_update(TILE_VAO, 0, i, data.buffer);
 }
 
 void data_update_walls(void)
 {
-    for (i = 0; i < game.walls.length; i++)
-        wall_push_data(game.walls.buffer[i], i);
+    for (i = 0; i < walls.length; i++)
+        wall_push_data(walls.buffer[i], i);
     renderer_update(WALL_VAO, 0, i, data.buffer);
 }
 
 void data_update_entities(void)
 {
-    for (i = 0; i < game.entities.length; i++)
-        entity_push_data(game.entities.buffer[i], i);
+    for (i = 0; i < entities.length; i++)
+        entity_push_data(entities.buffer[i], i);
     renderer_update(ENTITY_VAO, 0, i, data.buffer);
 }
 
 void data_update_projectiles(void)
 {
-    for (i = 0; i < game.projectiles.length; i++)
-        projectile_push_data(game.projectiles.buffer[i], i);
+    for (i = 0; i < projectiles.length; i++)
+        projectile_push_data(projectiles.buffer[i], i);
     renderer_update(PROJECTILE_VAO, 0, i, data.buffer);
 }
 
 void data_update_parjicles(void)
 {
-    for (i = 0; i < game.parjicles.length; i++)
-        parjicle_push_data(game.parjicles.buffer[i], i);
+    for (i = 0; i < parjicles.length; i++)
+        parjicle_push_data(parjicles.buffer[i], i);
     renderer_update(PARJICLE_VAO, 0, i, data.buffer);
 }
 
 void data_update_particles(void)
 {
-    for (i = 0; i < game.particles.length; i++)
-        particle_push_data(game.particles.buffer[i], i);
+    for (i = 0; i < particles.length; i++)
+        particle_push_data(particles.buffer[i], i);
     renderer_update(PARTICLE_VAO, 0, i, data.buffer);
 }
 
 void data_update_parstacles(void)
 {
-    for (i = 0; i < game.parstacles.length; i++)
-        parstacle_push_data(game.parstacles.buffer[i], i);
+    for (i = 0; i < parstacles.length; i++)
+        parstacle_push_data(parstacles.buffer[i], i);
     renderer_update(PARSTACLE_VAO, 0, i, data.buffer);
 }
 
 void data_update_obstacles(void)
 {
-    for (i = 0; i < game.obstacles.length; i++)
-        obstacle_push_data(game.obstacles.buffer[i], i);
+    for (i = 0; i < obstacles.length; i++)
+        obstacle_push_data(obstacles.buffer[i], i);
     renderer_update(OBSTACLE_VAO, 0, i, data.buffer);
 }

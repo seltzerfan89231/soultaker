@@ -13,18 +13,14 @@
 
 #define MAP_WIDTH 50
 
-typedef struct {
-    ProjectileArray projectiles;
-    EntityArray entities;
-    ParticleArray particles;
-    ParjicleArray parjicles;
-    ParstacleArray parstacles;
-    ObstacleArray obstacles;
-    TileArray tiles;
-    WallArray walls;
-} Game;
-
-extern Game game;
+extern ProjectileArray projectiles;
+extern EntityArray entities;
+extern ParticleArray particles;
+extern ParjicleArray parjicles;
+extern ParstacleArray parstacles;
+extern ObstacleArray obstacles;
+extern TileArray tiles;
+extern WallArray walls;
 
 void game_init(void);
 void game_setup(void);
@@ -33,5 +29,6 @@ void game_set_target(vec3f target);
 void game_set_direction(vec3f direction);
 void game_destroy(void);
 void game_shoot(vec2f pos, f32 rotation, f32 tilt, f32 zoom, f32 ar);
+vec3f game_get_player_position(void);
 
 #endif

@@ -1,6 +1,8 @@
 #include "wall.h"
 #include <stdlib.h>
 
+WallArray walls;
+
 Wall* wall_create(walltype type, f32 x, f32 z, f32 height)
 {
     Wall* wall = malloc(sizeof(Wall));
