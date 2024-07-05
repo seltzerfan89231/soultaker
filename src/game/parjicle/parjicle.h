@@ -10,7 +10,7 @@ typedef struct {
     vec3f position, direction;
 } Parjicle;
 
-Parjicle *parjicle_create(f32 rotation);
+Parjicle* parjicle_create(f32 rotation);
 void parjicle_update(Parjicle *parjicle, f32 dt);
 void parjicle_destroy(Parjicle *parj);
 

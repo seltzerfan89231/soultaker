@@ -3,7 +3,7 @@
 
 ParjicleArray parjicles;
 
-Parjicle *parjicle_create(f32 rotation)
+Parjicle* parjicle_create(f32 rotation)
 {
     Parjicle *parjicle = malloc(sizeof(Parjicle));
     parjicle->scale = 0.5f;

@@ -13,6 +13,7 @@ Entity* entity_create(u32 id, u8 friendly)
     entity->state = 0;
     entity->face_dir = TRUE;
     entity->timer = 0.0f;
+    entity->timer2 = 0.0f;
     entity->flag = 0;
     entity->direction = vec3f_create(0, 0, 0);
     entity->friendly = friendly;
@@ -34,6 +35,7 @@ void entity_update(Entity* entity, f32 dt)
         _UPDATE(KNIGHT, knight)
     }
     entity->timer += dt;
+    entity->timer2 -= dt;
 }
 
 void entity_set_direction(Entity *entity, vec3f direction)

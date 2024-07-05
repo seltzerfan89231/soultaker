@@ -14,7 +14,7 @@
 #define FLAG_BIT     3
 
 typedef struct {
-    f32 speed, scale, hitbox_radius, health, max_health, timer;
+    f32 speed, scale, hitbox_radius, health, max_health, timer, timer2;
     u8 friendly, face_dir, state, flag;
     u32 id;
     vec3f position, direction;

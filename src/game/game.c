@@ -217,7 +217,7 @@ void game_setup(void)
     Entity* entity = entity_create(ENEMY, 0);
     entity->position = vec3f_create(20, 0, 15);
     entity->scale = 1.0f;
-    
+
     Obstacle *obstacle = obstacle_create();
     obstacle->position = vec3f_create(10.0f, 0.0f, 10.0f);
     obstacle->hitbox_radius = 0.3f;
@@ -279,7 +279,7 @@ void game_shoot(vec2f pos, f32 rotation, f32 tilt, f32 zoom, f32 ar)
         return;
     cooldown = glfwGetTime();
     assert(player != NULL);
-    Projectile* proj = projectile_create(ONE, 1);
+    Projectile* proj = projectile_create(TRUE);
     proj->speed = 10;
     proj->position = player->position;
     f32 t = atan(dirz / dirx);

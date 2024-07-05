@@ -6,17 +6,15 @@
 #include "../../util/vec.h"
 #include "../../util/constants.h"
 #include "../particle/particle.h"
-
-typedef enum { ONE } projtype;
+#include "../parjicle/parjicle.h"
 
 typedef struct {
     f32 speed, scale, lifetime, rotation, hitbox_radius, timer;
     u8 friendly;
-    projtype type;
     vec3f position, direction;
 } Projectile;
 
-Projectile* projectile_create(projtype type, u8 friendly);
+Projectile* projectile_create(u8 friendly);
 void projectile_update(Projectile* projectile, f32 dt);
 void projectile_destroy(Projectile* projectile);
 

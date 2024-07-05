@@ -101,4 +101,15 @@ void knight_update(Entity *entity)
         default:
             break;
     }
+
+    if (entity->timer2 < 0) {
+        Particle *particle = particle_create();
+        particle->position = entity->position;
+        particle->position.x += 0.5;
+        particle->direction = vec3f_create(0, 1, 0);
+        particle->speed = 1;
+        particle->scale = 0.15;
+        particle->lifetime = 2;
+        entity->timer2 = 0.1;
+    }
 }
