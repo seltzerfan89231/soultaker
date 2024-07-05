@@ -11,6 +11,9 @@ Particle* particle_create(void)
     particle->lifetime = 2.0f;
     particle->scale = 0.5f;
     particle->direction = vec3f_create(0.0f, 0.0f, 0.0f);
+    particle->color.r = 0;
+    particle->color.g = 0;
+    particle->color.b = 1;
     particle_array_push(&particles, particle);
     return particle;
 }

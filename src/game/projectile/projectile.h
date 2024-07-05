@@ -10,7 +10,7 @@
 typedef enum { ONE } projtype;
 
 typedef struct {
-    f32 speed, scale, lifetime, rotation, hitbox_radius;
+    f32 speed, scale, lifetime, rotation, hitbox_radius, timer;
     u8 friendly;
     projtype type;
     vec3f position, direction;

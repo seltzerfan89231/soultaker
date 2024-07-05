@@ -9,6 +9,9 @@
 typedef struct {
     f32 speed, scale, lifetime;
     vec3f position, direction;
+    struct {
+        f32 r, g, b;
+    } color;
 } Particle;
 
 Particle* particle_create(void);

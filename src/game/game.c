@@ -217,12 +217,6 @@ void game_setup(void)
     Entity* entity = entity_create(ENEMY, 0);
     entity->position = vec3f_create(20, 0, 15);
     entity->scale = 1.0f;
-
-    Projectile* proj = projectile_create(ONE, 1);
-    proj->position = vec3f_create(15.0f, 0.0f, 13.0f);
-    proj->speed = 0.5;
-    proj->direction = vec3f_create(0.0f, 1.0f, 0.0f);
-    proj->rotation = 0.0f;
     
     Obstacle *obstacle = obstacle_create();
     obstacle->position = vec3f_create(10.0f, 0.0f, 10.0f);
@@ -257,7 +251,6 @@ void game_set_target(vec3f target)
 
 void game_destroy(void)
 {
-    printf("%d\n", entities.max_length);
     tile_array_destroy(&tiles);
     wall_array_destroy(&walls);
     entity_array_destroy(&entities);
@@ -282,9 +275,6 @@ void game_shoot(vec2f pos, f32 rotation, f32 tilt, f32 zoom, f32 ar)
     dirz = dir.x * sin(rotation - HALFPI) + dir.y * cos(rotation - HALFPI);
     player->facing = vec2f_normalize(vec2f_create(dirx, dirz));
     player->flag = TRUE;
-    Particle *part = particle_create();
-    part->position = player->position;
-    part->position.y = 0.5;
     if (glfwGetTime() - cooldown < 0.5)
         return;
     cooldown = glfwGetTime();
