@@ -61,11 +61,14 @@ static void entity_push_data(Entity* entity, u32 offset)
 
 static void particle_push_data(Particle *particle, u32 offset)
 {
-    offset *= 4;
+    offset *= 7;
     data.buffer[offset++] = particle->position.x;
     data.buffer[offset++] = particle->position.y;
     data.buffer[offset++] = particle->position.z;
     data.buffer[offset++] = particle->scale;
+    data.buffer[offset++] = particle->color.r;
+    data.buffer[offset++] = particle->color.g;
+    data.buffer[offset++] = particle->color.b;
 }
 
 static void parstacle_push_data(Parstacle *parstacle, u32 offset)

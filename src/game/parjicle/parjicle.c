@@ -11,6 +11,9 @@ Parjicle* parjicle_create(f32 rotation)
     parjicle->speed = 1.0f;
     parjicle->direction = vec3f_create(0.0f, 0.0f, 0.0f);
     parjicle->rotation = rotation;
+    parjicle->color.r = 0;
+    parjicle->color.g = 0;
+    parjicle->color.b = 1;
     parjicle_array_push(&parjicles, parjicle);
     return parjicle;
 }

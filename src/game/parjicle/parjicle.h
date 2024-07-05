@@ -8,6 +8,9 @@
 typedef struct {
     f32 speed, scale, lifetime, rotation;
     vec3f position, direction;
+    struct {
+        f32 r, g, b;
+    } color;
 } Parjicle;
 
 Parjicle* parjicle_create(f32 rotation);

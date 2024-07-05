@@ -59,7 +59,7 @@ void renderer_init(void)
     renderer.vaos[ENTITY_VAO]       = vao_create(GL_DYNAMIC_DRAW, GL_POINTS, 10);
     renderer.vaos[PROJECTILE_VAO]   = vao_create(GL_DYNAMIC_DRAW, GL_POINTS, 6);
     renderer.vaos[GUI_VAO]          = vao_create(GL_STATIC_DRAW, GL_TRIANGLES, 9);
-    renderer.vaos[PARTICLE_VAO]     = vao_create(GL_DYNAMIC_DRAW, GL_POINTS, 4);
+    renderer.vaos[PARTICLE_VAO]     = vao_create(GL_DYNAMIC_DRAW, GL_POINTS, 7);
     renderer.vaos[OBSTACLE_VAO]     = vao_create(GL_STATIC_DRAW, GL_POINTS, 5);
     renderer.vaos[PARJICLE_VAO]     = vao_create(GL_DYNAMIC_DRAW, GL_POINTS, 5);
     renderer.vaos[PARSTACLE_VAO]    = vao_create(GL_STATIC_DRAW, GL_POINTS, 5);
@@ -82,6 +82,7 @@ void renderer_init(void)
     vao_attr(renderer.vaos[GUI_VAO]         , 3, 4, 5);
     vao_attr(renderer.vaos[PARTICLE_VAO]    , 0, 3, 0);
     vao_attr(renderer.vaos[PARTICLE_VAO]    , 1, 1, 3);
+    vao_attr(renderer.vaos[PARTICLE_VAO]    , 2, 3, 4);
     vao_attr(renderer.vaos[OBSTACLE_VAO]    , 0, 3, 0);
     vao_attr(renderer.vaos[OBSTACLE_VAO]    , 1, 1, 3);
     vao_attr(renderer.vaos[OBSTACLE_VAO]    , 2, 1, 4);
