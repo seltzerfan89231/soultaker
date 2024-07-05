@@ -37,7 +37,6 @@ void enemy_update(Entity *entity)
             proj->lifetime = 3.0f;
             proj->hitbox_radius = (proj->scale - 0.4) / 2;
             proj->position.y = 0.5f;
-            projectile_array_push(&projectiles, proj);
         }
     }
 }

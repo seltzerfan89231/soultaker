@@ -14,6 +14,7 @@ Projectile* projectile_create(projtype type, u8 friendly)
     projectile->direction = vec3f_create(0, 0, 0);
     projectile->friendly = friendly;
     projectile->hitbox_radius = 0.3;
+    projectile_array_push(&projectiles, projectile);
     return projectile;
 }
 

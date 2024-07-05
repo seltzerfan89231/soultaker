@@ -10,6 +10,7 @@ Particle* particle_create(void)
     particle->lifetime = 2.0f;
     particle->scale = 0.5f;
     particle->direction = vec3f_create(0.0f, 0.0f, 0.0f);
+    particle_array_push(&particles, particle);
     return particle;
 }
 

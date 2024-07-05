@@ -10,6 +10,7 @@ Wall* wall_create(walltype type, f32 x, f32 z, f32 height)
     wall->position.x = x;
     wall->position.z = z;
     wall->height = height;
+    wall_array_push(&walls, wall);
     return wall;
 }
 

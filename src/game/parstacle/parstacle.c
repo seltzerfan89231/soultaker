@@ -7,6 +7,7 @@ Parstacle* parstacle_create(void)
 {
     Parstacle *parstacle = malloc(sizeof(Parstacle));
     parstacle->scale = 1.0f;
+    parstacle_array_push(&parstacles, parstacle);
     return parstacle;
 }
 

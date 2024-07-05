@@ -25,14 +25,12 @@ static void create_objects(void)
                 particle->position = vec3f_create(12.0f, 0.5f, 15.0f);
                 particle->direction = vec3f_create(cos(i), 0.0f, sin(i));
                 particle->speed = 2.0f;
-                particle_array_push(&particles, particle);
             } else {
                 Parjicle *parjicle = parjicle_create(i);
                 parjicle->position = vec3f_create(12.0f, 0.5f, 15.0f);
                 parjicle->direction = vec3f_create(cos(i), 0.0f, sin(i));
                 parjicle->scale = 0.3f;
                 parjicle->speed = 2.0f;
-                parjicle_array_push(&parjicles, parjicle);
             }
         }
     }
@@ -231,42 +229,36 @@ void game_setup(void)
     for (i32 i = 0; i < MAP_WIDTH; i++)
         for (i32 j = 0; j < MAP_WIDTH; j++)
             if (i == 0 || j == 0 || j == MAP_WIDTH - 1 || i == MAP_WIDTH - 1 || (i == 12 && j == 12))
-                wall_array_push(&walls, wall_create(WALL2, i, j, ((int)(i + j)) % 2 == 0 ? 3.0f : 0.8f));
+                wall_create(WALL2, i, j, ((int)(i + j)) % 2 == 0 ? 3.0f : 0.8f);
             else
-                tile_array_push(&tiles, tile_create(FLOOR, i, j));
+                tile_create(FLOOR, i, j);
 
     player = entity_create(KNIGHT, 1);
     player->position = vec3f_create(15.0f, 0.0f, 15.0f);
-    entity_array_push(&entities, player);
 
     Entity* entity = entity_create(ENEMY, 0);
     entity->position = vec3f_create(20, 0, 15);
     entity->scale = 1.0f;
-    entity_array_push(&entities, entity);
 
     Projectile* proj = projectile_create(ONE, 1);
     proj->position = vec3f_create(15.0f, 0.0f, 13.0f);
     proj->speed = 0.5;
     proj->direction = vec3f_create(0.0f, 1.0f, 0.0f);
     proj->rotation = 0.0f;
-    projectile_array_push(&projectiles, proj);
-
+    
     Obstacle *obstacle = obstacle_create();
     obstacle->position = vec3f_create(10.0f, 0.0f, 10.0f);
     obstacle->hitbox_radius = 0.3f;
     obstacle->scale = 3.0f;
-    obstacle_array_push(&obstacles, obstacle);
 
     obstacle = obstacle_create();
     obstacle->position = vec3f_create(12.0f, 0.0f, 10.0f);
     obstacle->hitbox_radius = 0.3f;
     obstacle->scale = 3.0f;
-    obstacle_array_push(&obstacles, obstacle);
 
     Parstacle *parstacle = parstacle_create();
     parstacle->position = vec3f_create(20.0f, 0.0f, 20.0f);
     parstacle->scale = 1.8f;
-    parstacle_array_push(&parstacles, parstacle);
 }
 
 void game_update(f32 dt)
@@ -323,7 +315,6 @@ void game_shoot(vec2f pos, f32 rotation, f32 tilt, f32 zoom, f32 ar)
     proj->rotation = t + (dirx > 0 ? 0 : PI);
     proj->direction = vec3f_normalize(vec3f_create(dirx, 0.0, dirz));
     proj->position.y = 0.5f;
-    projectile_array_push(&projectiles, proj);
 }
 
 vec3f game_get_player_position(void)

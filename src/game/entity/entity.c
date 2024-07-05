@@ -19,6 +19,7 @@ Entity* entity_create(u32 id, u8 friendly)
     entity->hitbox_radius = 0.5;
     entity->health = 100.0f;
     entity->max_health = 100.0f;
+    entity_array_push(&entities, entity);
     return entity;
 }
 
