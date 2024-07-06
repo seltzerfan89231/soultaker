@@ -4,9 +4,11 @@
 #include "../../util/array.h"
 #include "../../util/type.h"
 #include "../../util/vec.h"
+#include "../../util/indices.h"
 
 typedef struct {
     f32 scale, hitbox_radius;
+    u32 tex;
     vec3f position;
 } Obstacle;
 

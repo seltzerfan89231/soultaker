@@ -3,6 +3,7 @@
 layout (location = 0) in vec3 aPos;
 layout (location = 1) in float aScale;
 layout (location = 2) in float aRotation;
+layout (location = 3) in vec3 aColor;
 
 layout (std140) uniform Matrices
 {
@@ -19,6 +20,7 @@ out VertexData
 {
     float scale;
     float projectileRotation;
+    vec3 color;
 };
 
 void main()
@@ -27,4 +29,5 @@ void main()
     gl_Position.y += zoom * aPos.y;
     scale = aScale;
     projectileRotation = aRotation;
+    color = aColor;
 }

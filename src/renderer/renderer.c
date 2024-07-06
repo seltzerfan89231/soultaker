@@ -61,7 +61,7 @@ void renderer_init(void)
     renderer.vaos[GUI_VAO]          = vao_create(GL_STATIC_DRAW, GL_TRIANGLES, 9);
     renderer.vaos[PARTICLE_VAO]     = vao_create(GL_DYNAMIC_DRAW, GL_POINTS, 7);
     renderer.vaos[OBSTACLE_VAO]     = vao_create(GL_STATIC_DRAW, GL_POINTS, 5);
-    renderer.vaos[PARJICLE_VAO]     = vao_create(GL_DYNAMIC_DRAW, GL_POINTS, 5);
+    renderer.vaos[PARJICLE_VAO]     = vao_create(GL_DYNAMIC_DRAW, GL_POINTS, 8);
     renderer.vaos[PARSTACLE_VAO]    = vao_create(GL_STATIC_DRAW, GL_POINTS, 5);
     vao_attr(renderer.vaos[TILE_VAO]        , 0, 2, 0);
     vao_attr(renderer.vaos[TILE_VAO]        , 1, 1, 2);
@@ -89,6 +89,7 @@ void renderer_init(void)
     vao_attr(renderer.vaos[PARJICLE_VAO]    , 0, 3, 0);
     vao_attr(renderer.vaos[PARJICLE_VAO]    , 1, 1, 3);
     vao_attr(renderer.vaos[PARJICLE_VAO]    , 2, 1, 4);
+    vao_attr(renderer.vaos[PARJICLE_VAO]    , 3, 3, 5);
     vao_attr(renderer.vaos[PARSTACLE_VAO]   , 0, 3, 0);
     vao_attr(renderer.vaos[PARSTACLE_VAO]   , 1, 1, 3);
     vao_attr(renderer.vaos[PARSTACLE_VAO]   , 2, 1, 4);
@@ -190,7 +191,7 @@ void renderer_reload_textures(void)
     renderer.game_textures[BULLET_TEX]       = texture_create("assets/textures/game/bullet.png", GL_NEAREST);
     renderer.game_textures[TILE_TEX]         = texture_create("assets/textures/game/tile.png", GL_NEAREST);
     renderer.game_textures[WALL_TOP_TEX]     = texture_create("assets/textures/game/wall_top.png", GL_NEAREST);
-    renderer.game_textures[WALL_TEX]         = texture_create("assets/textures/game/wall.png", GL_NEAREST);
+    renderer.game_textures[WALL_SIDE_TEX]    = texture_create("assets/textures/game/wall.png", GL_NEAREST);
     renderer.game_textures[BUSH_TEX]         = texture_create("assets/textures/game/bush.png", GL_NEAREST);
     renderer.game_textures[ROCK_TEX]         = texture_create("assets/textures/game/rock.png", GL_NEAREST);
     set_game_ssbo();

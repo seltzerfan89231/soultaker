@@ -75,7 +75,7 @@
 #define BULLET_TEX        0
 #define TILE_TEX          1
 #define WALL_TOP_TEX      2
-#define WALL_TEX          3
+#define WALL_SIDE_TEX     3
 #define BUSH_TEX          4
 #define ROCK_TEX          5
 #define KNIGHT_IDLE_DOWN_TEX   6

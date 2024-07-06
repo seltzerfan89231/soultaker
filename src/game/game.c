@@ -2,8 +2,9 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <assert.h>
-#include <glfw.h>
 
+f64 game_time;
+u8 game_paused;
 extern ProjectileArray projectiles;
 extern EntityArray entities;
 extern ParticleArray particles;
@@ -200,6 +201,8 @@ void game_init(void)
     obstacles = obstacle_array_create(0);
     tiles = tile_array_create(0);
     walls = wall_array_create(0);
+    game_time = 0;
+    game_paused = FALSE;
 }
 
 void game_setup(void)
@@ -235,8 +238,11 @@ void game_setup(void)
 
 void game_update(f32 dt)
 {
+    if (game_paused)
+        return;
     update_objects(dt);
     collide_objects(dt);
+    game_time += dt;
 }
 
 void game_set_direction(vec3f direction)
@@ -275,9 +281,9 @@ void game_shoot(vec2f pos, f32 rotation, f32 tilt, f32 zoom, f32 ar)
     dirz = dir.x * sin(rotation - HALFPI) + dir.y * cos(rotation - HALFPI);
     player->facing = vec2f_normalize(vec2f_create(dirx, dirz));
     player->flag = TRUE;
-    if (glfwGetTime() - cooldown < 0.5)
+    if (game_time - cooldown < 0.5)
         return;
-    cooldown = glfwGetTime();
+    cooldown = game_time;
     assert(player != NULL);
     Projectile* proj = projectile_create(TRUE);
     proj->speed = 10;
@@ -291,4 +297,9 @@ void game_shoot(vec2f pos, f32 rotation, f32 tilt, f32 zoom, f32 ar)
 vec3f game_get_player_position(void)
 {
     return player->position;
+}
+
+void game_pause(void)
+{
+    game_paused = 1 - game_paused;
 }

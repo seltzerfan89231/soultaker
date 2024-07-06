@@ -4,12 +4,14 @@
 #include "../../util/array.h"
 #include "../../util/type.h"
 #include "../../util/vec.h"
+#include "../../util/indices.h"
 #include "../../util/constants.h"
 #include "../particle/particle.h"
 #include "../parjicle/parjicle.h"
 
 typedef struct {
     f32 speed, scale, lifetime, rotation, hitbox_radius, timer;
+    u32 tex;
     u8 friendly;
     vec3f position, direction;
 } Projectile;

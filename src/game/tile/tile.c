@@ -9,6 +9,7 @@ Tile* tile_create(tiletype type, f32 x, f32 z)
     tile->type = type;
     tile->position.x = x;
     tile->position.z = z;
+    tile->tex = TILE_TEX;
     tile_array_push(&tiles, tile);
     return tile;
 }

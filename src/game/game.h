@@ -13,15 +13,6 @@
 
 #define MAP_WIDTH 50
 
-extern ProjectileArray projectiles;
-extern EntityArray entities;
-extern ParticleArray particles;
-extern ParjicleArray parjicles;
-extern ParstacleArray parstacles;
-extern ObstacleArray obstacles;
-extern TileArray tiles;
-extern WallArray walls;
-
 void game_init(void);
 void game_setup(void);
 void game_update(f32 dt);
@@ -30,5 +21,6 @@ void game_set_direction(vec3f direction);
 void game_destroy(void);
 void game_shoot(vec2f pos, f32 rotation, f32 tilt, f32 zoom, f32 ar);
 vec3f game_get_player_position(void);
+void game_pause(void);
 
 #endif

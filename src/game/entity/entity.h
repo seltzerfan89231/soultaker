@@ -9,6 +9,8 @@
 #include "../../util/framedata.h"
 #include "../projectile/projectile.h"
 
+extern f64 game_time;
+
 #define FRIENDLY_BIT 1
 #define FACE_DIR_BIT 2
 #define FLAG_BIT     3

@@ -1,6 +1,5 @@
 #include "projectile.h"
 #include <stdlib.h>
-#include <glfw.h>
 
 ProjectileArray projectiles;
 
@@ -11,6 +10,7 @@ Projectile* projectile_create(u8 friendly)
     projectile->speed = 10;
     projectile->lifetime = 1;
     projectile->rotation = 0;
+    projectile->tex = BULLET_TEX;
     projectile->direction = vec3f_create(0, 0, 0);
     projectile->friendly = friendly;
     projectile->hitbox_radius = 0.3;
@@ -29,6 +29,9 @@ void projectile_update(Projectile* projectile, f32 dt)
         parjicle->direction = projectile->direction;
         parjicle->speed = 0.1;
         parjicle->lifetime = 0.3;
+        parjicle->color.r = (float)rand() / RAND_MAX;
+        parjicle->color.g = (float)rand() / RAND_MAX;
+        parjicle->color.b = (float)rand() / RAND_MAX;
         projectile->timer = 0;
     }
     projectile->lifetime -= dt;

@@ -33,10 +33,17 @@ in VertexData
 {
     float scale;
     float projectileRotation;
+    vec3 color;
 } inData[];
+
+out VertexData
+{
+    vec3 color;
+};
 
 void main() {
     vec4 position = gl_in[0].gl_Position;
+    color = inData[0].color;
     float scale = inData[0].scale;
     float drot = inData[0].projectileRotation - rotation;
     drot = atan(tan(drot) / cos(pi / 2 + tilt)) + (cos(drot) > 0 ? 0 : pi);
