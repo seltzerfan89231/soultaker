@@ -7,7 +7,7 @@ extern Window window;
 
 static char char_map[128];
 
-void component_init(void)
+void char_map_init(void)
 {
     char_map[' '] = NO_TEX;
     char_map['A'] = A_TEX;
@@ -24,6 +24,7 @@ Component* component_create(f32 x, f32 y, f32 w, f32 h, f32 a, u32 id)
     comp->children = NULL;
     comp->num_children = 0;
     comp->interactable = 1;
+    comp->action = 0;
     return comp;
 }
 

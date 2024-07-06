@@ -10,13 +10,13 @@ typedef struct Component Component;
 typedef struct Component {
     f32 x, y, w, h, r, g, b, a;
     Component **children;
-    u32 num_children, id;
+    u32 num_children, id, action;
     bool interactable;
 } Component;
 
 extern Window window;
 
-void component_init(void);
+void char_map_init(void);
 Component* component_create(f32 x, f32 y, f32 w, f32 h, f32 a, u32 id);
 void component_attach(Component *parent, Component *child);
 void component_detach(Component *parent, Component *child);

@@ -19,22 +19,23 @@ void confirm_click(void)
 
 void gui_init(void)
 {
-    component_init();
+    char_map_init();
     gui.max_length = 1000;
     gui.buffer = malloc(gui.max_length * sizeof(f32));
     gui.length = 0;
     gui.root = component_create(0.0f, 0.0f, 1.0f, 1.0f, 0.0f, NO_TEX);
     gui.root->interactable = 0;
     Component *btn = component_create(0.05f, 0.05f, 0.1f, 0.1f, 1.0f, BUTTON_TEX);
-    //Component *btn2 = component_create(0.1, 0.5, 0.5, 0.5, 0.2f, EMPTY_TEX);
-    //Component *btn3 = component_create(0.6, 0.7, 0.4, 0.4, 0.2f, EMPTY_TEX);
+    btn->action = 1;
     component_attach(gui.root, btn);
-    //component_attach(btn, btn2);
-    //component_attach(gui.root, btn3);
-    //component_add_text(gui.root, "ABABABABABABABAB", 15, 1.0f, 1.0f);
-    //component_add_text(btn, "ABABABABABABABAB", 15, 0.1f, 0.1f);
-    //component_add_text(btn2, "ABABABABABABABAB", 15, 0.25f, 0.25f);
-    //component_add_text(btn3, "ABABABABABABABABABA", 15, 0.4f, 0.4f);
+    Component *healthbar = component_create(0.05, 0.92, 0.2, 0.02, 0.0, NO_TEX);
+    component_attach(gui.root, healthbar);
+    Component *green_part = component_create(0.0, 0.0, 0.75, 1.0, 1.0, EMPTY_TEX);
+    green_part->g = 1.0, green_part->r = 0.0, green_part->b = 0.0;
+    component_attach(healthbar, green_part);
+    Component *red_part = component_create(0.75, 0.0, 0.25, 1.0, 1.0, EMPTY_TEX);
+    red_part->r = 1.0, red_part->g = red_part->b = 0.0;
+    component_attach(healthbar, red_part);
 }
 
 #define Z gui.buffer[gui.length++]
@@ -66,24 +67,24 @@ void gui_push_data(void)
     gui_push_data_helper(gui.root, gui.root->x, gui.root->y, gui.root->w, gui.root->h);
 }
 
-bool gui_interact_helper(vec2f mouse_pos, Component *comp, f32 x, f32 y, f32 w, f32 h)
+u32 gui_interact_helper(vec2f mouse_pos, Component *comp, f32 x, f32 y, f32 w, f32 h)
 {
     f32 new_x1, new_y1, new_x2, new_y2, win_x1, win_x2, win_y1, win_y2;
     new_x1 = comp->x * w + x, new_x2 = (comp->x + comp->w) * w + x;
     new_y1 = comp->y * h + y, new_y2 = (comp->y + comp->h) * h + y;
-    for (i32 i = 0; i < comp->num_children; i++)
-        if (gui_interact_helper(mouse_pos, comp->children[i], new_x1, new_y1, new_x2 - new_x1, new_y2 - new_y1))
-            return 1;
+    for (i32 i = 0; i < comp->num_children; i++) {
+        u32 action = gui_interact_helper(mouse_pos, comp->children[i], new_x1, new_y1, new_x2 - new_x1, new_y2 - new_y1);
+        if (action)
+            return action;
+    }
     if (!comp->interactable)
         return 0;
-    if (mouse_pos.x >= new_x1 && mouse_pos.x <= new_x2 && 1 - mouse_pos.y >= new_y1 && 1 - mouse_pos.y <= new_y2) {
-        puts("Hovered");
-        return 1;
-    }
+    if (mouse_pos.x >= new_x1 && mouse_pos.x <= new_x2 && 1 - mouse_pos.y >= new_y1 && 1 - mouse_pos.y <= new_y2)
+        return comp->action;
     return 0;
 }
 
-bool gui_interact(void)
+u32 gui_interact(void)
 {
     vec2f mouse_pos = window.mouse.position;
     mouse_pos.x *= window.aspect_ratio;

@@ -73,9 +73,17 @@ static void process_input(void)
     if (window_key_pressed(GLFW_KEY_G))
         renderer_reload_textures();
 
-    if (window_mouse_button_pressed(MOUSE_LEFT))
-        if (!gui_interact())
-            game_shoot(window.mouse.position, camera.yaw, camera.pitch, camera.zoom, window.aspect_ratio);
+    if (window_mouse_button_pressed(MOUSE_LEFT)) {
+        u32 gui_interact_id = gui_interact();
+        switch (gui_interact_id) {
+            case 0:
+                game_shoot(window.mouse.position, camera.yaw, camera.pitch, camera.zoom, window.aspect_ratio);
+                break;
+            case 1:
+                renderer_reload_textures();
+                break;
+        }
+    }
 
     game_set_direction(camera_get_direction(move_direction));
     if (rotation_magnitude != 0)

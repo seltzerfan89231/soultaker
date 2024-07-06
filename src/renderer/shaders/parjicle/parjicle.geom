@@ -29,8 +29,6 @@ layout (std140) uniform Tilt
     float tilt;
 };
 
-out vec2 texCoord;
-
 in VertexData
 {
     float scale;
@@ -45,19 +43,18 @@ void main() {
     vec2 offset;
     offset = scale * zoom * (1 / sqrt2) * vec2(ar * cos(drot - 3 * pi / 4), sin(drot - 3 * pi / 4));
     gl_Position = position + vec4(offset, 0.0 , 0.0);    // 1:bottom-left
-    texCoord = vec2(0.0f, 1.0f);
     EmitVertex();
+
     offset = scale * zoom * (1 / sqrt2) * vec2(ar * cos(drot - pi / 4), sin(drot - pi / 4));
     gl_Position = position + vec4(offset, 0.0, 0.0);    // 2:bottom-right
-    texCoord = vec2(1.0f, 1.0f);
     EmitVertex();
+
     offset = scale * zoom * (1 / sqrt2) * vec2(ar * cos(drot + 3 * pi / 4), sin(drot + 3 * pi / 4));
     gl_Position = position + vec4(offset, 0.0, 0.0);    // 3:top-left
-    texCoord = vec2(0.0f, 0.0f);
     EmitVertex();
+
     offset = scale * zoom * (1 / sqrt2) * vec2(ar * cos(drot + pi / 4), sin(drot + pi / 4));
     gl_Position = position + vec4(offset, 0.0, 0.0);    // 4:top-right
-    texCoord = vec2(1.0f, 0.0f);
     EmitVertex();
     EndPrimitive();
 }
