@@ -74,6 +74,8 @@ static void process_input(void)
         renderer_reload_textures();
     if (window_key_pressed(GLFW_KEY_H))
         game_pause();
+    if (window_key_pressed(GLFW_KEY_V))
+        switch_weapon();
 
     if (window_mouse_button_pressed(MOUSE_LEFT)) {
         u32 gui_interact_id = gui_interact();

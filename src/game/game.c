@@ -294,3 +294,8 @@ void game_pause(void)
 {
     game_paused = 1 - game_paused;
 }
+
+void switch_weapon(void)
+{
+    player.weapon.id = 1 - player.weapon.id;
+}

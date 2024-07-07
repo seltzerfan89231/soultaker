@@ -6,5 +6,4 @@ void player_shoot(Player *player, vec3f direction)
         weapon_shoot(player->weapon, player->entity->position, direction);
         player->cooldown = game_time;
     }
-    
 }

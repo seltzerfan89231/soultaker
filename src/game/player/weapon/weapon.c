@@ -7,5 +7,6 @@ void weapon_shoot(Weapon weapon, vec3f position, vec3f direction)
 {
     switch (weapon.id) {
         _SHOOT(SWORD, sword)
+        _SHOOT(SWORD2, sword2)
     }
 }

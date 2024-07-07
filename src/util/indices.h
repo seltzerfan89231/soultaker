@@ -96,6 +96,7 @@
 #define KNIGHT_SHOOT_RIGHT_2_TEX 21
 #define KNIGHT_SHOOT_DOWN_2_TEX 22
 #define KNIGHT_SHOOT_UP_2_TEX 23
+#define BULLET_2_TEX 24
 #pragma endregion
 
 

@@ -23,5 +23,6 @@ void game_destroy(void);
 void game_shoot(vec2f pos, f32 rotation, f32 tilt, f32 zoom, f32 ar);
 vec3f game_get_player_position(void);
 void game_pause(void);
+void switch_weapon(void);
 
 #endif

@@ -189,6 +189,7 @@ void renderer_reload_textures(void)
     renderer.game_textures[KNIGHT_SHOOT_UP_2_TEX]    = texture_create("assets/textures/game/knight/knight_shoot_up_2.png", GL_NEAREST);
     renderer.game_textures[KNIGHT_SHOOT_LEFT_2_TEX]  = texture_create("assets/textures/game/knight/knight_shoot_left_2.png", GL_NEAREST);
     renderer.game_textures[BULLET_TEX]       = texture_create("assets/textures/game/bullet.png", GL_NEAREST);
+    renderer.game_textures[BULLET_2_TEX]     = texture_create("assets/textures/game/bullet_2.png", GL_NEAREST);
     renderer.game_textures[TILE_TEX]         = texture_create("assets/textures/game/tile.png", GL_NEAREST);
     renderer.game_textures[WALL_TOP_TEX]     = texture_create("assets/textures/game/wall_top.png", GL_NEAREST);
     renderer.game_textures[WALL_SIDE_TEX]    = texture_create("assets/textures/game/wall.png", GL_NEAREST);
