@@ -28,7 +28,6 @@ extern Renderer renderer;
 void renderer_init(void);
 void renderer_malloc(u32 vao_index, u32 length);
 void renderer_update(u32 vao_index, u32 offset, u32 length, f32* buffer);
-void renderer_reload_textures(void);
 void renderer_render(void);
 void renderer_destroy(void);
 

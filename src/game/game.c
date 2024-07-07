@@ -5,6 +5,7 @@
 
 f64 game_time;
 u8 game_paused;
+Player player;
 extern ProjectileArray projectiles;
 extern EntityArray entities;
 extern ParticleArray particles;
@@ -13,19 +14,21 @@ extern ParstacleArray parstacles;
 extern ObstacleArray obstacles;
 extern TileArray tiles;
 extern WallArray walls;
-Player player;
 
 static void update_objects(f32 dt)
 {
     for (i32 i = 0; i < entities.length; i++) {
         Entity *entity = entities.buffer[i];
+        /* if (entity->health <= 0)
+            entity_array_cut(&entities, i--), printf("%d\n", entities.length); */
         entity_update(entity, dt);
     }
     for (i32 i = 0; i < projectiles.length; i++) {
         Projectile *proj = projectiles.buffer[i];
-        projectile_update(proj, dt);
-        if (proj->lifetime <= 0)
-            projectile_array_cut(&projectiles, i), i--;
+        if (proj->lifetime <= 0.3)
+            projectile_array_cut(&projectiles, i--);
+        else
+            projectile_update(proj, dt);
     }
     for (i32 i = 0; i < particles.length; i++) {
         Particle *particle = particles.buffer[i];
@@ -193,7 +196,7 @@ static void collide_objects(f32 dt)
 
 void game_init(void)
 {
-    projectiles = projectile_array_create(0);
+    projectiles = projectile_array_create(10000);
     entities = entity_array_create(0);
     particles = particle_array_create(0);
     parjicles = parjicle_array_create(0);
@@ -279,7 +282,6 @@ void game_shoot(vec2f pos, f32 rotation, f32 tilt, f32 zoom, f32 ar)
     dir.y = -dir.y > 0 ? sqrt(1 - 1 / c) : -sqrt(1 - 1 / c);
     dirx = dir.x * cos(rotation - HALFPI) - dir.y * sin(rotation - HALFPI);
     dirz = dir.x * sin(rotation - HALFPI) + dir.y * cos(rotation - HALFPI);
-    assert(player.entity != NULL);
     player.entity->facing = vec2f_normalize(vec2f_create(dirx, dirz));
     player.entity->flag = TRUE;
     player_shoot(&player, vec3f_normalize(vec3f_create(dirx, 0.0, dirz)));

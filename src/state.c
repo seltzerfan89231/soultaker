@@ -99,8 +99,6 @@ static void process_input(void)
         zoom_magnitude++;
     if (window_key_pressed(GLFW_KEY_P))
         zoom_magnitude--;
-    if (window_key_pressed(GLFW_KEY_G))
-        renderer_reload_textures();
 
     if (window_mouse_button_pressed(GLFW_MOUSE_BUTTON_LEFT))
         if (!hovered)

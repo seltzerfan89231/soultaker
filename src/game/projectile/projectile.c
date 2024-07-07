@@ -1,5 +1,6 @@
 #include "projectile.h"
 #include <stdlib.h>
+#include <stdio.h>
 
 ProjectileArray projectiles;
 
