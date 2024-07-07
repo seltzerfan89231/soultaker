@@ -42,6 +42,30 @@ static void state_update(void)
     data_update_parjicles();
 }
 
+void framebuffer_size_callback(GLFWwindow* handle, i32 width, i32 height)
+{
+    window.size.x = width;
+    window.size.y = height;
+    window.aspect_ratio = (f32)window.size.x / window.size.y;
+    glViewport(0, 0, window.size.x, window.size.y);
+    renderer_uniform_update_aspect_ratio(1 / window.aspect_ratio);
+    camera_update_proj_matrix(window.aspect_ratio);
+    update_proj_matrix();
+    gui_push_data();
+    renderer_update(GUI_VAO, 0, gui.length, gui.buffer);
+}
+
+void mouse_button_callback(GLFWwindow* handle, int button, int action)
+{
+    
+}
+
+void key_callback(GLFWwindow* handle, int key, int scancode, int action, int mods)
+{
+    if (key == GLFW_KEY_H && action == GLFW_PRESS)
+        game_pause();
+}
+
 static void process_input(void)
 {
     i32 rotation_magnitude = 0;
@@ -72,16 +96,14 @@ static void process_input(void)
         zoom_magnitude--;
     if (window_key_pressed(GLFW_KEY_G))
         renderer_reload_textures();
-    if (window_key_pressed(GLFW_KEY_H))
-        game_pause();
     if (window_key_pressed(GLFW_KEY_V))
         switch_weapon();
 
-    if (window_mouse_button_pressed(MOUSE_LEFT)) {
+    if (window_mouse_button_pressed(GLFW_MOUSE_BUTTON_LEFT)) {
         u32 gui_interact_id = gui_interact();
         switch (gui_interact_id) {
             case 0:
-                game_shoot(window.mouse.position, camera.yaw, camera.pitch, camera.zoom, window.aspect_ratio);
+                game_shoot(window.cursor.position, camera.yaw, camera.pitch, camera.zoom, window.aspect_ratio);
                 break;
             case 1:
                 renderer_reload_textures();
@@ -131,17 +153,4 @@ void state_exit(void)
     game_destroy();
     data_destroy();
     gui_destroy();
-}
-
-void framebuffer_size_callback(GLFWwindow* handle, i32 width, i32 height)
-{
-    window.size.x = width;
-    window.size.y = height;
-    window.aspect_ratio = (f32)window.size.x / window.size.y;
-    glViewport(0, 0, window.size.x, window.size.y);
-    renderer_uniform_update_aspect_ratio(1 / window.aspect_ratio);
-    camera_update_proj_matrix(window.aspect_ratio);
-    update_proj_matrix();
-    gui_push_data();
-    renderer_update(GUI_VAO, 0, gui.length, gui.buffer);
 }

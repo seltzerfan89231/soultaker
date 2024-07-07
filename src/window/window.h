@@ -9,16 +9,12 @@
 #define DEFAULT_WINDOW_WIDTH 1920/2
 #define DEFAULT_WINDOW_HEIGHT 1080/2
 
-typedef enum { MOUSE_LEFT, MOUSE_MIDDLE, MOUSE_RIGHT } mousebutton;
-typedef enum { MOUSE_UP, MOUSE_DOWN } mbstate;
-
 typedef struct {
     GLFWwindow *handle;
     vec2f size;
     struct {
         vec2f position;
-        mbstate left, middle, right;
-    } mouse;
+    } cursor;
     f32 aspect_ratio, last_frame, dt, fps;
 } Window;
 
@@ -27,10 +23,9 @@ extern Window window;
 void window_init(void);
 void window_update(void);
 void window_calc_dt(void);
-bool window_mouse_button_pressed(mousebutton mb);
 bool window_closed(void);
 void window_close(void);
+bool window_mouse_button_pressed(GLenum button);
 bool window_key_pressed(GLenum key);
-void framebuffer_size_callback(GLFWwindow* handle, i32 width, i32 height);
 
 #endif
