@@ -215,6 +215,7 @@ void game_setup(void)
                 tile_create(FLOOR, i, j);
 
     player.entity = entity_create(KNIGHT, 1);
+    player.weapon.id = 0;
     player.entity->position = vec3f_create(15.0f, 0.0f, 15.0f);
 
     Entity* entity = entity_create(ENEMY, 0);
