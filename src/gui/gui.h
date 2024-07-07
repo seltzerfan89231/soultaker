@@ -19,6 +19,7 @@ extern Window window;
 void gui_init(void);
 void gui_push_data(void);
 u32 gui_interact(void);
+bool gui_hover(void);
 void gui_destroy(void);
 
 #endif

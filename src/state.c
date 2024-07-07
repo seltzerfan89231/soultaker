@@ -57,13 +57,16 @@ void framebuffer_size_callback(GLFWwindow* handle, i32 width, i32 height)
 
 void mouse_button_callback(GLFWwindow* handle, int button, int action)
 {
-    
+    if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
+        gui_interact();
 }
 
 void key_callback(GLFWwindow* handle, int key, int scancode, int action, int mods)
 {
     if (key == GLFW_KEY_H && action == GLFW_PRESS)
         game_pause();
+    if (key == GLFW_KEY_V && action == GLFW_PRESS)
+        switch_weapon();
 }
 
 static void process_input(void)
@@ -72,6 +75,8 @@ static void process_input(void)
     i32 tilt_magnitude = 0;
     i32 zoom_magnitude = 0;
     vec2i move_direction = vec2i_create(0, 0);
+    bool hovered = gui_hover();
+
     if (window_key_pressed(GLFW_KEY_ESCAPE))
         window_close();
     if (window_key_pressed(GLFW_KEY_Q))
@@ -96,20 +101,10 @@ static void process_input(void)
         zoom_magnitude--;
     if (window_key_pressed(GLFW_KEY_G))
         renderer_reload_textures();
-    if (window_key_pressed(GLFW_KEY_V))
-        switch_weapon();
 
-    if (window_mouse_button_pressed(GLFW_MOUSE_BUTTON_LEFT)) {
-        u32 gui_interact_id = gui_interact();
-        switch (gui_interact_id) {
-            case 0:
-                game_shoot(window.cursor.position, camera.yaw, camera.pitch, camera.zoom, window.aspect_ratio);
-                break;
-            case 1:
-                renderer_reload_textures();
-                break;
-        }
-    }
+    if (window_mouse_button_pressed(GLFW_MOUSE_BUTTON_LEFT))
+        if (!hovered)
+            game_shoot(window.cursor.position, camera.yaw, camera.pitch, camera.zoom, window.aspect_ratio);
 
     game_set_direction(camera_get_direction(move_direction));
     if (rotation_magnitude != 0)

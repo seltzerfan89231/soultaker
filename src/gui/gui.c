@@ -78,10 +78,10 @@ u32 gui_interact_helper(vec2f cursor_pos, Component *comp, f32 x, f32 y, f32 w, 
             return action;
     }
     if (!comp->interactable)
-        return 0;
+        return FALSE;
     if (cursor_pos.x >= new_x1 && cursor_pos.x <= new_x2 && 1 - cursor_pos.y >= new_y1 && 1 - cursor_pos.y <= new_y2)
         return comp->action;
-    return 0;
+    return FALSE;
 }
 
 u32 gui_interact(void)
@@ -89,6 +89,30 @@ u32 gui_interact(void)
     vec2f cursor_pos = window.cursor.position;
     cursor_pos.x *= window.aspect_ratio;
     return gui_interact_helper(cursor_pos, gui.root, gui.root->x, gui.root->y, gui.root->w, gui.root->h);
+}
+
+bool gui_hover_helper(vec2f cursor_pos, Component *comp, f32 x, f32 y, f32 w, f32 h)
+{
+    f32 new_x1, new_y1, new_x2, new_y2, win_x1, win_x2, win_y1, win_y2;
+    new_x1 = comp->x * w + x, new_x2 = (comp->x + comp->w) * w + x;
+    new_y1 = comp->y * h + y, new_y2 = (comp->y + comp->h) * h + y;
+    for (i32 i = 0; i < comp->num_children; i++) {
+        bool hovered = gui_hover_helper(cursor_pos, comp->children[i], new_x1, new_y1, new_x2 - new_x1, new_y2 - new_y1);
+        if (hovered)
+            return hovered;
+    }
+    if (!comp->interactable)
+        return FALSE;
+    if (cursor_pos.x >= new_x1 && cursor_pos.x <= new_x2 && 1 - cursor_pos.y >= new_y1 && 1 - cursor_pos.y <= new_y2)
+        return TRUE;
+    return FALSE;
+}
+
+bool gui_hover(void)
+{
+    vec2f cursor_pos = window.cursor.position;
+    cursor_pos.x *= window.aspect_ratio;
+    return gui_hover_helper(cursor_pos, gui.root, gui.root->x, gui.root->y, gui.root->w, gui.root->h);
 }
 
 void gui_destroy(void)
