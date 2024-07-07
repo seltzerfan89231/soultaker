@@ -11,19 +11,24 @@
 
 typedef struct {
     f32 speed, scale, lifetime, rotation, hitbox_radius, timer;
-    u32 tex;
+    u32 tex, id;
     u8 friendly;
     vec3f position, direction;
 } Projectile;
 
-Projectile* projectile_create(u8 friendly);
+Projectile* projectile_create(u32 id, u8 friendly);
 void projectile_update(Projectile* projectile, f32 dt);
 void projectile_destroy(Projectile* projectile);
 
 _ARRAY_DECLARE(Projectile, projectile)
-
 extern ProjectileArray projectiles;
 
-void projectile_init(ProjectileArray *ptr);
+#define MAX_PROJECTILE_ID 1
+#define SWORD 0
+
+#define _PROJECTILE_INIT(_type) \
+    void _type##_update(Projectile *projectile, f32 dt);
+
+_PROJECTILE_INIT(sword)
 
 #endif

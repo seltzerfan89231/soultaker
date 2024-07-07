@@ -13,7 +13,7 @@ extern ParstacleArray parstacles;
 extern ObstacleArray obstacles;
 extern TileArray tiles;
 extern WallArray walls;
-Entity* player;
+Player player;
 
 static void update_objects(f32 dt)
 {
@@ -214,8 +214,8 @@ void game_setup(void)
             else
                 tile_create(FLOOR, i, j);
 
-    player = entity_create(KNIGHT, 1);
-    player->position = vec3f_create(15.0f, 0.0f, 15.0f);
+    player.entity = entity_create(KNIGHT, 1);
+    player.entity->position = vec3f_create(15.0f, 0.0f, 15.0f);
 
     Entity* entity = entity_create(ENEMY, 0);
     entity->position = vec3f_create(20, 0, 15);
@@ -247,12 +247,12 @@ void game_update(f32 dt)
 
 void game_set_direction(vec3f direction)
 {
-    entity_set_direction(player, direction);
+    entity_set_direction(player.entity, direction);
 }
 
 void game_set_target(vec3f target)
 {
-    player->position = target;
+    player.entity->position = target;
 }
 
 void game_destroy(void)
@@ -269,7 +269,6 @@ void game_destroy(void)
 
 void game_shoot(vec2f pos, f32 rotation, f32 tilt, f32 zoom, f32 ar)
 {
-    static f32 cooldown;
     vec2f dir = vec2f_normalize(vec2f_create((pos.x - 0.5) * ar, pos.y - 0.5 + 1.0 / 4 / zoom));
     f32 dirx, dirz, a, b, c;
     a = atan(-dir.y/dir.x);
@@ -279,24 +278,15 @@ void game_shoot(vec2f pos, f32 rotation, f32 tilt, f32 zoom, f32 ar)
     dir.y = -dir.y > 0 ? sqrt(1 - 1 / c) : -sqrt(1 - 1 / c);
     dirx = dir.x * cos(rotation - HALFPI) - dir.y * sin(rotation - HALFPI);
     dirz = dir.x * sin(rotation - HALFPI) + dir.y * cos(rotation - HALFPI);
-    player->facing = vec2f_normalize(vec2f_create(dirx, dirz));
-    player->flag = TRUE;
-    if (game_time - cooldown < 0.5)
-        return;
-    cooldown = game_time;
-    assert(player != NULL);
-    Projectile* proj = projectile_create(TRUE);
-    proj->speed = 10;
-    proj->position = player->position;
-    f32 t = atan(dirz / dirx);
-    proj->rotation = t + (dirx > 0 ? 0 : PI);
-    proj->direction = vec3f_normalize(vec3f_create(dirx, 0.0, dirz));
-    proj->position.y = 0.5f;
+    assert(player.entity != NULL);
+    player.entity->facing = vec2f_normalize(vec2f_create(dirx, dirz));
+    player.entity->flag = TRUE;
+    player_shoot(&player, vec3f_normalize(vec3f_create(dirx, 0.0, dirz)));
 }
 
 vec3f game_get_player_position(void)
 {
-    return player->position;
+    return player.entity->position;
 }
 
 void game_pause(void)

@@ -9,6 +9,7 @@
 #include "parstacle/parstacle.h"
 #include "tile/tile.h"
 #include "wall/wall.h"
+#include "player/player.h"
 #include "../util/array.h"
 
 #define MAP_WIDTH 50

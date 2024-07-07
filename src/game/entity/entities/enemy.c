@@ -27,8 +27,8 @@ void enemy_update(Entity *entity)
     static f32 cooldown;
     if (game_time - cooldown >= 0.05) {
         cooldown = game_time;
-        for (i32 i = 0; i < 1; i++) {
-            Projectile* proj = projectile_create(FALSE);
+        for (i32 i = 0; i < 8; i++) {
+            Projectile* proj = projectile_create(SWORD, FALSE);
             proj->position = entity->position;
             proj->rotation = i * 0.8 + sin(game_time);
             proj->direction = vec3f_create(cos(proj->rotation), 0.0f, sin(proj->rotation));
