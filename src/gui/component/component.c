@@ -23,7 +23,9 @@ Component* component_create(f32 x, f32 y, f32 w, f32 h, f32 a, u32 id)
     comp->id = id;
     comp->children = NULL;
     comp->num_children = 0;
-    comp->interactable = 1;
+    comp->interactable = TRUE;
+    comp->hoverable = TRUE;
+    comp->hovered = FALSE;
     comp->action = 0;
     return comp;
 }
@@ -52,6 +54,12 @@ void component_destroy(Component *comp)
         component_destroy(comp->children[i]);
     free(comp->children);
     free(comp);
+}
+
+void component_detach_and_destroy(Component *comp, Component *child)
+{
+    component_detach(comp, child);
+    component_destroy(child);
 }
 
 void component_add_text(Component *comp, char *text, u32 font_size, f32 gw, f32 gh)

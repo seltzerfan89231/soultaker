@@ -51,7 +51,7 @@ void framebuffer_size_callback(GLFWwindow* handle, i32 width, i32 height)
     renderer_uniform_update_aspect_ratio(1 / window.aspect_ratio);
     camera_update_proj_matrix(window.aspect_ratio);
     update_proj_matrix();
-    gui_push_data();
+    gui_update_data();
     renderer_update(GUI_VAO, 0, gui.length, gui.buffer);
 }
 
@@ -75,7 +75,7 @@ static void process_input(void)
     i32 tilt_magnitude = 0;
     i32 zoom_magnitude = 0;
     vec2i move_direction = vec2i_create(0, 0);
-    bool hovered = gui_hover();
+    bool hovered = 0;
 
     if (window_key_pressed(GLFW_KEY_ESCAPE))
         window_close();
@@ -129,6 +129,7 @@ void state_loop(void)
 {
     f32 t = glfwGetTime();
     while (!window_closed()) {
+        gui_update();
         window_update();
         process_input();
         state_update();

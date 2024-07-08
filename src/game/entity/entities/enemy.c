@@ -24,9 +24,8 @@ void enemy_destroy_frame_data(FrameData ***frame_data)
 
 void enemy_update(Entity *entity)
 {
-    static f32 cooldown;
-    if (game_time - cooldown >= 0.05) {
-        cooldown = game_time;
+    if (entity->timer >= 0.05) {
+        entity->timer = 0;
         for (i32 i = 0; i < 8; i++) {
             Projectile* proj = projectile_create(SWORD, FALSE);
             proj->position = entity->position;

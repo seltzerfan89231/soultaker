@@ -24,7 +24,9 @@ void gui_init(void)
     gui.buffer = malloc(gui.max_length * sizeof(f32));
     gui.length = 0;
     gui.root = component_create(0.0f, 0.0f, 1.0f, 1.0f, 0.0f, NO_TEX);
-    gui.root->interactable = 0;
+    gui.root->interactable = FALSE;
+    gui.root->hoverable = FALSE;
+    gui.max_length_changed = TRUE;
     Component *btn = component_create(0.05f, 0.05f, 0.1f, 0.1f, 1.0f, BUTTON_TEX);
     btn->action = 1;
     component_attach(gui.root, btn);
@@ -40,7 +42,7 @@ void gui_init(void)
 
 #define Z gui.buffer[gui.length++]
 
-void gui_push_data_helper(Component *comp, f32 x, f32 y, f32 w, f32 h)
+void gui_update_data_helper(Component *comp, f32 x, f32 y, f32 w, f32 h)
 {
     f32 new_x1, new_y1, new_x2, new_y2, win_x1, win_x2, win_y1, win_y2;
     new_x1 = comp->x * w + x, new_x2 = (comp->x + comp->w) * w + x;
@@ -50,6 +52,7 @@ void gui_push_data_helper(Component *comp, f32 x, f32 y, f32 w, f32 h)
     if (gui.length + 36 >= gui.max_length) {
         gui.max_length += 1000;
         gui.buffer = realloc(gui.buffer, gui.max_length * sizeof(f32));
+        gui.max_length_changed = FALSE;
     }
     Z = win_x1, Z = win_y1, Z = 0.0f, Z = 1.0f, Z = comp->id, Z = comp->r, Z = comp->g, Z = comp->b, Z = comp->a;
     Z = win_x2, Z = win_y1, Z = 1.0f, Z = 1.0f, Z = comp->id, Z = comp->r, Z = comp->g, Z = comp->b, Z = comp->a;
@@ -58,13 +61,13 @@ void gui_push_data_helper(Component *comp, f32 x, f32 y, f32 w, f32 h)
     Z = win_x2, Z = win_y1, Z = 1.0f, Z = 1.0f, Z = comp->id, Z = comp->r, Z = comp->g, Z = comp->b, Z = comp->a;
     Z = win_x2, Z = win_y2, Z = 1.0f, Z = 0.0f, Z = comp->id, Z = comp->r, Z = comp->g, Z = comp->b, Z = comp->a;
     for (i32 i = 0; i < comp->num_children; i++)
-        gui_push_data_helper(comp->children[i], new_x1, new_y1, new_x2 - new_x1, new_y2 - new_y1);
+        gui_update_data_helper(comp->children[i], new_x1, new_y1, new_x2 - new_x1, new_y2 - new_y1);
 }
 
-void gui_push_data(void)
+void gui_update_data(void)
 {
     gui.length = 0;
-    gui_push_data_helper(gui.root, gui.root->x, gui.root->y, gui.root->w, gui.root->h);
+    gui_update_data_helper(gui.root, gui.root->x, gui.root->y, gui.root->w, gui.root->h);
 }
 
 u32 gui_interact_helper(vec2f cursor_pos, Component *comp, f32 x, f32 y, f32 w, f32 h)
@@ -91,28 +94,48 @@ u32 gui_interact(void)
     return gui_interact_helper(cursor_pos, gui.root, gui.root->x, gui.root->y, gui.root->w, gui.root->h);
 }
 
-bool gui_hover_helper(vec2f cursor_pos, Component *comp, f32 x, f32 y, f32 w, f32 h)
+bool gui_update_helper(vec2f cursor_pos, Component *comp, f32 x, f32 y, f32 w, f32 h)
 {
     f32 new_x1, new_y1, new_x2, new_y2, win_x1, win_x2, win_y1, win_y2;
     new_x1 = comp->x * w + x, new_x2 = (comp->x + comp->w) * w + x;
     new_y1 = comp->y * h + y, new_y2 = (comp->y + comp->h) * h + y;
     for (i32 i = 0; i < comp->num_children; i++) {
-        bool hovered = gui_hover_helper(cursor_pos, comp->children[i], new_x1, new_y1, new_x2 - new_x1, new_y2 - new_y1);
+        bool hovered = gui_update_helper(cursor_pos, comp->children[i], new_x1, new_y1, new_x2 - new_x1, new_y2 - new_y1);
         if (hovered)
             return hovered;
     }
-    if (!comp->interactable)
+    if (!comp->hoverable)
         return FALSE;
-    if (cursor_pos.x >= new_x1 && cursor_pos.x <= new_x2 && 1 - cursor_pos.y >= new_y1 && 1 - cursor_pos.y <= new_y2)
+    if (cursor_pos.x >= new_x1 && cursor_pos.x <= new_x2 && 1 - cursor_pos.y >= new_y1 && 1 - cursor_pos.y <= new_y2) {
+        if (!comp->hovered) {
+            comp->hovered = TRUE;
+            Component *new_comp = component_create(0.0, 1.1, 1.0, 1.0, 1.0, EMPTY_TEX);
+            new_comp->r = 0.5;
+            new_comp->hoverable = FALSE;
+            component_attach(comp, new_comp);
+        }
         return TRUE;
+    }
+    if (comp->hovered) {
+        comp->hovered = FALSE;
+        if (comp->num_children == 1)
+            component_detach_and_destroy(comp, comp->children[0]);
+    }
     return FALSE;
 }
 
-bool gui_hover(void)
+bool gui_update(void)
 {
     vec2f cursor_pos = window.cursor.position;
     cursor_pos.x *= window.aspect_ratio;
-    return gui_hover_helper(cursor_pos, gui.root, gui.root->x, gui.root->y, gui.root->w, gui.root->h);
+    gui_update_helper(cursor_pos, gui.root, gui.root->x, gui.root->y, gui.root->w, gui.root->h);
+    gui_update_data();
+    if (gui.max_length_changed) {
+        renderer_malloc(GUI_VAO, gui.max_length);
+        gui.max_length_changed = FALSE;
+    }
+    renderer_update(GUI_VAO, 0, gui.length, gui.buffer);
+    return 0;
 }
 
 void gui_destroy(void)

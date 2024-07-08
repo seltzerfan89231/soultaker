@@ -19,16 +19,15 @@ static void update_objects(f32 dt)
 {
     for (i32 i = 0; i < entities.length; i++) {
         Entity *entity = entities.buffer[i];
+        entity_update(entity, dt);
         /* if (entity->health <= 0)
             entity_array_cut(&entities, i--), printf("%d\n", entities.length); */
-        entity_update(entity, dt);
     }
     for (i32 i = 0; i < projectiles.length; i++) {
         Projectile *proj = projectiles.buffer[i];
+        projectile_update(proj, dt);
         if (proj->lifetime <= 0.3)
             projectile_array_cut(&projectiles, i--);
-        else
-            projectile_update(proj, dt);
     }
     for (i32 i = 0; i < particles.length; i++) {
         Particle *particle = particles.buffer[i];

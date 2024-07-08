@@ -123,8 +123,6 @@ void data_destroy(void)
 
 void data_setup(void)
 {
-    gui_push_data();
-    renderer_malloc(GUI_VAO, gui.max_length);
     data_update_tiles();
     data_update_walls();
     data_update_entities();
@@ -133,7 +131,6 @@ void data_setup(void)
     data_update_particles();
     data_update_parstacles();
     data_update_obstacles();
-    renderer_update(GUI_VAO, 0, gui.length, gui.buffer);
 }
 
 #define _DATA_UPDATE(_utype, _ltype, _ltypes) \
