@@ -74,6 +74,11 @@ void component_add_text(Component *comp, char *text, u32 font_size, f32 gw, f32 
     }
 }
 
+void component_hover_event(Component *comp)
+{
+
+}
+
 bool component_hover_on(Component *comp)
 {
     if (comp->hovered)
@@ -81,6 +86,7 @@ bool component_hover_on(Component *comp)
     comp->hovered = TRUE;
     Component *new_comp = component_create(0.0, 1.1, 1.0, 1.0, 1.0, EMPTY_TEX);
     new_comp->r = 0.5;
+    new_comp->action = 69;
     new_comp->hoverable = FALSE;
     component_attach(comp, new_comp);
     return TRUE;
@@ -91,7 +97,8 @@ bool component_hover_off(Component *comp)
     if (!comp->hovered)
         return FALSE;
     comp->hovered = FALSE;
-    if (comp->num_children == 1)
-        component_detach_and_destroy(comp, comp->children[0]);
+    for (i32 i = 0; i < comp->num_children; i++)
+        if (comp->children[i]->action == 69)
+            component_detach_and_destroy(comp, comp->children[i]);
     return TRUE;
 }

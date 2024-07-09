@@ -128,6 +128,8 @@ void renderer_init(void)
     renderer.gui_textures[A_TEX]      = texture_create("assets/textures/gui/text/A.png", GL_LINEAR);
     renderer.gui_textures[B_TEX]      = texture_create("assets/textures/gui/text/B.png", GL_LINEAR);
     renderer.gui_textures[BUTTON_TEX] = texture_create("assets/textures/gui/button.png", GL_NEAREST);
+    renderer.gui_textures[SWORD_1_TEX] = texture_create("assets/textures/game/sword1.png", GL_NEAREST);
+    renderer.gui_textures[SWORD_2_TEX] = texture_create("assets/textures/game/sword2.png", GL_NEAREST);
     set_gui_ssbo();
     /* --------------------- */
     link_shader_ubo(TILE_SHADER, MATRICES_UBO, "Matrices");

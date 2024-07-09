@@ -104,12 +104,14 @@
 
 
 #pragma region GUI_TEXTURES
-#define NUM_GUI_TEXTURES 5
+#define NUM_GUI_TEXTURES 7
 #define NO_TEX           0
 #define EMPTY_TEX        1
 #define A_TEX            2
 #define B_TEX            3
 #define BUTTON_TEX       4
+#define SWORD_1_TEX 5
+#define SWORD_2_TEX 6
 #pragma endregion
 
 #endif

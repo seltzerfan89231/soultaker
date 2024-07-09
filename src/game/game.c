@@ -296,7 +296,12 @@ void game_pause(void)
     game_paused = 1 - game_paused;
 }
 
-void switch_weapon(void)
+u32 game_switch_weapon(void)
 {
     player.weapon.id = 1 - player.weapon.id;
+    if (player.weapon.id == SWORD)
+        player.weapon.tex = SWORD_1_TEX;
+    if (player.weapon.id == SWORD2)
+        player.weapon.tex = SWORD_2_TEX;
+    return player.weapon.tex;
 }

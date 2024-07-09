@@ -4,7 +4,7 @@
 #include "../../projectile/projectile.h"
 
 typedef struct {
-    u32 id;
+    u32 id, tex;
 } Weapon;
 
 void weapon_shoot(Weapon weapon, vec3f position, vec3f direction);

@@ -24,7 +24,7 @@ void component_destroy(Component *comp);
 void component_detach_and_destroy(Component *comp, Component *child);
 void component_add_text(Component *comp, char *text, u32 font_size, f32 gw, f32 gh);
 
-void component_hover(Component *comp);
+void component_hover_event(Component *comp);
 bool component_hover_on(Component *comp);
 bool component_hover_off(Component *comp);
 

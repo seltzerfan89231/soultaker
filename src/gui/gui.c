@@ -31,6 +31,8 @@ void gui_init(void)
     Component *btn = component_create(0.05f, 0.05f, 0.1f, 0.1f, 1.0f, BUTTON_TEX);
     btn->action = 1;
     component_attach(gui.root, btn);
+    Component *icon = component_create(0.05, 0.05, 0.9, 0.9, 1.0, SWORD_1_TEX);
+    component_attach(btn, icon);
     Component *healthbar = component_create(0.05, 0.92, 0.2, 0.02, 0.0, NO_TEX);
     healthbar->hoverable = FALSE;
     component_attach(gui.root, healthbar);
@@ -78,6 +80,43 @@ void gui_update_data(void)
     gui_update_data_helper(gui.root, gui.root->x, gui.root->y, gui.root->w, gui.root->h);
 }
 
+bool gui_update_helper(Component *comp, f32 x, f32 y, f32 w, f32 h)
+{
+    f32 new_x1, new_y1, new_x2, new_y2, win_x1, win_x2, win_y1, win_y2;
+    new_x1 = comp->x * w + x, new_x2 = (comp->x + comp->w) * w + x;
+    new_y1 = comp->y * h + y, new_y2 = (comp->y + comp->h) * h + y;
+    for (i32 i = 0; i < comp->num_children; i++)
+        gui_update_helper(comp->children[i], new_x1, new_y1, new_x2 - new_x1, new_y2 - new_y1);
+    if (!comp->hoverable)
+        return FALSE;
+    if (window.cursor.position.x * window.aspect_ratio >= new_x1 
+      && window.cursor.position.x * window.aspect_ratio <= new_x2 
+      && 1 - window.cursor.position.y >= new_y1 
+      && 1 - window.cursor.position.y <= new_y2) {
+        if (component_hover_on(comp))
+            gui.state_updated = TRUE;
+        return TRUE;
+    }
+    if (component_hover_off(comp))
+        gui.state_updated = TRUE;
+    return FALSE;
+}
+
+bool gui_update(void)
+{
+    gui_update_helper(gui.root, gui.root->x, gui.root->y, gui.root->w, gui.root->h);
+    if (gui.state_updated) {
+        gui_update_data();
+        if (gui.max_length_changed) {
+            renderer_malloc(GUI_VAO, gui.max_length);
+            gui.max_length_changed = FALSE;
+        }
+        renderer_update(GUI_VAO, 0, gui.length, gui.buffer);
+        gui.state_updated = FALSE;
+    }
+    return 0;
+}
+
 u32 gui_interact_helper(vec2f cursor_pos, Component *comp, f32 x, f32 y, f32 w, f32 h)
 {
     f32 new_x1, new_y1, new_x2, new_y2, win_x1, win_x2, win_y1, win_y2;
@@ -97,48 +136,41 @@ u32 gui_interact_helper(vec2f cursor_pos, Component *comp, f32 x, f32 y, f32 w, 
     return FALSE;
 }
 
-u32 gui_interact(void)
+u32 gui_interact(i32 input)
 {
     vec2f cursor_pos = window.cursor.position;
     cursor_pos.x *= window.aspect_ratio;
     return gui_interact_helper(cursor_pos, gui.root, gui.root->x, gui.root->y, gui.root->w, gui.root->h);;
 }
 
-bool gui_update_helper(vec2f cursor_pos, Component *comp, f32 x, f32 y, f32 w, f32 h)
+void gui_mouse_button_callback_helper(Component *comp, f32 x, f32 y, f32 w, f32 h)
 {
     f32 new_x1, new_y1, new_x2, new_y2, win_x1, win_x2, win_y1, win_y2;
     new_x1 = comp->x * w + x, new_x2 = (comp->x + comp->w) * w + x;
     new_y1 = comp->y * h + y, new_y2 = (comp->y + comp->h) * h + y;
     for (i32 i = 0; i < comp->num_children; i++)
-        gui_update_helper(cursor_pos, comp->children[i], new_x1, new_y1, new_x2 - new_x1, new_y2 - new_y1);
-    if (!comp->hoverable)
-        return FALSE;
-    if (cursor_pos.x >= new_x1 && cursor_pos.x <= new_x2 
-      && 1 - cursor_pos.y >= new_y1 && 1 - cursor_pos.y <= new_y2) {
-        if (component_hover_on(comp))
-            gui.state_updated = TRUE;
-        return TRUE;
-    }
-    if (component_hover_off(comp))
+        gui_mouse_button_callback_helper(comp->children[i], new_x1, new_y1, new_x2 - new_x1, new_y2 - new_y1);
+    if (!comp->interactable)
+        return;
+    if (window.cursor.position.x * window.aspect_ratio >= new_x1 
+      && window.cursor.position.x * window.aspect_ratio <= new_x2 
+      && 1 - window.cursor.position.y >= new_y1 
+      && 1 - window.cursor.position.y <= new_y2) {
         gui.state_updated = TRUE;
-    return FALSE;
+        return;
+    }
+    return;
 }
 
-bool gui_update(void)
+void gui_mouse_button_callback(i32 button, i32 action)
 {
-    vec2f cursor_pos = window.cursor.position;
-    cursor_pos.x *= window.aspect_ratio;
-    gui_update_helper(cursor_pos, gui.root, gui.root->x, gui.root->y, gui.root->w, gui.root->h);
-    if (gui.state_updated) {
-        gui_update_data();
-        if (gui.max_length_changed) {
-            renderer_malloc(GUI_VAO, gui.max_length);
-            gui.max_length_changed = FALSE;
-        }
-        renderer_update(GUI_VAO, 0, gui.length, gui.buffer);
-        gui.state_updated = FALSE;
-    }
-    return 0;
+    if (action == GLFW_PRESS)
+        gui_mouse_button_callback_helper(gui.root, gui.root->x, gui.root->y, gui.root->w, gui.root->h);
+}
+
+void gui_key_callback(i32 key, i32 scancode, i32 action, i32 mods)
+{
+
 }
 
 void gui_destroy(void)

@@ -55,18 +55,26 @@ void framebuffer_size_callback(GLFWwindow* handle, i32 width, i32 height)
     renderer_update(GUI_VAO, 0, gui.length, gui.buffer);
 }
 
-void mouse_button_callback(GLFWwindow* handle, int button, int action)
+void mouse_button_callback(GLFWwindow* handle, i32 button, i32 action)
 {
-    if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
-        gui_interact();
+    gui_mouse_button_callback(button, action);
 }
 
-void key_callback(GLFWwindow* handle, int key, int scancode, int action, int mods)
+void switch_weapon(void)
 {
+    gui.root->children[0]->children[0]->id = game_switch_weapon();;
+    gui.state_updated = TRUE;
+}
+
+void key_callback(GLFWwindow* handle, i32 key, i32 scancode, i32 action, i32 mods)
+{
+    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+        window_close();
     if (key == GLFW_KEY_H && action == GLFW_PRESS)
         game_pause();
     if (key == GLFW_KEY_V && action == GLFW_PRESS)
         switch_weapon();
+    //gui_key_callback(key, scancode, action, mods);
 }
 
 static void process_input(void)
@@ -77,8 +85,6 @@ static void process_input(void)
     vec2i move_direction = vec2i_create(0, 0);
     bool hovered = 0;
 
-    if (window_key_pressed(GLFW_KEY_ESCAPE))
-        window_close();
     if (window_key_pressed(GLFW_KEY_Q))
         rotation_magnitude++;
     if (window_key_pressed(GLFW_KEY_E))
