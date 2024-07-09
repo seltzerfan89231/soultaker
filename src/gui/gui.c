@@ -32,13 +32,15 @@ void gui_init(void)
     btn->action = 1;
     component_attach(gui.root, btn);
     Component *healthbar = component_create(0.05, 0.92, 0.2, 0.02, 0.0, NO_TEX);
+    healthbar->hoverable = FALSE;
     component_attach(gui.root, healthbar);
     Component *green_part = component_create(0.0, 0.0, 0.75, 1.0, 1.0, EMPTY_TEX);
     green_part->g = 1.0, green_part->r = 0.0, green_part->b = 0.0;
-    component_attach(healthbar, green_part);
+    
     Component *red_part = component_create(0.75, 0.0, 0.25, 1.0, 1.0, EMPTY_TEX);
     red_part->r = 1.0, red_part->g = red_part->b = 0.0;
     component_attach(healthbar, red_part);
+    component_attach(healthbar, green_part);
 }
 
 #define Z gui.buffer[gui.length++]
@@ -83,10 +85,8 @@ u32 gui_interact_helper(vec2f cursor_pos, Component *comp, f32 x, f32 y, f32 w, 
     new_y1 = comp->y * h + y, new_y2 = (comp->y + comp->h) * h + y;
     for (i32 i = 0; i < comp->num_children; i++) {
         u32 action = gui_interact_helper(cursor_pos, comp->children[i], new_x1, new_y1, new_x2 - new_x1, new_y2 - new_y1);
-        if (action) {
-            gui.state_updated = TRUE;
+        if (action)
             return action;
-        }
     }
     if (!comp->interactable)
         return FALSE;
@@ -109,11 +109,8 @@ bool gui_update_helper(vec2f cursor_pos, Component *comp, f32 x, f32 y, f32 w, f
     f32 new_x1, new_y1, new_x2, new_y2, win_x1, win_x2, win_y1, win_y2;
     new_x1 = comp->x * w + x, new_x2 = (comp->x + comp->w) * w + x;
     new_y1 = comp->y * h + y, new_y2 = (comp->y + comp->h) * h + y;
-    for (i32 i = 0; i < comp->num_children; i++) {
-        bool hovered = gui_update_helper(cursor_pos, comp->children[i], new_x1, new_y1, new_x2 - new_x1, new_y2 - new_y1);
-        if (hovered)
-            return hovered;
-    }
+    for (i32 i = 0; i < comp->num_children; i++)
+        gui_update_helper(cursor_pos, comp->children[i], new_x1, new_y1, new_x2 - new_x1, new_y2 - new_y1);
     if (!comp->hoverable)
         return FALSE;
     if (cursor_pos.x >= new_x1 && cursor_pos.x <= new_x2 
