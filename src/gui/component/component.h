@@ -11,7 +11,7 @@ typedef struct Component {
     f32 x, y, w, h, r, g, b, a;
     Component **children;
     u32 num_children, id, action;
-    bool interactable, hoverable, hovered;
+    bool interactable, hoverable, hovered, relative;
 } Component;
 
 extern Window window;
@@ -23,5 +23,9 @@ void component_detach(Component *parent, Component *child);
 void component_destroy(Component *comp);
 void component_detach_and_destroy(Component *comp, Component *child);
 void component_add_text(Component *comp, char *text, u32 font_size, f32 gw, f32 gh);
+
+void component_hover(Component *comp);
+bool component_hover_on(Component *comp);
+bool component_hover_off(Component *comp);
 
 #endif

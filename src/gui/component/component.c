@@ -26,6 +26,7 @@ Component* component_create(f32 x, f32 y, f32 w, f32 h, f32 a, u32 id)
     comp->interactable = TRUE;
     comp->hoverable = TRUE;
     comp->hovered = FALSE;
+    comp->relative = TRUE;
     comp->action = 0;
     return comp;
 }
@@ -71,4 +72,26 @@ void component_add_text(Component *comp, char *text, u32 font_size, f32 gw, f32 
         letter->r = letter->g = letter->b = 0.0f;
         component_attach(comp, letter);
     }
+}
+
+bool component_hover_on(Component *comp)
+{
+    if (comp->hovered)
+        return FALSE;
+    comp->hovered = TRUE;
+    Component *new_comp = component_create(0.0, 1.1, 1.0, 1.0, 1.0, EMPTY_TEX);
+    new_comp->r = 0.5;
+    new_comp->hoverable = FALSE;
+    component_attach(comp, new_comp);
+    return TRUE;
+}
+
+bool component_hover_off(Component *comp)
+{
+    if (!comp->hovered)
+        return FALSE;
+    comp->hovered = FALSE;
+    if (comp->num_children == 1)
+        component_detach_and_destroy(comp, comp->children[0]);
+    return TRUE;
 }

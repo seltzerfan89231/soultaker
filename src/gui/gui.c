@@ -26,6 +26,7 @@ void gui_init(void)
     gui.root = component_create(0.0f, 0.0f, 1.0f, 1.0f, 0.0f, NO_TEX);
     gui.root->interactable = FALSE;
     gui.root->hoverable = FALSE;
+    gui.state_updated = TRUE;
     gui.max_length_changed = TRUE;
     Component *btn = component_create(0.05f, 0.05f, 0.1f, 0.1f, 1.0f, BUTTON_TEX);
     btn->action = 1;
@@ -45,14 +46,19 @@ void gui_init(void)
 void gui_update_data_helper(Component *comp, f32 x, f32 y, f32 w, f32 h)
 {
     f32 new_x1, new_y1, new_x2, new_y2, win_x1, win_x2, win_y1, win_y2;
-    new_x1 = comp->x * w + x, new_x2 = (comp->x + comp->w) * w + x;
-    new_y1 = comp->y * h + y, new_y2 = (comp->y + comp->h) * h + y;
+    if (comp->relative) {
+        new_x1 = comp->x * w + x, new_x2 = (comp->x + comp->w) * w + x;
+        new_y1 = comp->y * h + y, new_y2 = (comp->y + comp->h) * h + y;
+    } else {
+        new_x1 = comp->x, new_x2 = comp->x + comp->w;
+        new_y1 = comp->y, new_y2 = comp->y + comp->h;
+    }
     win_x1 = 2 * (new_x1 / (comp == gui.root ? 1 : window.aspect_ratio) - 0.5f), win_y1 = 2 * (new_y1 - 0.5f);
     win_x2 = 2 * (new_x2 / (comp == gui.root ? 1 : window.aspect_ratio) - 0.5f), win_y2 = 2 * (new_y2 - 0.5f);
     if (gui.length + 36 >= gui.max_length) {
         gui.max_length += 1000;
         gui.buffer = realloc(gui.buffer, gui.max_length * sizeof(f32));
-        gui.max_length_changed = FALSE;
+        gui.max_length_changed = gui.state_updated = FALSE;
     }
     Z = win_x1, Z = win_y1, Z = 0.0f, Z = 1.0f, Z = comp->id, Z = comp->r, Z = comp->g, Z = comp->b, Z = comp->a;
     Z = win_x2, Z = win_y1, Z = 1.0f, Z = 1.0f, Z = comp->id, Z = comp->r, Z = comp->g, Z = comp->b, Z = comp->a;
@@ -77,13 +83,17 @@ u32 gui_interact_helper(vec2f cursor_pos, Component *comp, f32 x, f32 y, f32 w, 
     new_y1 = comp->y * h + y, new_y2 = (comp->y + comp->h) * h + y;
     for (i32 i = 0; i < comp->num_children; i++) {
         u32 action = gui_interact_helper(cursor_pos, comp->children[i], new_x1, new_y1, new_x2 - new_x1, new_y2 - new_y1);
-        if (action)
+        if (action) {
+            gui.state_updated = TRUE;
             return action;
+        }
     }
     if (!comp->interactable)
         return FALSE;
-    if (cursor_pos.x >= new_x1 && cursor_pos.x <= new_x2 && 1 - cursor_pos.y >= new_y1 && 1 - cursor_pos.y <= new_y2)
+    if (cursor_pos.x >= new_x1 && cursor_pos.x <= new_x2 && 1 - cursor_pos.y >= new_y1 && 1 - cursor_pos.y <= new_y2) {
+        gui.state_updated = TRUE;
         return comp->action;
+    }
     return FALSE;
 }
 
@@ -91,7 +101,7 @@ u32 gui_interact(void)
 {
     vec2f cursor_pos = window.cursor.position;
     cursor_pos.x *= window.aspect_ratio;
-    return gui_interact_helper(cursor_pos, gui.root, gui.root->x, gui.root->y, gui.root->w, gui.root->h);
+    return gui_interact_helper(cursor_pos, gui.root, gui.root->x, gui.root->y, gui.root->w, gui.root->h);;
 }
 
 bool gui_update_helper(vec2f cursor_pos, Component *comp, f32 x, f32 y, f32 w, f32 h)
@@ -106,21 +116,14 @@ bool gui_update_helper(vec2f cursor_pos, Component *comp, f32 x, f32 y, f32 w, f
     }
     if (!comp->hoverable)
         return FALSE;
-    if (cursor_pos.x >= new_x1 && cursor_pos.x <= new_x2 && 1 - cursor_pos.y >= new_y1 && 1 - cursor_pos.y <= new_y2) {
-        if (!comp->hovered) {
-            comp->hovered = TRUE;
-            Component *new_comp = component_create(0.0, 1.1, 1.0, 1.0, 1.0, EMPTY_TEX);
-            new_comp->r = 0.5;
-            new_comp->hoverable = FALSE;
-            component_attach(comp, new_comp);
-        }
+    if (cursor_pos.x >= new_x1 && cursor_pos.x <= new_x2 
+      && 1 - cursor_pos.y >= new_y1 && 1 - cursor_pos.y <= new_y2) {
+        if (component_hover_on(comp))
+            gui.state_updated = TRUE;
         return TRUE;
     }
-    if (comp->hovered) {
-        comp->hovered = FALSE;
-        if (comp->num_children == 1)
-            component_detach_and_destroy(comp, comp->children[0]);
-    }
+    if (component_hover_off(comp))
+        gui.state_updated = TRUE;
     return FALSE;
 }
 
@@ -129,12 +132,15 @@ bool gui_update(void)
     vec2f cursor_pos = window.cursor.position;
     cursor_pos.x *= window.aspect_ratio;
     gui_update_helper(cursor_pos, gui.root, gui.root->x, gui.root->y, gui.root->w, gui.root->h);
-    gui_update_data();
-    if (gui.max_length_changed) {
-        renderer_malloc(GUI_VAO, gui.max_length);
-        gui.max_length_changed = FALSE;
+    if (gui.state_updated) {
+        gui_update_data();
+        if (gui.max_length_changed) {
+            renderer_malloc(GUI_VAO, gui.max_length);
+            gui.max_length_changed = FALSE;
+        }
+        renderer_update(GUI_VAO, 0, gui.length, gui.buffer);
+        gui.state_updated = FALSE;
     }
-    renderer_update(GUI_VAO, 0, gui.length, gui.buffer);
     return 0;
 }
 
