@@ -25,6 +25,7 @@ typedef struct {
 
 Entity* entity_create(u32 id, u8 friendly);
 void entity_update(Entity* entity, f32 dt);
+void entity_damage(Entity *entity, u32 damage);
 void entity_set_direction(Entity *entity, vec3f direction);
 void entity_destroy(Entity* entity);
 

@@ -15,19 +15,19 @@ void char_map_init(void)
     //char_map['C'] = C_TEX;
 }
 
-Component* component_create(f32 x, f32 y, f32 w, f32 h, f32 a, u32 id)
+Component* component_create(f32 x, f32 y, f32 w, f32 h, f32 a, u32 tex)
 {
     Component *comp = malloc(sizeof(Component));
     comp->x = x, comp->y = y, comp->w = w, comp->h = h;
     comp->r = comp->g = comp->b = 1.0f, comp->a = a;
-    comp->id = id;
+    comp->tex = tex;
     comp->children = NULL;
     comp->num_children = 0;
     comp->interactable = TRUE;
     comp->hoverable = TRUE;
     comp->hovered = FALSE;
     comp->relative = TRUE;
-    comp->action = 0;
+    comp->id = 0;
     return comp;
 }
 
@@ -74,6 +74,23 @@ void component_add_text(Component *comp, char *text, u32 font_size, f32 gw, f32 
     }
 }
 
+bool component_update(Component *comp)
+{
+    if (comp->id == 3) {
+        Component *green_part, *red_part;
+        green_part = comp->children[0];
+        red_part = comp->children[1];
+        green_part->w = game_get_player_health_ratio();
+        red_part->w = 1 - green_part->w;
+        red_part->x = green_part->w;
+        return TRUE;
+    } else if (comp->id == 2) {
+        comp->tex = game_get_weapon_tex();
+        return TRUE;
+    }
+    return FALSE;
+}
+
 void component_hover_event(Component *comp)
 {
 
@@ -81,12 +98,14 @@ void component_hover_event(Component *comp)
 
 bool component_hover_on(Component *comp)
 {
+    if (comp->id != 1)
+        return FALSE;
     if (comp->hovered)
         return FALSE;
     comp->hovered = TRUE;
     Component *new_comp = component_create(0.0, 1.1, 1.0, 1.0, 1.0, EMPTY_TEX);
     new_comp->r = 0.5;
-    new_comp->action = 69;
+    new_comp->id = 69;
     new_comp->hoverable = FALSE;
     component_attach(comp, new_comp);
     return TRUE;
@@ -94,11 +113,13 @@ bool component_hover_on(Component *comp)
 
 bool component_hover_off(Component *comp)
 {
+    if (comp->id != 1)
+        return FALSE;
     if (!comp->hovered)
         return FALSE;
     comp->hovered = FALSE;
     for (i32 i = 0; i < comp->num_children; i++)
-        if (comp->children[i]->action == 69)
+        if (comp->children[i]->id == 69)
             component_detach_and_destroy(comp, comp->children[i]);
     return TRUE;
 }

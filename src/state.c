@@ -60,12 +60,6 @@ void mouse_button_callback(GLFWwindow* handle, i32 button, i32 action)
     gui_mouse_button_callback(button, action);
 }
 
-void switch_weapon(void)
-{
-    gui.root->children[0]->children[0]->id = game_switch_weapon();;
-    gui.state_updated = TRUE;
-}
-
 void key_callback(GLFWwindow* handle, i32 key, i32 scancode, i32 action, i32 mods)
 {
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
@@ -73,7 +67,7 @@ void key_callback(GLFWwindow* handle, i32 key, i32 scancode, i32 action, i32 mod
     if (key == GLFW_KEY_H && action == GLFW_PRESS)
         game_pause();
     if (key == GLFW_KEY_V && action == GLFW_PRESS)
-        switch_weapon();
+        game_switch_weapon();
     //gui_key_callback(key, scancode, action, mods);
 }
 

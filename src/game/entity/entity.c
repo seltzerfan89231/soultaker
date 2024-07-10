@@ -38,6 +38,13 @@ void entity_update(Entity* entity, f32 dt)
     entity->timer2 -= dt;
 }
 
+void entity_damage(Entity *entity, u32 damage)
+{
+    entity->health -= damage;
+    if (entity->health < 0)
+        entity->health = 0;
+}
+
 void entity_set_direction(Entity *entity, vec3f direction)
 {
     entity->direction = direction;

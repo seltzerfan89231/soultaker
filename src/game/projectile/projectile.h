@@ -11,7 +11,7 @@
 
 typedef struct {
     f32 speed, scale, lifetime, rotation, hitbox_radius, timer;
-    u32 tex, id;
+    u32 tex, id, damage;
     u8 friendly;
     vec3f position, direction;
 } Projectile;

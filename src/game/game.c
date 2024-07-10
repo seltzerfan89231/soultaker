@@ -57,8 +57,8 @@ static void collide_entities_projectiles(void)
             dx = entity->position.x - proj->position.x;
             dz = entity->position.z - proj->position.z;
             if (entity->friendly != proj->friendly && vec2f_mag(vec2f_create(dx, dz)) < entity->hitbox_radius + proj->hitbox_radius) {
+                entity_damage(entity, proj->damage);
                 projectile_array_cut(&projectiles, j);
-                entity->health--;
             }
             else
                 j++;
@@ -218,6 +218,7 @@ void game_setup(void)
 
     player.entity = entity_create(KNIGHT, 1);
     player.weapon.id = 0;
+    player.weapon.tex = SWORD_1_TEX;
     player.entity->position = vec3f_create(15.0f, 0.0f, 15.0f);
 
     Entity* entity = entity_create(ENEMY, 0);
@@ -296,12 +297,21 @@ void game_pause(void)
     game_paused = 1 - game_paused;
 }
 
-u32 game_switch_weapon(void)
+void game_switch_weapon(void)
 {
     player.weapon.id = 1 - player.weapon.id;
     if (player.weapon.id == SWORD)
         player.weapon.tex = SWORD_1_TEX;
     if (player.weapon.id == SWORD2)
         player.weapon.tex = SWORD_2_TEX;
+}
+
+f32 game_get_player_health_ratio(void)
+{
+    return player.entity->health / player.entity->max_health;
+}
+
+u32 game_get_weapon_tex(void)
+{
     return player.weapon.tex;
 }

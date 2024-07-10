@@ -11,6 +11,7 @@ Projectile* projectile_create(u32 id, u8 friendly)
     projectile->speed = 10;
     projectile->lifetime = 1;
     projectile->rotation = 0;
+    projectile->damage = 1;
     projectile->tex = BULLET_TEX;
     projectile->id = id;
     projectile->direction = vec3f_create(0, 0, 0);
