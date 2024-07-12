@@ -1,7 +1,7 @@
 #ifndef WEAPON_H
 #define WEAPON_H
 
-#include "../../projectile/projectile.h"
+#include "../projectile/projectile.h"
 
 typedef struct {
     u32 id, tex;

@@ -24,6 +24,7 @@ void game_shoot(vec2f pos, f32 rotation, f32 tilt, f32 zoom, f32 ar);
 vec3f game_get_player_position(void);
 void game_pause(void);
 void game_switch_weapon(void);
+void game_heal(void);
 f32 game_get_player_health_ratio(void);
 u32 game_get_weapon_tex(void);
 

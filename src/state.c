@@ -69,6 +69,8 @@ void key_callback(GLFWwindow* handle, i32 key, i32 scancode, i32 action, i32 mod
         game_pause();
     if (key == GLFW_KEY_V && action == GLFW_PRESS)
         game_switch_weapon();
+    if (key == GLFW_KEY_B && action == GLFW_PRESS)
+        game_heal();
     //gui_key_callback(key, scancode, action, mods);
 }
 
@@ -128,17 +130,12 @@ void state_init(void)
 
 void state_loop(void)
 {
-    f32 t = glfwGetTime();
     while (!window_closed()) {
         gui_update();
         window_update();
         process_input();
         state_update();
         renderer_render();
-        if (glfwGetTime() - t > 1) {
-            t = glfwGetTime();
-            printf("%.0f\n", window.fps);
-        }
     }
 }
 

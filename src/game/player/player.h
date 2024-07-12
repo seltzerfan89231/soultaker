@@ -1,7 +1,7 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
-#include "weapon/weapon.h"
+#include "../weapon/weapon.h"
 #include "../entity/entity.h"
 #include "../projectile/projectile.h"
 

@@ -306,6 +306,11 @@ void game_switch_weapon(void)
         player.weapon.tex = SWORD_2_TEX;
 }
 
+void game_heal(void)
+{
+    player.entity->health = player.entity->max_health;
+}
+
 f32 game_get_player_health_ratio(void)
 {
     return player.entity->health / player.entity->max_health;
