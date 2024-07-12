@@ -1,6 +1,6 @@
 @echo off
 setlocal enableextensions enabledelayedexpansion
-set flags=-O3 -fopenmp -mwindows
+set flags=-O3 -fopenmp
 set name=untitled
 set link=-L./lib/glfw/link -lglfw3dll
 set Ifiles=
@@ -16,3 +16,4 @@ for /R .\src %%f in (*) do (
 )
 gcc %flags% %Ifiles% %Cfiles% %link% -o %name%
 %name%
+del %name%
