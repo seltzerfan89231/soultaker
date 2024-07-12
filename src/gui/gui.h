@@ -12,7 +12,7 @@ typedef struct {
     Component *root;
     u32 length, max_length;
     f32 *buffer;
-    bool state_updated, max_length_changed;
+    bool max_length_changed;
 } GUI;
 
 extern GUI gui;

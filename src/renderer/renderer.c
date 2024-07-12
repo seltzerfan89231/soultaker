@@ -122,15 +122,51 @@ void renderer_init(void)
     renderer.game_textures[ROCK_TEX]         = texture_create("assets/textures/game/rock.png", GL_NEAREST);
     set_game_ssbo();
     /* --------------------- */
+    #pragma region GUI_STUFF
     renderer.gui_textures = malloc(NUM_GUI_TEXTURES * sizeof(Texture));
-    renderer.gui_textures[NO_TEX]     = texture_create("assets/textures/gui/none.png", GL_LINEAR);
-    renderer.gui_textures[EMPTY_TEX]  = texture_create("assets/textures/gui/empty.png", GL_LINEAR);
-    renderer.gui_textures[A_TEX]      = texture_create("assets/textures/gui/text/A.png", GL_LINEAR);
-    renderer.gui_textures[B_TEX]      = texture_create("assets/textures/gui/text/B.png", GL_LINEAR);
+    renderer.gui_textures[NO_TEX]     = texture_create("assets/textures/gui/none.png", GL_NEAREST);
+    renderer.gui_textures[EMPTY_TEX]  = texture_create("assets/textures/gui/empty.png", GL_NEAREST);
     renderer.gui_textures[BUTTON_TEX] = texture_create("assets/textures/gui/button.png", GL_NEAREST);
     renderer.gui_textures[SWORD_1_TEX] = texture_create("assets/textures/game/sword1.png", GL_NEAREST);
     renderer.gui_textures[SWORD_2_TEX] = texture_create("assets/textures/game/sword2.png", GL_NEAREST);
+    renderer.gui_textures[A_TEX]      = texture_create("assets/textures/gui/text/A.png", GL_NEAREST);
+    renderer.gui_textures[B_TEX]      = texture_create("assets/textures/gui/text/B.png", GL_NEAREST);
+    renderer.gui_textures[C_TEX]      = texture_create("assets/textures/gui/text/C.png", GL_NEAREST);
+    renderer.gui_textures[D_TEX]      = texture_create("assets/textures/gui/text/D.png", GL_NEAREST);
+    renderer.gui_textures[E_TEX]      = texture_create("assets/textures/gui/text/E.png", GL_NEAREST);
+    renderer.gui_textures[F_TEX]      = texture_create("assets/textures/gui/text/F.png", GL_NEAREST);
+    renderer.gui_textures[G_TEX]      = texture_create("assets/textures/gui/text/G.png", GL_NEAREST);
+    renderer.gui_textures[H_TEX]      = texture_create("assets/textures/gui/text/H.png", GL_NEAREST);
+    renderer.gui_textures[I_TEX]      = texture_create("assets/textures/gui/text/I.png", GL_NEAREST);
+    renderer.gui_textures[J_TEX]      = texture_create("assets/textures/gui/text/J.png", GL_NEAREST);
+    renderer.gui_textures[K_TEX]      = texture_create("assets/textures/gui/text/K.png", GL_NEAREST);
+    renderer.gui_textures[L_TEX]      = texture_create("assets/textures/gui/text/L.png", GL_NEAREST);
+    renderer.gui_textures[M_TEX]      = texture_create("assets/textures/gui/text/M.png", GL_NEAREST);
+    renderer.gui_textures[N_TEX]      = texture_create("assets/textures/gui/text/N.png", GL_NEAREST);
+    renderer.gui_textures[O_TEX]      = texture_create("assets/textures/gui/text/O.png", GL_NEAREST);
+    renderer.gui_textures[P_TEX]      = texture_create("assets/textures/gui/text/P.png", GL_NEAREST);
+    renderer.gui_textures[Q_TEX]      = texture_create("assets/textures/gui/text/Q.png", GL_NEAREST);
+    renderer.gui_textures[R_TEX]      = texture_create("assets/textures/gui/text/R.png", GL_NEAREST);
+    renderer.gui_textures[S_TEX]      = texture_create("assets/textures/gui/text/S.png", GL_NEAREST);
+    renderer.gui_textures[T_TEX]      = texture_create("assets/textures/gui/text/T.png", GL_NEAREST);
+    renderer.gui_textures[U_TEX]      = texture_create("assets/textures/gui/text/U.png", GL_NEAREST);
+    renderer.gui_textures[V_TEX]      = texture_create("assets/textures/gui/text/V.png", GL_NEAREST);
+    renderer.gui_textures[W_TEX]      = texture_create("assets/textures/gui/text/W.png", GL_NEAREST);
+    renderer.gui_textures[X_TEX]      = texture_create("assets/textures/gui/text/X.png", GL_NEAREST);
+    renderer.gui_textures[Y_TEX]      = texture_create("assets/textures/gui/text/Y.png", GL_NEAREST);
+    renderer.gui_textures[Z_TEX]      = texture_create("assets/textures/gui/text/Z.png", GL_NEAREST);
+    renderer.gui_textures[NUM_0_TEX]  = texture_create("assets/textures/gui/text/0.png", GL_NEAREST);
+    renderer.gui_textures[NUM_1_TEX]  = texture_create("assets/textures/gui/text/1.png", GL_NEAREST);
+    renderer.gui_textures[NUM_2_TEX]  = texture_create("assets/textures/gui/text/2.png", GL_NEAREST);
+    renderer.gui_textures[NUM_3_TEX]  = texture_create("assets/textures/gui/text/3.png", GL_NEAREST);
+    renderer.gui_textures[NUM_4_TEX]  = texture_create("assets/textures/gui/text/4.png", GL_NEAREST);
+    renderer.gui_textures[NUM_5_TEX]  = texture_create("assets/textures/gui/text/5.png", GL_NEAREST);
+    renderer.gui_textures[NUM_6_TEX]  = texture_create("assets/textures/gui/text/6.png", GL_NEAREST);
+    renderer.gui_textures[NUM_7_TEX]  = texture_create("assets/textures/gui/text/7.png", GL_NEAREST);
+    renderer.gui_textures[NUM_8_TEX]  = texture_create("assets/textures/gui/text/8.png", GL_NEAREST);
+    renderer.gui_textures[NUM_9_TEX]  = texture_create("assets/textures/gui/text/9.png", GL_NEAREST);
     set_gui_ssbo();
+    #pragma endregion
     /* --------------------- */
     link_shader_ubo(TILE_SHADER, MATRICES_UBO, "Matrices");
     link_shader_ubo(WALL_SHADER, MATRICES_UBO, "Matrices");

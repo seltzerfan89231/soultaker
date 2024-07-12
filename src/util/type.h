@@ -3,6 +3,9 @@
 
 #include <glad.h>
 
+#define FALSE 0
+#define TRUE 1
+
 typedef GLboolean bool;
 typedef GLbyte    i8;
 typedef GLubyte   u8;

@@ -5,7 +5,6 @@ Window window;
 
 static void cursor_pos_callback();
 static void error_callback();
-
 extern void mouse_button_callback();
 extern void key_callback();
 extern void framebuffer_size_callback();
@@ -20,21 +19,36 @@ void window_init(void)
     window.size = vec2f_create(DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HEIGHT);
     window.cursor.position = vec2f_create(window.size.x / 2, window.size.y / 2);
     window.handle = glfwCreateWindow(window.size.x, window.size.y, "soultaker", NULL, NULL);
-    glfwMakeContextCurrent(window.handle);
+    window.aspect_ratio = (f32)window.size.x / window.size.y;
+    window.last_frame = glfwGetTime();
+    window.dt = 0;
+    window.fps = 0;
 
+    glfwMakeContextCurrent(window.handle);
     glfwSetFramebufferSizeCallback(window.handle, framebuffer_size_callback);
     glfwSetMouseButtonCallback(window.handle, mouse_button_callback);
     glfwSetCursorPosCallback(window.handle, cursor_pos_callback);
     glfwSetKeyCallback(window.handle, key_callback);
     glfwSetErrorCallback(error_callback);
-
     gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
-    glViewport(0, 0, window.size.x, window.size.y);
+    glViewport(0, 0, window.size.x, window.size.y);    
+}
 
+void window_toggle_fullscreen(void)
+{
+    GLFWmonitor* monitor = glfwGetWindowMonitor(window.handle);
+    const GLFWvidmode* mode;
+    if (monitor != NULL)
+        glfwSetWindowMonitor(window.handle, NULL, window.xpos, window.ypos, window.width, window.height, 0);
+    else {
+        glfwGetWindowPos(window.handle, &window.xpos, &window.ypos);
+        glfwGetWindowSize(window.handle, &window.width, &window.height);
+        GLFWmonitor* full_monitor = glfwGetPrimaryMonitor();
+        mode = glfwGetVideoMode(full_monitor);
+        glfwSetWindowMonitor(window.handle, full_monitor, 0, 0, mode->width, mode->height, mode->refreshRate);
+    }
+    window.cursor.position = vec2f_create(window.size.x / 2, window.size.y / 2);
     window.aspect_ratio = (f32)window.size.x / window.size.y;
-    window.last_frame = glfwGetTime();
-    window.dt = 0;
-    window.fps = 0;
 }
 
 void window_update(void)

@@ -64,6 +64,8 @@ void key_callback(GLFWwindow* handle, i32 key, i32 scancode, i32 action, i32 mod
 {
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
         window_close();
+    if (key == GLFW_KEY_F11 && action == GLFW_PRESS)
+        window_toggle_fullscreen();
     if (key == GLFW_KEY_H && action == GLFW_PRESS)
         game_pause();
     if (key == GLFW_KEY_V && action == GLFW_PRESS)
