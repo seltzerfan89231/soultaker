@@ -1,10 +1,12 @@
 #include "window.h"
 #include <stdio.h>
+#include <stb_image.h>
 
 Window window;
 
 static void cursor_pos_callback();
 static void error_callback();
+static void load_images();
 extern void mouse_button_callback();
 extern void key_callback();
 extern void framebuffer_size_callback();
@@ -16,22 +18,24 @@ void window_init(void)
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    window.size = vec2f_create(DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HEIGHT);
-    window.cursor.position = vec2f_create(window.size.x / 2, window.size.y / 2);
-    window.handle = glfwCreateWindow(window.size.x, window.size.y, "soultaker", NULL, NULL);
-    window.aspect_ratio = (f32)window.size.x / window.size.y;
+    window.handle = glfwCreateWindow(DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HEIGHT, "soultaker", NULL, NULL);
+    window.cursor.position = vec2f_create(window.width / 2, window.height / 2);
+    glfwGetWindowSize(window.handle, &window.width, &window.height);
+    glfwSetWindowAspectRatio(window.handle, 16, 9);
+    window.aspect_ratio = (f32)window.width / window.height;
     window.last_frame = glfwGetTime();
     window.dt = 0;
     window.fps = 0;
 
     glfwMakeContextCurrent(window.handle);
+    load_images();
     glfwSetFramebufferSizeCallback(window.handle, framebuffer_size_callback);
     glfwSetMouseButtonCallback(window.handle, mouse_button_callback);
     glfwSetCursorPosCallback(window.handle, cursor_pos_callback);
     glfwSetKeyCallback(window.handle, key_callback);
     glfwSetErrorCallback(error_callback);
     gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
-    glViewport(0, 0, window.size.x, window.size.y);    
+    glViewport(0, 0, window.width, window.height);    
 }
 
 void window_toggle_fullscreen(void)
@@ -39,7 +43,7 @@ void window_toggle_fullscreen(void)
     GLFWmonitor* monitor = glfwGetWindowMonitor(window.handle);
     const GLFWvidmode* mode;
     if (monitor != NULL)
-        glfwSetWindowMonitor(window.handle, NULL, window.xpos, window.ypos, window.width, window.height, 0);
+        glfwSetWindowMonitor(window.handle, NULL, window.xpos, window.ypos, DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HEIGHT, 0);
     else {
         glfwGetWindowPos(window.handle, &window.xpos, &window.ypos);
         glfwGetWindowSize(window.handle, &window.width, &window.height);
@@ -47,8 +51,8 @@ void window_toggle_fullscreen(void)
         mode = glfwGetVideoMode(full_monitor);
         glfwSetWindowMonitor(window.handle, full_monitor, 0, 0, mode->width, mode->height, mode->refreshRate);
     }
-    window.cursor.position = vec2f_create(window.size.x / 2, window.size.y / 2);
-    window.aspect_ratio = (f32)window.size.x / window.size.y;
+    window.cursor.position = vec2f_create(window.width / 2, window.height / 2);
+    window.aspect_ratio = (f32)window.width / window.height;
 }
 
 void window_update(void)
@@ -64,8 +68,8 @@ void window_update(void)
 
 void cursor_pos_callback(GLFWwindow* handle, double xpos, double ypos)
 {
-    window.cursor.position.x = xpos / window.size.x;
-    window.cursor.position.y = ypos / window.size.y;
+    window.cursor.position.x = xpos / window.width;
+    window.cursor.position.y = ypos / window.height;
 }
 
 void error_callback(int x, const char *message)
@@ -77,3 +81,15 @@ bool window_closed(void) { return glfwWindowShouldClose(window.handle); }
 void window_close(void) { glfwSetWindowShouldClose(window.handle, 1); }
 bool window_key_pressed(GLenum key) { return glfwGetKey(window.handle, key) == GLFW_PRESS; }
 bool window_mouse_button_pressed(GLenum button) { return glfwGetMouseButton(window.handle, button) == GLFW_PRESS; }
+
+static void load_images()
+{
+    GLFWimage images[2];
+
+    images[0].pixels = stbi_load("assets/textures/my_icon.png", &images[0].width, &images[0].height, 0, 4);
+    images[1].pixels = stbi_load("assets/textures/my_icon_small.png", &images[1].width, &images[1].height, 0, 4);
+    
+    glfwSetWindowIcon(window.handle, 2, images);
+    stbi_image_free(images[0].pixels);
+    stbi_image_free(images[1].pixels);
+}

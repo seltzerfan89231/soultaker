@@ -11,7 +11,6 @@
 
 typedef struct {
     GLFWwindow *handle;
-    vec2f size;
     struct {
         vec2f position;
     } cursor;

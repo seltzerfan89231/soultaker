@@ -44,10 +44,9 @@ static void state_update(void)
 
 void framebuffer_size_callback(GLFWwindow* handle, i32 width, i32 height)
 {
-    window.size.x = width;
-    window.size.y = height;
-    window.aspect_ratio = (f32)window.size.x / window.size.y;
-    glViewport(0, 0, window.size.x, window.size.y);
+    glfwGetWindowSize(window.handle, &window.width, &window.height);
+    window.aspect_ratio = (f32)window.width / window.height;
+    glViewport(0, 0, window.width, window.height);
     renderer_uniform_update_aspect_ratio(1 / window.aspect_ratio);
     camera_update_proj_matrix(window.aspect_ratio);
     update_proj_matrix();
