@@ -20,26 +20,23 @@ void gui_init(void)
     gui.length = 0;
     gui.root = component_create(0.0f, 0.0f, 1.0f, 1.0f, NO_TEX);
     gui.root->a = 0;
-    gui.root->interactable = FALSE;
-    gui.root->hoverable = FALSE;
     gui.max_length_changed = TRUE;
 
-    Component *text_box = component_create(0.05, 0.8, 0.1, 0.1, EMPTY_TEX);
-    component_add_text(text_box, "THE QUICK BROWN FOX JUMPED OVER THE LAZY DOG 0123456789", 35, 0.1, 0.1);
+    Component *text_box = component_create(0.05, 0.8, 0.1, 0.1, NO_TEX);
+    text_box->id = COMP_TEXTBOX;
+    text_box->update_children = FALSE;
+    component_add_text(text_box, "THE QUICK BROWN FOX JUMPED OVER THE LAZY DOG 0123456789", 15, 0.1, 0.1);
     component_attach(gui.root, text_box);
-    component_add_text(gui.root, "THE QUICK BROWN FOX JUMPED OVER THE LAZY DOG 0123456789", 15, 1, 1);
     Component *btn = component_create(0.05f, 0.05f, 0.1f, 0.1f, BUTTON_TEX);
+    btn->hoverable = TRUE;
     btn->id = COMP_BUTTON;
     Component *icon = component_create(0.15, 0.15, 0.7, 0.7, SWORD_1_TEX);
     icon->id = COMP_ICON;
     Component *healthbar = component_create(0.3, 0.05, 0.2, 0.02, NO_TEX);
     healthbar->id = COMP_HEALTHBAR;
-    healthbar->hoverable = FALSE;
     Component *green_part = component_create(0.0, 0.0, 0.75, 1.0, EMPTY_TEX);
-    green_part->id = COMP_HEALTHBAR_GREEN;
     green_part->g = 1.0, green_part->r = 0.0, green_part->b = 0.0;
     Component *red_part = component_create(0.75, 0.0, 0.25, 1.0, EMPTY_TEX);
-    red_part->id = COMP_HEALTHBAR_RED;
     red_part->r = 1.0, red_part->g = red_part->b = 0.0;
     component_attach(gui.root, btn);
     component_attach(btn, icon);
@@ -96,8 +93,9 @@ void gui_update_helper(Component *comp, f32 x, f32 y, f32 w, f32 h)
     f32 new_x1, new_y1, new_x2, new_y2, win_x1, win_x2, win_y1, win_y2;
     new_x1 = comp->x * w + x, new_x2 = (comp->x + comp->w) * w + x;
     new_y1 = comp->y * h + y, new_y2 = (comp->y + comp->h) * h + y;
-    for (i32 i = 0; i < comp->num_children; i++)
-        gui_update_helper(comp->children[i], new_x1, new_y1, new_x2 - new_x1, new_y2 - new_y1);
+    if (comp->update_children)
+        for (i32 i = 0; i < comp->num_children; i++)
+            gui_update_helper(comp->children[i], new_x1, new_y1, new_x2 - new_x1, new_y2 - new_y1);
     component_update(comp);
     if (!comp->hoverable)
         return;
@@ -124,8 +122,9 @@ void gui_mouse_button_callback_helper(Component *comp, f32 x, f32 y, f32 w, f32 
     f32 new_x1, new_y1, new_x2, new_y2, win_x1, win_x2, win_y1, win_y2;
     new_x1 = comp->x * w + x, new_x2 = (comp->x + comp->w) * w + x;
     new_y1 = comp->y * h + y, new_y2 = (comp->y + comp->h) * h + y;
-    for (i32 i = 0; i < comp->num_children; i++)
-        gui_mouse_button_callback_helper(comp->children[i], new_x1, new_y1, new_x2 - new_x1, new_y2 - new_y1);
+    if (comp->update_children)
+        for (i32 i = 0; i < comp->num_children; i++)
+            gui_mouse_button_callback_helper(comp->children[i], new_x1, new_y1, new_x2 - new_x1, new_y2 - new_y1);
     if (comp->interactable && cursor_in_bounds(new_x1, new_x2, new_y1, new_y2))
         component_onclick(comp);
 }

@@ -5,6 +5,7 @@
 #include "../../util/indices.h"
 #include "../../window/window.h"
 #include "../../game/game.h"
+#include "character.h"
 
 typedef struct Component Component;
 
@@ -12,12 +13,11 @@ typedef struct Component {
     f32 x, y, w, h, r, g, b, a;
     Component **children;
     u32 num_children, tex, id;
-    bool interactable, hoverable, hovered, relative;
+    bool interactable, hoverable, hovered, relative, update_children;
 } Component;
 
 extern Window window;
 
-void char_map_init(void);
 Component* component_create(f32 x, f32 y, f32 w, f32 h, u32 tex);
 void component_attach(Component *parent, Component *child);
 void component_detach(Component *parent, Component *child);
@@ -34,9 +34,8 @@ void component_hover_off(Component *comp);
 #define COMP_BUTTON 1
 #define COMP_ICON 2
 #define COMP_HEALTHBAR 3
-#define COMP_HEALTHBAR_GREEN 4
-#define COMP_HEALTHBAR_RED 5
-#define COMP_POPUP 6
+#define COMP_POPUP 4
+#define COMP_TEXTBOX 5
 
 #define _COMP_INIT(_ltype) \
     void comp_##_ltype##_hover_on(Component *comp); \
@@ -46,8 +45,7 @@ void component_hover_off(Component *comp);
 _COMP_INIT(button)
 _COMP_INIT(icon)
 _COMP_INIT(healthbar)
-_COMP_INIT(healthbar_green)
-_COMP_INIT(healthbar_red)
 _COMP_INIT(popup)
+_COMP_INIT(textbox)
 
 #endif
