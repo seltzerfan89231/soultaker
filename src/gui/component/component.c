@@ -107,55 +107,52 @@ void component_add_text(Component *comp, char *text, u32 font_size, f32 gw, f32 
     }
 }
 
-bool component_onclick(Component *comp)
+void component_onclick(Component *comp)
 {
     puts("Clicked!");
-    return TRUE;
 }
+
+#define _COMP_UPDATE(_type, _ltype) \
+    case COMP_##_type : comp_##_ltype##_update(comp); break;
 
 void component_update(Component *comp)
 {
-    if (comp->id == 3) {
-        Component *green_part, *red_part;
-        green_part = comp->children[0];
-        red_part = comp->children[1];
-        green_part->w = game_get_player_health_ratio();
-        red_part->w = 1 - green_part->w;
-        red_part->x = green_part->w;
-    } else if (comp->id == 2) {
-        comp->tex = game_get_weapon_tex();
+    switch (comp->id) {
+        _COMP_UPDATE(BUTTON, button)
+        _COMP_UPDATE(ICON, icon)
+        _COMP_UPDATE(HEALTHBAR, healthbar)
+        _COMP_UPDATE(HEALTHBAR_GREEN, healthbar_green)
+        _COMP_UPDATE(HEALTHBAR_RED, healthbar_red)
+        _COMP_UPDATE(POPUP, popup)
     }
 }
 
-void component_hover_event(Component *comp)
-{
+#define _COMP_HOVER_ON(_type, _ltype) \
+    case COMP_##_type : comp_##_ltype##_hover_on(comp); break;
 
+void component_hover_on(Component *comp)
+{
+    switch (comp->id) {
+        _COMP_HOVER_ON(BUTTON, button)
+        _COMP_HOVER_ON(ICON, icon)
+        _COMP_HOVER_ON(HEALTHBAR, healthbar)
+        _COMP_HOVER_ON(HEALTHBAR_GREEN, healthbar_green)
+        _COMP_HOVER_ON(HEALTHBAR_RED, healthbar_red)
+        _COMP_HOVER_ON(POPUP, popup)
+    }
 }
 
-bool component_hover_on(Component *comp)
-{
-    if (comp->id != 1)
-        return FALSE;
-    if (comp->hovered)
-        return FALSE;
-    comp->hovered = TRUE;
-    Component *new_comp = component_create(0.0, 1.1, 1.0, 1.0, EMPTY_TEX);
-    new_comp->r = 0.5;
-    new_comp->id = 69;
-    new_comp->hoverable = FALSE;
-    component_attach(comp, new_comp);
-    return TRUE;
-}
+#define _COMP_HOVER_OFF(_type, _ltype) \
+    case COMP_##_type : comp_##_ltype##_hover_off(comp); break;
 
-bool component_hover_off(Component *comp)
+void component_hover_off(Component *comp)
 {
-    if (comp->id != 1)
-        return FALSE;
-    if (!comp->hovered)
-        return FALSE;
-    comp->hovered = FALSE;
-    for (i32 i = 0; i < comp->num_children; i++)
-        if (comp->children[i]->id == 69)
-            component_detach_and_destroy(comp, comp->children[i]);
-    return TRUE;
+    switch (comp->id) {
+        _COMP_HOVER_OFF(BUTTON, button)
+        _COMP_HOVER_OFF(ICON, icon)
+        _COMP_HOVER_OFF(HEALTHBAR, healthbar)
+        _COMP_HOVER_OFF(HEALTHBAR_GREEN, healthbar_green)
+        _COMP_HOVER_OFF(HEALTHBAR_RED, healthbar_red)
+        _COMP_HOVER_OFF(POPUP, popup)
+    }
 }

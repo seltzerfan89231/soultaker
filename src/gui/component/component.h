@@ -23,14 +23,31 @@ void component_attach(Component *parent, Component *child);
 void component_detach(Component *parent, Component *child);
 void component_destroy(Component *comp);
 void component_detach_and_destroy(Component *comp, Component *child);
+
 void component_add_text(Component *comp, char *text, u32 font_size, f32 gw, f32 gh);
-
-bool component_onclick(Component *comp);
-
+void component_onclick(Component *comp);
 void component_update(Component *comp);
+void component_hover_on(Component *comp);
+void component_hover_off(Component *comp);
 
-void component_hover_event(Component *comp);
-bool component_hover_on(Component *comp);
-bool component_hover_off(Component *comp);
+#define COMP_DEFAULT 0
+#define COMP_BUTTON 1
+#define COMP_ICON 2
+#define COMP_HEALTHBAR 3
+#define COMP_HEALTHBAR_GREEN 4
+#define COMP_HEALTHBAR_RED 5
+#define COMP_POPUP 6
+
+#define _COMP_INIT(_ltype) \
+    void comp_##_ltype##_hover_on(Component *comp); \
+    void comp_##_ltype##_hover_off(Component *comp); \
+    void comp_##_ltype##_update(Component *comp);
+
+_COMP_INIT(button)
+_COMP_INIT(icon)
+_COMP_INIT(healthbar)
+_COMP_INIT(healthbar_green)
+_COMP_INIT(healthbar_red)
+_COMP_INIT(popup)
 
 #endif
