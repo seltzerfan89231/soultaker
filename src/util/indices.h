@@ -68,7 +68,7 @@
 
 
 #pragma region GAME_TEXTURES
-#define NUM_GAME_TEXTURES 2400
+#define NUM_GAME_TEXTURES 25
 #define BULLET_TEX        0
 #define TILE_TEX          1
 #define WALL_TOP_TEX      2

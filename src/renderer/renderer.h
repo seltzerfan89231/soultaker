@@ -12,8 +12,6 @@
 #include "ubo/ubo.h"
 #include "ssbo/ssbo.h"
 
-#define OUTLINE_THICKNESS 0
-
 typedef struct {
     VAO *vaos;
     Shader *shaders;

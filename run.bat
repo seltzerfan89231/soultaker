@@ -16,4 +16,4 @@ for /R .\src %%f in (*) do (
 )
 gcc %flags% %Ifiles% %Cfiles% %link% -o %name%
 %name%
-del %name%
+del %name%.exe
