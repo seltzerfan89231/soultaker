@@ -13,6 +13,8 @@ typedef struct {
     f32 cooldown;
 } Player;
 
+extern Player player;
+
 void player_shoot(Player *player, vec3f direction);
 
 #endif

@@ -1,18 +1,9 @@
 #ifndef GAME_H
 #define GAME_H
 
-#include "entity/entity.h"
-#include "projectile/projectile.h"
-#include "particle/particle.h"
-#include "obstacle/obstacle.h"
-#include "parjicle/parjicle.h"
-#include "parstacle/parstacle.h"
-#include "tile/tile.h"
-#include "wall/wall.h"
-#include "player/player.h"
-#include "../util/array.h"
-
-#define MAP_WIDTH 50
+#include "collision.h"
+#include "loader/loader.h"
+#include "game_util.h"
 
 void game_init(void);
 void game_setup(void);

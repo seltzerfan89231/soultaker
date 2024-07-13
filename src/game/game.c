@@ -4,16 +4,9 @@
 #include <assert.h>
 
 f64 game_time;
-u8 game_paused;
-Player player;
-extern ProjectileArray projectiles;
-extern EntityArray entities;
-extern ParticleArray particles;
-extern ParjicleArray parjicles;
-extern ParstacleArray parstacles;
-extern ObstacleArray obstacles;
-extern TileArray tiles;
-extern WallArray walls;
+bool game_paused;
+
+extern void collide_objects(f32 dt);
 
 static void update_objects(f32 dt)
 {
@@ -22,6 +15,14 @@ static void update_objects(f32 dt)
         entity_update(entity, dt);
         /* if (entity->health <= 0)
             entity_array_cut(&entities, i--), printf("%d\n", entities.length); */
+        if (entity->position.x < 0)
+            entity->position.x = 0;
+        if (entity->position.z < 0)
+            entity->position.z = 0;
+        if (entity->position.x > MAP_WIDTH)
+            entity->position.x = MAP_WIDTH;
+        if (entity->position.z > MAP_WIDTH)
+            entity->position.z = MAP_WIDTH;
     }
     for (i32 i = 0; i < projectiles.length; i++) {
         Projectile *proj = projectiles.buffer[i];
@@ -43,156 +44,6 @@ static void update_objects(f32 dt)
     }
 }
 
-#pragma region collision
-static void collide_entities_projectiles(void)
-{
-    i32 i, j;
-    i = 0;
-    while (i < entities.length) {
-        Entity *entity = entities.buffer[i];
-        j = 0;
-        while (j < projectiles.length) {
-            f32 dx, dz;
-            Projectile *proj = projectiles.buffer[j];
-            dx = entity->position.x - proj->position.x;
-            dz = entity->position.z - proj->position.z;
-            if (entity->friendly != proj->friendly && vec2f_mag(vec2f_create(dx, dz)) < entity->hitbox_radius + proj->hitbox_radius) {
-                entity_damage(entity, proj->damage);
-                projectile_array_cut(&projectiles, j);
-            }
-            else
-                j++;
-        }
-        i++;
-    }
-}
-
-static void collide_walls_projectiles(void)
-{
-    i32 i, j;
-    i = 0;
-    while (i < walls.length) {
-        Wall *wall = walls.buffer[i];  
-        j = 0;
-        while (j < projectiles.length) {
-            Projectile *proj = projectiles.buffer[j];
-            if (proj->position.x + proj->hitbox_radius > wall->position.x   &&
-              proj->position.x - proj->hitbox_radius < wall->position.x + 1 &&
-              proj->position.z + proj->hitbox_radius > wall->position.z     &&
-              proj->position.z - proj->hitbox_radius < wall->position.z + 1)
-                projectile_array_cut(&projectiles, j);
-            else
-                j++;
-        }
-        i++;
-    }
-}
-
-static void collide_obstacles_projectiles()
-{
-    i32 i, j;
-    i = 0;
-    while (i < obstacles.length) {
-        Obstacle *obstacle = obstacles.buffer[i];
-        j = 0;
-        while (j < projectiles.length) {
-            f32 dx, dz;
-            Projectile *proj = projectiles.buffer[j];
-            dx = obstacle->position.x - proj->position.x;
-            dz = obstacle->position.z - proj->position.z;
-            if (vec2f_mag(vec2f_create(dx, dz)) < obstacle->hitbox_radius + proj->hitbox_radius)
-                projectile_array_cut(&projectiles, j);
-            else
-                j++;
-        }
-        i++;
-    }
-}
-
-static void collide_obstacles_entities()
-{
-    i32 i, j;
-    i = 0;
-    while (i < obstacles.length) {
-        Obstacle *obstacle = obstacles.buffer[i];
-        j = 0;
-        while (j < entities.length) {
-            f32 dx, dz;
-            vec2f dir;
-            Entity *entity = entities.buffer[j];
-            dx = entity->position.x - obstacle->position.x;
-            dz = entity->position.z - obstacle->position.z;
-            dir = vec2f_create(dx, dz);
-            if (vec2f_mag(dir) < obstacle->hitbox_radius + entity->hitbox_radius) {
-               dir = vec2f_scale(obstacle->hitbox_radius + entity->hitbox_radius, vec2f_normalize(dir));
-               entity->position.x = obstacle->position.x + dir.x;
-               entity->position.z = obstacle->position.z + dir.y;
-            }
-            j++;
-        }
-        i++;
-    }
-}
-
-static void collide_walls_entities(f32 dt)
-{
-    i32 i, j;
-    i = 0;
-    while (i < walls.length) {
-        Wall *wall = walls.buffer[i];
-        j = 0;
-        while (j < entities.length) {
-            Entity *entity = entities.buffer[j];
-            vec3f prev_position = vec3f_sub(entity->position, vec3f_scale(entity->speed * dt, entity->direction));
-            if (entity->position.x + entity->hitbox_radius > wall->position.x
-              && entity->position.x - entity->hitbox_radius < wall->position.x + 1
-              && entity->position.z + entity->hitbox_radius > wall->position.z
-              && entity->position.z - entity->hitbox_radius < wall->position.z + 1) {
-                if (prev_position.x < wall->position.x
-                  && entity->direction.x > 0
-                  && prev_position.z < wall->position.z + 1 + entity->hitbox_radius
-                  && prev_position.z > wall->position.z - entity->hitbox_radius) {
-                    entity->position.x = wall->position.x - entity->hitbox_radius;
-                    entity->direction.x = 0;
-                }
-                else if (prev_position.x > wall->position.x + 1
-                  && entity->direction.x < 0
-                  && prev_position.z < wall->position.z + 1 + entity->hitbox_radius
-                  && prev_position.z > wall->position.z - entity->hitbox_radius) {
-                    entity->position.x = wall->position.x + 1 + entity->hitbox_radius;
-                    entity->direction.x = 0;
-                }
-                else if (prev_position.z < wall->position.z
-                  && entity->direction.z > 0
-                  && prev_position.x < wall->position.x + 1 + entity->hitbox_radius
-                  && prev_position.x > wall->position.x - entity->hitbox_radius) {
-                    entity->position.z = wall->position.z - entity->hitbox_radius;
-                    entity->direction.z = 0;
-                }
-                else if (prev_position.z > wall->position.z + 1
-                  && entity->direction.z < 0
-                  && prev_position.x < wall->position.x + 1 + entity->hitbox_radius
-                  && prev_position.x > wall->position.x - entity->hitbox_radius) {
-                    entity->position.z = wall->position.z + 1 + entity->hitbox_radius;
-                    entity->direction.z = 0;
-                }
-            }
-            j++;
-        }
-        i++;
-    }
-}
-
-static void collide_objects(f32 dt)
-{
-    collide_walls_entities(dt);
-    collide_walls_projectiles();
-    collide_obstacles_projectiles();
-    collide_obstacles_entities();
-    collide_entities_projectiles();
-}
-#pragma endregion
-
 void game_init(void)
 {
     projectiles = projectile_array_create(10000);
@@ -209,35 +60,7 @@ void game_init(void)
 
 void game_setup(void)
 {
-    for (i32 i = 0; i < MAP_WIDTH; i++)
-        for (i32 j = 0; j < MAP_WIDTH; j++)
-            if (i == 0 || j == 0 || j == MAP_WIDTH - 1 || i == MAP_WIDTH - 1 || (i == 12 && j == 12))
-                wall_create(WALL2, i, j, ((int)(i + j)) % 2 == 0 ? 3.0f : 0.8f);
-            else
-                tile_create(FLOOR, i, j);
-
-    player.entity = entity_create(KNIGHT, 1);
-    player.weapon.id = 0;
-    player.weapon.tex = SWORD_1_TEX;
-    player.entity->position = vec3f_create(15.0f, 0.0f, 15.0f);
-
-    Entity* entity = entity_create(ENEMY, 0);
-    entity->position = vec3f_create(20, 0, 15);
-    entity->scale = 1.0f;
-
-    Obstacle *obstacle = obstacle_create();
-    obstacle->position = vec3f_create(10.0f, 0.0f, 10.0f);
-    obstacle->hitbox_radius = 0.3f;
-    obstacle->scale = 3.0f;
-
-    obstacle = obstacle_create();
-    obstacle->position = vec3f_create(12.0f, 0.0f, 10.0f);
-    obstacle->hitbox_radius = 0.3f;
-    obstacle->scale = 3.0f;
-
-    Parstacle *parstacle = parstacle_create();
-    parstacle->position = vec3f_create(20.0f, 0.0f, 20.0f);
-    parstacle->scale = 1.8f;
+    load_level();
 }
 
 void game_update(f32 dt)
@@ -251,11 +74,15 @@ void game_update(f32 dt)
 
 void game_set_direction(vec3f direction)
 {
+    if (game_paused)
+        return;
     entity_set_direction(player.entity, direction);
 }
 
 void game_set_target(vec3f target)
 {
+    if (game_paused)
+        return;
     player.entity->position = target;
 }
 
@@ -273,6 +100,8 @@ void game_destroy(void)
 
 void game_shoot(vec2f pos, f32 rotation, f32 tilt, f32 zoom, f32 ar)
 {
+    if (game_paused)
+        return;
     vec2f dir = vec2f_normalize(vec2f_create((pos.x - 0.5) * ar, pos.y - 0.5 + 1.0 / 4 / zoom));
     f32 dirx, dirz, a, b, c;
     a = atan(-dir.y/dir.x);
@@ -299,6 +128,8 @@ void game_pause(void)
 
 void game_switch_weapon(void)
 {
+    if (game_paused)
+        return;
     player.weapon.id = 1 - player.weapon.id;
     if (player.weapon.id == SWORD)
         player.weapon.tex = SWORD_1_TEX;
