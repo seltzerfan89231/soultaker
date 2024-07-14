@@ -58,9 +58,12 @@ void game_init(void)
     game_paused = FALSE;
 }
 
-void game_setup(void)
+void game_setup(u32 level)
 {
-    load_level();
+    if (level == 1)
+        load_level1();
+    if (level == 2)
+        load_level2();
 }
 
 void game_update(f32 dt)

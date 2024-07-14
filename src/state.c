@@ -24,7 +24,7 @@ static void update_view_matrix(void)
 static void state_setup(void)
 {
     renderer_uniform_update_aspect_ratio(1 / window.aspect_ratio);
-    game_setup();
+    game_setup(1);
     camera_set_target(game_get_player_position());
     update_view_matrix();
     update_proj_matrix();
@@ -36,10 +36,7 @@ static void state_update(void)
     game_update(window.dt > 0.01 ? 0.01 : window.dt);
     camera_set_target(game_get_player_position());
     update_view_matrix();
-    data_update_entities();
-    data_update_projectiles();
-    data_update_particles();
-    data_update_parjicles();
+    data_update();
 }
 
 void framebuffer_size_callback(GLFWwindow* handle, i32 width, i32 height)
@@ -71,6 +68,10 @@ void key_callback(GLFWwindow* handle, i32 key, i32 scancode, i32 action, i32 mod
         game_switch_weapon();
     if (key == GLFW_KEY_B && action == GLFW_PRESS)
         game_heal();
+    if (key == GLFW_KEY_J && action == GLFW_PRESS)
+        game_setup(2);
+    if (key == GLFW_KEY_K && action == GLFW_PRESS)
+        game_setup(1);
     //gui_key_callback(key, scancode, action, mods);
 }
 

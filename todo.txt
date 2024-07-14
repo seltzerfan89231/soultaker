@@ -1,16 +1,11 @@
-TODO
-- timestep
-
 ROADMAP
 - lever loader
 - first level
-- alternate weapon
 - ability
-- gui
-    - hud
-    - debug
-    - text (pain)
-- character selection area
 - home menu
+
+multithread idea
+boolean in each entity "mark for deletion"
+that way it doesnt matter if two threads access the same resource
 
 

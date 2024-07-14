@@ -121,6 +121,23 @@ void data_destroy(void)
     free(data.buffer);
 }
 
+void data_update(void)
+{
+    data_update_entities();
+    data_update_projectiles();
+    data_update_parjicles();
+    data_update_particles();
+
+    if (tile_array_updated(&tiles))
+        data_update_tiles();
+    if (wall_array_updated(&walls))
+        data_update_walls();
+    if (parstacle_array_updated(&parstacles))
+        data_update_parstacles();
+    if (obstacle_array_updated(&obstacles))
+        data_update_obstacles();
+}
+
 void data_setup(void)
 {
     data_update_tiles();
@@ -142,6 +159,7 @@ void data_setup(void)
             _ltypes.changed_size = 0; \
         } \
         renderer_update(_utype##_VAO, 0, i, data.buffer); \
+         _ltypes.updated = 0; \
     }
 
 _DATA_UPDATE(PARJICLE, parjicle, parjicles)

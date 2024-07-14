@@ -7,6 +7,7 @@
 
 #define LEVEL_1 0
 
-void load_level(void);
+void load_level1(void);
+void load_level2(void);
 
 #endif

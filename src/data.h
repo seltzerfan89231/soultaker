@@ -17,6 +17,7 @@ extern Data data;
 
 void data_init(void);
 void data_setup(void);
+void data_update(void);
 void data_update_tiles(void);
 void data_update_walls(void);
 void data_update_entities(void);
