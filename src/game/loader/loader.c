@@ -10,7 +10,7 @@ static void reset(void)
     obstacle_array_destroy(&obstacles);
     parstacle_array_destroy(&parstacles);
     parjicle_array_destroy(&parjicles);
-    projectiles = projectile_array_create(10000);
+    projectiles = projectile_array_create(0);
     entities = entity_array_create(0);
     particles = particle_array_create(0);
     parjicles = parjicle_array_create(0);

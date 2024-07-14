@@ -73,6 +73,10 @@ void game_update(f32 dt)
     update_objects(dt);
     collide_objects(dt);
     game_time += dt;
+    entity_array_update(&entities);
+    projectile_array_update(&projectiles);
+    particle_array_update(&particles);
+    parjicle_array_update(&parjicles);
 }
 
 void game_set_direction(vec3f direction)

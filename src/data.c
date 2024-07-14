@@ -127,15 +127,10 @@ void data_update(void)
     data_update_projectiles();
     data_update_parjicles();
     data_update_particles();
-
-    if (tile_array_updated(&tiles))
-        data_update_tiles();
-    if (wall_array_updated(&walls))
-        data_update_walls();
-    if (parstacle_array_updated(&parstacles))
-        data_update_parstacles();
-    if (obstacle_array_updated(&obstacles))
-        data_update_obstacles();
+    data_update_tiles();
+    data_update_walls();
+    data_update_parstacles();
+    data_update_obstacles();
 }
 
 void data_setup(void)
@@ -152,14 +147,14 @@ void data_setup(void)
 
 #define _DATA_UPDATE(_utype, _ltype, _ltypes) \
     void data_update_##_ltypes(void) { \
+        if (!_ltype##_array_updated(&_ltypes)) \
+            return; \
         for (i = 0; i < _ltypes.length; i++) \
             _ltype##_push_data(_ltypes.buffer[i], i); \
-        if (_ltypes.changed_size) { \
+        if (_ltype##_array_changed_size(&_ltypes)) \
             renderer_malloc(_utype##_VAO, _ltypes.max_length); \
-            _ltypes.changed_size = 0; \
-        } \
         renderer_update(_utype##_VAO, 0, i, data.buffer); \
-         _ltypes.updated = 0; \
+        _ltypes.updated = 0; \
     }
 
 _DATA_UPDATE(PARJICLE, parjicle, parjicles)
