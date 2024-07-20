@@ -1,6 +1,6 @@
 #include "../weapon.h"
 
-void sword_shoot(Weapon weapon, vec3f position, vec3f direction)
+void sword_shoot(Weapon weapon, vec3f position, vec3f direction, vec3f target)
 {
     f32 t = atan(direction.z / direction.x);
     Projectile* proj = projectile_create(SWORD, TRUE);

@@ -2,18 +2,18 @@
 
 Player player;
 
-void player_shoot(Player *player, vec3f direction)
+void player_shoot(Player *player, vec3f direction, vec3f target)
 {
     if (game_time - player->cooldown > 0.5) {
-        weapon_shoot(player->weapon, player->entity->position, direction);
+        weapon_shoot(player->weapon, player->entity->position, direction, target);
         player->cooldown = game_time;
     }
 }
 
-void player_spellcast(Player *player, vec3f position, vec3f direction)
+void player_spellcast(Player *player, vec3f direction, vec3f target)
 {
     Particle *part = particle_create();
     part->scale = 0.1;
-    part->position = position;
+    part->position = target;
     part->position.y = 0.5;
 }
