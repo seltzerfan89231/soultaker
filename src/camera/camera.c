@@ -24,7 +24,6 @@ void camera_init(f32 ar)
 {
     camera.yaw = DEFAULT_YAW;
     camera.pitch = DEFAULT_PITCH;
-    camera.fov = DEFAULT_FOV;
     camera.rotate_speed = DEFAULT_ROTATE_SPEED;
     camera.zoom = DEFAULT_ZOOM;
     camera.target = vec3f_create(0.0f, 0.0f, 0.0f);

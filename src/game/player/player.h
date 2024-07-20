@@ -16,5 +16,6 @@ typedef struct {
 extern Player player;
 
 void player_shoot(Player *player, vec3f direction);
+void player_spellcast(Player *player, vec3f position, vec3f direction);
 
 #endif

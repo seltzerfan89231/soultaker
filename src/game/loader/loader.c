@@ -36,7 +36,7 @@ void load_level1(void)
     player.entity = entity_create(KNIGHT, 1);
     player.weapon.id = 0;
     player.weapon.tex = SWORD_1_TEX;
-    player.entity->position = vec3f_create(15.0f, 0.0f, 15.0f);
+    player.entity->position = vec3f_create(0.0f, 0.0f, 0.0f);
 
     Entity* entity = entity_create(ENEMY, 0);
     entity->position = vec3f_create(20, 0, 15);

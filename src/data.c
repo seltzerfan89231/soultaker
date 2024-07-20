@@ -133,18 +133,6 @@ void data_update(void)
     data_update_obstacles();
 }
 
-void data_setup(void)
-{
-    data_update_tiles();
-    data_update_walls();
-    data_update_entities();
-    data_update_projectiles();
-    data_update_parjicles();
-    data_update_particles();
-    data_update_parstacles();
-    data_update_obstacles();
-}
-
 #define _DATA_UPDATE(_utype, _ltype, _ltypes) \
     void data_update_##_ltypes(void) { \
         if (!_ltype##_array_updated(&_ltypes)) \

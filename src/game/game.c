@@ -70,9 +70,11 @@ void game_update(f32 dt)
 {
     if (game_paused)
         return;
+    game_time += dt;
+
     update_objects(dt);
     collide_objects(dt);
-    game_time += dt;
+
     entity_array_update(&entities);
     projectile_array_update(&projectiles);
     particle_array_update(&particles);
@@ -105,22 +107,28 @@ void game_destroy(void)
     parjicle_array_destroy(&parjicles);
 }
 
-void game_shoot(vec2f pos, f32 rotation, f32 tilt, f32 zoom, f32 ar)
+void game_shoot(vec2f cursor_position, f32 rotation, f32 tilt, f32 zoom, f32 ar)
 {
     if (game_paused)
         return;
-    vec2f dir = vec2f_normalize(vec2f_create((pos.x - 0.5) * ar, pos.y - 0.5 + 1.0 / 4 / zoom));
-    f32 dirx, dirz, a, b, c;
-    a = atan(-dir.y/dir.x);
-    b = PI/2 + tilt;
+    vec2f pos = vec2f_create((cursor_position.x - 0.5) * ar, cursor_position.y - 0.5 + 1.0 / 4 / zoom);
+    f32 dirx, dirz, a, b, c, r, ratio;
+    r = vec2f_mag(pos);
+    a = atan(pos.y/pos.x);
+    b = PI/2 - tilt;
     c = tan(a) * tan(a) / cos(b) / cos(b) + 1;
-    dir.x =  dir.x > 0 ? 1 / sqrt(c) : -1 / sqrt(c);
-    dir.y = -dir.y > 0 ? sqrt(1 - 1 / c) : -sqrt(1 - 1 / c);
-    dirx = dir.x * cos(rotation - HALFPI) - dir.y * sin(rotation - HALFPI);
-    dirz = dir.x * sin(rotation - HALFPI) + dir.y * cos(rotation - HALFPI);
+    ratio = sqrt(r*r/(sin(a)*sin(a)/cos(b)/cos(b)+cos(a)*cos(a)));
+    pos.x =  pos.x > 0 ? 1 / sqrt(c) : -1 / sqrt(c);
+    pos.y = -pos.y > 0 ? sqrt(1 - 1 / c) : -sqrt(1 - 1 / c);
+    dirx = pos.x * cos(rotation - HALFPI) - pos.y * sin(rotation - HALFPI);
+    dirz = pos.x * sin(rotation - HALFPI) + pos.y * cos(rotation - HALFPI);
     player.entity->facing = vec2f_normalize(vec2f_create(dirx, dirz));
     player.entity->flag = TRUE;
-    player_shoot(&player, vec3f_normalize(vec3f_create(dirx, 0.0, dirz)));
+    vec3f direction = vec3f_normalize(vec3f_create(dirx, 0.0, dirz));
+    //player_shoot(&player, direction);
+    vec3f abc = vec3f_scale(-2 * zoom * r * r / ratio, direction);
+    vec3f spell_pos = vec3f_sub(player.entity->position, abc);
+    player_spellcast(&player, spell_pos, direction);
 }
 
 vec3f game_get_player_position(void)

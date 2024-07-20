@@ -12,7 +12,7 @@ typedef struct Component Component;
 typedef struct Component {
     f32 x, y, w, h, r, g, b, a;
     Component **children;
-    u32 num_children, tex, id;
+    u32 num_children, tex, id, sub_id;
     bool interactable, hoverable, hovered, relative, update_children;
 } Component;
 

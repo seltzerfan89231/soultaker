@@ -25,18 +25,17 @@ static void state_setup(void)
 {
     renderer_uniform_update_aspect_ratio(1 / window.aspect_ratio);
     game_setup(1);
-    camera_set_target(game_get_player_position());
+    //camera_set_target(game_get_player_position());
     update_view_matrix();
     update_proj_matrix();
-    data_setup();
 }
 
 static void state_update(void)
 {
     game_update(window.dt > 0.01 ? 0.01 : window.dt);
     camera_set_target(game_get_player_position());
-    update_view_matrix();
     data_update();
+    update_view_matrix();
 }
 
 void framebuffer_size_callback(GLFWwindow* handle, i32 width, i32 height)

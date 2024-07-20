@@ -1,4 +1,5 @@
 #include "../entity.h"
+#include "../../player/player.h"
 
 #define NUM_STATES 1
 #define IDLE   0
@@ -24,6 +25,10 @@ void enemy_destroy_frame_data(FrameData ***frame_data)
 
 void enemy_update(Entity *entity)
 {
+    return;
+    entity->speed = 0.5;
+    entity->direction = vec3f_normalize(vec3f_sub(player.entity->position, entity->position));
+    entity->facing = vec2f_create(entity->direction.x, entity->direction.z);
     if (entity->timer >= 0.05) {
         entity->timer = 0;
         for (i32 i = 0; i < 8; i++) {

@@ -14,7 +14,6 @@
 #define DEFAULT_TILT_SPEED 3
 #define DEFAULT_YAW 0
 #define DEFAULT_PITCH PI / 3
-#define DEFAULT_FOV PI / 4
 #define DEFAULT_ZOOM 8
 #define MIN_PITCH 0.3
 #define MAX_PITCH 1.3

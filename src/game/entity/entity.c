@@ -16,6 +16,7 @@ Entity* entity_create(u32 id, u8 friendly)
     entity->timer2 = 0.0f;
     entity->flag = 0;
     entity->direction = vec3f_create(0, 0, 0);
+    entity->facing = vec2f_create(1.0, 0.0);
     entity->friendly = friendly;
     entity->hitbox_radius = 0.5;
     entity->health = 100.0f;
