@@ -47,7 +47,6 @@ void knight_destroy_frame_data(FrameData ***frame_data)
 
 void knight_update(Entity *entity)
 {
-    return;
     if (entity->flag == TRUE) {
         if (entity->state != SHOOT_1 && entity->state != SHOOT_2) {
             entity->state = SHOOT_1;

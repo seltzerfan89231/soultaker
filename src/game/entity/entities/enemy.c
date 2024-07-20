@@ -25,7 +25,6 @@ void enemy_destroy_frame_data(FrameData ***frame_data)
 
 void enemy_update(Entity *entity)
 {
-    return;
     entity->speed = 0.5;
     entity->direction = vec3f_normalize(vec3f_sub(player.entity->position, entity->position));
     entity->facing = vec2f_create(entity->direction.x, entity->direction.z);
