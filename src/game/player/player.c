@@ -12,8 +12,8 @@ void player_shoot(Player *player, vec3f direction, vec3f target)
 
 void player_spellcast(Player *player, vec3f direction, vec3f target)
 {
-    Particle *part = particle_create();
-    part->scale = 0.1;
-    part->position = target;
-    part->position.y = 0.5;
+    if (game_time - player->cooldown2 > 0.5) {
+        ability_use(player->ability, player->entity->position, direction, target);
+        player->cooldown2 = game_time;
+    }
 }

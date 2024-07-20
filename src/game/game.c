@@ -126,6 +126,28 @@ void game_shoot(vec2f cursor_position, f32 rotation, f32 tilt, f32 zoom, f32 ar)
     direction = vec3f_normalize(vec3f_create(dirx, 0.0, dirz));
     target = vec3f_sub(player.entity->position, vec3f_scale(-2 * zoom * r * r / ratio, direction));
     player_shoot(&player, direction, target);
+    player.entity->facing = vec2f_normalize(vec2f_create(dirx, dirz));
+    player.entity->flag = TRUE;
+}
+
+void game_spellcast(vec2f cursor_position, f32 rotation, f32 tilt, f32 zoom, f32 ar)
+{
+    if (game_paused)
+        return;
+    f32 dirx, dirz, a, b, c, r, ratio;
+    vec3f direction, target;
+    vec2f pos = vec2f_create((cursor_position.x - 0.5) * ar, cursor_position.y - 0.5 + 1.0 / 4 / zoom);
+    r = vec2f_mag(pos);
+    a = atan(pos.y/pos.x);
+    b = PI/2 - tilt;
+    c = tan(a) * tan(a) / cos(b) / cos(b) + 1;
+    ratio = sqrt(r*r/(c * cos(a) * cos(a)));
+    pos.x =  pos.x > 0 ? 1 / sqrt(c) : -1 / sqrt(c);
+    pos.y = -pos.y > 0 ? sqrt(1 - 1 / c) : -sqrt(1 - 1 / c);
+    dirx = pos.x * cos(rotation - HALFPI) - pos.y * sin(rotation - HALFPI);
+    dirz = pos.x * sin(rotation - HALFPI) + pos.y * cos(rotation - HALFPI);
+    direction = vec3f_normalize(vec3f_create(dirx, 0.0, dirz));
+    target = vec3f_sub(player.entity->position, vec3f_scale(-2 * zoom * r * r / ratio, direction));
     player_spellcast(&player, direction, target);
     player.entity->facing = vec2f_normalize(vec2f_create(dirx, dirz));
     player.entity->flag = TRUE;

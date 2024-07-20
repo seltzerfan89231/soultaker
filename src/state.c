@@ -106,6 +106,10 @@ static void process_input(void)
     if (window_mouse_button_pressed(GLFW_MOUSE_BUTTON_LEFT))
         if (!hovered)
             game_shoot(window.cursor.position, camera.yaw, camera.pitch, camera.zoom, window.aspect_ratio);
+    
+    if (window_mouse_button_pressed(GLFW_MOUSE_BUTTON_RIGHT))
+        if (!hovered)
+            game_spellcast(window.cursor.position, camera.yaw, camera.pitch, camera.zoom, window.aspect_ratio);
 
     game_set_direction(camera_get_direction(move_direction));
     if (rotation_magnitude != 0)

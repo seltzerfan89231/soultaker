@@ -2,6 +2,7 @@
 #define PLAYER_H
 
 #include "../weapon/weapon.h"
+#include "../ability/ability.h"
 #include "../entity/entity.h"
 #include "../projectile/projectile.h"
 
@@ -10,7 +11,8 @@ extern f64 game_time;
 typedef struct {
     Entity *entity;
     Weapon weapon;
-    f32 cooldown;
+    Ability ability;
+    f32 cooldown, cooldown2;
 } Player;
 
 extern Player player;
