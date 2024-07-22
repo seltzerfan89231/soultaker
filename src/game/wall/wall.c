@@ -1,5 +1,6 @@
 #include "wall.h"
 #include <stdlib.h>
+#include <assert.h>
 
 WallArray walls;
 
@@ -16,8 +17,10 @@ Wall* wall_create(walltype type, f32 x, f32 z, f32 height)
     return wall;
 }
 
-void wall_destroy(Wall* wall)
+void wall_destroy(Wall* wall, u32 idx)
 {
+    assert(wall == walls.buffer[idx]);
+    wall_array_cut(&walls, idx);
     free(wall);
 }
 

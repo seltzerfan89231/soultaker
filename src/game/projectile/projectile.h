@@ -18,7 +18,7 @@ typedef struct {
 
 Projectile* projectile_create(u32 id, u8 friendly);
 void projectile_update(Projectile* projectile, f32 dt);
-void projectile_destroy(Projectile* projectile);
+void projectile_destroy(Projectile* projectile, u32 idx);
 
 _ARRAY_DECLARE(Projectile, projectile)
 extern ProjectileArray projectiles;

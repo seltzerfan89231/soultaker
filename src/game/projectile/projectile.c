@@ -1,6 +1,7 @@
 #include "projectile.h"
 #include <stdlib.h>
 #include <stdio.h>
+#include <assert.h>
 
 ProjectileArray projectiles;
 
@@ -35,8 +36,10 @@ void projectile_update(Projectile* projectile, f32 dt)
     projectile->timer += dt;
 }
 
-void projectile_destroy(Projectile* projectile)
+void projectile_destroy(Projectile* projectile, u32 idx)
 {
+    assert(projectile == projectiles.buffer[idx]);
+    projectile_array_cut(&projectiles, idx);
     free(projectile);
 }
 

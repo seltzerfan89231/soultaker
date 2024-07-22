@@ -14,7 +14,7 @@ static void update_objects(f32 dt)
         Entity *entity = entities.buffer[i];
         entity_update(entity, dt);
         /* if (entity->health <= 0)
-            entity_array_cut(&entities, i--), printf("%d\n", entities.length); */
+            entity_destroy(entity, i), i--; */
         if (entity->position.x < 0)
             entity->position.x = 0;
         if (entity->position.z < 0)
@@ -28,19 +28,19 @@ static void update_objects(f32 dt)
         Projectile *proj = projectiles.buffer[i];
         projectile_update(proj, dt);
         if (proj->lifetime <= 0.3)
-            projectile_array_cut(&projectiles, i--);
+            projectile_destroy(proj, i), i--;
     }
     for (i32 i = 0; i < particles.length; i++) {
         Particle *particle = particles.buffer[i];
         particle_update(particle, dt);
         if (particle->lifetime <= 0)
-            particle_array_cut(&particles, i), i--;
+            particle_destroy(particle, i), i--;
     }
     for (i32 i = 0; i < parjicles.length; i++) {
         Parjicle *parjicle = parjicles.buffer[i];
         parjicle_update(parjicle, dt);
         if (parjicle->lifetime <= 0)
-            parjicle_array_cut(&parjicles, i), i--;
+            parjicle_destroy(parjicle, i), i--;
     }
 }
 

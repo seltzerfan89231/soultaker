@@ -1,5 +1,6 @@
 #include "tile.h"
 #include <stdlib.h>
+#include <assert.h>
 
 TileArray tiles;
 
@@ -14,8 +15,10 @@ Tile* tile_create(tiletype type, f32 x, f32 z)
     return tile;
 }
 
-void tile_destroy(Tile* tile)
+void tile_destroy(Tile* tile, u32 idx)
 {
+    assert(tile == tiles.buffer[idx]);
+    tile_array_cut(&tiles, idx);
     free(tile);
 }
 

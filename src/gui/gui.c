@@ -22,7 +22,8 @@ void gui_init(void)
     gui.root->a = 0;
     gui.max_length_changed = TRUE;
 
-    Component *text_box = component_create(0.02, 0.95, 0.1, 0.1, NO_TEX);
+    Component *text_box = component_create(0.02, 0.95, 0.1, 0.1, EMPTY_TEX);
+    text_box->a = 0.5;
     text_box->id = COMP_TEXTBOX;
     text_box->sub_id = 0;
     text_box->update_children = FALSE;

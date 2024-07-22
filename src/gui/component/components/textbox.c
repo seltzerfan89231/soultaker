@@ -11,7 +11,7 @@ void comp_textbox_update(Component *comp)
     if (glfwGetTime() - cooldown > 1) {
         if (comp->sub_id == WINDOW_FPS) {
             char text[50], num[20];
-            strcpy(text, "WINDOW ");
+            strcpy(text, "FPS ");
             sprintf(num, "%.0f", window.fps);
             strncat(text, num, 20);
             i32 len = strlen(text);

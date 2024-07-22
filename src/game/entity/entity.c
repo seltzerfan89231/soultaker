@@ -1,6 +1,7 @@
 #include "entity.h"
 #include <stdlib.h>
 #include <stdio.h>
+#include <assert.h>
 
 EntityArray entities;
 
@@ -53,8 +54,10 @@ void entity_set_direction(Entity *entity, vec3f direction)
         entity->facing.x = direction.x, entity->facing.y = direction.z;
 }
 
-void entity_destroy(Entity* entity)
+void entity_destroy(Entity* entity, u32 idx)
 {
+    assert(entity == entities.buffer[idx]);
+    entity_array_cut(&entities, idx);
     free(entity);
 }
 

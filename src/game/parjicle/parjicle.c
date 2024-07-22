@@ -1,5 +1,6 @@
 #include "parjicle.h"
 #include <stdlib.h>
+#include <assert.h>
 
 ParjicleArray parjicles;
 
@@ -24,8 +25,10 @@ void parjicle_update(Parjicle* parjicle, f32 dt)
     parjicle->lifetime -= dt;
 }
 
-void parjicle_destroy(Parjicle *parj)
+void parjicle_destroy(Parjicle *parj, u32 idx)
 {
+    assert(parj == parjicles.buffer[idx]);
+    parjicle_array_cut(&parjicles, idx);
     free(parj);
 }
 

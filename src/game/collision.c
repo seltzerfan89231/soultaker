@@ -14,7 +14,7 @@ static void collide_entities_projectiles(void)
             dz = entity->position.z - proj->position.z;
             if (entity->friendly != proj->friendly && vec2f_mag(vec2f_create(dx, dz)) < entity->hitbox_radius + proj->hitbox_radius) {
                 entity_damage(entity, proj->damage);
-                projectile_array_cut(&projectiles, j);
+                projectile_destroy(proj, j);
             }
             else
                 j++;
@@ -36,7 +36,7 @@ static void collide_walls_projectiles(void)
               proj->position.x - proj->hitbox_radius < wall->position.x + 1 &&
               proj->position.z + proj->hitbox_radius > wall->position.z     &&
               proj->position.z - proj->hitbox_radius < wall->position.z + 1)
-                projectile_array_cut(&projectiles, j);
+                projectile_destroy(proj, j);
             else
                 j++;
         }
@@ -57,7 +57,7 @@ static void collide_obstacles_projectiles()
             dx = obstacle->position.x - proj->position.x;
             dz = obstacle->position.z - proj->position.z;
             if (vec2f_mag(vec2f_create(dx, dz)) < obstacle->hitbox_radius + proj->hitbox_radius)
-                projectile_array_cut(&projectiles, j);
+                projectile_destroy(proj, j);
             else
                 j++;
         }

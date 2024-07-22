@@ -16,7 +16,7 @@ typedef struct {
 
 Particle* particle_create(void);
 void particle_update(Particle *particle, f32 dt);
-void particle_destroy(Particle *particle);
+void particle_destroy(Particle *particle, u32 idx);
 
 _ARRAY_DECLARE(Particle, particle)
 extern ParticleArray particles;

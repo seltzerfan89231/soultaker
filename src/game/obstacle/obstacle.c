@@ -1,5 +1,6 @@
 #include "obstacle.h"
 #include <stdlib.h>
+#include <assert.h>
 
 ObstacleArray obstacles;
 
@@ -13,8 +14,10 @@ Obstacle* obstacle_create(void)
     return obstacle;
 }
 
-void obstacle_destroy(Obstacle* obstacle)
+void obstacle_destroy(Obstacle* obstacle, u32 idx)
 {
+    assert(obstacle == obstacles.buffer[idx]);
+    obstacle_array_cut(&obstacles, idx);
     free(obstacle);
 }
 

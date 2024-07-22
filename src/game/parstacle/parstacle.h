@@ -13,7 +13,7 @@ typedef struct {
 } Parstacle;
 
 Parstacle* parstacle_create(void);
-void parstacle_destroy(Parstacle* parstacle);
+void parstacle_destroy(Parstacle* parstacle, u32 idx);
 
 _ARRAY_DECLARE(Parstacle, parstacle)
 extern ParstacleArray parstacles;

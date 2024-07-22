@@ -42,7 +42,6 @@
     } \
     void _ltype##_array_cut(_type##Array *array, u32 idx) { \
         _ltype##_array_update(array); \
-        _ltype##_destroy(array->buffer[idx]); \
         array->buffer[idx] = array->buffer[--array->length];\
     } \
     bool _ltype##_array_empty(_type##Array *array) { \
@@ -62,8 +61,8 @@
     } \
     void _ltype##_array_destroy(_type##Array *array) { \
         _ltype##_array_update(array); \
-        for (i32 i = 0; i < array->length; i++) \
-            _ltype##_destroy(array->buffer[i]); \
+        while (!_ltype##_array_empty(array)) \
+            _ltype##_destroy(array->buffer[0], 0); \
         array->length = 0; \
         free(array->buffer); \
     }

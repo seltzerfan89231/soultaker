@@ -1,6 +1,7 @@
 #include "particle.h"
 #include <stdlib.h>
 #include <stdio.h>
+#include <assert.h>
 
 ParticleArray particles;
 
@@ -24,8 +25,10 @@ void particle_update(Particle* particle, f32 dt)
     particle->lifetime -= dt;
 }
 
-void particle_destroy(Particle *particle)
+void particle_destroy(Particle *particle, u32 idx)
 {
+    assert(particle == particles.buffer[idx]);
+    particle_array_cut(&particles, idx);
     free(particle);
 }
 
