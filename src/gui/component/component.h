@@ -23,6 +23,7 @@ void component_attach(Component *parent, Component *child);
 void component_detach(Component *parent, Component *child);
 void component_destroy(Component *comp);
 void component_detach_and_destroy(Component *comp, Component *child);
+void component_destroy_children(Component *comp);
 
 void component_add_text(Component *comp, char *text, u32 font_size, f32 gw, f32 gh);
 void component_onclick(Component *comp);

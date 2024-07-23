@@ -54,9 +54,15 @@ void component_detach_and_destroy(Component *comp, Component *child)
     component_destroy(child);
 }
 
+void component_destroy_children(Component *comp)
+{
+    while (comp->num_children != 0)
+        component_detach_and_destroy(comp, comp->children[0]);
+}
+
 void component_add_text(Component *comp, char *text, u32 font_size, f32 gw, f32 gh)
 {
-    f32 w = (f32)font_size / window.width / gw, h = (f32)font_size / window.height / gh;
+    f32 w = (f32)font_size / 1000 / gw, h = (f32)font_size / 1000 / gh;
     u32 length = strlen(text);
     for (i32 i = 0; i < length; i++) {
         Component *letter = component_create((w + 0.005 / gw) * i, 0, w, h, char_map[text[i]]);
