@@ -62,11 +62,21 @@ void component_destroy_children(Component *comp)
 
 void component_add_text(Component *comp, char *text, u32 font_size, f32 gw, f32 gh)
 {
-    f32 w = (f32)font_size / 1000 / gw, h = (f32)font_size / 1000 / gh;
-    u32 length = strlen(text);
-    for (i32 i = 0; i < length; i++) {
-        Component *letter = component_create((w + 0.005 / gw) * i, 0, w, h, char_map[text[i]]);
-        letter->r = letter->g = letter->b = 0.0f;
+    f32 pixel_size, padding, w, h, bx, by, origin;
+    u32 length, i;
+    pixel_size = 1.0 / (DEFAULT_WINDOW_HEIGHT);
+    padding = pixel_size * 2 / gw;
+    length = strlen(text);
+    origin = 0;
+    for (i = 0; i < length; i++) {
+        Character c = char_map[text[i]];
+        w = (f32)font_size * pixel_size / gw * c.width / c.height;
+        h = (f32)font_size * pixel_size / gh;
+        bx = pixel_size * c.bearingX / gw;
+        by = pixel_size * c.bearingY / gh;
+        Component *letter = component_create(origin + bx, 1 - h - by, w, h, c.tex);
+        origin += w + bx + padding;
+        letter->r = letter->g = letter->b = 1.0f;
         component_attach(comp, letter);
     }
 }

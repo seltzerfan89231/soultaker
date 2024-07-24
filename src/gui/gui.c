@@ -22,12 +22,12 @@ void gui_init(void)
     gui.root->a = 0;
     gui.max_length_changed = TRUE;
 
-    Component *text_box = component_create(0.02, 0.95, 0.1, 0.1, EMPTY_TEX);
+    Component *text_box = component_create(0.02, 0.5, 0.1, 0.1, EMPTY_TEX);
     text_box->a = 0.5;
     text_box->id = COMP_TEXTBOX;
     text_box->sub_id = 0;
     text_box->update_children = FALSE;
-    component_add_text(text_box, "THE QUICK BROWN FOX JUMPED OVER THE LAZY DOG 0123456789", 15, 0.1, 0.1);
+    component_add_text(text_box, "THE QUICK BROWN FOX JUMPED OVER THE LAZY DOG 0123456789", 30, 0.1, 0.1);
     component_attach(gui.root, text_box);
     Component *btn = component_create(0.05f, 0.05f, 0.1f, 0.1f, BUTTON_TEX);
     btn->hoverable = TRUE;

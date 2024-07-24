@@ -330,7 +330,6 @@ void load_textures(void)
     renderer.game_textures[BUSH_TEX]         = texture_create("assets/textures/game/bush.png", GL_NEAREST);
     renderer.game_textures[ROCK_TEX]         = texture_create("assets/textures/game/rock.png", GL_NEAREST);
 
-    renderer.gui_textures = malloc(NUM_GUI_TEXTURES * sizeof(Texture));
     renderer.gui_textures[NO_TEX]     = texture_create("assets/textures/gui/none.png", GL_NEAREST);
     renderer.gui_textures[EMPTY_TEX]  = texture_create("assets/textures/gui/empty.png", GL_NEAREST);
     renderer.gui_textures[BUTTON_TEX] = texture_create("assets/textures/gui/button.png", GL_NEAREST);

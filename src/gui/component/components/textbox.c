@@ -15,7 +15,7 @@ void comp_textbox_update(Component *comp)
             strcpy(text, "FPS ");
             sprintf(num, "%.0f", window.fps);
             strncat(text, num, 20);
-            component_add_text(comp, text, 15, 0.1, 0.1);
+            component_add_text(comp, text, 30, 0.1, 0.1);
             printf("%s\n", text);
             cooldown = glfwGetTime();
         } else if (comp->sub_id == GAME_FPS) {
