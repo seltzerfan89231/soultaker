@@ -46,7 +46,7 @@ static void update_objects(f32 dt)
 
 void game_init(void)
 {
-    projectiles = projectile_array_create(10000);
+    projectiles = projectile_array_create(0);
     entities = entity_array_create(0);
     particles = particle_array_create(0);
     parjicles = parjicle_array_create(0);

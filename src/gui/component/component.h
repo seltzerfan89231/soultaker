@@ -17,6 +17,7 @@ typedef struct Component {
 } Component;
 
 extern Window window;
+extern Component *comp_root;
 
 Component* component_create(f32 x, f32 y, f32 w, f32 h, u32 tex);
 void component_attach(Component *parent, Component *child);

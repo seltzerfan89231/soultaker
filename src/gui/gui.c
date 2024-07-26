@@ -4,6 +4,7 @@
 
 GUI gui;
 extern Window window;
+extern Component *comp_root;
 
 static float gui_vertices[] = {
      -1.0f, 0.95f, 0.0f, 0.0f, 0.6f,
@@ -18,17 +19,17 @@ void gui_init(void)
     gui.max_length = 1000;
     gui.buffer = malloc(gui.max_length * sizeof(f32));
     gui.length = 0;
-    gui.root = component_create(0.0f, 0.0f, 1.0f, 1.0f, NO_TEX);
-    gui.root->a = 0;
+    comp_root = component_create(0.0f, 0.0f, 1.0f, 1.0f, NO_TEX);
+    comp_root->a = 0;
     gui.max_length_changed = TRUE;
 
-    Component *text_box = component_create(0.02, 0.5, 0.1, 0.1, EMPTY_TEX);
+    Component *text_box = component_create(0.02, 0.5, 0.5, 0.1, EMPTY_TEX);
     text_box->a = 0.5;
     text_box->id = COMP_TEXTBOX;
     text_box->sub_id = 0;
     text_box->update_children = FALSE;
-    component_add_text(text_box, "THE QUICK BROWN FOX JUMPED OVER THE LAZY DOG 0123456789", 30, 0.1, 0.1);
-    component_attach(gui.root, text_box);
+    component_add_text(text_box, "THE QUICK BROWN FOX JUMPED OVER THE LAZY DOG 0123456789", 14, 0.5, 0.1);
+    component_attach(comp_root, text_box);
     Component *btn = component_create(0.05f, 0.05f, 0.1f, 0.1f, BUTTON_TEX);
     btn->hoverable = TRUE;
     btn->id = COMP_BUTTON;
@@ -40,9 +41,9 @@ void gui_init(void)
     green_part->g = 1.0, green_part->r = 0.0, green_part->b = 0.0;
     Component *red_part = component_create(0.75, 0.0, 0.25, 1.0, EMPTY_TEX);
     red_part->r = 1.0, red_part->g = red_part->b = 0.0;
-    component_attach(gui.root, btn);
+    component_attach(comp_root, btn);
     component_attach(btn, icon);
-    component_attach(gui.root, healthbar);
+    component_attach(comp_root, healthbar);
     component_attach(healthbar, green_part);
     component_attach(healthbar, red_part);
 }
@@ -59,8 +60,8 @@ void gui_update_data_helper(Component *comp, f32 x, f32 y, f32 w, f32 h)
         new_x1 = comp->x, new_x2 = comp->x + comp->w;
         new_y1 = comp->y, new_y2 = comp->y + comp->h;
     }
-    win_x1 = 2 * (new_x1 / (comp == gui.root ? 1 : window.aspect_ratio) - 0.5f), win_y1 = 2 * (new_y1 - 0.5f);
-    win_x2 = 2 * (new_x2 / (comp == gui.root ? 1 : window.aspect_ratio) - 0.5f), win_y2 = 2 * (new_y2 - 0.5f);
+    win_x1 = 2 * (new_x1 / (comp == comp_root ? 1 : window.aspect_ratio) - 0.5f), win_y1 = 2 * (new_y1 - 0.5f);
+    win_x2 = 2 * (new_x2 / (comp == comp_root ? 1 : window.aspect_ratio) - 0.5f), win_y2 = 2 * (new_y2 - 0.5f);
     if (gui.length + 36 >= gui.max_length) {
         gui.max_length += 1000;
         gui.buffer = realloc(gui.buffer, gui.max_length * sizeof(f32));
@@ -79,7 +80,7 @@ void gui_update_data_helper(Component *comp, f32 x, f32 y, f32 w, f32 h)
 void gui_update_data(void)
 {
     gui.length = 0;
-    gui_update_data_helper(gui.root, gui.root->x, gui.root->y, gui.root->w, gui.root->h);
+    gui_update_data_helper(comp_root, comp_root->x, comp_root->y, comp_root->w, comp_root->h);
 }
 
 static bool cursor_in_bounds(f32 x1, f32 x2, f32 y1, f32 y2)
@@ -109,7 +110,7 @@ void gui_update_helper(Component *comp, f32 x, f32 y, f32 w, f32 h)
 
 bool gui_update(void)
 {
-    gui_update_helper(gui.root, gui.root->x, gui.root->y, gui.root->w, gui.root->h);
+    gui_update_helper(comp_root, comp_root->x, comp_root->y, comp_root->w, comp_root->h);
     gui_update_data();
     if (gui.max_length_changed) {
         renderer_malloc(GUI_VAO, gui.max_length);
@@ -134,7 +135,7 @@ void gui_mouse_button_callback_helper(Component *comp, f32 x, f32 y, f32 w, f32 
 void gui_mouse_button_callback(i32 button, i32 action)
 {
     if (action == GLFW_PRESS)
-        gui_mouse_button_callback_helper(gui.root, gui.root->x, gui.root->y, gui.root->w, gui.root->h);
+        gui_mouse_button_callback_helper(comp_root, comp_root->x, comp_root->y, comp_root->w, comp_root->h);
 }
 
 void gui_key_callback(i32 key, i32 scancode, i32 action, i32 mods)
@@ -144,6 +145,6 @@ void gui_key_callback(i32 key, i32 scancode, i32 action, i32 mods)
 
 void gui_destroy(void)
 {
-    component_destroy(gui.root);
+    component_destroy(comp_root);
     free(gui.buffer);
 }

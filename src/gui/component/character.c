@@ -2,55 +2,54 @@
 
 Character char_map[128];
 
+#define _CHAR_INIT(_c, _tex, _w, _h, _bx, _by) \
+    char_map[_c].tex = _tex; \
+    char_map[_c].size.x = _w; \
+    char_map[_c].size.y = _h; \
+    char_map[_c].bearing.x = _bx; \
+    char_map[_c].bearing.y = _by; \
+    char_map[_c].advance = 1;
+
 void char_map_init(void)
 {
     for (i32 i = 0; i < 128; i++) {
-        char_map[i].tex = EMPTY_TEX;
-        char_map[i].width = 5;
-        char_map[i].height = 5;
+        _CHAR_INIT(i, EMPTY_TEX, 5, 5, 0, 0);
     }
-    char_map[' '].tex = NO_TEX;
-    char_map['0'].tex = NUM_0_TEX;
-    char_map['1'].tex = NUM_1_TEX;
-    char_map['2'].tex = NUM_2_TEX;
-    char_map['3'].tex = NUM_3_TEX;
-    char_map['4'].tex = NUM_4_TEX;
-    char_map['5'].tex = NUM_5_TEX;
-    char_map['6'].tex = NUM_6_TEX;
-    char_map['7'].tex = NUM_7_TEX;
-    char_map['8'].tex = NUM_8_TEX;
-    char_map['9'].tex = NUM_9_TEX;
-    char_map['A'].tex = A_TEX;
-    char_map['B'].tex = B_TEX;
-    char_map['C'].tex = C_TEX;
-    char_map['D'].tex = D_TEX;
-    char_map['E'].tex = E_TEX;
-    char_map['F'].tex = F_TEX;
-    char_map['G'].tex = G_TEX;
-    char_map['H'].tex = H_TEX;
-    char_map['I'].tex = I_TEX;
-    char_map['J'].tex = J_TEX;
-    char_map['K'].tex = K_TEX;
-    char_map['L'].tex = L_TEX;
-    char_map['M'].tex = M_TEX;
-    char_map['N'].tex = N_TEX;
-    char_map['O'].tex = O_TEX;
-    char_map['P'].tex = P_TEX;
-    char_map['P'].width = 4;
-    char_map['Q'].tex = Q_TEX;
-    char_map['R'].tex = R_TEX;
-    char_map['S'].tex = S_TEX;
-    char_map['T'].tex = T_TEX;
-    char_map['U'].tex = U_TEX;
-    char_map['V'].tex = V_TEX;
-    char_map['W'].tex = W_TEX;
-    char_map['X'].tex = X_TEX;
-    char_map['Y'].tex = Y_TEX;
-    char_map['Z'].tex = Z_TEX;
-    for (i32 i = 0; i < 128; i++)
-        char_map[i].tex = F_TEX;
-    char_map['P'].tex = P_TEX;
-    char_map['P'].width = 4;
-    char_map['P'].bearingX = 2;
-    char_map['P'].bearingY = 2;
+    _CHAR_INIT(' ', NO_TEX,      1, 1, 0, 0)
+    _CHAR_INIT('0', NUM_0_TEX,   5, 7, 0, 0)
+    _CHAR_INIT('1', NUM_1_TEX,   5, 7, 0, 0)
+    _CHAR_INIT('2', NUM_2_TEX,   5, 7, 0, 0)
+    _CHAR_INIT('3', NUM_3_TEX,   5, 7, 0, 0)
+    _CHAR_INIT('4', NUM_4_TEX,   5, 7, 0, 0)
+    _CHAR_INIT('5', NUM_5_TEX,   5, 7, 0, 0)
+    _CHAR_INIT('6', NUM_6_TEX,   5, 7, 0, 0)
+    _CHAR_INIT('7', NUM_7_TEX,   5, 7, 0, 0)
+    _CHAR_INIT('8', NUM_8_TEX,   5, 7, 0, 0)
+    _CHAR_INIT('9', NUM_9_TEX,   5, 7, 0, 0)
+    _CHAR_INIT('A', UPPER_A_TEX, 5, 7, 0, 0)
+    _CHAR_INIT('B', UPPER_B_TEX, 5, 7, 0, 0)
+    _CHAR_INIT('C', UPPER_C_TEX, 5, 7, 0, 0)
+    _CHAR_INIT('D', UPPER_D_TEX, 5, 7, 0, 0)
+    _CHAR_INIT('E', UPPER_E_TEX, 5, 7, 0, 0)
+    _CHAR_INIT('F', UPPER_F_TEX, 5, 7, 0, 0)
+    _CHAR_INIT('G', UPPER_G_TEX, 5, 7, 0, 0)
+    _CHAR_INIT('H', UPPER_H_TEX, 5, 7, 0, 0)
+    _CHAR_INIT('I', UPPER_I_TEX, 5, 7, 0, 0)
+    _CHAR_INIT('J', UPPER_J_TEX, 5, 7, 0, 0)
+    _CHAR_INIT('K', UPPER_K_TEX, 5, 7, 0, 0)
+    _CHAR_INIT('L', UPPER_L_TEX, 5, 7, 0, 0)
+    _CHAR_INIT('M', UPPER_M_TEX, 5, 7, 0, 0)
+    _CHAR_INIT('N', UPPER_N_TEX, 5, 7, 0, 0)
+    _CHAR_INIT('O', UPPER_O_TEX, 5, 7, 0, 0)
+    _CHAR_INIT('P', UPPER_P_TEX, 5, 7, 0, 0)
+    _CHAR_INIT('Q', UPPER_Q_TEX, 5, 7, 0, 0)
+    _CHAR_INIT('R', UPPER_R_TEX, 5, 7, 0, 0)
+    _CHAR_INIT('S', UPPER_S_TEX, 5, 7, 0, 0)
+    _CHAR_INIT('T', UPPER_T_TEX, 5, 7, 0, 0)
+    _CHAR_INIT('U', UPPER_U_TEX, 5, 7, 0, 0)
+    _CHAR_INIT('V', UPPER_V_TEX, 5, 7, 0, 0)
+    _CHAR_INIT('W', UPPER_W_TEX, 5, 7, 0, 0)
+    _CHAR_INIT('X', UPPER_X_TEX, 5, 7, 0, 0)
+    _CHAR_INIT('Y', UPPER_Y_TEX, 5, 7, 0, 0)
+    _CHAR_INIT('Z', UPPER_Z_TEX, 5, 7, 0, 0)
 }

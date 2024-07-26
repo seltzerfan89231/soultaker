@@ -6,7 +6,9 @@
 
 typedef struct {
     u32 tex;
-    u8 width, height, bearingX, bearingY;
+    struct { u8 x, y; } size;
+    struct { u8 x, y; } bearing;
+    u8 advance;
 } Character;
 
 extern Character char_map[128];

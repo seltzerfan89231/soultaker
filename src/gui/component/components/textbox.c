@@ -7,6 +7,7 @@
 
 void comp_textbox_update(Component *comp)
 {
+    return;
     static f32 cooldown;
     if (glfwGetTime() - cooldown > 1) {
         component_destroy_children(comp);
