@@ -9,7 +9,6 @@
 #include "component/component.h"
 
 typedef struct {
-    Component *root;
     u32 length, max_length;
     f32 *buffer;
     bool max_length_changed;
