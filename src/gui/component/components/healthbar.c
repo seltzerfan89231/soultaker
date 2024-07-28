@@ -10,12 +10,17 @@ void comp_healthbar_update(Component *comp)
     red_part->x = green_part->w;
 }
 
-void comp_healthbar_hover_on(Component *comp)
+void comp_healthbar_mouse_button_callback(Component *comp, i32 button, i32 action)
 {
-    
+
 }
 
-void comp_healthbar_hover_off(Component *comp)
+void comp_healthbar_key_callback(Component *comp, i32 key, i32 scancode, i32 action, i32 mods)
+{
+
+}
+
+void comp_healthbar_hover_callback(Component *comp, i32 action)
 {
     
 }

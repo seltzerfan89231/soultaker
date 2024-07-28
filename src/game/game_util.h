@@ -22,4 +22,7 @@ extern TileArray tiles;
 extern WallArray walls;
 extern Player player;
 
+extern f64 game_time;
+extern bool game_paused;
+
 #endif

@@ -13,7 +13,7 @@ typedef struct {
     u64 handle;
 } Texture;
 
-Texture texture_create(const char* image_path, GLenum filter_param);
+Texture texture_create(const char* image_path);
 void texture_destroy(Texture texture);
 
 #endif

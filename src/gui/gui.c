@@ -23,6 +23,11 @@ void gui_init(void)
     comp_root->a = 0;
     gui.max_length_changed = TRUE;
 
+    Component *title_card = component_create(0.3, 0.6, 0.4, 0.4 * 2.0/3, SOULTAKER_LOGO_TEX);
+    title_card->hoverable = TRUE;
+    title_card->id = COMP_START_BUTTON;
+    component_attach(comp_root, title_card);
+
     Component *text_box = component_create(0.02, 0.5, 0.5, 0.1, EMPTY_TEX);
     text_box->a = 0.5;
     text_box->id = COMP_TEXTBOX;
@@ -31,6 +36,7 @@ void gui_init(void)
     component_add_text(text_box, "THE QUICK BROWN FOX JUMPED OVER THE LAZY DOG 0123456789", 14, 0.5, 0.1);
     component_attach(comp_root, text_box);
     Component *btn = component_create(0.05f, 0.05f, 0.1f, 0.1f, BUTTON_TEX);
+    btn->interactable = TRUE;
     btn->hoverable = TRUE;
     btn->id = COMP_BUTTON;
     Component *icon = component_create(0.15, 0.15, 0.7, 0.7, SWORD_1_TEX);
@@ -102,10 +108,7 @@ void gui_update_helper(Component *comp, f32 x, f32 y, f32 w, f32 h)
     component_update(comp);
     if (!comp->hoverable)
         return;
-    if (cursor_in_bounds(new_x1, new_x2, new_y1, new_y2))
-        component_hover_on(comp);
-    else
-        component_hover_off(comp);
+    component_hover_callback(comp, cursor_in_bounds(new_x1, new_x2, new_y1, new_y2));
 }
 
 bool gui_update(void)
@@ -117,30 +120,41 @@ bool gui_update(void)
         gui.max_length_changed = FALSE;
     }
     renderer_update(GUI_VAO, 0, gui.length, gui.buffer);
-    return 0;
+    return FALSE;
 }
 
-void gui_mouse_button_callback_helper(Component *comp, f32 x, f32 y, f32 w, f32 h)
+void gui_mouse_button_callback_helper(Component *comp, f32 x, f32 y, f32 w, f32 h, i32 button, i32 action)
 {
     f32 new_x1, new_y1, new_x2, new_y2, win_x1, win_x2, win_y1, win_y2;
     new_x1 = comp->x * w + x, new_x2 = (comp->x + comp->w) * w + x;
     new_y1 = comp->y * h + y, new_y2 = (comp->y + comp->h) * h + y;
     if (comp->update_children)
         for (i32 i = 0; i < comp->num_children; i++)
-            gui_mouse_button_callback_helper(comp->children[i], new_x1, new_y1, new_x2 - new_x1, new_y2 - new_y1);
+            gui_mouse_button_callback_helper(comp->children[i], new_x1, new_y1, new_x2 - new_x1, new_y2 - new_y1, button, action);
     if (comp->interactable && cursor_in_bounds(new_x1, new_x2, new_y1, new_y2))
-        component_onclick(comp);
+        component_mouse_button_callback(comp, button, action);
 }
 
 void gui_mouse_button_callback(i32 button, i32 action)
 {
-    if (action == GLFW_PRESS)
-        gui_mouse_button_callback_helper(comp_root, comp_root->x, comp_root->y, comp_root->w, comp_root->h);
+    gui_mouse_button_callback_helper(comp_root, comp_root->x, comp_root->y, comp_root->w, comp_root->h, button, action);
+}
+
+void gui_key_callback_helper(Component *comp, f32 x, f32 y, f32 w, f32 h, i32 key, i32 scancode, i32 action, i32 mods)
+{
+    f32 new_x1, new_y1, new_x2, new_y2, win_x1, win_x2, win_y1, win_y2;
+    new_x1 = comp->x * w + x, new_x2 = (comp->x + comp->w) * w + x;
+    new_y1 = comp->y * h + y, new_y2 = (comp->y + comp->h) * h + y;
+    if (comp->update_children)
+        for (i32 i = 0; i < comp->num_children; i++)
+            gui_key_callback_helper(comp->children[i], new_x1, new_y1, new_x2 - new_x1, new_y2 - new_y1, key, scancode, action, mods);
+    if (comp->interactable && cursor_in_bounds(new_x1, new_x2, new_y1, new_y2))
+        component_key_callback(comp, key, scancode, action, mods);
 }
 
 void gui_key_callback(i32 key, i32 scancode, i32 action, i32 mods)
 {
-
+    gui_key_callback_helper(comp_root, comp_root->x, comp_root->y, comp_root->w, comp_root->h, key, scancode, action, mods);
 }
 
 void gui_destroy(void)

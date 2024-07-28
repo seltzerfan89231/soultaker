@@ -101,7 +101,7 @@
 
 
 #pragma region GUI_TEXTURES
-#define NUM_GUI_TEXTURES 41
+#define NUM_GUI_TEXTURES 42
 #define NO_TEX           0
 #define EMPTY_TEX        1
 #define BUTTON_TEX       2
@@ -143,6 +143,7 @@
 #define NUM_7_TEX 38
 #define NUM_8_TEX 39
 #define NUM_9_TEX 40
+#define SOULTAKER_LOGO_TEX 41
 #pragma endregion
 
 #endif

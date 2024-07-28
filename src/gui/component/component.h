@@ -27,10 +27,13 @@ void component_detach_and_destroy(Component *comp, Component *child);
 void component_destroy_children(Component *comp);
 
 void component_add_text(Component *comp, char *text, u32 font_size, f32 gw, f32 gh);
-void component_onclick(Component *comp);
+void component_mouse_button_callback(Component *comp, i32 button, i32 action);
+void component_key_callback(Component *comp, i32 key, i32 scancode, i32 action, i32 mods);
 void component_update(Component *comp);
-void component_hover_on(Component *comp);
-void component_hover_off(Component *comp);
+void component_hover_callback(Component *comp, i32 action);
+
+#define HOVER_OFF 0
+#define HOVER_ON  1
 
 #define COMP_DEFAULT 0
 #define COMP_BUTTON 1
@@ -38,10 +41,12 @@ void component_hover_off(Component *comp);
 #define COMP_HEALTHBAR 3
 #define COMP_POPUP 4
 #define COMP_TEXTBOX 5
+#define COMP_START_BUTTON 6
 
 #define _COMP_INIT(_ltype) \
-    void comp_##_ltype##_hover_on(Component *comp); \
-    void comp_##_ltype##_hover_off(Component *comp); \
+    void comp_##_ltype##_mouse_button_callback(Component *comp, i32 button, i32 action); \
+    void comp_##_ltype##_hover_callback(Component *comp, i32 action); \
+    void comp_##_ltype##_key_callback(Component *comp, i32 key, i32 scancode, i32 action, i32 mods); \
     void comp_##_ltype##_update(Component *comp);
 
 _COMP_INIT(button)
@@ -49,5 +54,6 @@ _COMP_INIT(icon)
 _COMP_INIT(healthbar)
 _COMP_INIT(popup)
 _COMP_INIT(textbox)
+_COMP_INIT(start_button)
 
 #endif

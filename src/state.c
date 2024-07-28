@@ -32,6 +32,8 @@ static void state_setup(void)
 
 static void state_update(void)
 {
+    if (game_paused)
+        return;
     game_update(window.dt > 0.01 ? 0.01 : window.dt);
     camera_set_target(game_get_player_position());
     data_update();
@@ -57,6 +59,7 @@ void mouse_button_callback(GLFWwindow* handle, i32 button, i32 action)
 
 void key_callback(GLFWwindow* handle, i32 key, i32 scancode, i32 action, i32 mods)
 {
+    gui_key_callback(key, scancode, action, mods);
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
         window_close();
     if (key == GLFW_KEY_F11 && action == GLFW_PRESS)
@@ -71,7 +74,6 @@ void key_callback(GLFWwindow* handle, i32 key, i32 scancode, i32 action, i32 mod
         game_setup(2);
     if (key == GLFW_KEY_K && action == GLFW_PRESS)
         game_setup(1);
-    //gui_key_callback(key, scancode, action, mods);
 }
 
 static void process_input(void)
@@ -81,6 +83,9 @@ static void process_input(void)
     i32 zoom_magnitude = 0;
     vec2i move_direction = vec2i_create(0, 0);
     bool hovered = 0;
+
+    if (game_paused)
+        return;
 
     if (window_key_pressed(GLFW_KEY_Q))
         rotation_magnitude++;

@@ -30,12 +30,17 @@ void comp_textbox_update(Component *comp)
     }
 }
 
-void comp_textbox_hover_on(Component *comp)
+void comp_textbox_mouse_button_callback(Component *comp, i32 button, i32 action)
 {
-    
+
 }
 
-void comp_textbox_hover_off(Component *comp)
+void comp_textbox_key_callback(Component *comp, i32 key, i32 scancode, i32 action, i32 mods)
 {
-    
+
+}
+
+void comp_textbox_hover_callback(Component *comp, i32 action)
+{
+
 }

@@ -56,7 +56,7 @@ void component_detach_and_destroy(Component *comp, Component *child)
 }
 
 void component_destroy_children(Component *comp)
-{
+{   
     while (comp->num_children != 0)
         component_detach_and_destroy(comp, comp->children[0]);
 }
@@ -78,7 +78,6 @@ void component_add_text(Component *comp, char *text, u32 font_size, f32 gw, f32 
         bx = pixel_size * c.bearing.x / gw;
         by = pixel_size * c.bearing.y / gh;
         adv = pixel_size * c.advance / gw;
-        printf("%c, %f\n", text[i], adv);
         if (text[i] != ' ' && ox + adv > 1)
             ox = 0, oy += h + py;
         Component *letter = component_create(ox + bx, 1 - h - by - oy, w, h, c.tex);
@@ -88,9 +87,19 @@ void component_add_text(Component *comp, char *text, u32 font_size, f32 gw, f32 
     }
 }
 
-void component_onclick(Component *comp)
+#define _COMP_MB_CALLBACK(_type, _ltype) \
+    case COMP_##_type : comp_##_ltype##_mouse_button_callback(comp, button, action); break;
+
+void component_mouse_button_callback(Component *comp, i32 button, i32 action)
 {
-    puts("Clicked!");
+    switch (comp->id) {
+        _COMP_MB_CALLBACK(BUTTON, button)
+        _COMP_MB_CALLBACK(ICON, icon)
+        _COMP_MB_CALLBACK(HEALTHBAR, healthbar)
+        _COMP_MB_CALLBACK(POPUP, popup)
+        _COMP_MB_CALLBACK(TEXTBOX, textbox)
+        _COMP_MB_CALLBACK(START_BUTTON, start_button)
+    }
 }
 
 #define _COMP_UPDATE(_type, _ltype) \
@@ -104,33 +113,41 @@ void component_update(Component *comp)
         _COMP_UPDATE(HEALTHBAR, healthbar)
         _COMP_UPDATE(POPUP, popup)
         _COMP_UPDATE(TEXTBOX, textbox)
+        _COMP_UPDATE(START_BUTTON, start_button)
     }
 }
 
-#define _COMP_HOVER_ON(_type, _ltype) \
-    case COMP_##_type : comp_##_ltype##_hover_on(comp); break;
+#define _COMP_HOVER_CALLBACK(_type, _ltype) \
+    case COMP_##_type : comp_##_ltype##_hover_callback(comp, action); break;
 
-void component_hover_on(Component *comp)
+void component_hover_callback(Component *comp, i32 action)
 {
+    if (action == HOVER_ON  &&  comp->hovered)
+        return;
+    if (action == HOVER_OFF && !comp->hovered)
+        return;
+    comp->hovered = action;
     switch (comp->id) {
-        _COMP_HOVER_ON(BUTTON, button)
-        _COMP_HOVER_ON(ICON, icon)
-        _COMP_HOVER_ON(HEALTHBAR, healthbar)
-        _COMP_HOVER_ON(POPUP, popup)
-        _COMP_HOVER_ON(TEXTBOX, textbox)
+        _COMP_HOVER_CALLBACK(BUTTON, button)
+        _COMP_HOVER_CALLBACK(ICON, icon)
+        _COMP_HOVER_CALLBACK(HEALTHBAR, healthbar)
+        _COMP_HOVER_CALLBACK(POPUP, popup)
+        _COMP_HOVER_CALLBACK(TEXTBOX, textbox)
+        _COMP_HOVER_CALLBACK(START_BUTTON, start_button)
     }
 }
 
-#define _COMP_HOVER_OFF(_type, _ltype) \
-    case COMP_##_type : comp_##_ltype##_hover_off(comp); break;
+#define _COMP_KEY_CALLBACK(_type, _ltype) \
+    case COMP_##_type : comp_##_ltype##_key_callback(comp, key, scancode, action, mods); break;
 
-void component_hover_off(Component *comp)
+void component_key_callback(Component *comp, i32 key, i32 scancode, i32 action, i32 mods)
 {
     switch (comp->id) {
-        _COMP_HOVER_OFF(BUTTON, button)
-        _COMP_HOVER_OFF(ICON, icon)
-        _COMP_HOVER_OFF(HEALTHBAR, healthbar)
-        _COMP_HOVER_OFF(POPUP, popup)
-        _COMP_HOVER_OFF(TEXTBOX, textbox)
+        _COMP_KEY_CALLBACK(BUTTON, button)
+        _COMP_KEY_CALLBACK(ICON, icon)
+        _COMP_KEY_CALLBACK(HEALTHBAR, healthbar)
+        _COMP_KEY_CALLBACK(POPUP, popup)
+        _COMP_KEY_CALLBACK(TEXTBOX, textbox)
+        _COMP_KEY_CALLBACK(START_BUTTON, start_button)
     }
 }

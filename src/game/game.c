@@ -54,12 +54,13 @@ void game_init(void)
     obstacles = obstacle_array_create(0);
     tiles = tile_array_create(0);
     walls = wall_array_create(0);
-    game_time = 0;
-    game_paused = FALSE;
+    game_paused = TRUE;
 }
 
 void game_setup(u32 level)
 {
+    game_time = 0;
+    game_paused = FALSE;
     if (level == 1)
         load_level1();
     if (level == 2)
@@ -85,6 +86,7 @@ void game_set_direction(vec3f direction)
 {
     if (game_paused)
         return;
+    assert(player.entity != NULL);
     entity_set_direction(player.entity, direction);
 }
 
@@ -92,6 +94,7 @@ void game_set_target(vec3f target)
 {
     if (game_paused)
         return;
+    assert(player.entity != NULL);
     player.entity->position = target;
 }
 
@@ -111,6 +114,7 @@ void game_shoot(vec2f cursor_position, f32 rotation, f32 tilt, f32 zoom, f32 ar)
 {
     if (game_paused)
         return;
+    assert(player.entity != NULL);
     f32 dirx, dirz, a, b, c, r, ratio;
     vec3f direction, target;
     vec2f pos = vec2f_create((cursor_position.x - 0.5) * ar, cursor_position.y - 0.5 + 1.0 / 4 / zoom);
@@ -134,6 +138,7 @@ void game_spellcast(vec2f cursor_position, f32 rotation, f32 tilt, f32 zoom, f32
 {
     if (game_paused)
         return;
+    assert(player.entity != NULL);
     f32 dirx, dirz, a, b, c, r, ratio;
     vec3f direction, target;
     vec2f pos = vec2f_create((cursor_position.x - 0.5) * ar, cursor_position.y - 0.5 + 1.0 / 4 / zoom);
@@ -155,18 +160,21 @@ void game_spellcast(vec2f cursor_position, f32 rotation, f32 tilt, f32 zoom, f32
 
 vec3f game_get_player_position(void)
 {
+    assert(player.entity != NULL);
     return player.entity->position;
 }
 
 void game_pause(void)
 {
+    if (game_paused)
+        return;
+    assert(player.entity != NULL);
     game_paused = 1 - game_paused;
 }
 
 void game_switch_weapon(void)
 {
-    if (game_paused)
-        return;
+    assert(player.entity != NULL);
     player.weapon.id = 1 - player.weapon.id;
     if (player.weapon.id == SWORD)
         player.weapon.tex = SWORD_1_TEX;
@@ -176,15 +184,18 @@ void game_switch_weapon(void)
 
 void game_heal(void)
 {
+    assert(player.entity != NULL);
     player.entity->health = player.entity->max_health;
 }
 
 f32 game_get_player_health_ratio(void)
 {
+    assert(player.entity != NULL);
     return player.entity->health / player.entity->max_health;
 }
 
 u32 game_get_weapon_tex(void)
 {
+    assert(player.entity != NULL);
     return player.weapon.tex;
 }
