@@ -25,10 +25,11 @@ void gui_init(void)
 
     Component *title_card = component_create(0.3, 0.6, 0.4, 0.4 * 2.0/3, SOULTAKER_LOGO_TEX);
     title_card->hoverable = TRUE;
+    title_card->interactable = TRUE;
     title_card->id = COMP_START_BUTTON;
     component_attach(comp_root, title_card);
 
-    Component *text_box = component_create(0.02, 0.5, 0.5, 0.1, EMPTY_TEX);
+    /* Component *text_box = component_create(0.02, 0.5, 0.5, 0.1, EMPTY_TEX);
     text_box->a = 0.5;
     text_box->id = COMP_TEXTBOX;
     text_box->sub_id = 0;
@@ -51,7 +52,7 @@ void gui_init(void)
     component_attach(btn, icon);
     component_attach(comp_root, healthbar);
     component_attach(healthbar, green_part);
-    component_attach(healthbar, red_part);
+    component_attach(healthbar, red_part); */
 }
 
 #define Z gui.buffer[gui.length++]

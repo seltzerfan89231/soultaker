@@ -174,6 +174,8 @@ void game_pause(void)
 
 void game_switch_weapon(void)
 {
+    if (game_paused)
+        return;
     assert(player.entity != NULL);
     player.weapon.id = 1 - player.weapon.id;
     if (player.weapon.id == SWORD)
@@ -184,18 +186,24 @@ void game_switch_weapon(void)
 
 void game_heal(void)
 {
+    if (game_paused)
+        return;
     assert(player.entity != NULL);
     player.entity->health = player.entity->max_health;
 }
 
 f32 game_get_player_health_ratio(void)
 {
+    if (game_paused)
+        return 0;
     assert(player.entity != NULL);
     return player.entity->health / player.entity->max_health;
 }
 
 u32 game_get_weapon_tex(void)
 {
+    if (game_paused)
+        return 0;
     assert(player.entity != NULL);
     return player.weapon.tex;
 }

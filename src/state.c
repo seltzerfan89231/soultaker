@@ -24,8 +24,6 @@ static void update_view_matrix(void)
 static void state_setup(void)
 {
     renderer_uniform_update_aspect_ratio(1 / window.aspect_ratio);
-    game_setup(1);
-    //camera_set_target(game_get_player_position());
     update_view_matrix();
     update_proj_matrix();
 }
