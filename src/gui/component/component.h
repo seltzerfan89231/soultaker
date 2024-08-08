@@ -27,7 +27,7 @@ void component_destroy(Component *comp);
 void component_detach_and_destroy(Component *comp, Component *child);
 void component_destroy_children(Component *comp);
 
-void component_add_text(Component *comp, char *text, u32 font_size, f32 gw, f32 gh);
+void component_set_text(Component *comp, u32 font_size, char *text);
 void component_mouse_button_callback(Component *comp, i32 button, i32 action);
 void component_key_callback(Component *comp, i32 key, i32 scancode, i32 action, i32 mods);
 void component_update(Component *comp);
@@ -43,6 +43,7 @@ void component_hover_callback(Component *comp, i32 action);
 #define COMP_POPUP 4
 #define COMP_TEXTBOX 5
 #define COMP_START_BUTTON 6
+#define COMP_SETTINGS 7
 
 #define _COMP_INIT(_ltype) \
     void comp_##_ltype##_mouse_button_callback(Component *comp, i32 button, i32 action); \
@@ -56,5 +57,6 @@ _COMP_INIT(healthbar)
 _COMP_INIT(popup)
 _COMP_INIT(textbox)
 _COMP_INIT(start_button)
+_COMP_INIT(settings)
 
 #endif

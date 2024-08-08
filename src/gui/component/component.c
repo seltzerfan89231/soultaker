@@ -46,6 +46,7 @@ void component_destroy(Component *comp)
 {
     for (i32 i = 0; i < comp->num_children; i++)
         component_destroy(comp->children[i]);
+    free(comp->text);
     free(comp->children);
     free(comp);
 }
@@ -62,30 +63,20 @@ void component_destroy_children(Component *comp)
         component_detach_and_destroy(comp, comp->children[0]);
 }
 
-void component_add_text(Component *comp, char *text, u32 font_size, f32 gw, f32 gh)
+void component_set_text(Component *comp, u32 font_size, char *text)
 {
-    /*                    padding  bearing  origin */
-    f32 pixel_size, w, h, px, py,  bx, by,  ox, oy, adv;
-    u32 length, i;
-    pixel_size = (f32)font_size / (DEFAULT_WINDOW_HEIGHT);
-    px = pixel_size * 2 / gw;
-    py = pixel_size * 0.5 / gh;
+    u32 length;
+    char *copied_text;
+    free(comp->text);
     length = strlen(text);
-    ox = oy = 0;
-    for (i = 0; i < length; i++) {
-        Character c = char_map[text[i]];
-        w = pixel_size / gw * c.size.x / c.size.y;
-        h = pixel_size / gh;
-        bx = pixel_size * c.bearing.x / gw;
-        by = pixel_size * c.bearing.y / gh;
-        adv = pixel_size * c.advance / gw;
-        if (text[i] != ' ' && ox + adv > 1)
-            ox = 0, oy += h + py;
-        Component *letter = component_create(ox + bx, 1 - h - by - oy, w, h, c.tex);
-        ox += adv;
-        letter->r = letter->g = letter->b = 1.0f;
-        component_attach(comp, letter);
+    if (length == 0) {
+        comp->text = NULL;
+        return;
     }
+    copied_text = malloc((length + 1) * sizeof(char));
+    strncpy(copied_text, text, length + 1);
+    comp->font_size = font_size;
+    comp->text = copied_text;
 }
 
 #define _COMP_MB_CALLBACK(_type, _ltype) \
@@ -100,6 +91,7 @@ void component_mouse_button_callback(Component *comp, i32 button, i32 action)
         _COMP_MB_CALLBACK(POPUP, popup)
         _COMP_MB_CALLBACK(TEXTBOX, textbox)
         _COMP_MB_CALLBACK(START_BUTTON, start_button)
+        _COMP_MB_CALLBACK(SETTINGS, settings)
     }
 }
 
@@ -115,6 +107,7 @@ void component_update(Component *comp)
         _COMP_UPDATE(POPUP, popup)
         _COMP_UPDATE(TEXTBOX, textbox)
         _COMP_UPDATE(START_BUTTON, start_button)
+        _COMP_UPDATE(SETTINGS, settings)
     }
 }
 
@@ -135,6 +128,7 @@ void component_hover_callback(Component *comp, i32 action)
         _COMP_HOVER_CALLBACK(POPUP, popup)
         _COMP_HOVER_CALLBACK(TEXTBOX, textbox)
         _COMP_HOVER_CALLBACK(START_BUTTON, start_button)
+        _COMP_HOVER_CALLBACK(SETTINGS, settings)
     }
 }
 
@@ -150,5 +144,6 @@ void component_key_callback(Component *comp, i32 key, i32 scancode, i32 action, 
         _COMP_KEY_CALLBACK(POPUP, popup)
         _COMP_KEY_CALLBACK(TEXTBOX, textbox)
         _COMP_KEY_CALLBACK(START_BUTTON, start_button)
+        _COMP_KEY_CALLBACK(SETTINGS, settings)
     }
 }

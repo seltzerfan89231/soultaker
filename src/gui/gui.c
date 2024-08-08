@@ -29,22 +29,26 @@ void gui_init(void)
     title_card->interactable = TRUE;
     title_card->id = COMP_START_BUTTON;
     component_attach(comp_root, title_card);
+
+    Component *settings_button = component_create(0.4, 0.2, 0.2, 0.2, BUTTON_TEX);
+    settings_button->interactable = TRUE;
+    settings_button->id = COMP_SETTINGS;
+    component_attach(comp_root, settings_button);
 }
 
 #define Z gui.buffer[gui.length++]
 
-void gui_update_data_add_text(Component *comp, f32 gx, f32 gy, f32 gw, f32 gh)
+void gui_update_data_add_text(Component *comp, f32 x, f32 y, f32 w, f32 h)
 {
     if (comp->text == NULL)
         return;
-    f32 pixel_size, w, h, px, py, bx, by, ox, oy, lx, ly, adv;
+    f32 pixel_size, px, py, bx, by, ox, oy, lx, ly, lw, lh,adv;
     f32 new_x1, new_y1, new_x2, new_y2, win_x1, win_x2, win_y1, win_y2;
     u32 length, i;
     char *text = comp->text;
-    u32 font_size = 14;
-    pixel_size = (f32)font_size / (DEFAULT_WINDOW_HEIGHT);
-    px = pixel_size * 2 / gw;
-    py = pixel_size * 0.5 / gh;
+    pixel_size = (f32)comp->font_size / (DEFAULT_WINDOW_HEIGHT);
+    px = pixel_size * 2 / w;
+    py = pixel_size * 0.5 / h;
     length = strlen(text);
     ox = oy = 0;
     if (gui.length + 54 * length >= gui.max_length) {
@@ -53,28 +57,30 @@ void gui_update_data_add_text(Component *comp, f32 gx, f32 gy, f32 gw, f32 gh)
         gui.max_length_changed = TRUE;
     }
     for (i = 0; i < length; i++) {
+        if (text[i] == '\n' || (text[i] != ' ' && ox > 1))
+            ox = 0, oy += lh + py;
+        if (text[i] == '\n')
+            continue;
+
         Character c = char_map[text[i]];
-        w = pixel_size / gw * c.size.x / c.size.y;
-        h = pixel_size / gh;
-        bx = pixel_size * c.bearing.x / gw;
-        by = pixel_size * c.bearing.y / gh;
-        adv = pixel_size * c.advance / gw;
-        if (text[i] != ' ' && ox + adv > 1)
-            ox = 0, oy += h + py;
+        lw = pixel_size / w * c.size.x / c.size.y;
+        lh = pixel_size / h;
+        bx = pixel_size * c.bearing.x / w;
+        by = pixel_size * c.bearing.y / h;
+        adv = pixel_size * c.advance / w;
         lx = ox + bx;
-        ly = 1 - h - by - oy;
-        //Component *letter = component_create(ox + bx, 1 - h - by - oy, w, h, c.tex);
+        ly = 1 - lh - by - oy;
         ox += adv;
-        new_x1 = lx * gw + gx, new_x2 = (lx + w) * gw + gx;
-        new_y1 = ly * gh + gy, new_y2 = (ly + h) * gh + gy;
+        new_x1 = lx * w + x, new_x2 = (lx + lw) * w + x;
+        new_y1 = ly * h + y, new_y2 = (ly + lh) * h + y;
         win_x1 = 2 * (new_x1 / window.aspect_ratio - 0.5f), win_y1 = 2 * (new_y1 - 0.5f);
         win_x2 = 2 * (new_x2 / window.aspect_ratio - 0.5f), win_y2 = 2 * (new_y2 - 0.5f);
-        Z = win_x1, Z = win_y1, Z = 0.0f, Z = 1.0f, Z = c.tex, Z = comp->r, Z = comp->g, Z = comp->b, Z = comp->a;
-        Z = win_x2, Z = win_y1, Z = 1.0f, Z = 1.0f, Z = c.tex, Z = comp->r, Z = comp->g, Z = comp->b, Z = comp->a;
-        Z = win_x1, Z = win_y2, Z = 0.0f, Z = 0.0f, Z = c.tex, Z = comp->r, Z = comp->g, Z = comp->b, Z = comp->a;
-        Z = win_x1, Z = win_y2, Z = 0.0f, Z = 0.0f, Z = c.tex, Z = comp->r, Z = comp->g, Z = comp->b, Z = comp->a;
-        Z = win_x2, Z = win_y1, Z = 1.0f, Z = 1.0f, Z = c.tex, Z = comp->r, Z = comp->g, Z = comp->b, Z = comp->a;
-        Z = win_x2, Z = win_y2, Z = 1.0f, Z = 0.0f, Z = c.tex, Z = comp->r, Z = comp->g, Z = comp->b, Z = comp->a;
+        Z = win_x1, Z = win_y1, Z = 0.0f, Z = 1.0f, Z = c.tex, Z = 1.0f, Z = 1.0f, Z = 1.0f, Z = 1.0f;
+        Z = win_x2, Z = win_y1, Z = 1.0f, Z = 1.0f, Z = c.tex, Z = 1.0f, Z = 1.0f, Z = 1.0f, Z = 1.0f;
+        Z = win_x1, Z = win_y2, Z = 0.0f, Z = 0.0f, Z = c.tex, Z = 1.0f, Z = 1.0f, Z = 1.0f, Z = 1.0f;
+        Z = win_x1, Z = win_y2, Z = 0.0f, Z = 0.0f, Z = c.tex, Z = 1.0f, Z = 1.0f, Z = 1.0f, Z = 1.0f;
+        Z = win_x2, Z = win_y1, Z = 1.0f, Z = 1.0f, Z = c.tex, Z = 1.0f, Z = 1.0f, Z = 1.0f, Z = 1.0f;
+        Z = win_x2, Z = win_y2, Z = 1.0f, Z = 0.0f, Z = c.tex, Z = 1.0f, Z = 1.0f, Z = 1.0f, Z = 1.0f;
     }
 }
 

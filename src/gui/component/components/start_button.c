@@ -11,14 +11,12 @@ void comp_start_button_mouse_button_callback(Component *comp, i32 button, i32 ac
     if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
         game_setup(1);
         component_destroy_children(comp_root);
-        Component *text_box = component_create(0.02, 0.5, 0.5, 0.1, EMPTY_TEX);
-        text_box->a = 0.5;
+        Component *text_box = component_create(0, 0.9, 0.5, 0.1, EMPTY_TEX);
+        text_box->a = 0.2;
         text_box->id = COMP_TEXTBOX;
         text_box->sub_id = 0;
         text_box->update_children = FALSE;
-        text_box->text = "THE QUICK BROWN FOX JUMPED OVER THE LAZY DOG 0123456789";
-        text_box->font_size = 14;
-        //component_add_text(text_box, "THE QUICK BROWN FOX JUMPED OVER THE LAZY DOG 0123456789", 14, 0.5, 0.1);
+        component_set_text(text_box, 14, "THE QUICK BROWN FOX JUMPED OVER THE LAZY DOG 0123456789");
         component_attach(comp_root, text_box);
         Component *btn = component_create(0.05f, 0.05f, 0.1f, 0.1f, BUTTON_TEX);
         btn->interactable = TRUE;

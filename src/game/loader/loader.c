@@ -18,6 +18,7 @@ static void reset(void)
     obstacles = obstacle_array_create(0);
     tiles = tile_array_create(0);
     walls = wall_array_create(0);
+    game_time = 0;
 }
 
 void load_level1(void)

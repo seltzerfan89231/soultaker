@@ -8,12 +8,12 @@ void comp_button_update(Component *comp)
 
 void comp_button_mouse_button_callback(Component *comp, i32 button, i32 action)
 {
-    printf("A");
+
 }
 
 void comp_button_key_callback(Component *comp, i32 key, i32 scancode, i32 action, i32 mods)
 {
-    printf("B");
+
 }
 
 void comp_button_hover_callback(Component *comp, i32 action)
@@ -23,6 +23,7 @@ void comp_button_hover_callback(Component *comp, i32 action)
         new_comp->r = 0.5;
         new_comp->id = COMP_POPUP;
         new_comp->hoverable = FALSE;
+        component_set_text(new_comp, 14, "DESC");
         component_attach(comp, new_comp);
     } else {
         for (i32 i = 0; i < comp->num_children; i++)
