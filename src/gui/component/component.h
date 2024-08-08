@@ -12,8 +12,9 @@ typedef struct Component Component;
 typedef struct Component {
     f32 x, y, w, h, r, g, b, a;
     Component **children;
-    u32 num_children, tex, id, sub_id;
+    u32 num_children, tex, id, sub_id, font_size;
     bool interactable, hoverable, hovered, relative, update_children;
+    char *text;
 } Component;
 
 extern Window window;

@@ -132,11 +132,11 @@ void state_init(void)
     game_init();
     gui_init();
     data_init();
-    state_setup();
 }
 
 void state_loop(void)
 {
+    state_setup();
     while (!window_closed()) {
         gui_update();
         window_update();

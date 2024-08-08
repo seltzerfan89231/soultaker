@@ -1,6 +1,7 @@
 #include "gui.h"
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 
 GUI gui;
 extern Window window;
@@ -28,34 +29,54 @@ void gui_init(void)
     title_card->interactable = TRUE;
     title_card->id = COMP_START_BUTTON;
     component_attach(comp_root, title_card);
-
-    /* Component *text_box = component_create(0.02, 0.5, 0.5, 0.1, EMPTY_TEX);
-    text_box->a = 0.5;
-    text_box->id = COMP_TEXTBOX;
-    text_box->sub_id = 0;
-    text_box->update_children = FALSE;
-    component_add_text(text_box, "THE QUICK BROWN FOX JUMPED OVER THE LAZY DOG 0123456789", 14, 0.5, 0.1);
-    component_attach(comp_root, text_box);
-    Component *btn = component_create(0.05f, 0.05f, 0.1f, 0.1f, BUTTON_TEX);
-    btn->interactable = TRUE;
-    btn->hoverable = TRUE;
-    btn->id = COMP_BUTTON;
-    Component *icon = component_create(0.15, 0.15, 0.7, 0.7, SWORD_1_TEX);
-    icon->id = COMP_ICON;
-    Component *healthbar = component_create(0.3, 0.05, 0.2, 0.02, NO_TEX);
-    healthbar->id = COMP_HEALTHBAR;
-    Component *green_part = component_create(0.0, 0.0, 0.75, 1.0, EMPTY_TEX);
-    green_part->g = 1.0, green_part->r = 0.0, green_part->b = 0.0;
-    Component *red_part = component_create(0.75, 0.0, 0.25, 1.0, EMPTY_TEX);
-    red_part->r = 1.0, red_part->g = red_part->b = 0.0;
-    component_attach(comp_root, btn);
-    component_attach(btn, icon);
-    component_attach(comp_root, healthbar);
-    component_attach(healthbar, green_part);
-    component_attach(healthbar, red_part); */
 }
 
 #define Z gui.buffer[gui.length++]
+
+void gui_update_data_add_text(Component *comp, f32 gx, f32 gy, f32 gw, f32 gh)
+{
+    if (comp->text == NULL)
+        return;
+    f32 pixel_size, w, h, px, py, bx, by, ox, oy, lx, ly, adv;
+    f32 new_x1, new_y1, new_x2, new_y2, win_x1, win_x2, win_y1, win_y2;
+    u32 length, i;
+    char *text = comp->text;
+    u32 font_size = 14;
+    pixel_size = (f32)font_size / (DEFAULT_WINDOW_HEIGHT);
+    px = pixel_size * 2 / gw;
+    py = pixel_size * 0.5 / gh;
+    length = strlen(text);
+    ox = oy = 0;
+    if (gui.length + 54 * length >= gui.max_length) {
+        gui.max_length += 54 * length;
+        gui.buffer = realloc(gui.buffer, gui.max_length * sizeof(f32));
+        gui.max_length_changed = TRUE;
+    }
+    for (i = 0; i < length; i++) {
+        Character c = char_map[text[i]];
+        w = pixel_size / gw * c.size.x / c.size.y;
+        h = pixel_size / gh;
+        bx = pixel_size * c.bearing.x / gw;
+        by = pixel_size * c.bearing.y / gh;
+        adv = pixel_size * c.advance / gw;
+        if (text[i] != ' ' && ox + adv > 1)
+            ox = 0, oy += h + py;
+        lx = ox + bx;
+        ly = 1 - h - by - oy;
+        //Component *letter = component_create(ox + bx, 1 - h - by - oy, w, h, c.tex);
+        ox += adv;
+        new_x1 = lx * gw + gx, new_x2 = (lx + w) * gw + gx;
+        new_y1 = ly * gh + gy, new_y2 = (ly + h) * gh + gy;
+        win_x1 = 2 * (new_x1 / window.aspect_ratio - 0.5f), win_y1 = 2 * (new_y1 - 0.5f);
+        win_x2 = 2 * (new_x2 / window.aspect_ratio - 0.5f), win_y2 = 2 * (new_y2 - 0.5f);
+        Z = win_x1, Z = win_y1, Z = 0.0f, Z = 1.0f, Z = c.tex, Z = comp->r, Z = comp->g, Z = comp->b, Z = comp->a;
+        Z = win_x2, Z = win_y1, Z = 1.0f, Z = 1.0f, Z = c.tex, Z = comp->r, Z = comp->g, Z = comp->b, Z = comp->a;
+        Z = win_x1, Z = win_y2, Z = 0.0f, Z = 0.0f, Z = c.tex, Z = comp->r, Z = comp->g, Z = comp->b, Z = comp->a;
+        Z = win_x1, Z = win_y2, Z = 0.0f, Z = 0.0f, Z = c.tex, Z = comp->r, Z = comp->g, Z = comp->b, Z = comp->a;
+        Z = win_x2, Z = win_y1, Z = 1.0f, Z = 1.0f, Z = c.tex, Z = comp->r, Z = comp->g, Z = comp->b, Z = comp->a;
+        Z = win_x2, Z = win_y2, Z = 1.0f, Z = 0.0f, Z = c.tex, Z = comp->r, Z = comp->g, Z = comp->b, Z = comp->a;
+    }
+}
 
 void gui_update_data_helper(Component *comp, f32 x, f32 y, f32 w, f32 h)
 {
@@ -69,7 +90,7 @@ void gui_update_data_helper(Component *comp, f32 x, f32 y, f32 w, f32 h)
     }
     win_x1 = 2 * (new_x1 / (comp == comp_root ? 1 : window.aspect_ratio) - 0.5f), win_y1 = 2 * (new_y1 - 0.5f);
     win_x2 = 2 * (new_x2 / (comp == comp_root ? 1 : window.aspect_ratio) - 0.5f), win_y2 = 2 * (new_y2 - 0.5f);
-    if (gui.length + 36 >= gui.max_length) {
+    if (gui.length + 54 >= gui.max_length) {
         gui.max_length += 1000;
         gui.buffer = realloc(gui.buffer, gui.max_length * sizeof(f32));
         gui.max_length_changed = TRUE;
@@ -80,6 +101,7 @@ void gui_update_data_helper(Component *comp, f32 x, f32 y, f32 w, f32 h)
     Z = win_x1, Z = win_y2, Z = 0.0f, Z = 0.0f, Z = comp->tex, Z = comp->r, Z = comp->g, Z = comp->b, Z = comp->a;
     Z = win_x2, Z = win_y1, Z = 1.0f, Z = 1.0f, Z = comp->tex, Z = comp->r, Z = comp->g, Z = comp->b, Z = comp->a;
     Z = win_x2, Z = win_y2, Z = 1.0f, Z = 0.0f, Z = comp->tex, Z = comp->r, Z = comp->g, Z = comp->b, Z = comp->a;
+    gui_update_data_add_text(comp, new_x1, new_y1, new_x2 - new_x1, new_y2 - new_y1);
     for (i32 i = 0; i < comp->num_children; i++)
         gui_update_data_helper(comp->children[i], new_x1, new_y1, new_x2 - new_x1, new_y2 - new_y1);
 }

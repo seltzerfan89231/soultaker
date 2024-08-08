@@ -19,6 +19,7 @@ Component* component_create(f32 x, f32 y, f32 w, f32 h, u32 tex)
     comp->hovered = FALSE;
     comp->relative = TRUE;
     comp->update_children = TRUE;
+    comp->text = NULL;
     comp->id = COMP_DEFAULT;
     return comp;
 }
