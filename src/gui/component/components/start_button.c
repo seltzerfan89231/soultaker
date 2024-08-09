@@ -15,7 +15,6 @@ void comp_start_button_mouse_button_callback(Component *comp, i32 button, i32 ac
         text_box->a = 0.2;
         text_box->id = COMP_TEXTBOX;
         text_box->sub_id = 0;
-        text_box->update_children = FALSE;
         component_set_text(text_box, 14, "THE QUICK BROWN FOX JUMPED OVER THE LAZY DOG 0123456789");
         component_attach(comp_root, text_box);
         Component *btn = component_create(0.05f, 0.05f, 0.1f, 0.1f, BUTTON_TEX);

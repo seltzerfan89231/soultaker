@@ -20,8 +20,9 @@ void gui_init(void)
     gui.max_length = 1000;
     gui.buffer = malloc(gui.max_length * sizeof(f32));
     gui.length = 0;
-    comp_root = component_create(0.0f, 0.0f, 1.0f, 1.0f, NO_TEX);
-    comp_root->a = 0;
+    comp_root = component_create(0.0f, 0.0f, 1.0f, 1.0f, EMPTY_TEX);
+    comp_root->a = 0.1;
+    comp_root->b = 0;
     gui.max_length_changed = TRUE;
 
     Component *title_card = component_create(0.3, 0.6, 0.4, 0.4 * 2.0/3, SOULTAKER_LOGO_TEX);
