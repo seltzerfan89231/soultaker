@@ -4,13 +4,19 @@
 
 TileArray tiles;
 
-Tile* tile_create(tiletype type, f32 x, f32 z)
+#define _CREATE(_id, _lid) \
+    case _id : _lid##_create(tile); break;
+
+Tile* tile_create(u32 id, f32 x, f32 z)
 {
     Tile* tile = malloc(sizeof(Tile));
-    tile->type = type;
+    tile->id = id;
     tile->position.x = x;
     tile->position.z = z;
-    tile->tex = TILE_TEX;
+    switch (id) {
+        _CREATE(GRASS, grass)
+        _CREATE(HELLSTONE, hellstone)
+    }
     tile_array_push(&tiles, tile);
     return tile;
 }

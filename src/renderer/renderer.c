@@ -329,6 +329,10 @@ void load_textures(void)
     renderer.game_textures[WALL_SIDE_TEX]    = texture_create("assets/textures/game/wall.png");
     renderer.game_textures[BUSH_TEX]         = texture_create("assets/textures/game/bush.png");
     renderer.game_textures[ROCK_TEX]         = texture_create("assets/textures/game/rock.png");
+    renderer.game_textures[GRASS_1_TEX]      = texture_create("assets/textures/game/grass1.png");
+    renderer.game_textures[GRASS_2_TEX]      = texture_create("assets/textures/game/grass2.png");
+    renderer.game_textures[GRASS_3_TEX]      = texture_create("assets/textures/game/grass3.png");
+    renderer.game_textures[HELLSTONE_TEX]    = texture_create("assets/textures/game/hellstone.png");
 
     renderer.gui_textures[NO_TEX]     = texture_create("assets/textures/gui/none.png");
     renderer.gui_textures[EMPTY_TEX]  = texture_create("assets/textures/gui/empty.png");

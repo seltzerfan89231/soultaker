@@ -63,10 +63,12 @@ void game_setup(u32 level)
     game_time = 0;
     game_dt = 0;
     game_paused = FALSE;
-    if (level == 1)
-        load_level1();
-    if (level == 2)
-        load_level2();
+    switch (level) {
+        case 1:
+            load_level1(); break;
+        case 2:
+            load_level2(); break;
+    }
 }
 
 void game_update(f32 dt)

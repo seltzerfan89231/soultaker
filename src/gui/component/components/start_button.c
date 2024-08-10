@@ -11,7 +11,7 @@ void comp_start_button_mouse_button_callback(Component *comp, i32 button, i32 ac
     if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
         game_setup(1);
         component_destroy_children(comp_root);
-        Component *text_box = component_create(0, 0.9, 0.5, 0.1, EMPTY_TEX);
+        Component *text_box = component_create(0.02, 0.88, 0.3, 0.05, EMPTY_TEX);
         text_box->a = 0.2;
         text_box->id = COMP_TEXTBOX;
         text_box->sub_id = 0;

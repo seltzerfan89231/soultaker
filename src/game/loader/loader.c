@@ -26,36 +26,30 @@ void load_level1(void)
     reset();
     for (i32 i = 0; i < MAP_WIDTH; i++) {
         for (i32 j = 0; j < MAP_WIDTH; j++) {
-            /* if (i == 0 || j == 0 || j == MAP_WIDTH - 1 || i == MAP_WIDTH - 1 || (i == 12 && j == 12))
-                wall_create(WALL2, i, j, ((int)(i + j)) % 2 == 0 ? 3.0f : 0.8f);
+            if (i > 75 && i < 125 && j > 75 && j < 125)
+                tile_create(HELLSTONE, i, j);
             else
-                tile_create(FLOOR, i, j); */
-            tile_create(FLOOR, i, j);
+                tile_create(GRASS, i, j);
         }
     }
             
     player.entity = entity_create(KNIGHT, 1);
     player.weapon.id = 0;
     player.weapon.tex = SWORD_1_TEX;
-    player.entity->position = vec3f_create(0.0f, 0.0f, 0.0f);
+    player.entity->position = vec3f_create(100.0f, 0.0f, 35.0f);
 
-    Entity* entity = entity_create(ENEMY, 0);
-    entity->position = vec3f_create(20, 0, 15);
-    entity->scale = 1.0f;
+    for (i32 i = 0; i < 250; i++) {
+        Obstacle *obstacle = obstacle_create();
+        obstacle->position = vec3f_create((f32)rand() / RAND_MAX * MAP_WIDTH, 0.0f, (f32)rand() / RAND_MAX * MAP_WIDTH);
+        obstacle->hitbox_radius = 0.3f;
+        obstacle->scale = 3.0f;
+    }
 
-    Obstacle *obstacle = obstacle_create();
-    obstacle->position = vec3f_create(10.0f, 0.0f, 10.0f);
-    obstacle->hitbox_radius = 0.3f;
-    obstacle->scale = 3.0f;
-
-    obstacle = obstacle_create();
-    obstacle->position = vec3f_create(12.0f, 0.0f, 10.0f);
-    obstacle->hitbox_radius = 0.3f;
-    obstacle->scale = 3.0f;
-
-    Parstacle *parstacle = parstacle_create();
-    parstacle->position = vec3f_create(20.0f, 0.0f, 20.0f);
-    parstacle->scale = 1.8f;
+    for (i32 i = 0; i < 250; i++) {
+        Parstacle *parstacle = parstacle_create();
+        parstacle->position = vec3f_create((f32)rand() / RAND_MAX * MAP_WIDTH, 0.0f, (f32)rand() / RAND_MAX * MAP_WIDTH);
+        parstacle->scale = 1 + (f32)rand() / RAND_MAX;
+    }
 
     parstacle_array_update(&parstacles);
     obstacle_array_update(&obstacles);
@@ -71,7 +65,7 @@ void load_level2(void)
             if (i == 0 || j == 0 || j == MAP_WIDTH - 1 || i == MAP_WIDTH - 1 || (i == 12 && j == 12))
                 wall_create(WALL2, i, j, ((int)(i + j)) % 2 == 0 ? 3.0f : 0.8f);
             else
-                tile_create(FLOOR, i, j);
+                tile_create(GRASS, i, j);
         }
     }
             
