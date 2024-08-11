@@ -34,6 +34,7 @@ void comp_start_button_mouse_button_callback(Component *comp, i32 button, i32 ac
         component_attach(comp_root, healthbar);
         component_attach(healthbar, green_part);
         component_attach(healthbar, red_part);
+        //Component *death_messsage = component_create(0.4, 0.93, 0.3, 0.05, EMPTY_TEX);
     }
 }
 

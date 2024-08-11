@@ -24,8 +24,13 @@ void slime_destroy_frame_data(FrameData ***frame_data)
 
 void slime_update(Entity *entity)
 {
-    vec3f target = player.entity->position;
-    vec3f offset = vec3f_sub(target, entity->position);
+    if (player.entity == NULL) {
+        entity->direction = vec3f_create(0, 0, 0);
+        return;
+    }
+    vec3f target, offset;
+    target = player.entity->position;
+    offset = vec3f_sub(target, entity->position);
     if (vec3f_mag(offset) < 10) {
         entity->direction = vec3f_normalize(offset);
         if (entity->timer >= 0.5) {

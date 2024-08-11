@@ -6,44 +6,6 @@
 f64 game_time;
 bool game_paused;
 
-extern void collide_objects(f32 dt);
-
-static void update_objects(f32 dt)
-{
-    for (i32 i = 0; i < entities.length; i++) {
-        Entity *entity = entities.buffer[i];
-        entity_update(entity, dt);
-        /* if (entity->health <= 0)
-            entity_destroy(entity, i), i--; */
-        if (entity->position.x < 0)
-            entity->position.x = 0;
-        if (entity->position.z < 0)
-            entity->position.z = 0;
-        if (entity->position.x > MAP_WIDTH)
-            entity->position.x = MAP_WIDTH;
-        if (entity->position.z > MAP_WIDTH)
-            entity->position.z = MAP_WIDTH;
-    }
-    for (i32 i = 0; i < projectiles.length; i++) {
-        Projectile *proj = projectiles.buffer[i];
-        projectile_update(proj, dt);
-        if (proj->lifetime <= 0.3)
-            projectile_destroy(proj, i), i--;
-    }
-    for (i32 i = 0; i < particles.length; i++) {
-        Particle *particle = particles.buffer[i];
-        particle_update(particle, dt);
-        if (particle->lifetime <= 0)
-            particle_destroy(particle, i), i--;
-    }
-    for (i32 i = 0; i < parjicles.length; i++) {
-        Parjicle *parjicle = parjicles.buffer[i];
-        parjicle_update(parjicle, dt);
-        if (parjicle->lifetime <= 0)
-            parjicle_destroy(parjicle, i), i--;
-    }
-}
-
 void game_init(void)
 {
     projectiles = projectile_array_create(0);
@@ -69,6 +31,9 @@ void game_setup(u32 level)
     }
 }
 
+extern void collide_objects(f32 dt);
+extern void update_objects(f32 dt);
+
 void game_update(f32 dt)
 {
     if (game_paused)
@@ -86,7 +51,7 @@ void game_update(f32 dt)
 
 void game_set_direction(vec3f direction)
 {
-    if (game_paused)
+    if (player.entity == NULL  || game_paused)
         return;
     assert(player.entity != NULL);
     entity_set_direction(player.entity, direction);
@@ -114,7 +79,7 @@ void game_destroy(void)
 
 void game_shoot(vec2f cursor_position, f32 rotation, f32 tilt, f32 zoom, f32 ar)
 {
-    if (game_paused)
+    if (player.entity == NULL || game_paused)
         return;
     assert(player.entity != NULL);
     f32 dirx, dirz, a, b, c, r, ratio;
@@ -188,7 +153,7 @@ void game_switch_weapon(void)
 
 void game_heal(void)
 {
-    if (game_paused)
+    if (player.entity == NULL || game_paused)
         return;
     assert(player.entity != NULL);
     player.entity->health = player.entity->max_health;
@@ -196,7 +161,7 @@ void game_heal(void)
 
 f32 game_get_player_health_ratio(void)
 {
-    if (game_paused)
+    if (player.entity == NULL || game_paused)
         return 0;
     assert(player.entity != NULL);
     return player.entity->health / player.entity->max_health;
@@ -206,6 +171,5 @@ u32 game_get_weapon_tex(void)
 {
     if (game_paused)
         return 0;
-    assert(player.entity != NULL);
     return player.weapon.tex;
 }

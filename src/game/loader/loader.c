@@ -48,6 +48,7 @@ void load_level1(void)
 
     for (i32 i = 0; i < 1000; i++) {
         Entity *entity = entity_create(SLIME, FALSE);
+        entity->max_health = entity->health = 10;
         entity->position = vec3f_create((f32)rand() / RAND_MAX * MAP_WIDTH, 0.0f, (f32)rand() / RAND_MAX * MAP_WIDTH);
     }
 

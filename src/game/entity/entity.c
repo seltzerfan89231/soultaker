@@ -1,4 +1,5 @@
 #include "entity.h"
+#include "../player/player.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <assert.h>
@@ -58,6 +59,8 @@ void entity_set_direction(Entity *entity, vec3f direction)
 void entity_destroy(Entity* entity, u32 idx)
 {
     assert(entity == entities.buffer[idx]);
+    if (entity == player.entity)
+        player.entity = NULL;
     entity_array_cut(&entities, idx);
     free(entity);
 }

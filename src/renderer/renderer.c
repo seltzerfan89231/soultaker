@@ -181,8 +181,8 @@ void renderer_render(void)
     vao_draw(renderer.vaos[WALL_VAO]);
     shader_use(renderer.shaders[ENTITY_SHADER]);
     vao_draw(renderer.vaos[ENTITY_VAO]);
-    /* shader_use(renderer.shaders[PARTICLE_SHADER]);
-    vao_draw(renderer.vaos[PARTICLE_VAO]); */
+    shader_use(renderer.shaders[PARTICLE_SHADER]);
+    vao_draw(renderer.vaos[PARTICLE_VAO]);
     shader_use(renderer.shaders[PARJICLE_SHADER]);
     vao_draw(renderer.vaos[PARJICLE_VAO]);
     shader_use(renderer.shaders[PROJECTILE_SHADER]);

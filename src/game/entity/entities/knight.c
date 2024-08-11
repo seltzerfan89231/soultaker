@@ -103,19 +103,22 @@ void knight_update(Entity *entity)
     }
 
     if (entity->timer2 < 0) {
-        Particle *particle = particle_create();
-        particle->position = entity->position;
-        f32 r = (float)rand() / RAND_MAX / 2;
-        f32 a = (float)rand() / RAND_MAX * 360;
-        particle->position.x += r * cos(a);
-        particle->position.z += r * sin(a);
-        particle->direction = vec3f_create(0, 1, 0);
-        particle->speed = 1;
-        particle->scale = 0.15;
-        particle->lifetime = 5;
-        particle->color.r = (float)rand() / RAND_MAX;
-        particle->color.g = (float)rand() / RAND_MAX;
-        particle->color.b = (float)rand() / RAND_MAX;
-        entity->timer2 = 0.1;
+        for (i32 i = 0; i < 10; i++) {
+            Particle *particle = particle_create();
+            particle->position = entity->position;
+            f32 r = (float)rand() / RAND_MAX / 2;
+            f32 a = (float)rand() / RAND_MAX * 360;
+            particle->position.x += r * cos(a);
+            particle->position.z += r * sin(a);
+            particle->direction = vec3f_create(0, 1, 0);
+            particle->speed = 1;
+            particle->scale = 0.15;
+            particle->lifetime = 5;
+            particle->color.r = (float)rand() / RAND_MAX;
+            particle->color.g = (float)rand() / RAND_MAX;
+            particle->color.b = (float)rand() / RAND_MAX;
+            entity->timer2 = 0.1;
+        }
+        
     }
 }

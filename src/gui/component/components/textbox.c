@@ -18,6 +18,9 @@ void comp_textbox_update(Component *comp)
             strncat(text, "\nPROJ ", 20);
             sprintf(num, "%d", projectiles.length);
             strncat(text, num, 20);
+            strncat(text, "\nPART ", 20);
+            sprintf(num, "%d", particles.length + parjicles.length);
+            strncat(text, num, 20);
             component_set_text(comp, 14, text);
             cooldown = glfwGetTime();
         } else if (comp->sub_id == GAME_FPS) {

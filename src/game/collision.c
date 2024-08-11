@@ -147,3 +147,41 @@ void collide_objects(f32 dt)
     collide_obstacles_entities();
     collide_entities_projectiles();
 }
+
+void update_objects(f32 dt)
+{
+    for (i32 i = 0; i < entities.length; i++) {
+        Entity *entity = entities.buffer[i];
+        entity_update(entity, dt);
+        if (entity->health <= 0) {
+            entity_destroy(entity, i), i--;
+            continue;
+        }
+        if (entity->position.x < 0)
+            entity->position.x = 0;
+        if (entity->position.z < 0)
+            entity->position.z = 0;
+        if (entity->position.x > MAP_WIDTH)
+            entity->position.x = MAP_WIDTH;
+        if (entity->position.z > MAP_WIDTH)
+            entity->position.z = MAP_WIDTH;
+    }
+    for (i32 i = 0; i < projectiles.length; i++) {
+        Projectile *proj = projectiles.buffer[i];
+        projectile_update(proj, dt);
+        if (proj->lifetime <= 0.3)
+            projectile_destroy(proj, i), i--;
+    }
+    for (i32 i = 0; i < particles.length; i++) {
+        Particle *particle = particles.buffer[i];
+        particle_update(particle, dt);
+        if (particle->lifetime <= 0)
+            particle_destroy(particle, i), i--;
+    }
+    for (i32 i = 0; i < parjicles.length; i++) {
+        Parjicle *parjicle = parjicles.buffer[i];
+        parjicle_update(parjicle, dt);
+        if (parjicle->lifetime <= 0)
+            parjicle_destroy(parjicle, i), i--;
+    }
+}
