@@ -33,19 +33,25 @@ void load_level1(void)
         }
     }
             
-    player.entity = entity_create(KNIGHT, 1);
+    player.entity = entity_create(KNIGHT, TRUE);
+    player.entity->speed = 8;
     player.weapon.id = 0;
     player.weapon.tex = SWORD_1_TEX;
     player.entity->position = vec3f_create(100.0f, 0.0f, 35.0f);
 
-    for (i32 i = 0; i < 250; i++) {
+    for (i32 i = 0; i < 600; i++) {
         Obstacle *obstacle = obstacle_create();
         obstacle->position = vec3f_create((f32)rand() / RAND_MAX * MAP_WIDTH, 0.0f, (f32)rand() / RAND_MAX * MAP_WIDTH);
         obstacle->hitbox_radius = 0.3f;
         obstacle->scale = 3.0f;
     }
 
-    for (i32 i = 0; i < 250; i++) {
+    for (i32 i = 0; i < 1000; i++) {
+        Entity *entity = entity_create(SLIME, FALSE);
+        entity->position = vec3f_create((f32)rand() / RAND_MAX * MAP_WIDTH, 0.0f, (f32)rand() / RAND_MAX * MAP_WIDTH);
+    }
+
+    for (i32 i = 0; i < 600; i++) {
         Parstacle *parstacle = parstacle_create();
         parstacle->position = vec3f_create((f32)rand() / RAND_MAX * MAP_WIDTH, 0.0f, (f32)rand() / RAND_MAX * MAP_WIDTH);
         parstacle->scale = 1 + (f32)rand() / RAND_MAX;

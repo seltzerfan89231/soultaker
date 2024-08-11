@@ -42,6 +42,7 @@ static void entity_push_data(Entity* entity, u32 offset)
     data.buffer[offset++] = entity->scale;
     data.buffer[offset++] = entity->health / entity->max_health;
     f32 theta = atan(entity->facing.y / entity->facing.x) + (entity->facing.x >= 0 ? 0 : PI);
+
     f32 dif = theta + PI - camera.yaw;
     u8 dir;
     if (dif > 2 * PI) dif -= 2 * PI;
@@ -52,11 +53,12 @@ static void entity_push_data(Entity* entity, u32 offset)
     else if (dif < 5 * PI / 4 - 0.01) dir = UP;
     else if (dif < 7 * PI / 4 + 0.01) dir = LEFT;
     else                              dir = DOWN;
+    
     data.buffer[offset++] = data.frame_data[entity->id][dir][entity->state].frame;
     data.buffer[offset++] = data.frame_data[entity->id][dir][entity->state].x;
     data.buffer[offset++] = data.frame_data[entity->id][dir][entity->state].y;
     data.buffer[offset++] = data.frame_data[entity->id][dir][entity->state].w;
-    data.buffer[offset++] = data.frame_data[entity->id][dir][entity->state].h;  
+    data.buffer[offset++] = data.frame_data[entity->id][dir][entity->state].h;
 }
 
 static void particle_push_data(Particle *particle, u32 offset)
@@ -111,12 +113,14 @@ void data_init(void)
     data.frame_data = malloc(MAX_ENTITY_ID * sizeof(FrameData**));
     knight_init_frame_data(data.frame_data);
     enemy_init_frame_data(data.frame_data);
+    slime_init_frame_data(data.frame_data);
 }
 
 void data_destroy(void)
 {
     knight_destroy_frame_data(data.frame_data);
     enemy_destroy_frame_data(data.frame_data);
+    slime_destroy_frame_data(data.frame_data);
     free(data.frame_data);
     free(data.buffer);
 }

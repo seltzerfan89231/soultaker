@@ -181,8 +181,8 @@ void renderer_render(void)
     vao_draw(renderer.vaos[WALL_VAO]);
     shader_use(renderer.shaders[ENTITY_SHADER]);
     vao_draw(renderer.vaos[ENTITY_VAO]);
-    shader_use(renderer.shaders[PARTICLE_SHADER]);
-    vao_draw(renderer.vaos[PARTICLE_VAO]);
+    /* shader_use(renderer.shaders[PARTICLE_SHADER]);
+    vao_draw(renderer.vaos[PARTICLE_VAO]); */
     shader_use(renderer.shaders[PARJICLE_SHADER]);
     vao_draw(renderer.vaos[PARJICLE_VAO]);
     shader_use(renderer.shaders[PROJECTILE_SHADER]);
@@ -333,6 +333,7 @@ void load_textures(void)
     renderer.game_textures[GRASS_2_TEX]      = texture_create("assets/textures/game/grass2.png");
     renderer.game_textures[GRASS_3_TEX]      = texture_create("assets/textures/game/grass3.png");
     renderer.game_textures[HELLSTONE_TEX]    = texture_create("assets/textures/game/hellstone.png");
+    renderer.game_textures[SLIME_TEX]        = texture_create("assets/textures/game/slime.png");
 
     renderer.gui_textures[NO_TEX]     = texture_create("assets/textures/gui/none.png");
     renderer.gui_textures[EMPTY_TEX]  = texture_create("assets/textures/gui/empty.png");

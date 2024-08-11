@@ -10,7 +10,7 @@ Entity* entity_create(u32 id, u8 friendly)
     Entity* entity = malloc(sizeof(Entity));
     entity->id = id;
     entity->scale = 1;
-    entity->speed = 8;
+    entity->speed = 1;
     entity->state = 0;
     entity->face_dir = TRUE;
     entity->timer = 0.0f;
@@ -35,6 +35,7 @@ void entity_update(Entity* entity, f32 dt)
     switch (entity->id) {
         _ENTITY_UPDATE(ENEMY, enemy)
         _ENTITY_UPDATE(KNIGHT, knight)
+        _ENTITY_UPDATE(SLIME, slime)
     }
     entity->timer += dt;
     entity->timer2 -= dt;

@@ -3,7 +3,6 @@
 
 #define NUM_STATES 1
 #define IDLE   0
-#define WALK_1 2
 
 void enemy_init_frame_data(FrameData ***frame_data)
 {

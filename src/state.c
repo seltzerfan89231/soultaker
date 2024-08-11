@@ -32,7 +32,7 @@ static void state_update(void)
 {
     if (game_paused)
         return;
-    game_update(window.dt > 0.01 ? 0.01 : window.dt);
+    game_update(window.dt);
     camera_set_target(game_get_player_position());
     data_update();
     update_view_matrix();

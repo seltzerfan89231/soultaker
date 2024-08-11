@@ -23,7 +23,6 @@ extern WallArray walls;
 extern Player player;
 
 extern f64 game_time;
-extern f64 game_dt;
 extern bool game_paused;
 
 #endif

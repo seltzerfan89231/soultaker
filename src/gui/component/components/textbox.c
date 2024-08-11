@@ -8,14 +8,17 @@
 void comp_textbox_update(Component *comp)
 {
     static f32 cooldown;
-    if (glfwGetTime() - cooldown > 1) {
+    if (glfwGetTime() - cooldown > 0.1) {
         component_destroy_children(comp);
         if (comp->sub_id == WINDOW_FPS) {
-            char text[50], num[20];
+            char text[100], num[20];
             strcpy(text, "FPS ");
             sprintf(num, "%.0f", window.fps);
             strncat(text, num, 20);
-            component_set_text(comp, 10, text);
+            strncat(text, "\nPROJ ", 20);
+            sprintf(num, "%d", projectiles.length);
+            strncat(text, num, 20);
+            component_set_text(comp, 14, text);
             cooldown = glfwGetTime();
         } else if (comp->sub_id == GAME_FPS) {
             char text[50], num[20];

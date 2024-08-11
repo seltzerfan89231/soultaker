@@ -4,7 +4,6 @@
 #include <assert.h>
 
 f64 game_time;
-f64 game_dt;
 bool game_paused;
 
 extern void collide_objects(f32 dt);
@@ -61,7 +60,6 @@ void game_init(void)
 void game_setup(u32 level)
 {
     game_time = 0;
-    game_dt = 0;
     game_paused = FALSE;
     switch (level) {
         case 1:
@@ -76,7 +74,6 @@ void game_update(f32 dt)
     if (game_paused)
         return;
     game_time += dt;
-    game_dt = dt;
 
     update_objects(dt);
     collide_objects(dt);
