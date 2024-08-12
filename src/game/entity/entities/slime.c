@@ -30,6 +30,7 @@ void slime_update(Entity *entity)
     }
     vec3f target, offset;
     target = player.entity->position;
+    target.y = 0;
     offset = vec3f_sub(target, entity->position);
     if (vec3f_mag(offset) < 10) {
         entity->direction = vec3f_normalize(offset);

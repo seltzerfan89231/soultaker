@@ -2,7 +2,7 @@
 setlocal enableextensions enabledelayedexpansion
 set flags=-O3 -fopenmp
 set name=untitled
-set link=-L./lib/glfw/link -lglfw3dll
+set link=-L./lib/glfw/link -L./lib/AL/link -L./lib/sndfile/link -lglfw3dll -lOpenAL32 -lsndfile
 set Ifiles=
 set Cfiles=
 for /d %%f in (".\lib\*") do (

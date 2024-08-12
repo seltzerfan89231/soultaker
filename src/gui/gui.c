@@ -47,7 +47,7 @@ void gui_update_data_add_text(Component *comp, f32 x, f32 y, f32 w, f32 h)
     u32 length, i;
     char *text = comp->text;
     pixel_size = (f32)comp->font_size / (DEFAULT_WINDOW_HEIGHT);
-    px = pixel_size * 2 / w;
+    px = pixel_size * 0.5 / w;
     py = pixel_size * 0.5 / h;
     length = strlen(text);
     ox = oy = 0;
