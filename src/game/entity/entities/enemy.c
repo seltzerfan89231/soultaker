@@ -41,3 +41,6 @@ void enemy_update(Entity *entity)
         }
     }
 }
+
+void enemy_die(Entity *entity)
+{}

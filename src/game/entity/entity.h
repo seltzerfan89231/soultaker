@@ -8,6 +8,7 @@
 #include "../../util/indices.h"
 #include "../../util/framedata.h"
 #include "../projectile/projectile.h"
+#include "../parstacle/parstacle.h"
 
 extern f64 game_time;
 
@@ -40,7 +41,8 @@ extern EntityArray entities;
 #define _ENTITY_INIT(_type) \
     void _type##_init_frame_data(FrameData ***frame_data); \
     void _type##_destroy_frame_data(FrameData ***frame_data); \
-    void _type##_update(Entity *entity);
+    void _type##_update(Entity *entity); \
+    void _type##_die(Entity *entity);
 
 _ENTITY_INIT(knight)
 _ENTITY_INIT(enemy)

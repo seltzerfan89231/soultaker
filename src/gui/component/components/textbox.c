@@ -12,7 +12,7 @@ void comp_textbox_update(Component *comp)
         component_destroy_children(comp);
         if (comp->sub_id == WINDOW_FPS) {
             char text[100], num[20];
-            strcpy(text, "FPS ");
+            strcpy(text, "FPS  ");
             sprintf(num, "%.0f", window.fps);
             strncat(text, num, 20);
             strncat(text, "\nPROJ ", 20);

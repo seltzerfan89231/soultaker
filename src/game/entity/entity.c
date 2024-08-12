@@ -56,9 +56,17 @@ void entity_set_direction(Entity *entity, vec3f direction)
         entity->facing.x = direction.x, entity->facing.y = direction.z;
 }
 
+#define _ENTITY_DIE(_id, _lid) \
+    case _id : _lid##_die(entity); break;
+
 void entity_destroy(Entity* entity, u32 idx)
 {
     assert(entity == entities.buffer[idx]);
+    switch (entity->id) {
+        _ENTITY_DIE(ENEMY, enemy)
+        _ENTITY_DIE(KNIGHT, knight)
+        _ENTITY_DIE(SLIME, slime)
+    }
     if (entity == player.entity)
         player.entity = NULL;
     entity_array_cut(&entities, idx);

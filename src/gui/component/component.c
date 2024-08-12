@@ -18,6 +18,7 @@ Component* component_create(f32 x, f32 y, f32 w, f32 h, u32 tex)
     comp->hoverable = FALSE;
     comp->hovered = FALSE;
     comp->relative = TRUE;
+    comp->show_text = TRUE;
     comp->update_children = TRUE;
     comp->text = NULL;
     comp->id = COMP_DEFAULT;
@@ -92,6 +93,7 @@ void component_mouse_button_callback(Component *comp, i32 button, i32 action)
         _COMP_MB_CALLBACK(TEXTBOX, textbox)
         _COMP_MB_CALLBACK(START_BUTTON, start_button)
         _COMP_MB_CALLBACK(SETTINGS, settings)
+        _COMP_MB_CALLBACK(DEATH, death)
     }
 }
 
@@ -108,6 +110,7 @@ void component_update(Component *comp)
         _COMP_UPDATE(TEXTBOX, textbox)
         _COMP_UPDATE(START_BUTTON, start_button)
         _COMP_UPDATE(SETTINGS, settings)
+        _COMP_UPDATE(DEATH, death)
     }
 }
 
@@ -129,6 +132,7 @@ void component_hover_callback(Component *comp, i32 action)
         _COMP_HOVER_CALLBACK(TEXTBOX, textbox)
         _COMP_HOVER_CALLBACK(START_BUTTON, start_button)
         _COMP_HOVER_CALLBACK(SETTINGS, settings)
+        _COMP_HOVER_CALLBACK(DEATH, death)
     }
 }
 
@@ -145,5 +149,6 @@ void component_key_callback(Component *comp, i32 key, i32 scancode, i32 action, 
         _COMP_KEY_CALLBACK(TEXTBOX, textbox)
         _COMP_KEY_CALLBACK(START_BUTTON, start_button)
         _COMP_KEY_CALLBACK(SETTINGS, settings)
+        _COMP_KEY_CALLBACK(DEATH, death)
     }
 }

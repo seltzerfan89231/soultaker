@@ -103,7 +103,7 @@ void knight_update(Entity *entity)
     }
 
     if (entity->timer2 < 0) {
-        for (i32 i = 0; i < 10; i++) {
+        for (i32 i = 0; i < 0; i++) {
             Particle *particle = particle_create();
             particle->position = entity->position;
             f32 r = (float)rand() / RAND_MAX / 2;
@@ -121,4 +121,11 @@ void knight_update(Entity *entity)
         }
         
     }
+}
+
+void knight_die(Entity *entity)
+{
+    Parstacle *parstacle = parstacle_create();
+    parstacle->tex = GRAVESTONE_TEX;
+    parstacle->position = entity->position;
 }

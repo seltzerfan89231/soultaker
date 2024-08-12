@@ -41,7 +41,6 @@ void game_update(f32 dt)
     game_time += dt;
 
     update_objects(dt);
-    collide_objects(dt);
 
     entity_array_update(&entities);
     projectile_array_update(&projectiles);
@@ -103,7 +102,7 @@ void game_shoot(vec2f cursor_position, f32 rotation, f32 tilt, f32 zoom, f32 ar)
 
 void game_spellcast(vec2f cursor_position, f32 rotation, f32 tilt, f32 zoom, f32 ar)
 {
-    if (game_paused)
+    if (player.entity == NULL || game_paused)
         return;
     assert(player.entity != NULL);
     f32 dirx, dirz, a, b, c, r, ratio;
@@ -133,7 +132,7 @@ vec3f game_get_player_position(void)
 
 void game_pause(void)
 {
-    if (game_paused)
+    if (player.entity == NULL || game_paused)
         return;
     assert(player.entity != NULL);
     game_paused = 1 - game_paused;
@@ -141,7 +140,7 @@ void game_pause(void)
 
 void game_switch_weapon(void)
 {
-    if (game_paused)
+    if (player.entity == NULL || game_paused)
         return;
     assert(player.entity != NULL);
     player.weapon.id = 1 - player.weapon.id;

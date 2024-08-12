@@ -1,7 +1,7 @@
 #ifndef GAME_H
 #define GAME_H
 
-#include "collision.h"
+#include "update.h"
 #include "loader/loader.h"
 #include "game_util.h"
 

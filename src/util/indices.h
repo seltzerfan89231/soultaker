@@ -68,7 +68,7 @@
 
 
 #pragma region GAME_TEXTURES
-#define NUM_GAME_TEXTURES 30
+#define NUM_GAME_TEXTURES 31
 #define BULLET_TEX        0
 #define TILE_TEX          1
 #define WALL_TOP_TEX      2
@@ -99,6 +99,7 @@
 #define GRASS_3_TEX 27
 #define HELLSTONE_TEX 28
 #define SLIME_TEX 29
+#define GRAVESTONE_TEX 30
 #pragma endregion
 
 

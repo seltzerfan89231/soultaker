@@ -40,7 +40,7 @@ void gui_init(void)
 
 void gui_update_data_add_text(Component *comp, f32 x, f32 y, f32 w, f32 h)
 {
-    if (comp->text == NULL)
+    if (comp->text == NULL || comp->show_text == FALSE)
         return;
     f32 pixel_size, px, py, bx, by, ox, oy, lx, ly, lw, lh,adv;
     f32 new_x1, new_y1, new_x2, new_y2, win_x1, win_x2, win_y1, win_y2;

@@ -334,6 +334,7 @@ void load_textures(void)
     renderer.game_textures[GRASS_3_TEX]      = texture_create("assets/textures/game/grass3.png");
     renderer.game_textures[HELLSTONE_TEX]    = texture_create("assets/textures/game/hellstone.png");
     renderer.game_textures[SLIME_TEX]        = texture_create("assets/textures/game/slime.png");
+    renderer.game_textures[GRAVESTONE_TEX]   = texture_create("assets/textures/game/gravestone.png");
 
     renderer.gui_textures[NO_TEX]     = texture_create("assets/textures/gui/none.png");
     renderer.gui_textures[EMPTY_TEX]  = texture_create("assets/textures/gui/empty.png");

@@ -139,7 +139,7 @@ static void collide_walls_entities(f32 dt)
     }
 }
 
-void collide_objects(f32 dt)
+static void collide_objects(f32 dt)
 {
     collide_walls_entities(dt);
     collide_walls_projectiles();
@@ -184,4 +184,5 @@ void update_objects(f32 dt)
         if (parjicle->lifetime <= 0)
             parjicle_destroy(parjicle, i), i--;
     }
+    collide_objects(dt);
 }

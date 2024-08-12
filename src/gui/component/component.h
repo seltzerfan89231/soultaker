@@ -13,7 +13,7 @@ typedef struct Component {
     f32 x, y, w, h, r, g, b, a;
     Component **children;
     u32 num_children, tex, id, sub_id, font_size;
-    bool interactable, hoverable, hovered, relative, update_children;
+    bool interactable, hoverable, hovered, relative, update_children, show_text;
     char *text;
 } Component;
 
@@ -44,6 +44,7 @@ void component_hover_callback(Component *comp, i32 action);
 #define COMP_TEXTBOX 5
 #define COMP_START_BUTTON 6
 #define COMP_SETTINGS 7
+#define COMP_DEATH 8
 
 #define _COMP_INIT(_ltype) \
     void comp_##_ltype##_mouse_button_callback(Component *comp, i32 button, i32 action); \
@@ -58,5 +59,6 @@ _COMP_INIT(popup)
 _COMP_INIT(textbox)
 _COMP_INIT(start_button)
 _COMP_INIT(settings)
+_COMP_INIT(death)
 
 #endif

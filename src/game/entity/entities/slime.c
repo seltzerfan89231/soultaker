@@ -48,3 +48,6 @@ void slime_update(Entity *entity)
     else
         entity->direction = vec3f_create(0, 0, 0);
 }
+
+void slime_die(Entity *entity)
+{}
