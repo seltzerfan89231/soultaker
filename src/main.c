@@ -1,5 +1,5 @@
 #include "state.h"
-#include "audio.h"
+#include "audio/audio.h"
 
 int main()
 {
