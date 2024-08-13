@@ -24,8 +24,8 @@ void window_init(void);
 void window_toggle_fullscreen(void);
 void window_update(void);
 void window_calc_dt(void);
-bool window_closed(void);
 void window_close(void);
+bool window_closed(void);
 bool window_mouse_button_pressed(GLenum button);
 bool window_key_pressed(GLenum key);
 

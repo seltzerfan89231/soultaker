@@ -35,7 +35,7 @@ void load_level1(void)
             
     player.entity = entity_create(KNIGHT, TRUE);
     player.entity->speed = 8;
-    player.entity->health = 100;
+    player.entity->health = player.entity->max_health = 10;
     player.weapon.id = 0;
     player.weapon.tex = SWORD_1_TEX;
     player.entity->position = vec3f_create(100.0f, 0.0f, 35.0f);

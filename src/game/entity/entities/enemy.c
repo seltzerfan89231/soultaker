@@ -22,6 +22,12 @@ void enemy_destroy_frame_data(FrameData ***frame_data)
     free(frame_data[ENEMY]);
 }
 
+void enemy_create(Entity *entity)
+{
+    entity->health = 100;
+    entity->max_health = 100;
+}
+
 void enemy_update(Entity *entity)
 {
     entity->speed = 0.5;

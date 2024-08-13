@@ -1,6 +1,7 @@
 #ifndef STATE_H
 #define STATE_H
 
+#include "audio/audio.h"
 #include "game/game.h"
 #include "window/window.h"
 #include "renderer/renderer.h"

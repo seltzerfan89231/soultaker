@@ -45,6 +45,11 @@ void knight_destroy_frame_data(FrameData ***frame_data)
     free(frame_data[KNIGHT]);
 }
 
+void knight_create(Entity *entity)
+{
+    
+}
+
 void knight_update(Entity *entity)
 {
     if (entity->flag == TRUE) {

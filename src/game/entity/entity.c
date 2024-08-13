@@ -6,6 +6,9 @@
 
 EntityArray entities;
 
+#define _ENTITY_CREATE(_id, _lid) \
+    case _id : _lid##_create(entity); break;
+
 Entity* entity_create(u32 id, u8 friendly)
 {
     Entity* entity = malloc(sizeof(Entity));
@@ -21,8 +24,13 @@ Entity* entity_create(u32 id, u8 friendly)
     entity->facing = vec2f_create(1.0, 0.0);
     entity->friendly = friendly;
     entity->hitbox_radius = 0.5;
-    entity->health = 100.0f;
-    entity->max_health = 100.0f;
+    entity->health = 100;
+    entity->max_health = 100;
+    switch (entity->id) {
+        _ENTITY_CREATE(ENEMY, enemy)
+        _ENTITY_CREATE(KNIGHT, knight)
+        _ENTITY_CREATE(SLIME, slime)
+    }
     entity_array_push(&entities, entity);
     return entity;
 }
@@ -47,6 +55,7 @@ void entity_damage(Entity *entity, u32 damage)
     entity->health -= damage;
     if (entity->health < 0)
         entity->health = 0;
+    printf("%d\n", entity->health);
 }
 
 void entity_set_direction(Entity *entity, vec3f direction)

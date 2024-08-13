@@ -22,6 +22,12 @@ void slime_destroy_frame_data(FrameData ***frame_data)
     free(frame_data[SLIME]);
 }
 
+void slime_create(Entity *entity)
+{
+    entity->health = 5;
+    entity->max_health = 5;
+}
+
 void slime_update(Entity *entity)
 {
     if (player.entity == NULL) {

@@ -17,8 +17,9 @@ extern f64 game_time;
 #define FLAG_BIT     3
 
 typedef struct {
-    f32 speed, scale, hitbox_radius, health, max_health, timer, timer2;
+    f32 speed, scale, hitbox_radius, timer, timer2;
     u8 friendly, face_dir, state, flag;
+    i32 health, max_health;
     u32 id;
     vec3f position, direction;
     vec2f facing;
@@ -41,6 +42,7 @@ extern EntityArray entities;
 #define _ENTITY_INIT(_type) \
     void _type##_init_frame_data(FrameData ***frame_data); \
     void _type##_destroy_frame_data(FrameData ***frame_data); \
+    void _type##_create(Entity *entity); \
     void _type##_update(Entity *entity); \
     void _type##_die(Entity *entity);
 

@@ -133,6 +133,7 @@ void state_init(void)
     game_init();
     gui_init();
     data_init();
+    //audio_test();
 }
 
 void state_loop(void)
