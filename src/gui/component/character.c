@@ -52,4 +52,5 @@ void char_map_init(void)
     _CHAR_INIT('X', UPPER_X_TEX, 5, 7, 0, 0)
     _CHAR_INIT('Y', UPPER_Y_TEX, 5, 7, 0, 0)
     _CHAR_INIT('Z', UPPER_Z_TEX, 5, 7, 0, 0)
+    _CHAR_INIT('/', FSLASH_TEX , 3, 5, 0, 0)
 }

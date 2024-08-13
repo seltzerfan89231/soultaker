@@ -378,4 +378,5 @@ void load_textures(void)
     renderer.gui_textures[NUM_8_TEX]  = texture_create("assets/textures/gui/text/8.png");
     renderer.gui_textures[NUM_9_TEX]  = texture_create("assets/textures/gui/text/9.png");
     renderer.gui_textures[SOULTAKER_LOGO_TEX]  = texture_create("assets/textures/gui/logo.png");
+    renderer.gui_textures[FSLASH_TEX] = texture_create("assets/textures/gui/text/FSLASH.png");
 }

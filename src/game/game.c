@@ -164,7 +164,15 @@ f32 game_get_player_health_ratio(void)
     if (player.entity == NULL || game_paused)
         return 0;
     assert(player.entity != NULL);
-    return (f32)player.entity->health / player.entity->max_health;
+    return player.entity->health / player.entity->max_health;
+}
+
+f32 game_get_player_mana_ratio(void)
+{
+    if (player.entity == NULL || game_paused)
+        return 0;
+    assert(player.entity != NULL);
+    return player.mana / player.max_mana;
 }
 
 u32 game_get_weapon_tex(void)

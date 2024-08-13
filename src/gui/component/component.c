@@ -94,6 +94,7 @@ void component_mouse_button_callback(Component *comp, i32 button, i32 action)
         _COMP_MB_CALLBACK(START_BUTTON, start_button)
         _COMP_MB_CALLBACK(SETTINGS, settings)
         _COMP_MB_CALLBACK(DEATH, death)
+        _COMP_MB_CALLBACK(MANABAR, manabar)
     }
 }
 
@@ -111,6 +112,7 @@ void component_update(Component *comp)
         _COMP_UPDATE(START_BUTTON, start_button)
         _COMP_UPDATE(SETTINGS, settings)
         _COMP_UPDATE(DEATH, death)
+        _COMP_UPDATE(MANABAR, manabar)
     }
 }
 
@@ -133,6 +135,7 @@ void component_hover_callback(Component *comp, i32 action)
         _COMP_HOVER_CALLBACK(START_BUTTON, start_button)
         _COMP_HOVER_CALLBACK(SETTINGS, settings)
         _COMP_HOVER_CALLBACK(DEATH, death)
+        _COMP_HOVER_CALLBACK(MANABAR, manabar)
     }
 }
 
@@ -150,5 +153,6 @@ void component_key_callback(Component *comp, i32 key, i32 scancode, i32 action, 
         _COMP_KEY_CALLBACK(START_BUTTON, start_button)
         _COMP_KEY_CALLBACK(SETTINGS, settings)
         _COMP_KEY_CALLBACK(DEATH, death)
+        _COMP_KEY_CALLBACK(MANABAR, manabar)
     }
 }

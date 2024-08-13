@@ -12,6 +12,7 @@ typedef struct {
     Entity *entity;
     Weapon weapon;
     Ability ability;
+    f32 mana, max_mana, mana_regen, health, max_health, health_regen;
     f32 cooldown, cooldown2;
 } Player;
 

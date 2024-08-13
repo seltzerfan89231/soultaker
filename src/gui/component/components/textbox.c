@@ -21,6 +21,12 @@ void comp_textbox_update(Component *comp)
             strncat(text, "\nPART ", 20);
             sprintf(num, "%d", particles.length + parjicles.length);
             strncat(text, num, 20);
+            strncat(text, "\nHP   ", 20);
+            sprintf(num, "%d/%d", (i32)player.health, (i32)player.max_health);
+            strncat(text, num, 20);
+            strncat(text, "\nMP   ", 20);
+            sprintf(num, "%d/%d", (i32)player.mana, (i32)player.max_mana);
+            strncat(text, num, 20);
             component_set_text(comp, 14, text);
             cooldown = glfwGetTime();
         } else if (comp->sub_id == GAME_FPS) {

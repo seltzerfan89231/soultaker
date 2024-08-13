@@ -18,6 +18,7 @@ void game_pause(void);
 void game_switch_weapon(void);
 void game_heal(void);
 f32 game_get_player_health_ratio(void);
+f32 game_get_player_mana_ratio(void);
 u32 game_get_weapon_tex(void);
 
 #endif

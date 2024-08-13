@@ -17,9 +17,8 @@ extern f64 game_time;
 #define FLAG_BIT     3
 
 typedef struct {
-    f32 speed, scale, hitbox_radius, timer, timer2;
+    f32 speed, scale, hitbox_radius, timer, timer2, health, max_health;
     u8 friendly, face_dir, state, flag;
-    i32 health, max_health;
     u32 id;
     vec3f position, direction;
     vec2f facing;

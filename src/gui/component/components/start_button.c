@@ -23,17 +23,29 @@ void comp_start_button_mouse_button_callback(Component *comp, i32 button, i32 ac
         btn->id = COMP_BUTTON;
         Component *icon = component_create(0.15, 0.15, 0.7, 0.7, SWORD_1_TEX);
         icon->id = COMP_ICON;
-        Component *healthbar = component_create(0.3, 0.05, 0.2, 0.02, NO_TEX);
+
+        Component *healthbar = component_create(0.3, 0.07, 0.2, 0.02, NO_TEX);
         healthbar->id = COMP_HEALTHBAR;
         Component *green_part = component_create(0.0, 0.0, 0.75, 1.0, EMPTY_TEX);
         green_part->g = 1.0, green_part->r = 0.0, green_part->b = 0.0;
         Component *red_part = component_create(0.75, 0.0, 0.25, 1.0, EMPTY_TEX);
-        red_part->r = 1.0, red_part->g = red_part->b = 0.0;
+        red_part->r = 1.0, red_part->g = 0.0, red_part->b = 0.0;
+        component_attach(healthbar, green_part);
+        component_attach(healthbar, red_part);
+
+        Component *manabar = component_create(0.3, 0.05, 0.2, 0.02, NO_TEX);
+        manabar->id = COMP_MANABAR;
+        Component *blue_part = component_create(0.0, 0.0, 0.75, 1.0, EMPTY_TEX);
+        blue_part->g = 0.0, blue_part->r = 0.0, blue_part->b = 1.0;
+        Component *yellow_part = component_create(0.75, 0.0, 0.25, 1.0, EMPTY_TEX);
+        yellow_part->r = 1.0, yellow_part->g = 1.0, yellow_part->b = 0.0;
+        component_attach(manabar, blue_part);
+        component_attach(manabar, yellow_part);
+
         component_attach(comp_root, btn);
         component_attach(btn, icon);
         component_attach(comp_root, healthbar);
-        component_attach(healthbar, green_part);
-        component_attach(healthbar, red_part);
+        component_attach(comp_root, manabar);
         Component *death_message = component_create(0.4, 0.93, 0.3, 0.05, NO_TEX);
         death_message->id = COMP_DEATH;
         death_message->show_text = FALSE;
