@@ -1,4 +1,7 @@
 #include "game.h"
+#include <omp.h>
+#include <time.h>
+#include <stdio.h>
 
 static void collide_entities_projectiles(void)
 {
