@@ -139,7 +139,7 @@ static void collide_walls_entities(f32 dt)
     }
 }
 
-static void collide_objects(f32 dt)
+void collide_objects(f32 dt)
 {
     collide_walls_entities(dt);
     collide_walls_projectiles();
@@ -148,7 +148,7 @@ static void collide_objects(f32 dt)
     collide_entities_projectiles();
 }
 
-void update_objects(f32 dt)
+static void update_entities(f32 dt)
 {
     for (i32 i = 0; i < entities.length; i++) {
         Entity *entity = entities.buffer[i];
@@ -166,23 +166,48 @@ void update_objects(f32 dt)
         if (entity->position.z > MAP_WIDTH)
             entity->position.z = MAP_WIDTH;
     }
+}
+
+static void update_projectiles(f32 dt)
+{
     for (i32 i = 0; i < projectiles.length; i++) {
         Projectile *proj = projectiles.buffer[i];
         projectile_update(proj, dt);
         if (proj->lifetime <= 0.3)
             projectile_destroy(proj, i), i--;
     }
+}
+
+static void update_particles(f32 dt)
+{
     for (i32 i = 0; i < particles.length; i++) {
         Particle *particle = particles.buffer[i];
         particle_update(particle, dt);
         if (particle->lifetime <= 0)
             particle_destroy(particle, i), i--;
     }
+}
+
+static void update_parjicles(f32 dt)
+{
     for (i32 i = 0; i < parjicles.length; i++) {
         Parjicle *parjicle = parjicles.buffer[i];
         parjicle_update(parjicle, dt);
         if (parjicle->lifetime <= 0)
             parjicle_destroy(parjicle, i), i--;
     }
-    collide_objects(dt);
+}
+
+static void update_players(f32 dt)
+{
+    player_update(&player, dt);
+}
+
+void update_objects(f32 dt)
+{
+    update_entities(dt);
+    update_projectiles(dt);
+    update_particles(dt);
+    update_parjicles(dt);
+    update_players(dt);
 }

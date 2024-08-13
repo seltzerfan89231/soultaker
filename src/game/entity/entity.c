@@ -55,7 +55,6 @@ void entity_damage(Entity *entity, u32 damage)
     entity->health -= damage;
     if (entity->health < 0)
         entity->health = 0;
-    printf("%d\n", entity->health);
 }
 
 void entity_set_direction(Entity *entity, vec3f direction)

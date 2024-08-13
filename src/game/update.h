@@ -4,5 +4,6 @@
 #include "game_util.h"
 
 void update_objects(f32 dt);
+void collide_objects(f32 dt);
 
 #endif

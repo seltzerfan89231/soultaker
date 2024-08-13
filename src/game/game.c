@@ -41,6 +41,7 @@ void game_update(f32 dt)
     game_time += dt;
 
     update_objects(dt);
+    collide_objects(dt);
 
     entity_array_update(&entities);
     projectile_array_update(&projectiles);
