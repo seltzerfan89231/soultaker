@@ -3,26 +3,30 @@
 #include <stdio.h>
 #include <assert.h>
 #include <sys/time.h>
-#include <pthread.h>    
+#include <pthread.h>   
+#include <semaphore.h>  
 
 f64 game_time;
 f64 game_dt;
 bool game_paused;
+
 static pthread_t thread_id;
-bool kill_thread;
+static bool kill_thread;
+static sem_t mutex;
 
 extern void collide_objects(f32 dt);
 extern void update_objects(f32 dt);
 
-void *game_update(void *vargp)
+static void *game_update(void *vargp)
 {
     while (TRUE) {
-
         if (kill_thread)
             pthread_exit(NULL);
 
         if (game_paused)
             continue;
+        
+        sem_wait(&mutex);
 
         game_time += game_dt;
 
@@ -42,6 +46,8 @@ void *game_update(void *vargp)
         long microseconds = end.tv_usec - start.tv_usec;
         double time_taken = seconds + microseconds*1e-6;
         game_dt = time_taken;
+
+        sem_post(&mutex); 
     }
 }
 
@@ -57,6 +63,7 @@ void game_init(void)
     walls = wall_array_create(0);
     game_paused = TRUE;
     kill_thread = FALSE;
+    sem_init(&mutex, 0, 1);
     pthread_create(&thread_id, NULL, game_update, NULL);
 }
 
@@ -65,12 +72,14 @@ void game_setup(u32 level)
     game_time = 0;
     game_dt = 0;
     game_paused = TRUE;
+    sem_wait(&mutex);
     switch (level) {
         case 1:
             load_level1(); break;
         case 2:
             load_level2(); break;
     }
+    sem_post(&mutex);
     game_paused = FALSE;
 }
 
@@ -94,6 +103,8 @@ void game_destroy(void)
 {
     kill_thread = TRUE;
     pthread_join(thread_id, NULL);
+    sem_destroy(&mutex);
+
     tile_array_destroy(&tiles);
     wall_array_destroy(&walls);
     entity_array_destroy(&entities);

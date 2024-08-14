@@ -79,7 +79,7 @@ void load_level2(void)
         }
     }
             
-    player.entity = entity_create(KNIGHT, 1);
+    /* player.entity = entity_create(KNIGHT, 1);
     player.weapon.id = 0;
     player.weapon.tex = SWORD_1_TEX;
     player.entity->position = vec3f_create(15.0f, 0.0f, 15.0f);
@@ -101,7 +101,7 @@ void load_level2(void)
 
     Parstacle *parstacle = parstacle_create();
     parstacle->position = vec3f_create(20.0f, 0.0f, 20.0f);
-    parstacle->scale = 1.8f;
+    parstacle->scale = 1.8f; */
 
     parstacle_array_update(&parstacles);
     obstacle_array_update(&obstacles);
