@@ -19,7 +19,6 @@ void window_init(void)
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     window.handle = glfwCreateWindow(DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HEIGHT, "soultaker", NULL, NULL);
-    window.cursor.position = vec2f_create(window.width / 2, window.height / 2);
     glfwGetWindowSize(window.handle, &window.width, &window.height);
     glfwSetWindowAspectRatio(window.handle, 16, 9);
     window.aspect_ratio = (f32)window.width / window.height;
@@ -77,19 +76,29 @@ void error_callback(int x, const char *message)
     printf("%d\n%s\n", x, message);
 }
 
+void window_close(void) 
+{
+    glfwDestroyCursor(window.cursor.handle);
+    glfwSetWindowShouldClose(window.handle, 1); 
+}
+
 bool window_closed(void) { return glfwWindowShouldClose(window.handle); }
-void window_close(void) { glfwSetWindowShouldClose(window.handle, 1); }
 bool window_key_pressed(GLenum key) { return glfwGetKey(window.handle, key) == GLFW_PRESS; }
 bool window_mouse_button_pressed(GLenum button) { return glfwGetMouseButton(window.handle, button) == GLFW_PRESS; }
 
 static void load_images()
 {
-    GLFWimage images[2];
+    GLFWimage images[2], cursor_image;
 
     images[0].pixels = stbi_load("assets/textures/my_icon.png", &images[0].width, &images[0].height, 0, 4);
     images[1].pixels = stbi_load("assets/textures/my_icon_small.png", &images[1].width, &images[1].height, 0, 4);
-    
     glfwSetWindowIcon(window.handle, 2, images);
+
+    cursor_image.pixels = stbi_load("assets/textures/cursor.png", &cursor_image.width, &cursor_image.height, 0, 4);
+    window.cursor.handle = glfwCreateCursor(&cursor_image, 8, 8);
+    glfwSetCursor(window.handle, window.cursor.handle);
+
     stbi_image_free(images[0].pixels);
     stbi_image_free(images[1].pixels);
+    stbi_image_free(cursor_image.pixels);
 }

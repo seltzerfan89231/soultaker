@@ -2,9 +2,48 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <assert.h>
+#include <sys/time.h>
+#include <pthread.h>    
 
 f64 game_time;
+f64 game_dt;
 bool game_paused;
+static pthread_t thread_id;
+bool kill_thread;
+
+extern void collide_objects(f32 dt);
+extern void update_objects(f32 dt);
+
+void *game_update(void *vargp)
+{
+    while (TRUE) {
+
+        if (kill_thread)
+            pthread_exit(NULL);
+
+        if (game_paused)
+            continue;
+
+        game_time += game_dt;
+
+        struct timeval start, end;
+        gettimeofday(&start, NULL);
+
+        update_objects(game_dt);
+        collide_objects(game_dt);
+        
+        entity_array_update(&entities);
+        projectile_array_update(&projectiles);
+        particle_array_update(&particles);
+        parjicle_array_update(&parjicles);
+        
+        gettimeofday(&end, NULL);
+        long seconds = end.tv_sec - start.tv_sec;
+        long microseconds = end.tv_usec - start.tv_usec;
+        double time_taken = seconds + microseconds*1e-6;
+        game_dt = time_taken;
+    }
+}
 
 void game_init(void)
 {
@@ -17,36 +56,22 @@ void game_init(void)
     tiles = tile_array_create(0);
     walls = wall_array_create(0);
     game_paused = TRUE;
+    kill_thread = FALSE;
+    pthread_create(&thread_id, NULL, game_update, NULL);
 }
 
 void game_setup(u32 level)
 {
     game_time = 0;
-    game_paused = FALSE;
+    game_dt = 0;
+    game_paused = TRUE;
     switch (level) {
         case 1:
             load_level1(); break;
         case 2:
             load_level2(); break;
     }
-}
-
-extern void collide_objects(f32 dt);
-extern void update_objects(f32 dt);
-
-void game_update(f32 dt)
-{
-    if (game_paused)
-        return;
-    game_time += dt;
-
-    update_objects(dt);
-    collide_objects(dt);
-
-    entity_array_update(&entities);
-    projectile_array_update(&projectiles);
-    particle_array_update(&particles);
-    parjicle_array_update(&parjicles);
+    game_paused = FALSE;
 }
 
 void game_set_direction(vec3f direction)
@@ -67,6 +92,8 @@ void game_set_target(vec3f target)
 
 void game_destroy(void)
 {
+    kill_thread = TRUE;
+    pthread_join(thread_id, NULL);
     tile_array_destroy(&tiles);
     wall_array_destroy(&walls);
     entity_array_destroy(&entities);
@@ -133,9 +160,6 @@ vec3f game_get_player_position(void)
 
 void game_pause(void)
 {
-    if (player.entity == NULL || game_paused)
-        return;
-    assert(player.entity != NULL);
     game_paused = 1 - game_paused;
 }
 

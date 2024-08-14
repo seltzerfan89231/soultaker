@@ -176,7 +176,7 @@ static void update_projectiles(f32 dt)
     for (i32 i = 0; i < projectiles.length; i++) {
         Projectile *proj = projectiles.buffer[i];
         projectile_update(proj, dt);
-        if (proj->lifetime <= 0.3)
+        if (proj->lifetime <= 0)
             projectile_destroy(proj, i), i--;
     }
 }

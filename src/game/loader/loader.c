@@ -83,6 +83,7 @@ void load_level2(void)
     player.weapon.id = 0;
     player.weapon.tex = SWORD_1_TEX;
     player.entity->position = vec3f_create(15.0f, 0.0f, 15.0f);
+    player.entity->speed = 8;
 
     Entity* entity = entity_create(ENEMY, 0);
     entity->position = vec3f_create(20, 0, 15);

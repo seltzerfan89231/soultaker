@@ -32,7 +32,6 @@ static void state_update(void)
 {
     if (game_paused)
         return;
-    game_update(window.dt);
     if (player.entity != NULL)
         camera_set_target(game_get_player_position());
     data_update();

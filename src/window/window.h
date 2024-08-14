@@ -12,6 +12,7 @@
 typedef struct {
     GLFWwindow *handle;
     struct {
+        GLFWcursor *handle;
         vec2f position;
     } cursor;
     f32 aspect_ratio, last_frame, dt, fps;

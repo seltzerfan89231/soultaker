@@ -7,7 +7,6 @@
 
 void game_init(void);
 void game_setup(u32 level);
-void game_update(f32 dt);
 void game_set_target(vec3f target);
 void game_set_direction(vec3f direction);
 void game_destroy(void);
