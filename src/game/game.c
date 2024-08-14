@@ -191,7 +191,7 @@ void game_heal(void)
     if (player.entity == NULL || game_paused)
         return;
     assert(player.entity != NULL);
-    player.entity->health = player.entity->max_health;
+    player.entity->health = 0;
 }
 
 f32 game_get_player_health_ratio(void)
@@ -215,4 +215,14 @@ u32 game_get_weapon_tex(void)
     if (game_paused)
         return 0;
     return player.weapon.tex;
+}
+
+void game_wait(void)
+{
+    sem_wait(&mutex);
+}
+
+void game_post(void)
+{
+    sem_post(&mutex);
 }

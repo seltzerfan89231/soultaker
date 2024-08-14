@@ -30,6 +30,10 @@ void enemy_create(Entity *entity)
 
 void enemy_update(Entity *entity)
 {
+    if (player.entity == NULL) {
+        entity->direction = vec3f_create(0, 0, 0);
+        return;
+    }
     entity->speed = 0.5;
     entity->direction = vec3f_normalize(vec3f_sub(player.entity->position, entity->position));
     entity->facing = vec2f_create(entity->direction.x, entity->direction.z);

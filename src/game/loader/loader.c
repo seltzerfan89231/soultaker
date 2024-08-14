@@ -79,11 +79,14 @@ void load_level2(void)
         }
     }
             
-    /* player.entity = entity_create(KNIGHT, 1);
+    player.entity = entity_create(KNIGHT, TRUE);
+    player.entity->speed = 8;
+    player.entity->health = player.entity->max_health = 10;
+    player.mana = player.max_mana = 10;
+    player.mana_regen = player.health_regen = 0.5;
     player.weapon.id = 0;
     player.weapon.tex = SWORD_1_TEX;
-    player.entity->position = vec3f_create(15.0f, 0.0f, 15.0f);
-    player.entity->speed = 8;
+    player.entity->position = vec3f_create(20.0f, 0.0f, 20.0f);
 
     Entity* entity = entity_create(ENEMY, 0);
     entity->position = vec3f_create(20, 0, 15);
@@ -101,7 +104,7 @@ void load_level2(void)
 
     Parstacle *parstacle = parstacle_create();
     parstacle->position = vec3f_create(20.0f, 0.0f, 20.0f);
-    parstacle->scale = 1.8f; */
+    parstacle->scale = 1.8f;
 
     parstacle_array_update(&parstacles);
     obstacle_array_update(&obstacles);

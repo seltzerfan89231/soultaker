@@ -127,6 +127,7 @@ void data_destroy(void)
 
 void data_update(void)
 {
+    game_wait();
     data_update_entities();
     data_update_projectiles();
     data_update_parjicles();
@@ -135,6 +136,7 @@ void data_update(void)
     data_update_walls();
     data_update_parstacles();
     data_update_obstacles();
+    game_post();
 }
 
 #define _DATA_UPDATE(_utype, _ltype, _ltypes) \
