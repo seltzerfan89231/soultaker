@@ -15,6 +15,7 @@ typedef struct {
 
 Tile* tile_create(u32 id, f32 x, f32 z);
 void tile_destroy(Tile* tile, u32 idx);
+void destroy_all_tiles(void);
 
 _ARRAY_DECLARE(Tile, tile)
 extern TileArray tiles;

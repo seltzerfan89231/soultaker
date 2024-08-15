@@ -1,12 +1,12 @@
 #include "../component.h"
 #include <stdio.h>
 
-void comp_start_button_update(Component *comp)
+void comp_singleplayer_update(Component *comp)
 {
     
 }
 
-void comp_start_button_mouse_button_callback(Component *comp, i32 button, i32 action)
+void comp_singleplayer_mouse_button_callback(Component *comp, i32 button, i32 action)
 {
     if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
         game_setup(1);
@@ -48,18 +48,16 @@ void comp_start_button_mouse_button_callback(Component *comp, i32 button, i32 ac
         component_attach(comp_root, manabar);
         Component *death_message = component_create(0.4, 0.93, 0.3, 0.05, NO_TEX);
         death_message->id = COMP_DEATH;
-        death_message->show_text = FALSE;
-        component_set_text(death_message, 14, "YOU DIED");
         component_attach(comp_root, death_message);
     }
 }
 
-void comp_start_button_key_callback(Component *comp, i32 key, i32 scancode, i32 action, i32 mods)
+void comp_singleplayer_key_callback(Component *comp, i32 key, i32 scancode, i32 action, i32 mods)
 {
 
 }
 
-void comp_start_button_hover_callback(Component *comp, i32 action)
+void comp_singleplayer_hover_callback(Component *comp, i32 action)
 {
     
 }

@@ -43,4 +43,11 @@ void projectile_destroy(Projectile* projectile, u32 idx)
     free(projectile);
 }
 
+void destroy_all_projectiles(void)
+{
+    for (i32 i = 0; i < projectiles.length; i++)
+        free(projectiles.buffer[i]);
+    projectile_array_destroy(&projectiles);
+}
+
 _ARRAY_DEFINE(Projectile, projectile)

@@ -19,6 +19,7 @@ typedef struct {
 
 Wall* wall_create(walltype type, f32 x, f32 z, f32 height);
 void wall_destroy(Wall* wall, u32 idx);
+void destroy_all_walls(void);
 
 _ARRAY_DECLARE(Wall, wall)
 extern WallArray walls;

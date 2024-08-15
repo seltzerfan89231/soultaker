@@ -24,4 +24,12 @@ void wall_destroy(Wall* wall, u32 idx)
     free(wall);
 }
 
+void destroy_all_walls(void)
+{
+    for (i32 i = 0; i < walls.length; i++)
+        free(walls.buffer[i]);
+    wall_array_destroy(&walls);
+}
+
+
 _ARRAY_DEFINE(Wall, wall)

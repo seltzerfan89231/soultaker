@@ -32,4 +32,11 @@ void particle_destroy(Particle *particle, u32 idx)
     free(particle);
 }
 
+void destroy_all_particles(void)
+{
+    for (i32 i = 0; i < particles.length; i++)
+        free(particles.buffer[i]);
+    particle_array_destroy(&particles);
+}
+
 _ARRAY_DEFINE(Particle, particle)

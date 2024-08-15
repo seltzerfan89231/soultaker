@@ -32,4 +32,11 @@ void parjicle_destroy(Parjicle *parj, u32 idx)
     free(parj);
 }
 
+void destroy_all_parjicles(void)
+{
+    for (i32 i = 0; i < parjicles.length; i++)
+        free(parjicles.buffer[i]);
+    parjicle_array_destroy(&parjicles);
+}
+
 _ARRAY_DEFINE(Parjicle, parjicle)

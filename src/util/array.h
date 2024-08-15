@@ -61,8 +61,6 @@
     } \
     void _ltype##_array_destroy(_type##Array *array) { \
         _ltype##_array_update(array); \
-        while (!_ltype##_array_empty(array)) \
-            _ltype##_destroy(array->buffer[0], 0); \
         array->length = 0; \
         free(array->buffer); \
     }

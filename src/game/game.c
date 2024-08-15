@@ -46,7 +46,7 @@ static void *game_update(void *vargp)
         long microseconds = end.tv_usec - start.tv_usec;
         double time_taken = seconds + microseconds*1e-6;
         game_dt = time_taken;
-
+        
         sem_post(&mutex); 
     }
 }
@@ -105,14 +105,14 @@ void game_destroy(void)
     pthread_join(thread_id, NULL);
     sem_destroy(&mutex);
 
-    tile_array_destroy(&tiles);
-    wall_array_destroy(&walls);
-    entity_array_destroy(&entities);
-    projectile_array_destroy(&projectiles);
-    particle_array_destroy(&particles);
-    obstacle_array_destroy(&obstacles);
-    parstacle_array_destroy(&parstacles);
-    parjicle_array_destroy(&parjicles);
+    destroy_all_tiles();
+    destroy_all_walls();
+    destroy_all_entities();
+    destroy_all_projectiles();
+    destroy_all_particles();
+    destroy_all_obstacles();
+    destroy_all_parstacles();
+    destroy_all_parjicles();
 }
 
 void game_shoot(vec2f cursor_position, f32 rotation, f32 tilt, f32 zoom, f32 ar)

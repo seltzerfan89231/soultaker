@@ -28,4 +28,11 @@ void tile_destroy(Tile* tile, u32 idx)
     free(tile);
 }
 
+void destroy_all_tiles(void)
+{
+    for (i32 i = 0; i < tiles.length; i++)
+        free(tiles.buffer[i]);
+    tile_array_destroy(&tiles);
+}
+
 _ARRAY_DEFINE(Tile, tile)

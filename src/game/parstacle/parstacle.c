@@ -20,4 +20,11 @@ void parstacle_destroy(Parstacle* parstacle, u32 idx)
     free(parstacle);
 }
 
+void destroy_all_parstacles(void)
+{
+    for (i32 i = 0; i < parstacles.length; i++)
+        free(parstacles.buffer[i]);
+    parstacle_array_destroy(&parstacles);
+}
+
 _ARRAY_DEFINE(Parstacle, parstacle)

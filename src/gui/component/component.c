@@ -18,7 +18,7 @@ Component* component_create(f32 x, f32 y, f32 w, f32 h, u32 tex)
     comp->hoverable = FALSE;
     comp->hovered = FALSE;
     comp->relative = TRUE;
-    comp->show_text = TRUE;
+    comp->center_text = FALSE;
     comp->update_children = TRUE;
     comp->text = NULL;
     comp->id = COMP_DEFAULT;
@@ -80,6 +80,14 @@ void component_set_text(Component *comp, u32 font_size, char *text)
     comp->text = copied_text;
 }
 
+void component_remove_text(Component *comp)
+{
+    if (comp->text == NULL) 
+        return;
+    free(comp->text);
+    comp->text = NULL;
+}
+
 #define _COMP_MB_CALLBACK(_type, _ltype) \
     case COMP_##_type : comp_##_ltype##_mouse_button_callback(comp, button, action); break;
 
@@ -91,10 +99,12 @@ void component_mouse_button_callback(Component *comp, i32 button, i32 action)
         _COMP_MB_CALLBACK(HEALTHBAR, healthbar)
         _COMP_MB_CALLBACK(POPUP, popup)
         _COMP_MB_CALLBACK(TEXTBOX, textbox)
-        _COMP_MB_CALLBACK(START_BUTTON, start_button)
-        _COMP_MB_CALLBACK(SETTINGS, settings)
+        _COMP_MB_CALLBACK(SINGLEPLAYER, singleplayer)
+        _COMP_MB_CALLBACK(MULTIPLAYER, multiplayer)
         _COMP_MB_CALLBACK(DEATH, death)
         _COMP_MB_CALLBACK(MANABAR, manabar)
+        _COMP_MB_CALLBACK(HOST, host)
+        _COMP_MB_CALLBACK(JOIN, join)
     }
 }
 
@@ -109,10 +119,12 @@ void component_update(Component *comp)
         _COMP_UPDATE(HEALTHBAR, healthbar)
         _COMP_UPDATE(POPUP, popup)
         _COMP_UPDATE(TEXTBOX, textbox)
-        _COMP_UPDATE(START_BUTTON, start_button)
-        _COMP_UPDATE(SETTINGS, settings)
+        _COMP_UPDATE(SINGLEPLAYER, singleplayer)
+        _COMP_UPDATE(MULTIPLAYER, multiplayer)
         _COMP_UPDATE(DEATH, death)
         _COMP_UPDATE(MANABAR, manabar)
+        _COMP_UPDATE(HOST, host)
+        _COMP_UPDATE(JOIN, join)
     }
 }
 
@@ -132,10 +144,12 @@ void component_hover_callback(Component *comp, i32 action)
         _COMP_HOVER_CALLBACK(HEALTHBAR, healthbar)
         _COMP_HOVER_CALLBACK(POPUP, popup)
         _COMP_HOVER_CALLBACK(TEXTBOX, textbox)
-        _COMP_HOVER_CALLBACK(START_BUTTON, start_button)
-        _COMP_HOVER_CALLBACK(SETTINGS, settings)
+        _COMP_HOVER_CALLBACK(SINGLEPLAYER, singleplayer)
+        _COMP_HOVER_CALLBACK(MULTIPLAYER, multiplayer)
         _COMP_HOVER_CALLBACK(DEATH, death)
         _COMP_HOVER_CALLBACK(MANABAR, manabar)
+        _COMP_HOVER_CALLBACK(HOST, host)
+        _COMP_HOVER_CALLBACK(JOIN, join)
     }
 }
 
@@ -150,9 +164,11 @@ void component_key_callback(Component *comp, i32 key, i32 scancode, i32 action, 
         _COMP_KEY_CALLBACK(HEALTHBAR, healthbar)
         _COMP_KEY_CALLBACK(POPUP, popup)
         _COMP_KEY_CALLBACK(TEXTBOX, textbox)
-        _COMP_KEY_CALLBACK(START_BUTTON, start_button)
-        _COMP_KEY_CALLBACK(SETTINGS, settings)
+        _COMP_KEY_CALLBACK(SINGLEPLAYER, singleplayer)
+        _COMP_KEY_CALLBACK(MULTIPLAYER, multiplayer)
         _COMP_KEY_CALLBACK(DEATH, death)
         _COMP_KEY_CALLBACK(MANABAR, manabar)
+        _COMP_KEY_CALLBACK(HOST, host)
+        _COMP_KEY_CALLBACK(JOIN, join)
     }
 }

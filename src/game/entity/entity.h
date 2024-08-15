@@ -29,6 +29,7 @@ void entity_update(Entity* entity, f32 dt);
 void entity_damage(Entity *entity, u32 damage);
 void entity_set_direction(Entity *entity, vec3f direction);
 void entity_destroy(Entity* entity, u32 idx);
+void destroy_all_entities(void);
 
 _ARRAY_DECLARE(Entity, entity)
 extern EntityArray entities;

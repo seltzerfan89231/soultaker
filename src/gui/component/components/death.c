@@ -3,9 +3,9 @@
 void comp_death_update(Component *comp)
 {
     if (player.entity == NULL)
-        comp->show_text = TRUE;
+        component_set_text(comp, 14, "YOU DIED");
     else
-        comp->show_text = FALSE;
+        component_remove_text(comp);
 }
 
 void comp_death_mouse_button_callback(Component *comp, i32 button, i32 action)

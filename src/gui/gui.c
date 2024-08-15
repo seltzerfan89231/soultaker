@@ -24,23 +24,28 @@ void gui_init(void)
     comp_root->a = 0;
     gui.max_length_changed = TRUE;
 
-    Component *title_card = component_create(window.aspect_ratio / 2 - 0.2, 0.7, 0.4, 0.4 * 2.0/3, SOULTAKER_LOGO_TEX);
-    title_card->hoverable = TRUE;
-    title_card->interactable = TRUE;
-    title_card->id = COMP_START_BUTTON;
-    component_attach(comp_root, title_card);
+    Component *singleplayer = component_create(window.aspect_ratio / 2 - 0.2, 0.7, 0.4, 0.4 * 2.0/3, EMPTY_TEX);
+    singleplayer->a = 0.2;
+    component_set_text(singleplayer, 14, "SINGLEPLAYER");
+    singleplayer->center_text = TRUE;
+    singleplayer->hoverable = TRUE;
+    singleplayer->interactable = TRUE;
+    singleplayer->id = COMP_SINGLEPLAYER;
+    component_attach(comp_root, singleplayer);
 
-    Component *settings_button = component_create(0.4, 0.2, 0.2, 0.2, BUTTON_TEX);
-    settings_button->interactable = TRUE;
-    settings_button->id = COMP_SETTINGS;
-    component_attach(comp_root, settings_button);
+    Component *multiplayer = component_create(window.aspect_ratio / 2 - 0.2, 0.3, 0.4, 0.4 * 2.0/3, EMPTY_TEX);
+    multiplayer->a = 0.2;
+    component_set_text(multiplayer, 14, "MULTIPLAYER");
+    multiplayer->interactable = TRUE;
+    multiplayer->id = COMP_MULTIPLAYER;
+    component_attach(comp_root, multiplayer);
 }
 
 #define Z gui.buffer[gui.length++]
 
 void gui_update_data_add_text(Component *comp, f32 x, f32 y, f32 w, f32 h)
 {
-    if (comp->text == NULL || comp->show_text == FALSE)
+    if (comp->text == NULL)
         return;
     f32 pixel_size, px, py, bx, by, ox, oy, lx, ly, lw, lh,adv;
     f32 new_x1, new_y1, new_x2, new_y2, win_x1, win_x2, win_y1, win_y2;
@@ -57,17 +62,16 @@ void gui_update_data_add_text(Component *comp, f32 x, f32 y, f32 w, f32 h)
         gui.max_length_changed = TRUE;
     }
     for (i = 0; i < length; i++) {
-        if (text[i] == '\n' || (text[i] != ' ' && ox > 1))
-            ox = 0, oy += lh + py;
-        if (text[i] == '\n')
-            continue;
-
         Character c = char_map[text[i]];
         lw = pixel_size / w * c.size.x / c.size.y;
         lh = pixel_size / h;
         bx = pixel_size * c.bearing.x / w;
         by = pixel_size * c.bearing.y / h;
         adv = pixel_size * c.advance / w;
+        if (text[i] == '\n' || (text[i] != ' ' && ox + adv > 1))
+            ox = 0, oy += lh + py;
+        if (text[i] == '\n')
+            continue;
         lx = ox + bx;
         ly = 1 - lh - by - oy;
         ox += adv;

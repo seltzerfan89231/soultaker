@@ -14,6 +14,7 @@ typedef struct {
 
 Parstacle* parstacle_create(void);
 void parstacle_destroy(Parstacle* parstacle, u32 idx);
+void destroy_all_parstacles(void);
 
 _ARRAY_DECLARE(Parstacle, parstacle)
 extern ParstacleArray parstacles;

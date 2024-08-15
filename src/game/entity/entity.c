@@ -81,4 +81,11 @@ void entity_destroy(Entity* entity, u32 idx)
     free(entity);
 }
 
+void destroy_all_entities(void)
+{
+    for (i32 i = 0; i < entities.length; i++)
+        free(entities.buffer[i]);
+    entity_array_destroy(&entities);
+}
+
 _ARRAY_DEFINE(Entity, entity)

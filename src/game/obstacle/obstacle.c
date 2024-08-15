@@ -21,4 +21,11 @@ void obstacle_destroy(Obstacle* obstacle, u32 idx)
     free(obstacle);
 }
 
+void destroy_all_obstacles(void)
+{
+    for (i32 i = 0; i < obstacles.length; i++)
+        free(obstacles.buffer[i]);
+    obstacle_array_destroy(&obstacles);
+}
+
 _ARRAY_DEFINE(Obstacle, obstacle)
