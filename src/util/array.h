@@ -63,6 +63,7 @@
         _ltype##_array_update(array); \
         array->length = 0; \
         free(array->buffer); \
+        array->buffer = NULL; \
     }
 
 #endif
