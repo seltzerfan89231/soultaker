@@ -5,9 +5,10 @@
 #include <sys/time.h>
 #include <pthread.h>   
 #include <semaphore.h>  
+#include <Windows.h>
 
-f64 game_time;
-f64 game_dt;
+f32 game_time;
+f32 game_dt;
 bool game_paused;
 
 static pthread_t thread_id;
@@ -25,29 +26,27 @@ static void *game_update(void *vargp)
 
         if (game_paused)
             continue;
-        
-        sem_wait(&mutex);
-
-        game_time += game_dt;
 
         struct timeval start, end;
-        gettimeofday(&start, NULL);
+        i64 seconds, microseconds;
 
-        update_objects(game_dt);
-        collide_objects(game_dt);
-        
-        entity_array_update(&entities);
-        projectile_array_update(&projectiles);
-        particle_array_update(&particles);
-        parjicle_array_update(&parjicles);
-        
+        if (game_dt > 0.0001) {
+            game_time += game_dt;
+            sem_wait(&mutex);
+            gettimeofday(&start, NULL);
+            update_objects(game_dt);
+            collide_objects(game_dt);
+            entity_array_update(&entities);
+            projectile_array_update(&projectiles);
+            particle_array_update(&particles);
+            parjicle_array_update(&parjicles);
+            sem_post(&mutex);
+        }
+
         gettimeofday(&end, NULL);
-        long seconds = end.tv_sec - start.tv_sec;
-        long microseconds = end.tv_usec - start.tv_usec;
-        double time_taken = seconds + microseconds*1e-6;
-        game_dt = time_taken;
-        
-        sem_post(&mutex); 
+        seconds = end.tv_sec - start.tv_sec;
+        microseconds = end.tv_usec - start.tv_usec;
+        game_dt = seconds + microseconds*1e-6;
     }
 }
 

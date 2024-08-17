@@ -43,7 +43,7 @@ void gui_init(void)
 
     Component *test = component_create(0.05, 0.3, 0.3, 0.4, EMPTY_TEX);
     test->a = 0.2;
-    component_set_text(test, 14, "THE QUICK BROWN FOX JUMPED OVER THE LAZY DOG\n\nthe quick brown fox jumped over the lazy dog");
+    component_set_text(test, 14, "T\tHE QUICK BROWN FOX JUMPED OVER THE LAZY DOG\n\nthe \"quick\" \'brown\' fox jumped over the lazy dog\n1+2-3*4=-9\n$+-*=%\"\'@&_#(),.;:?!\\|{}<>[]`^~");
     component_attach(comp_root, test);
 }
 
@@ -64,7 +64,7 @@ void gui_update_data_add_text(Component *comp, f32 x, f32 y, f32 w, f32 h)
         gui.max_length_changed = TRUE;
     }
 
-    pixel_size = (f32)comp->font_size / window.height / GLYPH_HEIGHT;
+    pixel_size = (f32)comp->font_size / (DEFAULT_WINDOW_HEIGHT) / GLYPH_HEIGHT;
     pixel_size_x = pixel_size / w;
     pixel_size_y = pixel_size / h;
     glyph_size_y = pixel_size_y * GLYPH_HEIGHT;

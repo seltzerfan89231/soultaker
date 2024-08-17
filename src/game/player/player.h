@@ -6,7 +6,7 @@
 #include "../entity/entity.h"
 #include "../projectile/projectile.h"
 
-extern f64 game_time;
+extern f32 game_time;
 
 typedef struct {
     Entity *entity;

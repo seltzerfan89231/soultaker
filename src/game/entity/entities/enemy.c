@@ -1,6 +1,8 @@
 #include "../entity.h"
 #include "../../player/player.h"
 
+extern f32 game_time;
+
 #define NUM_STATES 1
 #define IDLE   0
 

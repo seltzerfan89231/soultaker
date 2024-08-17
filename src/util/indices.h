@@ -107,7 +107,7 @@
 
 
 #pragma region GUI_TEXTURES
-#define NUM_GUI_TEXTURES 69
+#define NUM_GUI_TEXTURES 100
 #define NO_TEX           0
 #define EMPTY_TEX        1
 #define BUTTON_TEX       2
@@ -150,7 +150,7 @@
 #define NUM_8_TEX 39
 #define NUM_9_TEX 40
 #define SOULTAKER_LOGO_TEX 41
-#define FSLASH_TEX 42
+#define FORWARDSLASH_TEX 42
 #define LOWER_A_TEX 43
 #define LOWER_B_TEX 44
 #define LOWER_C_TEX 45
@@ -177,6 +177,37 @@
 #define LOWER_X_TEX 66
 #define LOWER_Y_TEX 67
 #define LOWER_Z_TEX 68
+#define AMPERSAND_TEX 69
+#define APOSTROPHE_TEX 70
+#define ASTERISK_TEX 71
+#define AT_TEX 72
+#define BACKSLASH_TEX 73
+#define COLON_TEX 74
+#define COMMA_TEX 75
+#define DOLLAR_TEX 76
+#define EQUALS_TEX 77
+#define EXCLAMATIONMARK_TEX 78
+#define GREATERTHAN_TEX 79
+#define HASH_TEX 80
+#define LEFTCURLYBRACKET_TEX 81
+#define LEFTPARENTHESES_TEX 82
+#define LEFTSQUAREBRACKET_TEX 83
+#define LESSTHAN_TEX 84
+#define MINUS_TEX 85
+#define PERCENT_TEX 86
+#define PERIOD_TEX 87
+#define PIPE_TEX 88
+#define PLUS_TEX 89
+#define QUESTIONMARK_TEX 90
+#define QUOTE_TEX 91
+#define RIGHTCURLYBRACKET_TEX 92
+#define RIGHTPARENTHESES_TEX 93
+#define RIGHTSQUAREBRACKET_TEX 94
+#define SEMICOLON_TEX 95
+#define UNDERSCORE_TEX 96
+#define BACKTICK_TEX 97
+#define CARROT_TEX 98
+#define TILDE_TEX 99
 #pragma endregion
 
 #endif
