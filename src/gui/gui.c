@@ -41,7 +41,8 @@ void gui_init(void)
     multiplayer->id = COMP_MULTIPLAYER;
     component_attach(comp_root, multiplayer);
 
-    Component *test = component_create(0, 0.3, 0.3, 0.4, NO_TEX);
+    Component *test = component_create(0, 0.3, 0.3, 0.4, EMPTY_TEX);
+    test->a = 0.2;
     component_set_text(test, 14, "THE QUICK BROWN FOX JUMPED OVER THE LAZY DOG");
     component_attach(comp_root, test);
 }
@@ -63,37 +64,37 @@ void gui_update_data_add_text(Component *comp, f32 x, f32 y, f32 w, f32 h)
         gui.max_length_changed = TRUE;
     }
 
-    pixel_size = (f32)comp->font_size / (DEFAULT_WINDOW_HEIGHT);
+    pixel_size = (f32)comp->font_size / (DEFAULT_WINDOW_HEIGHT) / GLYPH_HEIGHT;
     pixel_size_x = pixel_size / w;
     pixel_size_y = pixel_size / h;
-    px = 0;
-    py = pixel_size_y * 0.5;
-    lh = pixel_size_y;
+    px = pixel_size_x;
+    py = pixel_size_y * 2;
     ox = oy = 0;    
     for (left = 0, right = 0; right < length; right++) {
         f32 test_ox = ox;
         while (right < length && !isspace(text[right])) {
             Character c = char_map[text[right]];
-            test_ox += pixel_size_x * c.advance / c.size.y + px;
+            test_ox += pixel_size_x * c.advance + px;
             right++;
         }
         if (right > left)
             test_ox -= px;
         if (test_ox > 1)
-            ox = 0, oy += lh + py;
+            ox = 0, oy += pixel_size_y * GLYPH_HEIGHT + py;
         while (left < length && left <= right) {
             if (text[left] == '\n') {
-                ox = 0, oy += lh + py;
+                ox = 0, oy += pixel_size_y * GLYPH_HEIGHT + py;
                 left++;
                 continue;
             }
             Character c = char_map[text[left]];
-            lw = pixel_size_x * c.size.x / c.size.y;
+            lw = pixel_size_x * c.size.x;
+            lh = pixel_size_y * c.size.y;
             bx = pixel_size_x * c.bearing.x;
             by = pixel_size_y * c.bearing.y;
-            adv = pixel_size_x * c.advance / c.size.y;
+            adv = pixel_size_x * c.advance;
             lx = ox + bx;
-            ly = 1 - lh - by - oy;
+            ly = 1 - pixel_size_y * GLYPH_HEIGHT + by - oy;
             ox += adv + px;
             new_x1 = lx * w + x, new_x2 = (lx + lw) * w + x;
             new_y1 = ly * h + y, new_y2 = (ly + lh) * h + y;

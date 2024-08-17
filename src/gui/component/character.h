@@ -4,11 +4,13 @@
 #include "../../util/type.h"
 #include "../../util/indices.h"
 
+#define GLYPH_HEIGHT 7
+
 typedef struct {
     u32 tex;
-    struct { u8 x, y; } size;
-    struct { u8 x, y; } bearing;
-    u8 advance;
+    struct { i8 x, y; } size;
+    struct { i8 x, y; } bearing;
+    i8 advance;
 } Character;
 
 extern Character char_map[128];
