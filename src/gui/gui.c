@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <ctype.h>
 
 GUI gui;
 extern Window window;
@@ -39,6 +40,10 @@ void gui_init(void)
     multiplayer->interactable = TRUE;
     multiplayer->id = COMP_MULTIPLAYER;
     component_attach(comp_root, multiplayer);
+
+    Component *test = component_create(0, 0.3, 0.3, 0.4, NO_TEX);
+    component_set_text(test, 14, "THE QUICK BROWN FOX JUMPED OVER THE LAZY DOG");
+    component_attach(comp_root, test);
 }
 
 #define Z gui.buffer[gui.length++]
@@ -47,44 +52,61 @@ void gui_update_data_add_text(Component *comp, f32 x, f32 y, f32 w, f32 h)
 {
     if (comp->text == NULL)
         return;
-    f32 pixel_size, px, py, bx, by, ox, oy, lx, ly, lw, lh,adv;
+    f32 pixel_size, pixel_size_x, pixel_size_y, px, py, bx, by, ox, oy, lx, ly, lw, lh,adv;
     f32 new_x1, new_y1, new_x2, new_y2, win_x1, win_x2, win_y1, win_y2;
-    u32 length, i;
+    u32 length, left, right;
     char *text = comp->text;
-    pixel_size = (f32)comp->font_size / (DEFAULT_WINDOW_HEIGHT);
-    px = pixel_size * 0.5 / w;
-    py = pixel_size * 0.5 / h;
     length = strlen(text);
-    ox = oy = 0;
     if (gui.length + 54 * length >= gui.max_length) {
         gui.max_length += 54 * length;
         gui.buffer = realloc(gui.buffer, gui.max_length * sizeof(f32));
         gui.max_length_changed = TRUE;
     }
-    for (i = 0; i < length; i++) {
-        Character c = char_map[text[i]];
-        lw = pixel_size / w * c.size.x / c.size.y;
-        lh = pixel_size / h;
-        bx = pixel_size * c.bearing.x / w;
-        by = pixel_size * c.bearing.y / h;
-        adv = pixel_size * c.advance / w;
-        if (text[i] == '\n' || (text[i] != ' ' && ox + adv > 1))
+
+    pixel_size = (f32)comp->font_size / (DEFAULT_WINDOW_HEIGHT);
+    pixel_size_x = pixel_size / w;
+    pixel_size_y = pixel_size / h;
+    px = 0;
+    py = pixel_size_y * 0.5;
+    lh = pixel_size_y;
+    ox = oy = 0;    
+    for (left = 0, right = 0; right < length; right++) {
+        f32 test_ox = ox;
+        while (right < length && !isspace(text[right])) {
+            Character c = char_map[text[right]];
+            test_ox += pixel_size_x * c.advance / c.size.y + px;
+            right++;
+        }
+        if (right > left)
+            test_ox -= px;
+        if (test_ox > 1)
             ox = 0, oy += lh + py;
-        if (text[i] == '\n')
-            continue;
-        lx = ox + bx;
-        ly = 1 - lh - by - oy;
-        ox += adv;
-        new_x1 = lx * w + x, new_x2 = (lx + lw) * w + x;
-        new_y1 = ly * h + y, new_y2 = (ly + lh) * h + y;
-        win_x1 = 2 * (new_x1 / window.aspect_ratio - 0.5f), win_y1 = 2 * (new_y1 - 0.5f);
-        win_x2 = 2 * (new_x2 / window.aspect_ratio - 0.5f), win_y2 = 2 * (new_y2 - 0.5f);
-        Z = win_x1, Z = win_y1, Z = 0.0f, Z = 1.0f, Z = c.tex, Z = 1.0f, Z = 1.0f, Z = 1.0f, Z = 1.0f;
-        Z = win_x2, Z = win_y1, Z = 1.0f, Z = 1.0f, Z = c.tex, Z = 1.0f, Z = 1.0f, Z = 1.0f, Z = 1.0f;
-        Z = win_x1, Z = win_y2, Z = 0.0f, Z = 0.0f, Z = c.tex, Z = 1.0f, Z = 1.0f, Z = 1.0f, Z = 1.0f;
-        Z = win_x1, Z = win_y2, Z = 0.0f, Z = 0.0f, Z = c.tex, Z = 1.0f, Z = 1.0f, Z = 1.0f, Z = 1.0f;
-        Z = win_x2, Z = win_y1, Z = 1.0f, Z = 1.0f, Z = c.tex, Z = 1.0f, Z = 1.0f, Z = 1.0f, Z = 1.0f;
-        Z = win_x2, Z = win_y2, Z = 1.0f, Z = 0.0f, Z = c.tex, Z = 1.0f, Z = 1.0f, Z = 1.0f, Z = 1.0f;
+        while (left < length && left <= right) {
+            if (text[left] == '\n') {
+                ox = 0, oy += lh + py;
+                left++;
+                continue;
+            }
+            Character c = char_map[text[left]];
+            lw = pixel_size_x * c.size.x / c.size.y;
+            bx = pixel_size_x * c.bearing.x;
+            by = pixel_size_y * c.bearing.y;
+            adv = pixel_size_x * c.advance / c.size.y;
+            lx = ox + bx;
+            ly = 1 - lh - by - oy;
+            ox += adv + px;
+            new_x1 = lx * w + x, new_x2 = (lx + lw) * w + x;
+            new_y1 = ly * h + y, new_y2 = (ly + lh) * h + y;
+            win_x1 = 2 * (new_x1 / window.aspect_ratio - 0.5f), win_y1 = 2 * (new_y1 - 0.5f);
+            win_x2 = 2 * (new_x2 / window.aspect_ratio - 0.5f), win_y2 = 2 * (new_y2 - 0.5f);
+            Z = win_x1, Z = win_y1, Z = 0.0f, Z = 1.0f, Z = c.tex, Z = 1.0f, Z = 1.0f, Z = 1.0f, Z = 1.0f;
+            Z = win_x2, Z = win_y1, Z = 1.0f, Z = 1.0f, Z = c.tex, Z = 1.0f, Z = 1.0f, Z = 1.0f, Z = 1.0f;
+            Z = win_x1, Z = win_y2, Z = 0.0f, Z = 0.0f, Z = c.tex, Z = 1.0f, Z = 1.0f, Z = 1.0f, Z = 1.0f;
+            Z = win_x1, Z = win_y2, Z = 0.0f, Z = 0.0f, Z = c.tex, Z = 1.0f, Z = 1.0f, Z = 1.0f, Z = 1.0f;
+            Z = win_x2, Z = win_y1, Z = 1.0f, Z = 1.0f, Z = c.tex, Z = 1.0f, Z = 1.0f, Z = 1.0f, Z = 1.0f;
+            Z = win_x2, Z = win_y2, Z = 1.0f, Z = 0.0f, Z = c.tex, Z = 1.0f, Z = 1.0f, Z = 1.0f, Z = 1.0f;
+            left++;
+        }
     }
 }
 

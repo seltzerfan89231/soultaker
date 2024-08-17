@@ -3,6 +3,7 @@
 
 #include "type.h"
 #include <stdlib.h>
+#include <assert.h>
 
 #define _ARRAY_DECLARE(_type, _ltype) \
     typedef struct { \
@@ -33,6 +34,7 @@
         return array; \
     } \
     void _ltype##_array_push(_type##Array *array, _type *_ltype) { \
+        assert(array->buffer != NULL); \
         _ltype##_array_update(array); \
         if (array->length >= array->max_length) { \
             array->buffer = realloc(array->buffer, (array->max_length += 100) * sizeof(_type*)); \
@@ -41,6 +43,7 @@
         array->buffer[array->length++] = _ltype; \
     } \
     void _ltype##_array_cut(_type##Array *array, u32 idx) { \
+        assert(array->buffer != NULL); \
         _ltype##_array_update(array); \
         array->buffer[idx] = array->buffer[--array->length];\
     } \
