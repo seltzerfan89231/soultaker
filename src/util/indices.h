@@ -107,7 +107,7 @@
 
 
 #pragma region GUI_TEXTURES
-#define NUM_GUI_TEXTURES 43
+#define NUM_GUI_TEXTURES 69
 #define NO_TEX           0
 #define EMPTY_TEX        1
 #define BUTTON_TEX       2
@@ -151,6 +151,32 @@
 #define NUM_9_TEX 40
 #define SOULTAKER_LOGO_TEX 41
 #define FSLASH_TEX 42
+#define LOWER_A_TEX 43
+#define LOWER_B_TEX 44
+#define LOWER_C_TEX 45
+#define LOWER_D_TEX 46
+#define LOWER_E_TEX 47
+#define LOWER_F_TEX 48
+#define LOWER_G_TEX 49
+#define LOWER_H_TEX 50
+#define LOWER_I_TEX 51
+#define LOWER_J_TEX 52
+#define LOWER_K_TEX 53
+#define LOWER_L_TEX 54
+#define LOWER_M_TEX 55
+#define LOWER_N_TEX 56
+#define LOWER_O_TEX 57
+#define LOWER_P_TEX 58
+#define LOWER_Q_TEX 59
+#define LOWER_R_TEX 60
+#define LOWER_S_TEX 61
+#define LOWER_T_TEX 62
+#define LOWER_U_TEX 63
+#define LOWER_V_TEX 64
+#define LOWER_W_TEX 65
+#define LOWER_X_TEX 66
+#define LOWER_Y_TEX 67
+#define LOWER_Z_TEX 68
 #pragma endregion
 
 #endif

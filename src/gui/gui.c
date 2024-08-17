@@ -41,9 +41,9 @@ void gui_init(void)
     multiplayer->id = COMP_MULTIPLAYER;
     component_attach(comp_root, multiplayer);
 
-    Component *test = component_create(0, 0.3, 0.3, 0.4, EMPTY_TEX);
+    Component *test = component_create(0.05, 0.3, 0.3, 0.4, EMPTY_TEX);
     test->a = 0.2;
-    component_set_text(test, 14, "THE QUICK BROWN FOX JUMPED OVER THE LAZY DOG");
+    component_set_text(test, 14, "THE QUICK BROWN FOX JUMPED OVER THE LAZY DOG\n\nthe quick brown fox jumped over the lazy dog");
     component_attach(comp_root, test);
 }
 
@@ -53,7 +53,7 @@ void gui_update_data_add_text(Component *comp, f32 x, f32 y, f32 w, f32 h)
 {
     if (comp->text == NULL)
         return;
-    f32 pixel_size, pixel_size_x, pixel_size_y, px, py, bx, by, ox, oy, lx, ly, lw, lh,adv;
+    f32 pixel_size, pixel_size_x, pixel_size_y, glyph_size_y, px, py, bx, by, ox, oy, lx, ly, lw, lh, adv;
     f32 new_x1, new_y1, new_x2, new_y2, win_x1, win_x2, win_y1, win_y2;
     u32 length, left, right;
     char *text = comp->text;
@@ -64,11 +64,12 @@ void gui_update_data_add_text(Component *comp, f32 x, f32 y, f32 w, f32 h)
         gui.max_length_changed = TRUE;
     }
 
-    pixel_size = (f32)comp->font_size / (DEFAULT_WINDOW_HEIGHT) / GLYPH_HEIGHT;
+    pixel_size = (f32)comp->font_size / window.height / GLYPH_HEIGHT;
     pixel_size_x = pixel_size / w;
     pixel_size_y = pixel_size / h;
+    glyph_size_y = pixel_size_y * GLYPH_HEIGHT;
     px = pixel_size_x;
-    py = pixel_size_y * 2;
+    py = pixel_size_y * 2 - pixel_size_y * MIN_BEARING_Y;
     ox = oy = 0;    
     for (left = 0, right = 0; right < length; right++) {
         f32 test_ox = ox;
@@ -80,10 +81,10 @@ void gui_update_data_add_text(Component *comp, f32 x, f32 y, f32 w, f32 h)
         if (right > left)
             test_ox -= px;
         if (test_ox > 1)
-            ox = 0, oy += pixel_size_y * GLYPH_HEIGHT + py;
+            ox = 0, oy += glyph_size_y + py;
         while (left < length && left <= right) {
             if (text[left] == '\n') {
-                ox = 0, oy += pixel_size_y * GLYPH_HEIGHT + py;
+                ox = 0, oy += glyph_size_y + py;
                 left++;
                 continue;
             }
@@ -94,7 +95,7 @@ void gui_update_data_add_text(Component *comp, f32 x, f32 y, f32 w, f32 h)
             by = pixel_size_y * c.bearing.y;
             adv = pixel_size_x * c.advance;
             lx = ox + bx;
-            ly = 1 - pixel_size_y * GLYPH_HEIGHT + by - oy;
+            ly = 1 - glyph_size_y + by - oy;
             ox += adv + px;
             new_x1 = lx * w + x, new_x2 = (lx + lw) * w + x;
             new_y1 = ly * h + y, new_y2 = (ly + lh) * h + y;

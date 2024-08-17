@@ -5,6 +5,7 @@
 #include "../../util/indices.h"
 
 #define GLYPH_HEIGHT 7
+#define MIN_BEARING_Y -1
 
 typedef struct {
     u32 tex;
