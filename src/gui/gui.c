@@ -101,22 +101,39 @@ void gui_update_data_add_text(Component *comp, f32 x, f32 y, f32 w, f32 h)
             left++;
         }
     }
-    ox = 0;
-    oy = 0.5 - (nl * glyph_size_y + (nl - 1) * py) / 2;
-    for (left = right = 0; right < length; right++) {
-        f32 test_ox = ox;
-        while (right < length && !isspace(text[right])) {
+    oy = 0;
+    if (comp->center_text)
+        oy = 0.5 - (nl * glyph_size_y + (nl - 1) * py) / 2;
+    left = right = 0;
+    while (right < length) {
+        f32 test_ox = -px;
+        while (text[right] == ' ' || text[right] == '\t')
+            right++;
+        left = right;
+        while (right < length && text[right] != '\n' && test_ox <= 1) {
             Character c = char_map[text[right]];
             test_ox += pixel_size_x * c.advance + px;
             right++;
         }
-        if (right > left)
-            test_ox -= px;
-        if (test_ox > 1)
-            ox = 0, oy += glyph_size_y + py;
-        while (left < length && left <= right) {
+        if (text[right] == '\n')
+            right++;
+        if (test_ox > 1) {
+            do {
+                right --;
+                Character c = char_map[text[right]];
+                test_ox -= pixel_size_x * c.advance + px;
+            } while (text[right-1] != ' ' && text[right-1] != '\t');
+            while (text[right-1] == ' ' || text[right-1] == '\t') { 
+                right--;
+                Character c = char_map[text[right]];
+                test_ox -= pixel_size_x * c.advance + px;
+            } 
+        }
+        ox = 0;
+        if (comp->center_text)
+            ox = (1.0 - test_ox) / 2.0;
+        while (left < length && left < right) {
             if (text[left] == '\n') {
-                ox = 0, oy += glyph_size_y + py;
                 left++;
                 continue;
             }
@@ -141,6 +158,7 @@ void gui_update_data_add_text(Component *comp, f32 x, f32 y, f32 w, f32 h)
             Z = win_x2, Z = win_y2, Z = 1.0f, Z = 0.0f, Z = c.tex, Z = 1.0f, Z = 1.0f, Z = 1.0f, Z = 1.0f;
             left++;
         }
+        oy += glyph_size_y + py;
     }
 }
 

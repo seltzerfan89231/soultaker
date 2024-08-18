@@ -16,7 +16,8 @@ void char_map_init(void)
         _CHAR_INIT(i, EMPTY_TEX, 5, 7, 0, 0, 5);
     }
     _CHAR_INIT(' ',  NO_TEX,      0, 0, 0, 0, 5)
-    _CHAR_INIT('\t',  NO_TEX,     0, 0, 0, 0, 20)
+    _CHAR_INIT('\n', NO_TEX,      0, 0, 0, 0, 0)
+    _CHAR_INIT('\t', NO_TEX,      0, 0, 0, 0, 20)
     _CHAR_INIT('A',  UPPER_A_TEX, 5, 7, 0, 0, 5)
     _CHAR_INIT('B',  UPPER_B_TEX, 5, 7, 0, 0, 5)
     _CHAR_INIT('C',  UPPER_C_TEX, 5, 7, 0, 0, 5)
