@@ -19,6 +19,10 @@ static void collide_entities_projectiles(void)
             if (entity->friendly != proj->friendly && vec2f_mag(vec2f_create(dx, dz)) < entity->hitbox_radius + proj->hitbox_radius) {
                 entity_damage(entity, proj->damage);
                 projectile_destroy(proj, j);
+                if (entity->health <= 0) {
+                    entity_destroy(entity, i), i--;
+                    break;
+                }
             }
             else
                 j++;

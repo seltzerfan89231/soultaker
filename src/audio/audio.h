@@ -1,6 +1,6 @@
 #ifndef AUDIO_H
 #define AUDIO_H
 
-int audio_test();
+int audio_init();
 
 #endif

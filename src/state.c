@@ -128,11 +128,11 @@ void state_init(void)
 {
     window_init();
     renderer_init();
+    audio_init();
     camera_init(window.aspect_ratio);
     game_init();
     gui_init();
     data_init();
-    //audio_test();
 }
 
 void state_loop(void)

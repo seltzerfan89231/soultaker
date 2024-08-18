@@ -16,7 +16,7 @@ void checkError(const char* msg) {
     }
 }
 
-int audio_test() {
+int audio_init() {
     ALCdevice* device;
     ALCcontext* context;
     ALuint source;
