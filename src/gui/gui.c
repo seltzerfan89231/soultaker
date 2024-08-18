@@ -43,7 +43,7 @@ void gui_init(void)
 
     Component *test = component_create(0.05, 0.3, 0.3, 0.4, EMPTY_TEX);
     test->a = 0.2;
-    component_set_text(test, 14, "T\tHE QUICK BROWN FOX JUMPED OVER THE LAZY DOG\n\nthe \"quick\" \'brown\' fox jumped over the lazy dog\n1+2-3*4=-9\n$+-*=%\"\'@&_#(),.;:?!\\|{}<>[]`^~");
+    component_set_text(test, 14, "THE QUICK BROWN FOX JUMPED OVER THE LAZY DOG. THE QUICK BROWN FOX JUMPED OVER THE LAZY DOG.");
     component_attach(comp_root, test);
 }
 
@@ -55,7 +55,7 @@ void gui_update_data_add_text(Component *comp, f32 x, f32 y, f32 w, f32 h)
         return;
     f32 pixel_size, pixel_size_x, pixel_size_y, glyph_size_y, px, py, bx, by, ox, oy, lx, ly, lw, lh, adv;
     f32 new_x1, new_y1, new_x2, new_y2, win_x1, win_x2, win_y1, win_y2;
-    u32 length, left, right;
+    u32 length, left, right, nl;
     char *text = comp->text;
     length = strlen(text);
     if (gui.length + 54 * length >= gui.max_length) {
@@ -69,9 +69,41 @@ void gui_update_data_add_text(Component *comp, f32 x, f32 y, f32 w, f32 h)
     pixel_size_y = pixel_size / h;
     glyph_size_y = pixel_size_y * GLYPH_HEIGHT;
     px = pixel_size_x;
-    py = pixel_size_y * 2 - pixel_size_y * MIN_BEARING_Y;
-    ox = oy = 0;    
-    for (left = 0, right = 0; right < length; right++) {
+    py = pixel_size_y * (2 - MIN_BEARING_Y);
+    nl = 1;
+    for (ox = oy = left = right = 0; right < length; right++) {
+        f32 test_ox = ox;
+        while (right < length && !isspace(text[right])) {
+            Character c = char_map[text[right]];
+            test_ox += pixel_size_x * c.advance + px;
+            right++;
+        }
+        if (right > left)
+            test_ox -= px;
+        if (test_ox > 1)
+            ox = 0, nl++;
+        while (left < length && left <= right) {
+            if (text[left] == '\n') {
+                ox = 0;
+                nl++;
+                left++;
+                continue;
+            }
+            Character c = char_map[text[left]];
+            lw = pixel_size_x * c.size.x;
+            lh = pixel_size_y * c.size.y;
+            bx = pixel_size_x * c.bearing.x;
+            by = pixel_size_y * c.bearing.y;
+            adv = pixel_size_x * c.advance;
+            lx = ox + bx;
+            ly = 1 - glyph_size_y + by - oy;
+            ox += adv + px;
+            left++;
+        }
+    }
+    ox = 0;
+    oy = 0.5 - (nl * glyph_size_y + (nl - 1) * py) / 2;
+    for (left = right = 0; right < length; right++) {
         f32 test_ox = ox;
         while (right < length && !isspace(text[right])) {
             Character c = char_map[text[right]];
