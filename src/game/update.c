@@ -33,22 +33,14 @@ static void collide_entities_projectiles(void)
 
 static void collide_walls_projectiles(void)
 {
-    i32 i, j;
+    i32 i;
     i = 0;
-    while (i < walls.length) {
-        Wall *wall = walls.buffer[i];  
-        j = 0;
-        while (j < projectiles.length) {
-            Projectile *proj = projectiles.buffer[j];
-            if (proj->position.x + proj->hitbox_radius > wall->position.x   &&
-              proj->position.x - proj->hitbox_radius < wall->position.x + 1 &&
-              proj->position.z + proj->hitbox_radius > wall->position.z     &&
-              proj->position.z - proj->hitbox_radius < wall->position.z + 1)
-                projectile_destroy(proj, j);
-            else
-                j++;
-        }
-        i++;
+    while (i < projectiles.length) {
+        Projectile *proj = projectiles.buffer[i];
+        if (tilemap_collide_projectile(proj))
+            projectile_destroy(proj, i);
+        else
+            i++;
     }
 }
 

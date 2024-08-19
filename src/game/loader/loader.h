@@ -9,5 +9,6 @@
 
 void load_level1(void);
 void load_level2(void);
+void load_level3(void);
 
 #endif

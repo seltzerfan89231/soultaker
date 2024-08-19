@@ -11,6 +11,7 @@
 #include "wall/wall.h"
 #include "player/player.h"
 #include "aud/aud.h"
+#include "tilemap/tilemap.h"
 #include "../util/array.h"
 
 extern ProjectileArray projectiles;
@@ -22,6 +23,7 @@ extern ObstacleArray obstacles;
 extern TileArray tiles;
 extern WallArray walls;
 extern Player player;
+extern TileMap map;
 
 extern f32 game_time;
 extern f32 game_dt;

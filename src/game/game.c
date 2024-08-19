@@ -24,23 +24,22 @@ static void *game_update(void *vargp)
         if (kill_thread)
             pthread_exit(NULL);
 
-        if (game_paused)
-            continue;
-
         struct timeval start, end;
         i64 seconds, microseconds;
         
         if (game_dt > 0.0001) {
-            game_time += game_dt;
             gettimeofday(&start, NULL);
-            sem_wait(&mutex);
-            update_objects(game_dt);
-            collide_objects(game_dt);
-            entity_array_update(&entities);
-            projectile_array_update(&projectiles);
-            particle_array_update(&particles);
-            parjicle_array_update(&parjicles);
-            sem_post(&mutex);
+            if (!game_paused) {
+                game_time += game_dt;
+                sem_wait(&mutex);
+                update_objects(game_dt);
+                collide_objects(game_dt);
+                entity_array_update(&entities);
+                projectile_array_update(&projectiles);
+                particle_array_update(&particles);
+                parjicle_array_update(&parjicles);
+                sem_post(&mutex);
+            }
         }
 
         gettimeofday(&end, NULL);
@@ -53,6 +52,7 @@ static void *game_update(void *vargp)
 void game_init(void)
 {
     aud_init();
+    tilemap_init();
     projectiles = projectile_array_create(0);
     entities = entity_array_create(0);
     particles = particle_array_create(0);
@@ -106,6 +106,7 @@ void game_destroy(void)
     sem_destroy(&mutex);
 
     aud_destroy();
+    tilemap_destroy();
     destroy_all_tiles();
     destroy_all_walls();
     destroy_all_entities();

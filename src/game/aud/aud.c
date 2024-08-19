@@ -3,7 +3,7 @@
 #include <pthread.h>
 #include <semaphore.h>
 
-#define MAX_NUM_AUDS 200
+#define MAX_NUM_AUDS 2
 
 Aud *auds;
 i32 num_auds;
@@ -11,7 +11,7 @@ static pthread_t thread_id;
 static bool kill_thread;
 static sem_t mutex;
 
-// singleplayer dont need this thread
+// singleplayer doesnt need this thread
 
 static void *aud_update(void *vargp)
 {

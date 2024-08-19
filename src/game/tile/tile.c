@@ -1,4 +1,5 @@
 #include "tile.h"
+#include "../tilemap/tilemap.h"
 #include <stdlib.h>
 #include <assert.h>
 
@@ -18,6 +19,7 @@ Tile* tile_create(u32 id, f32 x, f32 z)
         _CREATE(HELLSTONE, hellstone)
     }
     tile_array_push(&tiles, tile);
+    tilemap_insert_tile(tile);
     return tile;
 }
 
