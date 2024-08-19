@@ -32,8 +32,8 @@ static void *game_update(void *vargp)
         
         if (game_dt > 0.0001) {
             game_time += game_dt;
-            sem_wait(&mutex);
             gettimeofday(&start, NULL);
+            sem_wait(&mutex);
             update_objects(game_dt);
             collide_objects(game_dt);
             entity_array_update(&entities);

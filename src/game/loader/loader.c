@@ -86,7 +86,7 @@ void load_level2(void)
     player.weapon.tex = SWORD_1_TEX;
     player.entity->position = vec3f_create(20.0f, 0.0f, 20.0f);
 
-    for (i32 i = 0; i < 1; i++) {
+    for (i32 i = 0; i < 10; i++) {
         Entity* entity = entity_create(ENEMY, 0);
         entity->position = vec3f_create(20 + i, 0, 15);
         entity->scale = 1.0f;
