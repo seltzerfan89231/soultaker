@@ -72,6 +72,8 @@ void key_callback(GLFWwindow* handle, i32 key, i32 scancode, i32 action, i32 mod
         game_setup(2);
     if (key == GLFW_KEY_K && action == GLFW_PRESS)
         game_setup(1);
+    if (key == GLFW_KEY_G && action == GLFW_PRESS)
+        audio_play_sound();
 }
 
 static void process_input(void)
@@ -149,6 +151,7 @@ void state_loop(void)
 
 void state_exit(void)
 {
+    audio_destroy();
     renderer_destroy();
     game_destroy();
     data_destroy();

@@ -1,11 +1,10 @@
 #include "audio.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include <al.h>
-#include <alc.h>
-#include <sndfile.h>
 
 #define BUFFER_SIZE 4096
+
+Audio audio;
 
 void checkError(const char* msg) {
     ALenum error = alGetError();
@@ -17,96 +16,83 @@ void checkError(const char* msg) {
 }
 
 int audio_init() {
-    ALCdevice* device;
-    ALCcontext* context;
-    ALuint source;
-    ALuint buffer;
-    SNDFILE* file;
-    SF_INFO sfinfo;
-    ALshort* samples;
-    ALsizei numSamples;
-    ALsizei size;
-    ALenum format;
-
-    // Initialize OpenAL
-    device = alcOpenDevice(NULL);  // Open default device
-    if (!device) {
+    audio.device = alcOpenDevice(NULL);
+    if (!audio.device) {
         fprintf(stderr, "Failed to open OpenAL device.\n");
         return EXIT_FAILURE;
     }
-
-    context = alcCreateContext(device, NULL);
-    if (!context) {
+    audio.context = alcCreateContext(audio.device, NULL);
+    if (!audio.context) {
         fprintf(stderr, "Failed to create OpenAL context.\n");
-        alcCloseDevice(device);
+        alcCloseDevice(audio.device);
         return EXIT_FAILURE;
     }
-    alcMakeContextCurrent(context);
+    alcMakeContextCurrent(audio.context);
 
-    // Load the sound file
+    /* ----------------------------- */
+
+    SNDFILE *file;
+    SF_INFO sfinfo;
     file = sf_open("assets/audio/nature.wav", SFM_READ, &sfinfo);
     if (!file) {
         fprintf(stderr, "Failed to open sound file.\n");
-        alcDestroyContext(context);
-        alcCloseDevice(device);
         return EXIT_FAILURE;
     }
 
-    // Determine the audio format
     if (sfinfo.channels == 1) {
-        format = AL_FORMAT_MONO16;
+        audio.sound1.format = AL_FORMAT_MONO16;
     } else if (sfinfo.channels == 2) {
-        format = AL_FORMAT_STEREO16;
+        audio.sound1.format = AL_FORMAT_STEREO16;
     } else {
         fprintf(stderr, "Unsupported number of channels.\n");
         sf_close(file);
-        alcDestroyContext(context);
-        alcCloseDevice(device);
         return EXIT_FAILURE;
     }
 
-    // Allocate and fill the buffer with sound data
-    size = sfinfo.frames * sfinfo.channels * sizeof(ALshort);
-    samples = (ALshort*)malloc(size);
-    if (!samples) {
+    audio.sound1.size = sfinfo.frames * sfinfo.channels * sizeof(ALshort);
+    audio.sound1.samples = malloc(audio.sound1.size);
+    if (!audio.sound1.samples) {
         fprintf(stderr, "Failed to allocate memory for audio samples.\n");
         sf_close(file);
-        alcDestroyContext(context);
-        alcCloseDevice(device);
         return EXIT_FAILURE;
     }
 
-    numSamples = sf_read_short(file, samples, sfinfo.frames * sfinfo.channels);
+    ALsizei numSamples = sf_read_short(file, audio.sound1.samples, sfinfo.frames * sfinfo.channels);
     if (numSamples != sfinfo.frames * sfinfo.channels) {
         fprintf(stderr, "Failed to read all samples from file.\n");
-        free(samples);
+        free(audio.sound1.samples);
         sf_close(file);
-        alcDestroyContext(context);
-        alcCloseDevice(device);
         return EXIT_FAILURE;
     }
+    audio.sound1.freq = sfinfo.samplerate;
     sf_close(file);
-
-    // Generate a buffer and source
-    alGenBuffers(1, &buffer);
+    alGenBuffers(1, &audio.sound1.buffer);
     checkError("Failed to generate buffer.");
-    alBufferData(buffer, format, samples, size, sfinfo.samplerate);
+    alBufferData(audio.sound1.buffer, 
+                 audio.sound1.format, 
+                 audio.sound1.samples, 
+                 audio.sound1.size, 
+                 audio.sound1.freq);
     checkError("Failed to fill buffer with data.");
 
+    return EXIT_SUCCESS;
+}
+
+void audio_play_sound()
+{
+    ALuint source;
     alGenSources(1, &source);
     checkError("Failed to generate source.");
-    alSourcei(source, AL_BUFFER, buffer);
+    alSourcei(source, AL_BUFFER, audio.sound1.buffer);
     alSourcePlay(source);
     checkError("Failed to play source.");
+}
 
-    // Clean up
-    /* alSourceStop(source);
-    alDeleteSources(1, &source);
-    alDeleteBuffers(1, &buffer);
-    free(samples);
+void audio_destroy()
+{
+    free(audio.sound1.samples);
+
     alcMakeContextCurrent(NULL);
-    alcDestroyContext(context);
-    alcCloseDevice(device); */
-
-    return EXIT_SUCCESS;
+    alcDestroyContext(audio.context);
+    alcCloseDevice(audio.device);
 }
