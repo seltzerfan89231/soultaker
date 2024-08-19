@@ -47,7 +47,6 @@ static void *audio_update(void *vargp)
                 audio.sources[i] = audio.sources[audio.num_sources-1];
                 audio.sources[audio.num_sources-1] = tmp;
                 audio.num_sources--;
-                printf("num sources: %d\n", audio.num_sources);
                 i--;
             }
         }
@@ -145,7 +144,6 @@ void audio_play_sound(ALint id)
     checkError("Failed to play source.");
     audio.num_sources++;
     sem_post(&mutex);
-    printf("num sources: %d\n", audio.num_sources);
 }
 
 void audio_destroy()

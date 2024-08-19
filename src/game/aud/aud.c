@@ -11,6 +11,8 @@ static pthread_t thread_id;
 static bool kill_thread;
 static sem_t mutex;
 
+// singleplayer dont need this thread
+
 static void *aud_update(void *vargp)
 {
     while (TRUE) {
@@ -23,7 +25,6 @@ static void *aud_update(void *vargp)
             if (aud.playing) {
                 auds[i] = auds[num_auds-1];
                 num_auds--;
-                printf("num auds: %d\n", num_auds);
             }
         }
         sem_post(&mutex);
@@ -53,7 +54,7 @@ void aud_clear()
     sem_post(&mutex);
 }
 
-void aud_push(u32 id)
+void aud_play(u32 id)
 {
     if (num_auds >= MAX_NUM_AUDS)
         return;
@@ -61,7 +62,6 @@ void aud_push(u32 id)
     Aud aud = { .id = id, .playing = FALSE };
     auds[num_auds++] = aud;
     sem_post(&mutex);
-    printf("num auds: %d\n", num_auds);
 }
 
 void aud_wait()

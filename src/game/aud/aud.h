@@ -18,7 +18,7 @@ extern i32 num_auds;
 void aud_init();
 void aud_destroy();
 void aud_clear();
-void aud_push(u32 id);
+void aud_play(u32 id);
 void aud_wait();
 void aud_post();
 i32 get_num_auds();

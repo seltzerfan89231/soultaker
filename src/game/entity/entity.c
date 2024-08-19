@@ -53,7 +53,7 @@ void entity_update(Entity* entity, f32 dt)
 
 void entity_damage(Entity *entity, u32 damage)
 {
-    aud_push(GUI_CLICK_AUD);
+    aud_play(GUI_CLICK_AUD);
     entity->health -= damage;
     if (entity->health < 0)
         entity->health = 0;
