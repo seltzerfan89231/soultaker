@@ -92,50 +92,10 @@ static void collide_obstacles_entities()
 
 static void collide_walls_entities(f32 dt)
 {
-    i32 i, j;
-    i = 0;
-    while (i < walls.length) {
-        Wall *wall = walls.buffer[i];
-        j = 0;
-        while (j < entities.length) {
-            Entity *entity = entities.buffer[j];
-            vec3f prev_position = vec3f_sub(entity->position, vec3f_scale(entity->speed * dt, entity->direction));
-            if (entity->position.x + entity->hitbox_radius > wall->position.x
-              && entity->position.x - entity->hitbox_radius < wall->position.x + 1
-              && entity->position.z + entity->hitbox_radius > wall->position.z
-              && entity->position.z - entity->hitbox_radius < wall->position.z + 1) {
-                if (prev_position.x < wall->position.x
-                  && entity->direction.x > 0
-                  && prev_position.z < wall->position.z + 1 + entity->hitbox_radius
-                  && prev_position.z > wall->position.z - entity->hitbox_radius) {
-                    entity->position.x = wall->position.x - entity->hitbox_radius;
-                    entity->direction.x = 0;
-                }
-                else if (prev_position.x > wall->position.x + 1
-                  && entity->direction.x < 0
-                  && prev_position.z < wall->position.z + 1 + entity->hitbox_radius
-                  && prev_position.z > wall->position.z - entity->hitbox_radius) {
-                    entity->position.x = wall->position.x + 1 + entity->hitbox_radius;
-                    entity->direction.x = 0;
-                }
-                else if (prev_position.z < wall->position.z
-                  && entity->direction.z > 0
-                  && prev_position.x < wall->position.x + 1 + entity->hitbox_radius
-                  && prev_position.x > wall->position.x - entity->hitbox_radius) {
-                    entity->position.z = wall->position.z - entity->hitbox_radius;
-                    entity->direction.z = 0;
-                }
-                else if (prev_position.z > wall->position.z + 1
-                  && entity->direction.z < 0
-                  && prev_position.x < wall->position.x + 1 + entity->hitbox_radius
-                  && prev_position.x > wall->position.x - entity->hitbox_radius) {
-                    entity->position.z = wall->position.z + 1 + entity->hitbox_radius;
-                    entity->direction.z = 0;
-                }
-            }
-            j++;
-        }
-        i++;
+    for (i32 i = 0; i < entities.length; i++) {
+        Entity *entity = entities.buffer[i];
+        vec3f prev_position = vec3f_sub(entity->position, vec3f_scale(entity->speed * dt, entity->direction));
+        tilemap_collide_entity(entity, prev_position);
     }
 }
 

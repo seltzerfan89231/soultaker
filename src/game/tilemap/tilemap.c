@@ -51,20 +51,66 @@ Wall* tilemap_get_wall(u32 x, u32 z)
 
 bool tilemap_collide_projectile(Projectile *proj)
 {
-    // returns true if projectile collides with a wall
     f32 x, z, r;
     i32 x1, x2, z1, z2;
     x = proj->position.x, z = proj->position.z;
     r = proj->hitbox_radius;
     x1 = (int) (x - r), x2 = (int) (x + r);
     z1 = (int) (z - r), z2 = (int) (z + r);
-    for (i32 i = x1; i <= x2; i++) {
-        for (i32 j = z1; j <= z2; j++) {
+    for (i32 i = x1; i <= x2; i++)
+        for (i32 j = z1; j <= z2; j++)
             if (tilemap_get_wall(i, j) != NULL)
                 return TRUE;
+    return FALSE;
+}
+
+static void move_along_wall(Wall *wall, Entity *entity, vec3f prev_position)
+{
+    if (prev_position.x < wall->position.x
+        && entity->direction.x > 0
+        && prev_position.z < wall->position.z + 1 + entity->hitbox_radius
+        && prev_position.z > wall->position.z - entity->hitbox_radius) {
+            entity->position.x = wall->position.x - entity->hitbox_radius;
+            entity->direction.x = 0;
+    }
+    else if (prev_position.x > wall->position.x + 1
+        && entity->direction.x < 0
+        && prev_position.z < wall->position.z + 1 + entity->hitbox_radius
+        && prev_position.z > wall->position.z - entity->hitbox_radius) {
+            entity->position.x = wall->position.x + 1 + entity->hitbox_radius;
+            entity->direction.x = 0;
+    }
+    else if (prev_position.z < wall->position.z
+        && entity->direction.z > 0
+        && prev_position.x < wall->position.x + 1 + entity->hitbox_radius
+        && prev_position.x > wall->position.x - entity->hitbox_radius) {
+            entity->position.z = wall->position.z - entity->hitbox_radius;
+            entity->direction.z = 0;
+    }
+    else if (prev_position.z > wall->position.z + 1
+        && entity->direction.z < 0
+        && prev_position.x < wall->position.x + 1 + entity->hitbox_radius
+        && prev_position.x > wall->position.x - entity->hitbox_radius) {
+            entity->position.z = wall->position.z + 1 + entity->hitbox_radius;
+            entity->direction.z = 0;
+    }
+}
+
+void tilemap_collide_entity(Entity *entity, vec3f prev_position)
+{
+    f32 x, z, r;
+    i32 x1, x2, z1, z2;
+    x = entity->position.x, z = entity->position.z;
+    r = entity->hitbox_radius;
+    x1 = (int) (x - r), x2 = (int) (x + r);
+    z1 = (int) (z - r), z2 = (int) (z + r);
+    for (i32 i = x1; i <= x2; i++) {
+        for (i32 j = z1; j <= z2; j++) {
+            Wall *wall = tilemap_get_wall(i, j);
+            if (wall != NULL)
+                move_along_wall(wall, entity, prev_position);
         }
     }
-    return FALSE;
 }
 
 void tilemap_reset(u32 width, u32 length)
