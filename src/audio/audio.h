@@ -4,25 +4,24 @@
 #include <al.h>
 #include <alc.h>
 #include <sndfile.h>
+#include "../game/aud/aud.h"
+#include "../util/indices.h"
+#include "../util/type.h"
 
-typedef struct {
-    ALuint buffer;
-    ALenum format;
-    ALshort *samples;
-    ALsizei size;
-    ALsizei freq;
-} SoundInfo;
+#define MAX_NUM_SOURCES 100
 
 typedef struct {
     ALCdevice *device;
     ALCcontext *context;
-    SoundInfo sound1;
+    ALuint *buffers;
+    ALuint *sources;
+    ALuint num_sources;
 } Audio;
 
 extern Audio audio;
 
 int audio_init();
-void audio_play_sound();
+void audio_play_sound(ALint id);
 void audio_destroy();
 
 #endif

@@ -10,6 +10,7 @@
 #include "tile/tile.h"
 #include "wall/wall.h"
 #include "player/player.h"
+#include "aud/aud.h"
 #include "../util/array.h"
 
 extern ProjectileArray projectiles;

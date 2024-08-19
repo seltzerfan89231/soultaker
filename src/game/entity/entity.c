@@ -1,5 +1,6 @@
 #include "entity.h"
 #include "../player/player.h"
+#include "../aud/aud.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <assert.h>
@@ -52,6 +53,7 @@ void entity_update(Entity* entity, f32 dt)
 
 void entity_damage(Entity *entity, u32 damage)
 {
+    aud_push(GUI_CLICK_AUD);
     entity->health -= damage;
     if (entity->health < 0)
         entity->health = 0;

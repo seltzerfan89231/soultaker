@@ -2,6 +2,7 @@
 
 static void reset(void)
 {
+    aud_clear();
     destroy_all_tiles();
     destroy_all_walls();
     destroy_all_parstacles();

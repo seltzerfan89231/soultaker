@@ -29,7 +29,7 @@ static void *game_update(void *vargp)
 
         struct timeval start, end;
         i64 seconds, microseconds;
-
+        
         if (game_dt > 0.0001) {
             game_time += game_dt;
             sem_wait(&mutex);
@@ -52,6 +52,7 @@ static void *game_update(void *vargp)
 
 void game_init(void)
 {
+    aud_init();
     projectiles = projectile_array_create(0);
     entities = entity_array_create(0);
     particles = particle_array_create(0);
@@ -104,6 +105,7 @@ void game_destroy(void)
     pthread_join(thread_id, NULL);
     sem_destroy(&mutex);
 
+    aud_destroy();
     destroy_all_tiles();
     destroy_all_walls();
     destroy_all_entities();

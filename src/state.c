@@ -73,7 +73,7 @@ void key_callback(GLFWwindow* handle, i32 key, i32 scancode, i32 action, i32 mod
     if (key == GLFW_KEY_K && action == GLFW_PRESS)
         game_setup(1);
     if (key == GLFW_KEY_G && action == GLFW_PRESS)
-        audio_play_sound();
+        audio_play_sound(GUI_CLICK_AUD);
 }
 
 static void process_input(void)

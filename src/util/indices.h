@@ -210,4 +210,12 @@
 #define TILDE_TEX 99
 #pragma endregion
 
+
+
+
+
+#pragma region AUDIO_BUFFERS
+#define NUM_BUFFERS 1
+#define GUI_CLICK_AUD 0
+
 #endif

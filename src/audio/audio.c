@@ -1,8 +1,14 @@
 #include "audio.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <pthread.h>
+#include <semaphore.h>
 
 #define BUFFER_SIZE 4096
+
+static pthread_t thread_id;
+static bool kill_thread;
+static sem_t mutex;
 
 Audio audio;
 
@@ -10,8 +16,42 @@ void checkError(const char* msg) {
     ALenum error = alGetError();
     if (error != AL_NO_ERROR) {
         fprintf(stderr, "OpenAL Error: %s\n", msg);
-        fprintf(stderr, "Error code: %d\n", error);
+        fprintf(stderr, "Error code: %X\n", error);
         exit(EXIT_FAILURE);
+    }
+}
+
+static void *audio_update(void *vargp)
+{
+    while (TRUE) {
+        if (kill_thread)
+            pthread_exit(NULL);
+
+        aud_wait();
+        for (ALint i = 0; i < num_auds; i++) {
+            Aud *aud = &auds[i];
+            if (!aud->playing) {
+                audio_play_sound(aud->id);
+                aud->playing = TRUE;
+            }
+        }
+        aud_post();
+
+        sem_wait(&mutex);
+        for (ALint i = 0; i < audio.num_sources; i++) {
+            ALuint source_state, source, tmp;
+            source = audio.sources[i];
+            alGetSourcei(source, AL_SOURCE_STATE, &source_state);
+            if (source_state == AL_STOPPED) {
+                tmp = audio.sources[i];
+                audio.sources[i] = audio.sources[audio.num_sources-1];
+                audio.sources[audio.num_sources-1] = tmp;
+                audio.num_sources--;
+                printf("num sources: %d\n", audio.num_sources);
+                i--;
+            }
+        }
+        sem_post(&mutex);
     }
 }
 
@@ -29,68 +69,103 @@ int audio_init() {
     }
     alcMakeContextCurrent(audio.context);
 
+    audio.buffers = malloc(sizeof(ALuint));
+    alGenBuffers(1, audio.buffers);
+    checkError("Failed to generate buffers.");
+
+    audio.sources = malloc(MAX_NUM_SOURCES * sizeof(ALuint));
+    alGenSources(MAX_NUM_SOURCES, audio.sources);
+    checkError("Failed to generate sources.");
+    audio.num_sources = 0;
+
     /* ----------------------------- */
 
     SNDFILE *file;
     SF_INFO sfinfo;
-    file = sf_open("assets/audio/nature.wav", SFM_READ, &sfinfo);
+    ALenum format;
+    ALshort *samples;
+    ALsizei numSamples;
+    ALsizei size;
+    ALsizei freq;
+    
+    file = sf_open("assets/audio/gui_click.wav", SFM_READ, &sfinfo);
     if (!file) {
         fprintf(stderr, "Failed to open sound file.\n");
         return EXIT_FAILURE;
     }
 
     if (sfinfo.channels == 1) {
-        audio.sound1.format = AL_FORMAT_MONO16;
+        format = AL_FORMAT_MONO16;
     } else if (sfinfo.channels == 2) {
-        audio.sound1.format = AL_FORMAT_STEREO16;
+        format = AL_FORMAT_STEREO16;
     } else {
         fprintf(stderr, "Unsupported number of channels.\n");
         sf_close(file);
         return EXIT_FAILURE;
     }
 
-    audio.sound1.size = sfinfo.frames * sfinfo.channels * sizeof(ALshort);
-    audio.sound1.samples = malloc(audio.sound1.size);
-    if (!audio.sound1.samples) {
+    size = sfinfo.frames * sfinfo.channels * sizeof(ALshort);
+    samples = malloc(size);
+    if (!samples) {
         fprintf(stderr, "Failed to allocate memory for audio samples.\n");
         sf_close(file);
         return EXIT_FAILURE;
     }
 
-    ALsizei numSamples = sf_read_short(file, audio.sound1.samples, sfinfo.frames * sfinfo.channels);
+    numSamples = sf_read_short(file, samples, sfinfo.frames * sfinfo.channels);
     if (numSamples != sfinfo.frames * sfinfo.channels) {
         fprintf(stderr, "Failed to read all samples from file.\n");
-        free(audio.sound1.samples);
+        free(samples);
         sf_close(file);
         return EXIT_FAILURE;
     }
-    audio.sound1.freq = sfinfo.samplerate;
+    freq = sfinfo.samplerate;
     sf_close(file);
-    alGenBuffers(1, &audio.sound1.buffer);
-    checkError("Failed to generate buffer.");
-    alBufferData(audio.sound1.buffer, 
-                 audio.sound1.format, 
-                 audio.sound1.samples, 
-                 audio.sound1.size, 
-                 audio.sound1.freq);
+    
+    alBufferData(audio.buffers[0], format, samples, size, freq);
     checkError("Failed to fill buffer with data.");
+
+    free(samples);
+
+    kill_thread = FALSE;
+    sem_init(&mutex, 0, 1);
+    pthread_create(&thread_id, NULL, audio_update, NULL);
 
     return EXIT_SUCCESS;
 }
 
-void audio_play_sound()
+void audio_play_sound(ALint id)
 {
-    ALuint source;
-    alGenSources(1, &source);
-    checkError("Failed to generate source.");
-    alSourcei(source, AL_BUFFER, audio.sound1.buffer);
+    if (audio.num_sources >= MAX_NUM_SOURCES)
+        return;
+    sem_wait(&mutex);
+    ALuint source = audio.sources[audio.num_sources];
+    alSourcei(source, AL_BUFFER, audio.buffers[id]);
     alSourcePlay(source);
     checkError("Failed to play source.");
+    audio.num_sources++;
+    sem_post(&mutex);
+    printf("num sources: %d\n", audio.num_sources);
 }
 
 void audio_destroy()
 {
-    free(audio.sound1.samples);
+    kill_thread = TRUE;
+    pthread_join(thread_id, NULL);
+    sem_destroy(&mutex);
+
+    for (ALint i = 0; i < MAX_NUM_SOURCES; i++) {
+        alSourceStop(audio.sources[i]);
+        checkError("Failed to stop source.");
+    }
+
+    alDeleteSources(MAX_NUM_SOURCES, audio.sources);
+    checkError("Failed to delete source.");
+    free(audio.sources);
+
+    alDeleteBuffers(1, audio.buffers);
+    checkError("Failed to delete buffers.");
+    free(audio.buffers);
 
     alcMakeContextCurrent(NULL);
     alcDestroyContext(audio.context);
