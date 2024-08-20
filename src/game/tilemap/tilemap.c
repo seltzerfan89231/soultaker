@@ -205,7 +205,7 @@ void tilemap_reset(u32 width, u32 length)
     for (i32 i = 0; i < width * length; i++) {
         tilemap.buffer[i].is_wall = FALSE;
         tilemap.buffer[i].ptr = NULL;
-        tilemap.buffer[i].obs = obstacle_array_create(5);
+        tilemap.buffer[i].obs = obstacle_array_create(0, 1);
     }
 }
 

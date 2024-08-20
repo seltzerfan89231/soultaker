@@ -11,14 +11,14 @@ static void reset(void)
     destroy_all_particles();
     destroy_all_obstacles();
     destroy_all_parjicles();
-    projectiles = projectile_array_create(0);
-    entities = entity_array_create(0);
-    particles = particle_array_create(0);
-    parjicles = parjicle_array_create(0);
-    parstacles = parstacle_array_create(0);
-    obstacles = obstacle_array_create(0);
-    tiles = tile_array_create(0);
-    walls = wall_array_create(0);
+    projectiles = projectile_array_create(0, 100);
+    entities = entity_array_create(0, 100);
+    particles = particle_array_create(0, 100);
+    parjicles = parjicle_array_create(0, 100);
+    parstacles = parstacle_array_create(0, 100);
+    obstacles = obstacle_array_create(0, 100);
+    tiles = tile_array_create(0, 100);
+    walls = wall_array_create(0, 100);
     game_time = 0;
 }
 
