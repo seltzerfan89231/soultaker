@@ -5,6 +5,7 @@
 #include "../../util/indices.h"
 #include "../../window/window.h"
 #include "../../game/game.h"
+#include "../../audio/audio.h"
 #include "character.h"
 
 typedef struct Component Component;

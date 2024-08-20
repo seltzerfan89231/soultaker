@@ -5,10 +5,10 @@
 
 WallArray walls;
 
-Wall* wall_create(walltype type, f32 x, f32 z, f32 height)
+Wall* wall_create(u32 id, f32 x, f32 z, f32 height)
 {
     Wall* wall = malloc(sizeof(Wall));
-    wall->type = type;
+    wall->id = id;
     wall->position.x = x;
     wall->position.z = z;
     wall->height = height;
@@ -32,6 +32,5 @@ void destroy_all_walls(void)
         free(walls.buffer[i]);
     wall_array_destroy(&walls);
 }
-
 
 _ARRAY_DEFINE(Wall, wall)

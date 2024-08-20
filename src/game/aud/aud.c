@@ -73,8 +73,3 @@ void aud_post()
 {
     sem_post(&mutex);
 }
-
-i32 get_num_auds()
-{
-    return num_auds;
-}

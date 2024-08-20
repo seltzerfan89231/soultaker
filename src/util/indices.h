@@ -215,7 +215,7 @@
 
 
 #pragma region AUDIO_BUFFERS
-#define NUM_BUFFERS 1
+#define NUM_BUFFERS 2
 #define GUI_CLICK_AUD 0
 
 #endif
