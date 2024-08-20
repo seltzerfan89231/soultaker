@@ -125,6 +125,14 @@ bool tilemap_collide_projectile(Projectile *proj)
 
 static void move_along_wall(Wall *wall, Entity *entity, vec3f prev_position)
 {
+    bool condition = entity->position.x + entity->hitbox_radius > wall->position.x
+        && entity->position.x - entity->hitbox_radius < wall->position.x + 1
+        && entity->position.z + entity->hitbox_radius > wall->position.z
+        && entity->position.z - entity->hitbox_radius < wall->position.z + 1;
+    
+    if (!condition)
+        return;
+
     if (prev_position.x < wall->position.x
         && entity->direction.x > 0
         && prev_position.z < wall->position.z + 1 + entity->hitbox_radius
