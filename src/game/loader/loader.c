@@ -30,11 +30,11 @@ static void fill_tilemap(void)
 void load_level1(void)
 {
     reset();
-    tilemap_reset(10, 10);
-    for (i32 i = 0; i < 10; i++) {
-        for (i32 j = 0; j < 10; j++) {
+    tilemap_reset(MAP_WIDTH, MAP_WIDTH);
+    for (i32 i = 0; i < MAP_WIDTH; i++) {
+        for (i32 j = 0; j < MAP_WIDTH; j++) {
             if (i == 1 && j == 1)
-                wall_create(WALL2, i, j , 3);
+                wall_create(WALL2, i, j, 3);
             else
                 tile_create(GRASS, i, j);
         }
@@ -49,20 +49,19 @@ void load_level1(void)
     player.weapon.tex = SWORD_1_TEX;
     player.entity->position = vec3f_create(5.0f, 0.0f, 5.0f);
 
-    for (i32 i = 0; i < 0; i++) {
-        Obstacle *obstacle = obstacle_create();
-        obstacle->position = vec3f_create((f32)rand() / RAND_MAX * MAP_WIDTH, 0.0f, (f32)rand() / RAND_MAX * MAP_WIDTH);
+    for (i32 i = 0; i < 600; i++) {
+        Obstacle *obstacle = obstacle_create((f32)rand() / RAND_MAX * MAP_WIDTH, (f32)rand() / RAND_MAX * MAP_WIDTH);
         obstacle->hitbox_radius = 0.3f;
         obstacle->scale = 3.0f;
     }
 
-    for (i32 i = 0; i < 0; i++) {
+    for (i32 i = 0; i < 1000; i++) {
         Entity *entity = entity_create(SLIME, FALSE);
         entity->max_health = entity->health = 10;
         entity->position = vec3f_create((f32)rand() / RAND_MAX * MAP_WIDTH, 0.0f, (f32)rand() / RAND_MAX * MAP_WIDTH);
     }
 
-    for (i32 i = 0; i < 0; i++) {
+    for (i32 i = 0; i < 600; i++) {
         Parstacle *parstacle = parstacle_create();
         parstacle->position = vec3f_create((f32)rand() / RAND_MAX * MAP_WIDTH, 0.0f, (f32)rand() / RAND_MAX * MAP_WIDTH);
         parstacle->scale = 1 + (f32)rand() / RAND_MAX;
@@ -102,15 +101,11 @@ void load_level2(void)
         entity->scale = 1.0f;
     }
 
-    Obstacle *obstacle = obstacle_create();
-    obstacle->position = vec3f_create(10.0f, 0.0f, 10.0f);
-    obstacle->hitbox_radius = 0.3f;
-    obstacle->scale = 3.0f;
-
-    obstacle = obstacle_create();
-    obstacle->position = vec3f_create(12.0f, 0.0f, 10.0f);
-    obstacle->hitbox_radius = 0.3f;
-    obstacle->scale = 3.0f;
+    for (i32 i = 0; i < 10000; i++) {
+        Obstacle *obstacle = obstacle_create((f32)rand() / RAND_MAX * MAP_WIDTH, (f32)rand() / RAND_MAX * MAP_WIDTH);
+        obstacle->hitbox_radius = 0.3f;
+        obstacle->scale = 3.0f;
+    }
 
     Parstacle *parstacle = parstacle_create();
     parstacle->position = vec3f_create(20.0f, 0.0f, 20.0f);

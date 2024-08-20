@@ -12,7 +12,7 @@ typedef struct {
     vec3f position;
 } Obstacle;
 
-Obstacle* obstacle_create(void);
+Obstacle* obstacle_create(f32 x, f32 z);
 void obstacle_destroy(Obstacle* Obstacle, u32 idx);
 void destroy_all_obstacles(void);
 

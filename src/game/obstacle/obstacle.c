@@ -1,16 +1,19 @@
 #include "obstacle.h"
 #include <stdlib.h>
 #include <assert.h>
+#include "../tilemap/tilemap.h"
 
 ObstacleArray obstacles;
 
-Obstacle* obstacle_create(void)
+Obstacle* obstacle_create(f32 x, f32 z)
 {
     Obstacle *obstacle = malloc(sizeof(Obstacle));
+    obstacle->position = vec3f_create(x, 0, z);
     obstacle->scale = 1.0f;
     obstacle->tex = ROCK_TEX;
     obstacle->hitbox_radius = 0.5f;
     obstacle_array_push(&obstacles, obstacle);
+    tilemap_insert_obstacle(obstacle);
     return obstacle;
 }
 

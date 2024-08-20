@@ -33,60 +33,13 @@ static void collide_entities_projectiles(void)
 
 static void collide_walls_projectiles(void)
 {
-    i32 i;
-    i = 0;
+    i32 i = 0;
     while (i < projectiles.length) {
         Projectile *proj = projectiles.buffer[i];
         if (tilemap_collide_projectile(proj))
             projectile_destroy(proj, i);
         else
             i++;
-    }
-}
-
-static void collide_obstacles_projectiles()
-{
-    i32 i, j;
-    i = 0;
-    while (i < obstacles.length) {
-        Obstacle *obstacle = obstacles.buffer[i];
-        j = 0;
-        while (j < projectiles.length) {
-            f32 dx, dz;
-            Projectile *proj = projectiles.buffer[j];
-            dx = obstacle->position.x - proj->position.x;
-            dz = obstacle->position.z - proj->position.z;
-            if (vec2f_mag(vec2f_create(dx, dz)) < obstacle->hitbox_radius + proj->hitbox_radius)
-                projectile_destroy(proj, j);
-            else
-                j++;
-        }
-        i++;
-    }
-}
-
-static void collide_obstacles_entities()
-{
-    i32 i, j;
-    i = 0;
-    while (i < obstacles.length) {
-        Obstacle *obstacle = obstacles.buffer[i];
-        j = 0;
-        while (j < entities.length) {
-            f32 dx, dz;
-            vec2f dir;
-            Entity *entity = entities.buffer[j];
-            dx = entity->position.x - obstacle->position.x;
-            dz = entity->position.z - obstacle->position.z;
-            dir = vec2f_create(dx, dz);
-            if (vec2f_mag(dir) < obstacle->hitbox_radius + entity->hitbox_radius) {
-               dir = vec2f_scale(obstacle->hitbox_radius + entity->hitbox_radius, vec2f_normalize(dir));
-               entity->position.x = obstacle->position.x + dir.x;
-               entity->position.z = obstacle->position.z + dir.y;
-            }
-            j++;
-        }
-        i++;
     }
 }
 
@@ -103,8 +56,6 @@ void collide_objects(f32 dt)
 {
     collide_walls_entities(dt);
     collide_walls_projectiles();
-    collide_obstacles_projectiles();
-    collide_obstacles_entities();
     collide_entities_projectiles();
 }
 

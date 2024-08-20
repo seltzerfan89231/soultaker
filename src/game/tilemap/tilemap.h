@@ -6,10 +6,15 @@
 #include "../../util/type.h"
 #include "../projectile/projectile.h"
 #include "../entity/entity.h"
+#include "../obstacle/obstacle.h"
+
+#define TILEMAP_TILE 0
+#define TILEMAP_WALL 1
 
 typedef struct {
     bool is_wall;
     void *ptr;
+    ObstacleArray obs;
 } TileMapPtr;
 
 typedef struct {
@@ -22,6 +27,7 @@ extern TileMap tilemap;
 void tilemap_init(void);
 void tilemap_insert_tile(Tile *tile);
 void tilemap_insert_wall(Wall *wall);
+void tilemap_insert_obstacle(Obstacle *obstacle);
 Tile* tilemap_get_tile(u32 x, u32 z);
 Wall* tilemap_get_wall(u32 x, u32 z);
 bool tilemap_collide_projectile(Projectile *proj);
