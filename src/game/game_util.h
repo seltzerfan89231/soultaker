@@ -14,14 +14,14 @@
 #include "tilemap/tilemap.h"
 #include "../util/array.h"
 
-extern ProjectileArray projectiles;
-extern EntityArray entities;
-extern ParticleArray particles;
-extern ParjicleArray parjicles;
-extern ParstacleArray parstacles;
-extern ObstacleArray obstacles;
-extern TileArray tiles;
-extern WallArray walls;
+extern ProjectileArray global_projectiles;
+extern EntityArray global_entities;
+extern ParticleArray global_particles;
+extern ParjicleArray global_parjicles;
+extern ParstacleArray global_parstacles;
+extern ObstacleArray global_obstacles;
+extern TileArray global_tiles;
+extern WallArray global_walls;
 extern Player player;
 extern TileMap map;
 

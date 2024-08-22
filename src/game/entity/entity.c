@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include <assert.h>
 
-EntityArray entities;
+EntityArray global_entities;
 
 #define _ENTITY_CREATE(_id, _lid) \
     case _id : _lid##_create(entity); break;
@@ -32,7 +32,7 @@ Entity* entity_create(u32 id, u8 friendly)
         _ENTITY_CREATE(KNIGHT, knight)
         _ENTITY_CREATE(SLIME, slime)
     }
-    entity_array_push(&entities, entity);
+    entity_array_push(&global_entities, entity);
     return entity;
 }
 
@@ -71,7 +71,7 @@ void entity_set_direction(Entity *entity, vec3f direction)
 
 void entity_destroy(Entity* entity, u32 idx)
 {
-    assert(entity == entities.buffer[idx]);
+    assert(entity == global_entities.buffer[idx]);
     switch (entity->id) {
         _ENTITY_DIE(ENEMY, enemy)
         _ENTITY_DIE(KNIGHT, knight)
@@ -79,15 +79,15 @@ void entity_destroy(Entity* entity, u32 idx)
     }
     if (entity == player.entity)
         player.entity = NULL;
-    entity_array_cut(&entities, idx);
+    entity_array_cut(&global_entities, idx);
     free(entity);
 }
 
 void destroy_all_entities(void)
 {
-    for (i32 i = 0; i < entities.length; i++)
-        free(entities.buffer[i]);
-    entity_array_destroy(&entities);
+    for (i32 i = 0; i < global_entities.length; i++)
+        free(global_entities.buffer[i]);
+    entity_array_destroy(&global_entities);
 }
 
 _ARRAY_DEFINE(Entity, entity)

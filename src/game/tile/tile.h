@@ -18,7 +18,7 @@ void tile_destroy(Tile* tile, u32 idx);
 void destroy_all_tiles(void);
 
 _ARRAY_DECLARE(Tile, tile)
-extern TileArray tiles;
+extern TileArray global_tiles;
 
 #define MAX_TILE_ID 2
 #define GRASS 0

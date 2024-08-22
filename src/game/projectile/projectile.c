@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <assert.h>
 
-ProjectileArray projectiles;
+ProjectileArray global_projectiles;
 
 Projectile* projectile_create(u32 id, u8 friendly)
 {
@@ -19,7 +19,7 @@ Projectile* projectile_create(u32 id, u8 friendly)
     projectile->friendly = friendly;
     projectile->hitbox_radius = 0.3;
     projectile->timer = 0;
-    projectile_array_push(&projectiles, projectile);
+    projectile_array_push(&global_projectiles, projectile);
     return projectile;
 }
 
@@ -38,16 +38,16 @@ void projectile_update(Projectile* projectile, f32 dt)
 
 void projectile_destroy(Projectile* projectile, u32 idx)
 {
-    assert(projectile == projectiles.buffer[idx]);
-    projectile_array_cut(&projectiles, idx);
+    assert(projectile == global_projectiles.buffer[idx]);
+    projectile_array_cut(&global_projectiles, idx);
     free(projectile);
 }
 
 void destroy_all_projectiles(void)
 {
-    for (i32 i = 0; i < projectiles.length; i++)
-        free(projectiles.buffer[i]);
-    projectile_array_destroy(&projectiles);
+    for (i32 i = 0; i < global_projectiles.length; i++)
+        free(global_projectiles.buffer[i]);
+    projectile_array_destroy(&global_projectiles);
 }
 
 _ARRAY_DEFINE(Projectile, projectile)

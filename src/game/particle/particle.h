@@ -20,6 +20,6 @@ void particle_destroy(Particle *particle, u32 idx);
 void destroy_all_particles(void);
 
 _ARRAY_DECLARE(Particle, particle)
-extern ParticleArray particles;
+extern ParticleArray global_particles;
 
 #endif

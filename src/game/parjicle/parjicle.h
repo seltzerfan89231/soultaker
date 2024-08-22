@@ -19,6 +19,6 @@ void parjicle_destroy(Parjicle *parj, u32 idx);
 void destroy_all_parjicles(void);
 
 _ARRAY_DECLARE(Parjicle, parjicle)
-extern ParjicleArray parjicles;
+extern ParjicleArray global_parjicles;
 
 #endif

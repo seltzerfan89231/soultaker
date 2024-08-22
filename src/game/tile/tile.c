@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <assert.h>
 
-TileArray tiles;
+TileArray global_tiles;
 
 #define _CREATE(_id, _lid) \
     case _id : _lid##_create(tile); break;
@@ -18,23 +18,23 @@ Tile* tile_create(u32 id, f32 x, f32 z)
         _CREATE(GRASS, grass)
         _CREATE(HELLSTONE, hellstone)
     }
-    tile_array_push(&tiles, tile);
+    tile_array_push(&global_tiles, tile);
     tilemap_insert_tile(tile);
     return tile;
 }
 
 void tile_destroy(Tile* tile, u32 idx)
 {
-    assert(tile == tiles.buffer[idx]);
-    tile_array_cut(&tiles, idx);
+    assert(tile == global_tiles.buffer[idx]);
+    tile_array_cut(&global_tiles, idx);
     free(tile);
 }
 
 void destroy_all_tiles(void)
 {
-    for (i32 i = 0; i < tiles.length; i++)
-        free(tiles.buffer[i]);
-    tile_array_destroy(&tiles);
+    for (i32 i = 0; i < global_tiles.length; i++)
+        free(global_tiles.buffer[i]);
+    tile_array_destroy(&global_tiles);
 }
 
 _ARRAY_DEFINE(Tile, tile)

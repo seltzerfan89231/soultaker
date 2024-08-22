@@ -30,7 +30,7 @@ void entity_destroy(Entity* entity, u32 idx);
 void destroy_all_entities(void);
 
 _ARRAY_DECLARE(Entity, entity)
-extern EntityArray entities;
+extern EntityArray global_entities;
 
 #define MAX_ENTITY_ID 3
 #define KNIGHT 0

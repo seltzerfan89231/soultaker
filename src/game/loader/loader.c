@@ -11,14 +11,14 @@ static void reset(void)
     destroy_all_particles();
     destroy_all_obstacles();
     destroy_all_parjicles();
-    projectiles = projectile_array_create(0, 100);
-    entities = entity_array_create(0, 100);
-    particles = particle_array_create(0, 100);
-    parjicles = parjicle_array_create(0, 100);
-    parstacles = parstacle_array_create(0, 100);
-    obstacles = obstacle_array_create(0, 100);
-    tiles = tile_array_create(0, 100);
-    walls = wall_array_create(0, 100);
+    global_projectiles = projectile_array_create(0, 100);
+    global_entities = entity_array_create(0, 100);
+    global_particles = particle_array_create(0, 100);
+    global_parjicles = parjicle_array_create(0, 100);
+    global_parstacles = parstacle_array_create(0, 100);
+    global_obstacles = obstacle_array_create(0, 100);
+    global_tiles = tile_array_create(0, 100);
+    global_walls = wall_array_create(0, 100);
     game_time = 0;
 }
 
@@ -67,10 +67,10 @@ void load_level1(void)
         parstacle->scale = 1 + (f32)rand() / RAND_MAX;
     }
 
-    parstacle_array_update(&parstacles);
-    obstacle_array_update(&obstacles);
-    tile_array_update(&tiles);
-    wall_array_update(&walls);
+    parstacle_array_update(&global_parstacles);
+    obstacle_array_update(&global_obstacles);
+    tile_array_update(&global_tiles);
+    wall_array_update(&global_walls);
 }
 
 void load_level2(void)
@@ -111,8 +111,8 @@ void load_level2(void)
     parstacle->position = vec3f_create(20.0f, 0.0f, 20.0f);
     parstacle->scale = 1.8f;
 
-    parstacle_array_update(&parstacles);
-    obstacle_array_update(&obstacles);
-    tile_array_update(&tiles);
-    wall_array_update(&walls);
+    parstacle_array_update(&global_parstacles);
+    obstacle_array_update(&global_obstacles);
+    tile_array_update(&global_tiles);
+    wall_array_update(&global_walls);
 }

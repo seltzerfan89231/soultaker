@@ -151,14 +151,14 @@ void data_update(void)
 
 #define _DATA_UPDATE(_utype, _ltype, _ltypes) \
     void data_update_##_ltypes(void) { \
-        if (!_ltype##_array_updated(&_ltypes)) \
+        if (!_ltype##_array_updated(&global_##_ltypes)) \
             return; \
-        for (i = 0; i < _ltypes.length; i++) \
-            _ltype##_push_data(_ltypes.buffer[i], i); \
-        if (_ltype##_array_changed_size(&_ltypes)) \
-            renderer_malloc(_utype##_VAO, _ltypes.max_length); \
+        for (i = 0; i < global_##_ltypes.length; i++) \
+            _ltype##_push_data(global_##_ltypes.buffer[i], i); \
+        if (_ltype##_array_changed_size(&global_##_ltypes)) \
+            renderer_malloc(_utype##_VAO, global_##_ltypes.max_length); \
         renderer_update(_utype##_VAO, 0, i, data.buffer); \
-        _ltypes.updated = 0; \
+        global_##_ltypes.updated = 0; \
     }
 
 _DATA_UPDATE(PARJICLE, parjicle, parjicles)

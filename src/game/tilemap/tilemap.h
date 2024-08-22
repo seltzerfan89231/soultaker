@@ -14,7 +14,7 @@
 typedef struct {
     bool is_wall;
     void *ptr;
-    ObstacleArray obs;
+    ObstacleArray obstacles;
 } TileMapPtr;
 
 typedef struct {

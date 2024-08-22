@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <assert.h>
 
-ParticleArray particles;
+ParticleArray global_particles;
 
 Particle* particle_create(void)
 {
@@ -15,7 +15,7 @@ Particle* particle_create(void)
     particle->color.r = 0;
     particle->color.g = 0;
     particle->color.b = 1;
-    particle_array_push(&particles, particle);
+    particle_array_push(&global_particles, particle);
     return particle;
 }
 
@@ -27,16 +27,16 @@ void particle_update(Particle* particle, f32 dt)
 
 void particle_destroy(Particle *particle, u32 idx)
 {
-    assert(particle == particles.buffer[idx]);
-    particle_array_cut(&particles, idx);
+    assert(particle == global_particles.buffer[idx]);
+    particle_array_cut(&global_particles, idx);
     free(particle);
 }
 
 void destroy_all_particles(void)
 {
-    for (i32 i = 0; i < particles.length; i++)
-        free(particles.buffer[i]);
-    particle_array_destroy(&particles);
+    for (i32 i = 0; i < global_particles.length; i++)
+        free(global_particles.buffer[i]);
+    particle_array_destroy(&global_particles);
 }
 
 _ARRAY_DEFINE(Particle, particle)

@@ -31,10 +31,10 @@ static void *game_update(void *vargp)
                 sem_wait(&mutex);
                 update_objects(game_dt);
                 collide_objects(game_dt);
-                entity_array_update(&entities);
-                projectile_array_update(&projectiles);
-                particle_array_update(&particles);
-                parjicle_array_update(&parjicles);
+                entity_array_update(&global_entities);
+                projectile_array_update(&global_projectiles);
+                particle_array_update(&global_particles);
+                parjicle_array_update(&global_parjicles);
                 sem_post(&mutex);
             }
         }
@@ -50,14 +50,14 @@ void game_init(void)
 {
     aud_init();
     tilemap_init();
-    projectiles = projectile_array_create(0, 100);
-    entities = entity_array_create(0, 100);
-    particles = particle_array_create(0, 100);
-    parjicles = parjicle_array_create(0, 100);
-    parstacles = parstacle_array_create(0, 100);
-    obstacles = obstacle_array_create(0, 100);
-    tiles = tile_array_create(0, 100);
-    walls = wall_array_create(0, 100);
+    global_projectiles = projectile_array_create(0, 100);
+    global_entities = entity_array_create(0, 100);
+    global_particles = particle_array_create(0, 100);
+    global_parjicles = parjicle_array_create(0, 100);
+    global_parstacles = parstacle_array_create(0, 100);
+    global_obstacles = obstacle_array_create(0, 100);
+    global_tiles = tile_array_create(0, 100);
+    global_walls = wall_array_create(0, 100);
     game_paused = TRUE;
     kill_thread = FALSE;
     sem_init(&mutex, 0, 1);

@@ -49,7 +49,7 @@ void tilemap_insert_obstacle(Obstacle *obstacle)
         for (i32 j = z1; j <= z2 && j < tilemap.length; j++) {
             if (j < 0)
                 continue;
-            obstacle_array_push(&tilemap.buffer[i * tilemap.width + j].obs, obstacle);
+            obstacle_array_push(&tilemap.buffer[i * tilemap.width + j].obstacles, obstacle);
         }
     }
 }
@@ -79,13 +79,13 @@ Obstacle** tilemap_get_obstacles(u32 x, u32 z)
     if (!in_tilemap(x, z))
         return NULL;
     TileMapPtr t = tilemap.buffer[x * tilemap.width + z];
-    Obstacle **arr = malloc((t.obs.length + 1) * sizeof(Obstacle*));
+    Obstacle **arr = malloc((t.obstacles.length + 1) * sizeof(Obstacle*));
     if (arr == NULL) {
         printf("something went wrong");
         exit(1);
     }
-    memcpy(arr, t.obs.buffer, t.obs.length * sizeof(Obstacle*));
-    arr[t.obs.length] = NULL;
+    memcpy(arr, t.obstacles.buffer, t.obstacles.length * sizeof(Obstacle*));
+    arr[t.obstacles.length] = NULL;
     return arr;
 }
 
@@ -205,7 +205,7 @@ void tilemap_collide_entity(Entity *entity, vec3f prev_position)
 void tilemap_reset(u32 width, u32 length)
 {
     for (i32 i = 0; i < tilemap.width * tilemap.length; i++)
-        obstacle_array_destroy(&tilemap.buffer[i].obs);
+        obstacle_array_destroy(&tilemap.buffer[i].obstacles);
     free(tilemap.buffer);
     tilemap.width = width;
     tilemap.length = length;
@@ -213,7 +213,7 @@ void tilemap_reset(u32 width, u32 length)
     for (i32 i = 0; i < width * length; i++) {
         tilemap.buffer[i].is_wall = FALSE;
         tilemap.buffer[i].ptr = NULL;
-        tilemap.buffer[i].obs = obstacle_array_create(0, 1);
+        tilemap.buffer[i].obstacles = obstacle_array_create(0, 1);
     }
 }
 

@@ -19,7 +19,7 @@ void wall_destroy(Wall* wall, u32 idx);
 void destroy_all_walls(void);
 
 _ARRAY_DECLARE(Wall, wall)
-extern WallArray walls;
+extern WallArray global_walls;
 
 #define MAX_WALL_ID 1
 #define DEFAULT_WALL 0
