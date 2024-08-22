@@ -74,6 +74,8 @@ void key_callback(GLFWwindow* handle, i32 key, i32 scancode, i32 action, i32 mod
         game_setup(1);
     if (key == GLFW_KEY_G && action == GLFW_PRESS)
         audio_play_sound(GUI_CLICK_AUD);
+    if (key == GLFW_KEY_U && action == GLFW_PRESS)
+        chat_send_message("Hello World");
 }
 
 static void process_input(void)
