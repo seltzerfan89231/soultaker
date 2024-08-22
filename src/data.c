@@ -1,11 +1,14 @@
 #include "data.h"
 #include <stdlib.h>
 
+#define BUFFER_SIZE 50000000
+
 Data data;
 i32 i;
 
 static void wall_push_data(Wall* wall, u32 offset)
 {
+    assert((offset+1)*5 < BUFFER_SIZE);
     offset *= 5;
     data.buffer[offset++] = wall->position.x;
     data.buffer[offset++] = wall->height;
@@ -16,6 +19,7 @@ static void wall_push_data(Wall* wall, u32 offset)
 
 static void tile_push_data(Tile* tile, u32 offset)
 {
+    assert((offset+1)*3 < BUFFER_SIZE);
     offset *= 3;
     data.buffer[offset++] = tile->position.x;
     data.buffer[offset++] = tile->position.z;
@@ -24,6 +28,7 @@ static void tile_push_data(Tile* tile, u32 offset)
 
 static void projectile_push_data(Projectile* projectile, u32 offset)
 {
+    assert((offset+1)*6 < BUFFER_SIZE);
     offset *= 6;
     data.buffer[offset++] = projectile->position.x;
     data.buffer[offset++] = projectile->position.y;
@@ -35,6 +40,7 @@ static void projectile_push_data(Projectile* projectile, u32 offset)
 
 static void entity_push_data(Entity* entity, u32 offset)
 {
+    assert((offset+1)*10 < BUFFER_SIZE);
     offset *= 10;
     data.buffer[offset++] = entity->position.x;
     data.buffer[offset++] = entity->position.y;
@@ -63,6 +69,7 @@ static void entity_push_data(Entity* entity, u32 offset)
 
 static void particle_push_data(Particle *particle, u32 offset)
 {
+    assert((offset+1)*7 < BUFFER_SIZE);
     offset *= 7;
     data.buffer[offset++] = particle->position.x;
     data.buffer[offset++] = particle->position.y;
@@ -75,6 +82,7 @@ static void particle_push_data(Particle *particle, u32 offset)
 
 static void parstacle_push_data(Parstacle *parstacle, u32 offset)
 {
+    assert((offset+1)*5 < BUFFER_SIZE);
     offset *= 5;
     data.buffer[offset++] = parstacle->position.x;
     data.buffer[offset++] = parstacle->position.y;
@@ -85,6 +93,7 @@ static void parstacle_push_data(Parstacle *parstacle, u32 offset)
 
 static void parjicle_push_data(Parjicle *parjicle, u32 offset)
 {
+    assert((offset+1)*8 < BUFFER_SIZE);
     offset *= 8;
     data.buffer[offset++] = parjicle->position.x;
     data.buffer[offset++] = parjicle->position.y;
@@ -99,6 +108,7 @@ static void parjicle_push_data(Parjicle *parjicle, u32 offset)
 
 static void obstacle_push_data(Obstacle *obstacle, u32 offset)
 {
+    assert((offset+1)*5 < BUFFER_SIZE);
     offset *= 5;
     data.buffer[offset++] = obstacle->position.x;
     data.buffer[offset++] = obstacle->position.y;
@@ -109,7 +119,7 @@ static void obstacle_push_data(Obstacle *obstacle, u32 offset)
 
 void data_init(void)
 {
-    data.buffer = malloc(50000000 * sizeof(f32));
+    data.buffer = malloc(BUFFER_SIZE * sizeof(f32));
     data.frame_data = malloc(MAX_ENTITY_ID * sizeof(FrameData**));
     knight_init_frame_data(data.frame_data);
     enemy_init_frame_data(data.frame_data);

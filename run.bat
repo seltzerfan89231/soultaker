@@ -15,5 +15,7 @@ for /R .\src %%f in (*) do (
     if %%~xf==.c set "Cfiles=!Cfiles! %%f"
 )
 gcc %flags% %Ifiles% %Cfiles% %link% -o %name%
-%name%
-del %name%.exe
+
+if %ERRORLEVEL% == 0 (
+    %name%
+)

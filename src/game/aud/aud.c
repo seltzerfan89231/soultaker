@@ -15,10 +15,7 @@ static sem_t mutex;
 
 static void *aud_update(void *vargp)
 {
-    while (TRUE) {
-        if (kill_thread)
-            pthread_exit(NULL);
-
+    while (!kill_thread) {
         sem_wait(&mutex);
         for (i32 i = 0; i < num_auds; i++) {
             Aud aud = auds[i];

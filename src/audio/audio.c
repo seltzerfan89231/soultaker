@@ -21,10 +21,7 @@ static void checkError(const char* msg) {
 
 static void *audio_update(void *vargp)
 {
-    while (TRUE) {
-        if (kill_thread)
-            pthread_exit(NULL);
-
+    while (!kill_thread) {
         aud_wait();
         for (ALint i = 0; i < num_auds; i++) {
             Aud *aud = &auds[i];
@@ -176,5 +173,4 @@ static int load_sound(ALuint id, char *path)
 static int load_sounds(void)
 {
     load_sound(GUI_CLICK_AUD, "assets/audio/gui_click.wav");
-    load_sound(1, "nope.wav");
 }

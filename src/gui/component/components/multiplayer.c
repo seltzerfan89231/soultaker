@@ -1,4 +1,5 @@
 #include "../component.h"
+#include "../../../networking/networking.h"
 
 static void create_buttons(Component *comp)
 {
@@ -27,8 +28,10 @@ void comp_multiplayer_update(Component *comp)
 
 void comp_multiplayer_mouse_button_callback(Component *comp, i32 button, i32 action)
 {
-    if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) 
+    if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
+        networking_init();
         create_buttons(comp);
+    }
 }
 
 void comp_multiplayer_key_callback(Component *comp, i32 key, i32 scancode, i32 action, i32 mods)

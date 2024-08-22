@@ -20,10 +20,7 @@ extern void update_objects(f32 dt);
 
 static void *game_update(void *vargp)
 {
-    while (TRUE) {
-        if (kill_thread)
-            pthread_exit(NULL);
-
+    while (!kill_thread) {
         struct timeval start, end;
         i64 seconds, microseconds;
         

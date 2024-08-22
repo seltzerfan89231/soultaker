@@ -151,6 +151,7 @@ void state_loop(void)
 
 void state_exit(void)
 {
+    networking_destroy();
     audio_destroy();
     renderer_destroy();
     game_destroy();

@@ -6,6 +6,7 @@
 #include "window/window.h"
 #include "renderer/renderer.h"
 #include "camera/camera.h"
+#include "networking/networking.h"
 #include "gui/gui.h"
 #include "data.h"
 
