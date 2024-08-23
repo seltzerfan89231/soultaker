@@ -3,6 +3,7 @@
 #include <pthread.h>
 #include <stdlib.h>
 #include <winsock2.h>
+#include <string.h>
 // use atomic bool
 
 #define BUFFER_SIZE 2000
@@ -22,7 +23,7 @@ typedef struct {
 } Server;
 
 typedef struct {
-    struct sockaddr_in client;
+    struct sockaddr_in address;
     SOCKET socket;
 } Client;
 
@@ -93,6 +94,7 @@ static int create_client(void)
         networking_destroy();
         return 1;
     }
+
     chat_join_init();
 }
 
@@ -158,7 +160,7 @@ void chat_send_message(char *message)
 
 static int seen(struct sockaddr_in *clients, struct sockaddr_in client) {
     for (int i = 0; i < MAX_CLIENTS; i++)
-        if (clients[i].sin_addr.s_addr == client.sin_addr.s_addr)
+        if (clients[i].sin_addr.s_addr == client.sin_addr.s_addr && clients[i].sin_port == client.sin_port)
             return i;
     return -1;
 }
@@ -167,14 +169,13 @@ static void *host_listener(void *vargp)
 {
     struct sockaddr_in client_addr, connected_clients[MAX_CLIENTS];
     int recv_len, client_addr_len, num_clients = 0, lens[MAX_CLIENTS];
-    char names[MAX_CLIENTS][BUFFER_SIZE];
     struct timeval timeout;
     FD_SET readfds;
 
     while (!kill_thread) {
         int idx;
         size_t message_size;
-        char buffer[BUFFER_SIZE];
+        char buffer[BUFFER_SIZE], message[BUFFER_SIZE], name[BUFFER_SIZE];
         client_addr_len = sizeof(client_addr);
         timeout.tv_sec = 1;
         timeout.tv_usec = 0;
@@ -197,20 +198,20 @@ static void *host_listener(void *vargp)
         if ((idx = seen(connected_clients, client_addr)) == -1) {
             connected_clients[num_clients] = client_addr;
             lens[num_clients] = client_addr_len;
-            strcpy(names[num_clients], buffer);
             idx = num_clients;
             num_clients++;
             printf("Successfully added %s.\n", buffer);
         }
 
-        /* for (int i = 0; i < num_clients; i++) {
-            if (connected_clients[i].sin_family == 69)
-                continue;
-            if (sendto(net.socket, buffer, sizeof(buffer), 0, (struct sockaddr *)&connected_clients[i], lens[i]) == SOCKET_ERROR) {
+        printf("Received message from client %d %s:%d: %s\n", idx + 1, inet_ntoa(client_addr.sin_addr), ntohs(client_addr.sin_port), buffer);
+        sprintf(name, "Client %d", idx+1);
+        strcat(strcat(strcpy(message, name), "> "), buffer);
+        for (int i = 0; i < num_clients; i++) {
+            if (sendto(server.socket, message, sizeof(message), 0, (struct sockaddr *)&connected_clients[i], lens[i]) == SOCKET_ERROR) {
                 printf("Sendto failed with error code : %d", WSAGetLastError());
                 pthread_exit(NULL);
             }
-        } */
+        }
     }
 }
 
@@ -220,6 +221,16 @@ static void *client_listener(void *vargp)
     int recv_len, server_addr_len;
     struct timeval timeout;
     FD_SET readfds;
+
+    server_addr.sin_family = AF_INET;
+    if (!(server_addr.sin_addr.s_addr = inet_addr(SERVER_ADDR))) {
+        printf("Invalid IP address");
+        pthread_exit(NULL);
+    }
+    if (!(server_addr.sin_port = htons(SERVER_PORT))) {
+        printf("Invalid port number");
+        pthread_exit(NULL);
+    };
 
     chat_send_message("Client 1");
 
@@ -237,7 +248,7 @@ static void *client_listener(void *vargp)
         } else if (result == 0) {
             continue;
         }
-        recv_len = recvfrom(client.socket, buffer, BUFFER_SIZE, 0, (struct sockaddr *)&server_addr, &server_addr_len);
+        recv_len = recvfrom(client.socket, buffer, BUFFER_SIZE, 0, NULL, NULL);
         if (recv_len == SOCKET_ERROR) {
             printf("Client recv failed : %d\n", WSAGetLastError());
             pthread_exit(NULL);
