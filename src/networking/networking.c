@@ -10,16 +10,24 @@
 
 #define SERVER_ADDR "127.0.0.1"
 #define CLIENT_ADDR "127.0.0.1"
-#define SERVER_PORT 12345
+#define SERVER_PORT 5000
+#define CLIENT_PORT 6000
+
+static WSADATA wsa;
+static bool wsa_initialized;
 
 typedef struct {
-    WSADATA wsa;
-    bool initialized;
     struct sockaddr_in address;
     SOCKET socket;
-} Networking;
+} Server;
 
-static Networking net;
+typedef struct {
+    struct sockaddr_in client;
+    SOCKET socket;
+} Client;
+
+static Server server;
+static Client client;
 
 static pthread_t host_thread_id;
 static pthread_t client_thread_id;
@@ -32,44 +40,42 @@ static void *client_listener(void *vargp);
 int networking_init(void)
 {
     printf("Initializing Winsock...\n");
-    if (WSAStartup(MAKEWORD(2,2), &net.wsa) != 0) {
+    if (WSAStartup(MAKEWORD(2,2), &wsa) != 0) {
         printf("Failed. Error Code: %d", WSAGetLastError());
         return 1;
     }
-    net.initialized = TRUE;
-
+    wsa_initialized = TRUE;
 }
 
 void networking_destroy(void)
 {
     chat_destroy();
-    if (net.initialized) {
-        closesocket(net.socket);
+    if (wsa_initialized) {
         WSACleanup();
         puts("Succesfully cleaned up.");
     } else {
         puts("WSA was not initialized.");
     }
-    net.initialized = FALSE;
+    wsa_initialized = FALSE;
 }
 
-int networking_host(void)
+static int create_server(void)
 {
     puts("Creating host...");
-    net.socket = socket(AF_INET, SOCK_DGRAM, 0);
-    if (net.socket == INVALID_SOCKET) {
+    server.socket = socket(AF_INET, SOCK_DGRAM, 0);
+    if (server.socket == INVALID_SOCKET) {
         printf("Could not create socket : %d", WSAGetLastError());
         networking_destroy();
         return 1;
     }
 
-    net.address.sin_family = AF_INET;
-    net.address.sin_addr.s_addr = INADDR_ANY;
-    net.address.sin_port = htons(SERVER_PORT);
+    server.address.sin_family = AF_INET;
+    server.address.sin_addr.s_addr = INADDR_ANY;
+    server.address.sin_port = htons(SERVER_PORT);
     
-    if (bind(net.socket, (struct sockaddr *)&net.address, sizeof(net.address)) == SOCKET_ERROR) {
+    if (bind(server.socket, (struct sockaddr *)&server.address, sizeof(server.address)) == SOCKET_ERROR) {
         printf("Bind failed with error code : %d", WSAGetLastError());
-        closesocket(net.socket);
+        closesocket(server.socket);
         WSACleanup();
         return 1;
     }
@@ -78,16 +84,27 @@ int networking_host(void)
     chat_host_init();
 }
 
-int networking_join(void)
+static int create_client(void)
 {
     puts("Joining...");
-    net.socket = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
-    if (net.socket == INVALID_SOCKET) {
+    client.socket = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
+    if (client.socket == INVALID_SOCKET) {
         printf("Could not create socket : %d", WSAGetLastError());
         networking_destroy();
         return 1;
     }
     chat_join_init();
+}
+
+int networking_host(void)
+{
+    create_server();
+    create_client();
+}
+
+int networking_join(void)
+{
+    create_client();
 }
 
 void chat_host_init(void)
@@ -122,42 +139,8 @@ void chat_send_message(char *message)
 {
     if(!chat_initialized)
         return;
-}
 
-static void *host_listener(void *vargp)
-{
-    struct sockaddr_in client_addr;
-    int recv_len, client_addr_len;
-    struct timeval timeout;
-    FD_SET readfds;
-    while (!kill_thread) {
-        size_t message_size;
-        char buffer[BUFFER_SIZE];
-        client_addr_len = sizeof(client_addr);
-        timeout.tv_sec = 1;
-        timeout.tv_usec = 0;
-        FD_ZERO(&readfds);
-        FD_SET(net.socket, &readfds);
-        int result = select(net.socket + 1, &readfds, NULL, NULL, &timeout);
-        if (result == -1) {
-            puts("Select error in host listener");
-            pthread_exit(NULL);
-        } else if (result == 0) {
-            continue;
-        }
-        recv_len = recvfrom(net.socket, buffer, BUFFER_SIZE, 0, (struct sockaddr *)&client_addr, &client_addr_len);
-        if (recv_len == SOCKET_ERROR) {
-            printf("Host recv failed with error code : %d", WSAGetLastError());
-            pthread_exit(NULL);
-        }
-        buffer[recv_len] = '\0';
-        puts(buffer);
-    }
-}
-
-static void *client_listener(void *vargp)
-{
-   /*  struct sockaddr_in server_addr;
+    struct sockaddr_in server_addr;
     server_addr.sin_family = AF_INET;
     if (!(server_addr.sin_addr.s_addr = inet_addr(SERVER_ADDR))) {
         printf("Invalid IP address");
@@ -167,39 +150,98 @@ static void *client_listener(void *vargp)
         printf("Invalid port number");
         pthread_exit(NULL);
     };
-    char *text = "Hello World.";
-    if (sendto(net.socket, text, strlen(text), 0, (struct sockaddr *)&server_addr, sizeof(server_addr)) == SOCKET_ERROR) {
+    if (sendto(client.socket, message, strlen(message), 0, (struct sockaddr *)&server_addr, sizeof(server_addr)) == SOCKET_ERROR) {
         puts("Failed to send message from client");
         pthread_exit(NULL);
-    } */
+    }
+}
 
+static int seen(struct sockaddr_in *clients, struct sockaddr_in client) {
+    for (int i = 0; i < MAX_CLIENTS; i++)
+        if (clients[i].sin_addr.s_addr == client.sin_addr.s_addr)
+            return i;
+    return -1;
+}
+
+static void *host_listener(void *vargp)
+{
+    struct sockaddr_in client_addr, connected_clients[MAX_CLIENTS];
+    int recv_len, client_addr_len, num_clients = 0, lens[MAX_CLIENTS];
+    char names[MAX_CLIENTS][BUFFER_SIZE];
+    struct timeval timeout;
+    FD_SET readfds;
+
+    while (!kill_thread) {
+        int idx;
+        size_t message_size;
+        char buffer[BUFFER_SIZE];
+        client_addr_len = sizeof(client_addr);
+        timeout.tv_sec = 1;
+        timeout.tv_usec = 0;
+        FD_ZERO(&readfds);
+        FD_SET(server.socket, &readfds);
+        int result = select(server.socket + 1, &readfds, NULL, NULL, &timeout);
+        if (result == -1) {
+            puts("Select error in host listener");
+            pthread_exit(NULL);
+        } else if (result == 0) {
+            continue;
+        }
+        recv_len = recvfrom(server.socket, buffer, BUFFER_SIZE, 0, (struct sockaddr *)&client_addr, &client_addr_len);
+        if (recv_len == SOCKET_ERROR) {
+            printf("Host recv failed with error code : %d", WSAGetLastError());
+            pthread_exit(NULL);
+        }
+        buffer[recv_len] = '\0';
+
+        if ((idx = seen(connected_clients, client_addr)) == -1) {
+            connected_clients[num_clients] = client_addr;
+            lens[num_clients] = client_addr_len;
+            strcpy(names[num_clients], buffer);
+            idx = num_clients;
+            num_clients++;
+            printf("Successfully added %s.\n", buffer);
+        }
+
+        /* for (int i = 0; i < num_clients; i++) {
+            if (connected_clients[i].sin_family == 69)
+                continue;
+            if (sendto(net.socket, buffer, sizeof(buffer), 0, (struct sockaddr *)&connected_clients[i], lens[i]) == SOCKET_ERROR) {
+                printf("Sendto failed with error code : %d", WSAGetLastError());
+                pthread_exit(NULL);
+            }
+        } */
+    }
+}
+
+static void *client_listener(void *vargp)
+{
     struct sockaddr_in server_addr;
     int recv_len, server_addr_len;
     struct timeval timeout;
     FD_SET readfds;
-    int result = select(net.socket + 1, &readfds, NULL, NULL, &timeout);
+
+    chat_send_message("Client 1");
+
     while (!kill_thread) {
         size_t message_size;
         char buffer[BUFFER_SIZE];
         timeout.tv_sec = 1;
         timeout.tv_usec = 0;
         FD_ZERO(&readfds);
-        FD_SET(net.socket, &readfds);
-        int result = select(net.socket + 1, &readfds, NULL, NULL, &timeout);
+        FD_SET(client.socket, &readfds);
+        int result = select(client.socket + 1, &readfds, NULL, NULL, &timeout);
         if (result == -1) {
             puts("Select error in host listener");
             pthread_exit(NULL);
         } else if (result == 0) {
-            puts("Timeout");
             continue;
         }
-
-        recv_len = recvfrom(net.socket, buffer, BUFFER_SIZE, 0, (struct sockaddr *)&server_addr, &server_addr_len);
+        recv_len = recvfrom(client.socket, buffer, BUFFER_SIZE, 0, (struct sockaddr *)&server_addr, &server_addr_len);
         if (recv_len == SOCKET_ERROR) {
             printf("Client recv failed : %d\n", WSAGetLastError());
             pthread_exit(NULL);
         }
-        
         buffer[recv_len] = '\0';
         puts(buffer);
     }

@@ -22,7 +22,7 @@ void projectile_destroy(Projectile* projectile, u32 idx);
 void destroy_all_projectiles(void);
 
 _ARRAY_DECLARE(Projectile, projectile)
-extern ProjectileArray projectiles;
+extern ProjectileArray global_projectiles;
 
 #define MAX_PROJECTILE_ID 1
 #define SWORD 0

@@ -2,7 +2,6 @@
 #define NETWORKING_H
 
 #include "../util/type.h"
-#include <winsock2.h>
 
 int networking_init(void);
 void networking_destroy(void);
