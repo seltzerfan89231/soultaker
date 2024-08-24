@@ -116,3 +116,37 @@ void load_level2(void)
     tile_array_update(&global_tiles);
     wall_array_update(&global_walls);
 }
+
+void load_level3(void)
+{
+    reset();
+    tilemap_reset(MAP_WIDTH, MAP_WIDTH);
+    for (i32 i = 0; i < MAP_WIDTH; i++) {
+        for (i32 j = 0; j < MAP_WIDTH; j++) {
+            if (i == 0 || j == 0 || i == MAP_WIDTH - 1 || j == MAP_WIDTH - 1)
+                wall_create(DEFAULT_WALL, i, j, 3.0);
+            else
+                tile_create(GRASS, i, j);
+        }
+    }
+
+    player.entity = entity_create(KNIGHT, TRUE);
+    player.entity->speed = 8;
+    player.entity->health = player.entity->max_health = 100000;
+    player.mana = player.max_mana = 10;
+    player.mana_regen = player.health_regen = 0.5;
+    player.weapon.id = 0;
+    player.weapon.tex = SWORD_1_TEX;
+    player.entity->position = vec3f_create(20.0f, 0.0f, 20.0f);
+
+    for (i32 i = 0; i < 10; i++) {
+        Entity* entity = entity_create(TRAINING_DUMMY, 0);
+        entity->position = vec3f_create(20 + i, 0, 15);
+        entity->scale = 1.0f;
+    }
+
+    parstacle_array_update(&global_parstacles);
+    obstacle_array_update(&global_obstacles);
+    tile_array_update(&global_tiles);
+    wall_array_update(&global_walls);
+}

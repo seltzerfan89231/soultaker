@@ -31,6 +31,7 @@ Entity* entity_create(u32 id, u8 friendly)
         _ENTITY_CREATE(ENEMY, enemy)
         _ENTITY_CREATE(KNIGHT, knight)
         _ENTITY_CREATE(SLIME, slime)
+        _ENTITY_CREATE(TRAINING_DUMMY, training_dummy)
     }
     entity_array_push(&global_entities, entity);
     return entity;
@@ -46,6 +47,7 @@ void entity_update(Entity* entity, f32 dt)
         _ENTITY_UPDATE(ENEMY, enemy)
         _ENTITY_UPDATE(KNIGHT, knight)
         _ENTITY_UPDATE(SLIME, slime)
+        _ENTITY_UPDATE(TRAINING_DUMMY, training_dummy)
     }
     entity->timer += dt;
     entity->timer2 -= dt;
@@ -76,6 +78,7 @@ void entity_destroy(Entity* entity, u32 idx)
         _ENTITY_DIE(ENEMY, enemy)
         _ENTITY_DIE(KNIGHT, knight)
         _ENTITY_DIE(SLIME, slime)
+        _ENTITY_DIE(TRAINING_DUMMY, training_dummy)
     }
     if (entity == player.entity)
         player.entity = NULL;

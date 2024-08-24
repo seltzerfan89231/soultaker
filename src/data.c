@@ -124,6 +124,7 @@ void data_init(void)
     knight_init_frame_data(data.frame_data);
     enemy_init_frame_data(data.frame_data);
     slime_init_frame_data(data.frame_data);
+    training_dummy_init_frame_data(data.frame_data);
 }
 
 void data_destroy(void)
@@ -131,6 +132,7 @@ void data_destroy(void)
     knight_destroy_frame_data(data.frame_data);
     enemy_destroy_frame_data(data.frame_data);
     slime_destroy_frame_data(data.frame_data);
+    training_dummy_destroy_frame_data(data.frame_data);
     free(data.frame_data);
     free(data.buffer);
 }

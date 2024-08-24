@@ -32,10 +32,11 @@ void destroy_all_entities(void);
 _ARRAY_DECLARE(Entity, entity)
 extern EntityArray global_entities;
 
-#define MAX_ENTITY_ID 3
+#define MAX_ENTITY_ID 4
 #define KNIGHT 0
 #define ENEMY  1
 #define SLIME  2
+#define TRAINING_DUMMY 3
 
 #define _ENTITY_INIT(_type) \
     void _type##_init_frame_data(FrameData ***frame_data); \
@@ -47,5 +48,6 @@ extern EntityArray global_entities;
 _ENTITY_INIT(knight)
 _ENTITY_INIT(enemy)
 _ENTITY_INIT(slime)
+_ENTITY_INIT(training_dummy)
 
 #endif
