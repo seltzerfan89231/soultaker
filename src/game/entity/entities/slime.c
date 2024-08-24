@@ -1,5 +1,6 @@
 #include "../entity.h"
 #include "../../player/player.h"
+#include "../../projectile/projectile.h"
 
 #define NUM_STATES 1
 #define IDLE   0

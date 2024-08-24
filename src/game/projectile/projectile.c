@@ -19,6 +19,9 @@ Projectile* projectile_create(u32 id, u8 friendly)
     projectile->friendly = friendly;
     projectile->hitbox_radius = 0.3;
     projectile->timer = 0;
+    projectile->pierce = TRUE;
+    projectile->hit_entities = malloc(sizeof(EntityArray));
+    *projectile->hit_entities = entity_array_create(0, 1);
     projectile_array_push(&global_projectiles, projectile);
     return projectile;
 }
@@ -36,10 +39,25 @@ void projectile_update(Projectile* projectile, f32 dt)
     projectile->timer += dt;
 }
 
+bool projectile_hit(Projectile* projectile, Entity *entity, u32 idx)
+{
+    if (projectile->pierce) {
+        for (i32 i = 0; i < projectile->hit_entities->length; i++)
+            if (projectile->hit_entities->buffer[i] == entity)
+                return FALSE;
+        entity_array_push(projectile->hit_entities, entity);
+    }
+    entity_damage(entity, projectile->damage);
+    if (!projectile->pierce)
+        projectile_destroy(projectile, idx);
+    return !projectile->pierce;
+}
+
 void projectile_destroy(Projectile* projectile, u32 idx)
 {
     assert(projectile == global_projectiles.buffer[idx]);
     projectile_array_cut(&global_projectiles, idx);
+    entity_array_destroy(projectile->hit_entities);
     free(projectile);
 }
 

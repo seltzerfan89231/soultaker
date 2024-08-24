@@ -64,6 +64,8 @@
         return (array->updated >> UPDATE_BIT) & 1; \
     } \
     void _ltype##_array_destroy(_type##Array *array) { \
+        if (array == NULL) \
+            return; \
         _ltype##_array_update(array); \
         array->length = 0; \
         free(array->buffer); \

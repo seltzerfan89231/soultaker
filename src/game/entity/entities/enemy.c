@@ -1,5 +1,6 @@
 #include "../entity.h"
 #include "../../player/player.h"
+#include "../../projectile/projectile.h"
 
 extern f32 game_time;
 

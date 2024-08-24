@@ -7,7 +7,7 @@
 #include "../../util/constants.h"
 #include "../../util/indices.h"
 #include "../../util/framedata.h"
-#include "../projectile/projectile.h"
+#include "../particle/particle.h"
 #include "../parstacle/parstacle.h"
 
 #define FRIENDLY_BIT 1

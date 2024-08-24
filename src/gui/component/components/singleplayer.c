@@ -10,7 +10,7 @@ void comp_singleplayer_mouse_button_callback(Component *comp, i32 button, i32 ac
 {
     if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
         audio_play_sound(GUI_CLICK_AUD);
-        game_setup(1);
+        game_setup(3);
         component_destroy_children(comp_root);
         Component *text_box = component_create(0.02, 0.93, 0.3, 0.05, EMPTY_TEX);
         text_box->a = 0;
