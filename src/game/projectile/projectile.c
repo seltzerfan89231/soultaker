@@ -58,13 +58,18 @@ void projectile_destroy(Projectile* projectile, u32 idx)
     assert(projectile == global_projectiles.buffer[idx]);
     projectile_array_cut(&global_projectiles, idx);
     entity_array_destroy(projectile->hit_entities);
+    free(projectile->hit_entities);
     free(projectile);
 }
 
 void destroy_all_projectiles(void)
 {
-    for (i32 i = 0; i < global_projectiles.length; i++)
-        free(global_projectiles.buffer[i]);
+    for (i32 i = 0; i < global_projectiles.length; i++) {
+        Projectile *projectile = global_projectiles.buffer[i];
+        entity_array_destroy(projectile->hit_entities);
+        free(projectile->hit_entities);
+        free(projectile);
+    }
     projectile_array_destroy(&global_projectiles);
 }
 

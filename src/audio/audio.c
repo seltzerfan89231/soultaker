@@ -172,5 +172,5 @@ static int load_sound(ALuint id, char *path)
 
 static int load_sounds(void)
 {
-    load_sound(GUI_CLICK_AUD, "assets/audio/gui_click.wav");
+    load_sound(GUI_CLICK_AUD, "assets/audio/hit.wav");
 }

@@ -135,9 +135,11 @@ void game_shoot(vec2f cursor_position, f32 rotation, f32 tilt, f32 zoom, f32 ar)
     dirz = pos.x * sin(rotation - HALFPI) + pos.y * cos(rotation - HALFPI);
     direction = vec3f_normalize(vec3f_create(dirx, 0.0, dirz));
     target = vec3f_sub(player.entity->position, vec3f_scale(-2 * zoom * r * r / ratio, direction));
+    sem_wait(&mutex);
     player_shoot(&player, direction, target);
     player.entity->facing = vec2f_normalize(vec2f_create(dirx, dirz));
     player.entity->flag = TRUE;
+    sem_post(&mutex);
 }
 
 void game_spellcast(vec2f cursor_position, f32 rotation, f32 tilt, f32 zoom, f32 ar)
@@ -159,9 +161,11 @@ void game_spellcast(vec2f cursor_position, f32 rotation, f32 tilt, f32 zoom, f32
     dirz = pos.x * sin(rotation - HALFPI) + pos.y * cos(rotation - HALFPI);
     direction = vec3f_normalize(vec3f_create(dirx, 0.0, dirz));
     target = vec3f_sub(player.entity->position, vec3f_scale(-2 * zoom * r * r / ratio, direction));
+    sem_wait(&mutex);
     player_spellcast(&player, direction, target);
     player.entity->facing = vec2f_normalize(vec2f_create(dirx, dirz));
     player.entity->flag = TRUE;
+    sem_post(&mutex);
 }
 
 vec3f game_get_player_position(void)
