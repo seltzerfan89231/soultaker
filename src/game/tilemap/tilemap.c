@@ -70,7 +70,7 @@ Obstacle** tilemap_get_obstacles(u32 x, u32 z)
 {
     if (!in_tilemap(x, z))
         return NULL;
-    TileMapPtr t = tilemap.buffer[x * tilemap.width + z];
+    TileMapInfo t = tilemap.buffer[x * tilemap.width + z];
     Obstacle **arr = malloc((t.obstacles.length + 1) * sizeof(Obstacle*));
     if (arr == NULL) {
         printf("something went wrong");
@@ -201,7 +201,7 @@ void tilemap_reset(u32 width, u32 length)
     free(tilemap.buffer);
     tilemap.width = width;
     tilemap.length = length;
-    tilemap.buffer = malloc(width * length * sizeof(TileMapPtr));
+    tilemap.buffer = malloc(width * length * sizeof(TileMapInfo));
     for (i32 i = 0; i < width * length; i++) {
         tilemap.buffer[i].tile = FALSE;
         tilemap.buffer[i].wall = NULL;

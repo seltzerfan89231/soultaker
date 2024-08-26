@@ -15,10 +15,10 @@ typedef struct {
     Tile *tile;
     Wall *wall;
     ObstacleArray obstacles;
-} TileMapPtr;
+} TileMapInfo;
 
 typedef struct {
-    TileMapPtr *buffer;
+    TileMapInfo *buffer;
     u32 width, length;
 } TileMap;
 
