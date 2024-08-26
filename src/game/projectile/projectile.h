@@ -18,7 +18,7 @@ typedef struct {
     EntityArray *hit_entities;
 } Projectile;
 
-Projectile* projectile_create(u32 id, u8 friendly);
+Projectile* projectile_create(u32 id, bool friendly, bool pierce);
 void projectile_update(Projectile* projectile, f32 dt);
 bool projectile_hit(Projectile* projectile, Entity *entity, u32 idx);
 void projectile_destroy(Projectile* projectile, u32 idx);

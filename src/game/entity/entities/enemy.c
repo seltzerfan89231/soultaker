@@ -43,7 +43,7 @@ void enemy_update(Entity *entity)
     if (entity->timer >= 0.05) {
         entity->timer = 0;
         for (i32 i = 0; i < 8; i++) {
-            Projectile* proj = projectile_create(SWORD, FALSE);
+            Projectile* proj = projectile_create(SWORD, FALSE, FALSE);
             proj->position = entity->position;
             proj->rotation = i * 0.8 + sin(game_time);
             proj->direction = vec3f_create(cos(proj->rotation), 0.0f, sin(proj->rotation));

@@ -118,9 +118,11 @@ void game_destroy(void)
 
 void game_shoot(vec2f cursor_position, f32 rotation, f32 tilt, f32 zoom, f32 ar)
 {
-    if (player.entity == NULL || game_paused)
+    sem_wait(&mutex);
+    if (player.entity == NULL || game_paused) {
+        sem_post(&mutex);
         return;
-    assert(player.entity != NULL);
+    }
     f32 dirx, dirz, a, b, c, r, ratio;
     vec3f direction, target;
     vec2f pos = vec2f_create((cursor_position.x - 0.5) * ar, cursor_position.y - 0.5 + 1.0 / 4 / zoom);
@@ -135,7 +137,6 @@ void game_shoot(vec2f cursor_position, f32 rotation, f32 tilt, f32 zoom, f32 ar)
     dirz = pos.x * sin(rotation - HALFPI) + pos.y * cos(rotation - HALFPI);
     direction = vec3f_normalize(vec3f_create(dirx, 0.0, dirz));
     target = vec3f_sub(player.entity->position, vec3f_scale(-2 * zoom * r * r / ratio, direction));
-    sem_wait(&mutex);
     player_shoot(&player, direction, target);
     player.entity->facing = vec2f_normalize(vec2f_create(dirx, dirz));
     player.entity->flag = TRUE;
@@ -144,9 +145,11 @@ void game_shoot(vec2f cursor_position, f32 rotation, f32 tilt, f32 zoom, f32 ar)
 
 void game_spellcast(vec2f cursor_position, f32 rotation, f32 tilt, f32 zoom, f32 ar)
 {
-    if (player.entity == NULL || game_paused)
+    sem_wait(&mutex);
+    if (player.entity == NULL || game_paused) {
+        sem_post(&mutex);
         return;
-    assert(player.entity != NULL);
+    }
     f32 dirx, dirz, a, b, c, r, ratio;
     vec3f direction, target;
     vec2f pos = vec2f_create((cursor_position.x - 0.5) * ar, cursor_position.y - 0.5 + 1.0 / 4 / zoom);
@@ -161,7 +164,6 @@ void game_spellcast(vec2f cursor_position, f32 rotation, f32 tilt, f32 zoom, f32
     dirz = pos.x * sin(rotation - HALFPI) + pos.y * cos(rotation - HALFPI);
     direction = vec3f_normalize(vec3f_create(dirx, 0.0, dirz));
     target = vec3f_sub(player.entity->position, vec3f_scale(-2 * zoom * r * r / ratio, direction));
-    sem_wait(&mutex);
     player_spellcast(&player, direction, target);
     player.entity->facing = vec2f_normalize(vec2f_create(dirx, dirz));
     player.entity->flag = TRUE;

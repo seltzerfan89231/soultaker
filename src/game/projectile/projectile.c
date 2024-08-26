@@ -5,7 +5,7 @@
 
 ProjectileArray global_projectiles;
 
-Projectile* projectile_create(u32 id, u8 friendly)
+Projectile* projectile_create(u32 id, bool friendly, bool pierce)
 {
     Projectile* projectile = malloc(sizeof(Projectile));
     projectile->scale = 1;
@@ -19,9 +19,12 @@ Projectile* projectile_create(u32 id, u8 friendly)
     projectile->friendly = friendly;
     projectile->hitbox_radius = 0.3;
     projectile->timer = 0;
-    projectile->pierce = TRUE;
-    projectile->hit_entities = malloc(sizeof(EntityArray));
-    *projectile->hit_entities = entity_array_create(0, 1);
+    projectile->pierce = pierce;
+    projectile->hit_entities = NULL;
+    if (pierce) {
+        projectile->hit_entities = malloc(sizeof(EntityArray));
+        *projectile->hit_entities = entity_array_create(0, 1);
+    }
     projectile_array_push(&global_projectiles, projectile);
     return projectile;
 }
