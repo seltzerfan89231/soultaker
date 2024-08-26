@@ -22,8 +22,7 @@ void tilemap_insert_tile(Tile *tile)
     if (!in_tilemap(tile->position.x, tile->position.z))
         return;
     i32 idx = tile->position.x * tilemap.width + tile->position.z;
-    tilemap.buffer[idx].is_wall = FALSE; 
-    tilemap.buffer[idx].ptr = tile;
+    tilemap.buffer[idx].tile = tile;
 }
 
 void tilemap_insert_wall(Wall *wall)
@@ -31,8 +30,7 @@ void tilemap_insert_wall(Wall *wall)
     if (!in_tilemap(wall->position.x, wall->position.z))
         return;
     i32 idx = wall->position.x * tilemap.width + wall->position.z;
-    tilemap.buffer[idx].is_wall = TRUE; 
-    tilemap.buffer[idx].ptr = wall;
+    tilemap.buffer[idx].wall = wall;
 }
 
 void tilemap_insert_obstacle(Obstacle *obstacle)
@@ -58,20 +56,14 @@ Tile* tilemap_get_tile(u32 x, u32 z)
 {
     if (!in_tilemap(x, z))
         return NULL;
-    TileMapPtr t = tilemap.buffer[x * tilemap.width + z];
-    if (t.ptr == NULL || t.is_wall)
-        return NULL;
-    return (Tile*)t.ptr;
+    return tilemap.buffer[x * tilemap.width + z].tile;
 }
 
 Wall* tilemap_get_wall(u32 x, u32 z)
 {
     if (!in_tilemap(x, z))
         return NULL;
-    TileMapPtr t = tilemap.buffer[x * tilemap.width + z];
-    if (t.ptr == NULL || !t.is_wall)
-        return NULL;
-    return (Wall*)t.ptr;
+    return tilemap.buffer[x * tilemap.width + z].wall;
 }
 
 Obstacle** tilemap_get_obstacles(u32 x, u32 z)
@@ -211,8 +203,8 @@ void tilemap_reset(u32 width, u32 length)
     tilemap.length = length;
     tilemap.buffer = malloc(width * length * sizeof(TileMapPtr));
     for (i32 i = 0; i < width * length; i++) {
-        tilemap.buffer[i].is_wall = FALSE;
-        tilemap.buffer[i].ptr = NULL;
+        tilemap.buffer[i].tile = FALSE;
+        tilemap.buffer[i].wall = NULL;
         tilemap.buffer[i].obstacles = obstacle_array_create(0, 1);
     }
 }

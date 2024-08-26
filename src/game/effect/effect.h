@@ -9,7 +9,7 @@
 typedef struct {
     vec3f position;
     u32 id;
-    f32 duration, radius;
+    f32 radius;
 } AreaEffect;
 
 #endif

@@ -12,8 +12,8 @@
 #define TILEMAP_WALL 1
 
 typedef struct {
-    bool is_wall;
-    void *ptr;
+    Tile *tile;
+    Wall *wall;
     ObstacleArray obstacles;
 } TileMapPtr;
 
