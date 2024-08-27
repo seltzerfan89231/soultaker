@@ -23,7 +23,8 @@ void destroy_all_walls(void);
 _ARRAY_DECLARE(Wall, wall)
 extern WallArray global_walls;
 
-#define MAX_WALL_ID 1
-#define DEFAULT_WALL 0
+#define MAX_WALL_ID 2
+#define INVISIBLE_WALL 0
+#define DEFAULT_WALL 1
 
 #endif

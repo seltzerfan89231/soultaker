@@ -8,6 +8,8 @@ i32 i;
 
 static void wall_push_data(Wall* wall, u32 offset)
 {
+    if (wall->id == INVISIBLE_WALL)
+        return;
     assert((offset+1)*7 < BUFFER_SIZE);
     offset *= 7;
     data.buffer[offset++] = wall->position.x;

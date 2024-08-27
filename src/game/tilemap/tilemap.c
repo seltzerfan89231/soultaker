@@ -41,10 +41,15 @@ void tilemap_insert_tile(Tile *tile)
 
 void tilemap_insert_wall(Wall *wall)
 {
-    i32 idx = idx_at(wall->position.x, wall->position.z);
-    if (idx == -1)
-        return;
-    tilemap.buffer[idx].wall = wall;
+    f32 x, z, w, l;
+    i32 x1, x2, z1, z2;
+    x = wall->position.x, z = wall->position.z;
+    w = wall->dimensions.w, l = wall->dimensions.l;
+    x1 = (int) x, x2 = (int) (x + w);
+    z1 = (int) z, z2 = (int) (z + l);
+    for (i32 i = max(x1, 0); i <= x2 && i < tilemap.width; i++)
+        for (i32 j = max(z1, 0); j <= z2 && j < tilemap.length; j++)
+            tilemap.buffer[idx_at(i, j)].wall = wall;
 }
 
 void tilemap_insert_obstacle(Obstacle *obstacle)
