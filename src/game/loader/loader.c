@@ -36,7 +36,7 @@ void load_level1(void)
         for (i32 j = 0; j < MAP_WIDTH; j++) {
             if (i == 1 && j == 1)
                 wall_create(DEFAULT_WALL, i, j, 1, 3, 1);
-            else if (i > 30 && i < 40 && j > 30 && j < 40)
+            else if (i > 10 && i < 20 && j > 10 && j < 20)
                 tile_create(HELLSTONE, i, j);
             else
                 tile_create(GRASS, i, j);

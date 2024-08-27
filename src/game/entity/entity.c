@@ -21,6 +21,7 @@ Entity* entity_create(u32 id, u8 friendly)
     entity->timer = 0.0f;
     entity->timer2 = 0.0f;
     entity->flag = 0;
+    entity->ground_level = TRUE;
     entity->direction = vec3f_create(0, 0, 0);
     entity->facing = vec2f_create(1.0, 0.0);
     entity->friendly = friendly;
@@ -43,6 +44,10 @@ Entity* entity_create(u32 id, u8 friendly)
 void entity_update(Entity* entity, f32 dt)
 {
     entity->position = vec3f_add(entity->position, vec3f_scale(entity->speed * dt, entity->direction));
+    if (entity->ground_level)
+        entity->position.y = 0;
+    else
+        entity->ground_level = TRUE;
     switch (entity->id) {
         _ENTITY_UPDATE(ENEMY, enemy)
         _ENTITY_UPDATE(KNIGHT, knight)

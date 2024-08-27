@@ -16,7 +16,7 @@
 
 typedef struct {
     f32 speed, scale, hitbox_radius, timer, timer2, health, max_health;
-    u8 friendly, face_dir, state, flag;
+    bool friendly, face_dir, state, flag, ground_level;
     u32 id;
     vec3f position, direction;
     vec2f facing;

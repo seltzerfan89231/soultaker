@@ -66,6 +66,7 @@ void camera_zoom(i32 mag, f32 dt, f32 ar)
 
 void camera_set_target(vec3f target)
 {
+    target.y = 0.0;
     camera.target = target;
     camera.position = vec3f_add(camera.target, vec3f_scale(-DEFAULT_DISTANCE, camera.facing));
     update_view_matrix();
