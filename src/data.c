@@ -11,7 +11,7 @@ static void wall_push_data(Wall* wall, u32 offset)
     assert((offset+1)*5 < BUFFER_SIZE);
     offset *= 5;
     data.buffer[offset++] = wall->position.x;
-    data.buffer[offset++] = wall->height;
+    data.buffer[offset++] = wall->dimensions.h;
     data.buffer[offset++] = wall->position.z;
     data.buffer[offset++] = wall->top_tex;
     data.buffer[offset++] = wall->side_tex;

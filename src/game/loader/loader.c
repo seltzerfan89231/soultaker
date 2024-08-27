@@ -34,7 +34,7 @@ void load_level1(void)
     for (i32 i = 0; i < MAP_WIDTH; i++) {
         for (i32 j = 0; j < MAP_WIDTH; j++) {
             if (i == 1 && j == 1)
-                wall_create(DEFAULT_WALL, i, j, 3);
+                wall_create(DEFAULT_WALL, i, j, 1, 3, 1);
             else
                 tile_create(GRASS, i, j);
         }
@@ -80,7 +80,7 @@ void load_level2(void)
     for (i32 i = 0; i < MAP_WIDTH; i++) {
         for (i32 j = 0; j < MAP_WIDTH; j++) {
             if (i == 0 || j == 0 || i == MAP_WIDTH - 1 || j == MAP_WIDTH - 1)
-                wall_create(DEFAULT_WALL, i, j, 3.0);
+                wall_create(DEFAULT_WALL, i, j, 1, 3, 1);
             else
                 tile_create(GRASS, i, j);
         }
@@ -124,7 +124,7 @@ void load_level3(void)
     for (i32 i = 0; i < MAP_WIDTH; i++) {
         for (i32 j = 0; j < MAP_WIDTH; j++) {
             if (i == 0 || j == 0 || i == MAP_WIDTH - 1 || j == MAP_WIDTH - 1)
-                wall_create(DEFAULT_WALL, i, j, 3.0);
+                wall_create(DEFAULT_WALL, i, j, 1, 3, 1);
             else
                 tile_create(GRASS, i, j);
         }

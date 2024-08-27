@@ -5,13 +5,15 @@
 
 WallArray global_walls;
 
-Wall* wall_create(u32 id, f32 x, f32 z, f32 height)
+Wall* wall_create(u32 id, f32 x, f32 z, f32 w, f32 h, f32 l)
 {
     Wall* wall = malloc(sizeof(Wall));
     wall->id = id;
     wall->position.x = x;
     wall->position.z = z;
-    wall->height = height;
+    wall->dimensions.w = w;
+    wall->dimensions.h = h;
+    wall->dimensions.l = l;
     wall->top_tex = WALL_TOP_TEX;
     wall->side_tex = WALL_SIDE_TEX;
     wall_array_push(&global_walls, wall);

@@ -5,9 +5,23 @@
 
 TileMap tilemap;
 
-static bool in_tilemap(u32 x, u32 z)
+static bool in_tilemap(i32 x, i32 z)
 {
     return x >= 0 && x < tilemap.width && z >= 0 && z < tilemap.length;
+}
+
+static i32 idx_at(i32 x, i32 z)
+{
+    if (!in_tilemap(x, z))
+        return -1;
+    return x * tilemap.width + z;
+}
+
+static i32 max(i32 a, i32 b)
+{
+    if (a > b)
+        return a;
+    return b;
 }
 
 void tilemap_init(void)
@@ -19,17 +33,17 @@ void tilemap_init(void)
 
 void tilemap_insert_tile(Tile *tile)
 {
-    if (!in_tilemap(tile->position.x, tile->position.z))
+    i32 idx = idx_at(tile->position.x, tile->position.z);
+    if (idx == -1)
         return;
-    i32 idx = tile->position.x * tilemap.width + tile->position.z;
     tilemap.buffer[idx].tile = tile;
 }
 
 void tilemap_insert_wall(Wall *wall)
 {
-    if (!in_tilemap(wall->position.x, wall->position.z))
+    i32 idx = idx_at(wall->position.x, wall->position.z);
+    if (idx == -1)
         return;
-    i32 idx = wall->position.x * tilemap.width + wall->position.z;
     tilemap.buffer[idx].wall = wall;
 }
 
@@ -41,36 +55,33 @@ void tilemap_insert_obstacle(Obstacle *obstacle)
     r = obstacle->hitbox_radius;
     x1 = (int) (x - r), x2 = (int) (x + r);
     z1 = (int) (z - r), z2 = (int) (z + r);
-    for (i32 i = x1; i <= x2 && i < tilemap.width; i++) {
-        if (i < 0)
-            continue;
-        for (i32 j = z1; j <= z2 && j < tilemap.length; j++) {
-            if (j < 0)
-                continue;
-            obstacle_array_push(&tilemap.buffer[i * tilemap.width + j].obstacles, obstacle);
-        }
-    }
+    for (i32 i = max(x1, 0); i <= x2 && i < tilemap.width; i++)
+        for (i32 j = max(z1, 0); j <= z2 && j < tilemap.length; j++)
+            obstacle_array_push(&tilemap.buffer[idx_at(i, j)].obstacles, obstacle);
 }
 
 Tile* tilemap_get_tile(u32 x, u32 z)
 {
-    if (!in_tilemap(x, z))
+    i32 idx = idx_at(x, z);
+    if (idx == -1)
         return NULL;
-    return tilemap.buffer[x * tilemap.width + z].tile;
+    return tilemap.buffer[idx].tile;
 }
 
 Wall* tilemap_get_wall(u32 x, u32 z)
 {
-    if (!in_tilemap(x, z))
+    i32 idx = idx_at(x, z);
+    if (idx == -1)
         return NULL;
-    return tilemap.buffer[x * tilemap.width + z].wall;
+    return tilemap.buffer[idx].wall;
 }
 
 Obstacle** tilemap_get_obstacles(u32 x, u32 z)
 {
-    if (!in_tilemap(x, z))
+    i32 idx = idx_at(x, z);
+    if (idx == -1)
         return NULL;
-    TileMapInfo t = tilemap.buffer[x * tilemap.width + z];
+    TileMapInfo t = tilemap.buffer[idx];
     Obstacle **arr = malloc((t.obstacles.length + 1) * sizeof(Obstacle*));
     if (arr == NULL) {
         printf("something went wrong");
@@ -81,6 +92,29 @@ Obstacle** tilemap_get_obstacles(u32 x, u32 z)
     return arr;
 }
 
+static bool collide_projectile(Projectile *proj, i32 x, i32 y)
+{
+    if (tilemap_get_wall(x, y) != NULL)
+        return TRUE;
+    Obstacle **arr = tilemap_get_obstacles(x, y);
+    if (arr == NULL)
+        return FALSE;
+    i32 k = 0;
+    while (arr[k] != NULL) {
+        Obstacle *obstacle = arr[k];
+        f32 dx, dz;
+        dx = obstacle->position.x - proj->position.x;
+        dz = obstacle->position.z - proj->position.z;
+        if (vec2f_mag(vec2f_create(dx, dz)) < obstacle->hitbox_radius + proj->hitbox_radius) {
+            free(arr);
+            return TRUE;
+        }
+        k++;
+    }
+    free(arr);
+    return FALSE;
+}
+
 bool tilemap_collide_projectile(Projectile *proj)
 {
     f32 x, z, r;
@@ -89,68 +123,49 @@ bool tilemap_collide_projectile(Projectile *proj)
     r = proj->hitbox_radius;
     x1 = (int) (x - r), x2 = (int) (x + r);
     z1 = (int) (z - r), z2 = (int) (z + r);
-    for (i32 i = x1; i <= x2; i++) {
-        for (i32 j = z1; j <= z2; j++) {
-            if (tilemap_get_wall(i, j) != NULL)
+    for (i32 i = x1; i <= x2; i++)
+        for (i32 j = z1; j <= z2; j++)
+            if (collide_projectile(proj, i, j))
                 return TRUE;
-            Obstacle **arr = tilemap_get_obstacles(i, j);
-            if (arr == NULL)
-                continue;
-            i32 k = 0;
-            while (arr[k] != NULL) {
-                Obstacle *obstacle = arr[k];
-                f32 dx, dz;
-                dx = obstacle->position.x - proj->position.x;
-                dz = obstacle->position.z - proj->position.z;
-                if (vec2f_mag(vec2f_create(dx, dz)) < obstacle->hitbox_radius + proj->hitbox_radius) {
-                    free(arr);
-                    return TRUE;
-                }
-                k++;
-            }
-            free(arr);
-        }
-    }
-        
     return FALSE;
 }
 
 static void move_along_wall(Wall *wall, Entity *entity, vec3f prev_position)
 {
     bool condition = entity->position.x + entity->hitbox_radius > wall->position.x
-        && entity->position.x - entity->hitbox_radius < wall->position.x + 1
+        && entity->position.x - entity->hitbox_radius < wall->position.x + wall->dimensions.w
         && entity->position.z + entity->hitbox_radius > wall->position.z
-        && entity->position.z - entity->hitbox_radius < wall->position.z + 1;
+        && entity->position.z - entity->hitbox_radius < wall->position.z + wall->dimensions.l;
     
     if (!condition)
         return;
 
     if (prev_position.x < wall->position.x
         && entity->direction.x > 0
-        && prev_position.z < wall->position.z + 1 + entity->hitbox_radius
+        && prev_position.z < wall->position.z + wall->dimensions.l + entity->hitbox_radius
         && prev_position.z > wall->position.z - entity->hitbox_radius) {
             entity->position.x = wall->position.x - entity->hitbox_radius;
             entity->direction.x = 0;
     }
-    else if (prev_position.x > wall->position.x + 1
+    else if (prev_position.x > wall->position.x + wall->dimensions.w
         && entity->direction.x < 0
-        && prev_position.z < wall->position.z + 1 + entity->hitbox_radius
+        && prev_position.z < wall->position.z + wall->dimensions.l + entity->hitbox_radius
         && prev_position.z > wall->position.z - entity->hitbox_radius) {
-            entity->position.x = wall->position.x + 1 + entity->hitbox_radius;
+            entity->position.x = wall->position.x + wall->dimensions.w + entity->hitbox_radius;
             entity->direction.x = 0;
     }
     else if (prev_position.z < wall->position.z
         && entity->direction.z > 0
-        && prev_position.x < wall->position.x + 1 + entity->hitbox_radius
+        && prev_position.x < wall->position.x + wall->dimensions.w + entity->hitbox_radius
         && prev_position.x > wall->position.x - entity->hitbox_radius) {
             entity->position.z = wall->position.z - entity->hitbox_radius;
             entity->direction.z = 0;
     }
-    else if (prev_position.z > wall->position.z + 1
+    else if (prev_position.z > wall->position.z + wall->dimensions.l
         && entity->direction.z < 0
-        && prev_position.x < wall->position.x + 1 + entity->hitbox_radius
+        && prev_position.x < wall->position.x + wall->dimensions.w + entity->hitbox_radius
         && prev_position.x > wall->position.x - entity->hitbox_radius) {
-            entity->position.z = wall->position.z + 1 + entity->hitbox_radius;
+            entity->position.z = wall->position.z + wall->dimensions.l + entity->hitbox_radius;
             entity->direction.z = 0;
     }
 }
@@ -169,6 +184,21 @@ static void move_along_obstacle(Obstacle *obstacle, Entity *entity)
     }
 }
 
+static void collide_entity(Entity *entity, vec3f prev_position, i32 x, i32 y)
+{
+    Wall *wall = tilemap_get_wall(x, y);
+    if (wall != NULL)
+        move_along_wall(wall, entity, prev_position);
+    Obstacle **arr = tilemap_get_obstacles(x, y);
+    if (arr == NULL)
+        return;
+    for (i32 k = 0; arr[k] != NULL; k++) {
+        Obstacle *obstacle = arr[k];
+        move_along_obstacle(obstacle, entity);
+    }
+    free(arr);
+}
+
 void tilemap_collide_entity(Entity *entity, vec3f prev_position)
 {
     f32 x, z, r;
@@ -177,21 +207,9 @@ void tilemap_collide_entity(Entity *entity, vec3f prev_position)
     r = entity->hitbox_radius;
     x1 = (int) (x - r), x2 = (int) (x + r);
     z1 = (int) (z - r), z2 = (int) (z + r);
-    for (i32 i = x1; i <= x2; i++) {
-        for (i32 j = z1; j <= z2; j++) {
-            Wall *wall = tilemap_get_wall(i, j);
-            if (wall != NULL)
-                move_along_wall(wall, entity, prev_position);
-            Obstacle **arr = tilemap_get_obstacles(i, j);
-            if (arr == NULL)
-                continue;
-            for (i32 k = 0; arr[k] != NULL; k++) {
-                Obstacle *obstacle = arr[k];
-                move_along_obstacle(obstacle, entity);
-            }
-            free(arr);
-        }
-    }
+    for (i32 i = x1; i <= x2; i++)
+        for (i32 j = z1; j <= z2; j++)
+            collide_entity(entity, prev_position, i, j);
 }
 
 void tilemap_reset(u32 width, u32 length)

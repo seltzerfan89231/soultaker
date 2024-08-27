@@ -8,13 +8,15 @@
 
 typedef struct {
     struct {
-        i32 x, z;
+        f32 x, z;
     } position;
+    struct {
+        f32 w, h, l;
+    } dimensions;
     u32 top_tex, side_tex, id;
-    f32 height;
 } Wall;
 
-Wall* wall_create(u32 id, f32 x, f32 z, f32 height);
+Wall* wall_create(u32 id, f32 x, f32 z, f32 w, f32 h, f32 l);
 void wall_destroy(Wall* wall, u32 idx);
 void destroy_all_walls(void);
 
