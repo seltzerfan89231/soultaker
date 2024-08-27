@@ -5,6 +5,12 @@
 layout (points) in;
 layout (triangle_strip, max_vertices = 4) out;
 
+layout (std140) uniform Matrices
+{
+    mat4 view;
+    mat4 proj;
+};
+
 layout (std140) uniform AspectRatio
 {
     highp float ar;
@@ -17,6 +23,7 @@ layout (std140) uniform Zoom
 
 in VertexData
 {
+    vec4 position;
     float scale;
     int texID;
     float x, y, w, h;
@@ -24,18 +31,21 @@ in VertexData
 
 out VertexData
 {
+    flat float depthValue;
     vec2 texCoord;
     flat int texID;
 };
 
 void main() {
-    vec4 position = gl_in[0].gl_Position;
     vec2 offset;
+    vec4 position = proj * view * vec4(inData[0].position.x, 0.0, inData[0].position.z, 1.0);
+    position.y += zoom * inData[0].position.y;
     float scale = inData[0].scale;
     texID = inData[0].texID;
     float x, y, w, h;
     x = inData[0].x, y = inData[0].y;
     w = inData[0].w, h = inData[0].h;
+    depthValue = 0.5 + 0.5 * position.z / position.w;
 
     // bottom left
     offset = scale * zoom * vec2((x - w / 2) * ar, y);

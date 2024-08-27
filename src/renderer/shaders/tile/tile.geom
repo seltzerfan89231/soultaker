@@ -14,6 +14,7 @@ layout (std140) uniform Matrices
 in VertexData
 {
     int texID;
+    vec4 position;
 } inData[];
 
 out VertexData
@@ -24,7 +25,7 @@ out VertexData
 
 void main()
 {    
-    vec4 position = gl_in[0].gl_Position;
+    vec4 position = inData[0].position;
     texID = inData[0].texID;
     gl_Position = proj * view * (position + vec4(0.0, 0.0, 0.0, 0.0));
     texCoord = vec2(0.0f, 0.0f);

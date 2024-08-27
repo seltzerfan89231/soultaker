@@ -22,7 +22,8 @@ void renderer_init(void)
     glDisable(GL_DEPTH_TEST);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    //glEnable(GL_STENCIL_TEST);
+    glEnable(GL_STENCIL_TEST);
+    glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
     glEnable(GL_MULTISAMPLE);
     glEnable(GL_CULL_FACE); 
     glCullFace(GL_BACK);
@@ -167,19 +168,27 @@ void renderer_update(u32 vao, u32 offset, u32 length, f32* buffer)
 
 void renderer_render(void)
 {
+    glStencilFunc(GL_ALWAYS, 1, 0xFF);
+    glStencilMask(0xFF);
+
     glClearColor(0.7f, 0.7f, 0.7f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
     
+    glEnable(GL_DEPTH_TEST);
+    shader_use(renderer.shaders[WALL_SHADER]);
+    vao_draw(renderer.vaos[WALL_VAO]);
+    glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
+    glStencilMask(0x00);
     shader_use(renderer.shaders[TILE_SHADER]);
     vao_draw(renderer.vaos[TILE_VAO]);
+    shader_use(renderer.shaders[HEALTHBAR_SHADER]);
+    vao_draw(renderer.vaos[ENTITY_VAO]);
     shader_use(renderer.shaders[SHADOW_SHADER]);
     vao_draw(renderer.vaos[PROJECTILE_VAO]);
     vao_draw(renderer.vaos[OBSTACLE_VAO]);
     vao_draw(renderer.vaos[PARSTACLE_VAO]);
     vao_draw(renderer.vaos[ENTITY_VAO]);
-    glEnable(GL_DEPTH_TEST);
-    shader_use(renderer.shaders[WALL_SHADER]);
-    vao_draw(renderer.vaos[WALL_VAO]);
+    glStencilFunc(GL_ALWAYS, 1, 0xFF);
     shader_use(renderer.shaders[ENTITY_SHADER]);
     vao_draw(renderer.vaos[ENTITY_VAO]);
     shader_use(renderer.shaders[PARTICLE_SHADER]);
@@ -192,10 +201,6 @@ void renderer_render(void)
     vao_draw(renderer.vaos[OBSTACLE_VAO]);
     shader_use(renderer.shaders[PARSTACLE_SHADER]);
     vao_draw(renderer.vaos[PARSTACLE_VAO]);
-    //glDepthFunc(GL_ALWAYS);
-    shader_use(renderer.shaders[HEALTHBAR_SHADER]);
-    vao_draw(renderer.vaos[ENTITY_VAO]);
-    //glDepthFunc(GL_LESS);
     glDisable(GL_DEPTH_TEST);
     shader_use(renderer.shaders[GUI_SHADER]);
     vao_draw(renderer.vaos[GUI_VAO]);

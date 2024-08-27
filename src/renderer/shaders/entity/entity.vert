@@ -7,12 +7,6 @@ layout (location = 1) in float aScale;
 layout (location = 3) in float aTexID;
 layout (location = 4) in vec4 aOffsetData;
 
-layout (std140) uniform Matrices
-{
-    mat4 view;
-    mat4 proj;
-};
-
 layout (std140) uniform Zoom
 {
     float zoom;
@@ -20,6 +14,7 @@ layout (std140) uniform Zoom
 
 out VertexData
 {
+    vec4 position;
     float scale;
     int texID;
     float x, y, w, h;
@@ -27,8 +22,7 @@ out VertexData
 
 void main()
 {
-    gl_Position = proj * view * vec4(aPos.x, 0.0, aPos.z, 1.0f);
-    gl_Position.y += zoom * aPos.y;
+    position = vec4(aPos, 1.0);
     scale = aScale;
     texID = int(round(aTexID));
     x = aOffsetData.x;

@@ -8,10 +8,11 @@ layout (location = 1) in float aTexID;
 out VertexData
 {
     int texID;
+    vec4 position;
 };
 
 void main()
 {
-    gl_Position = vec4(aPos.x, 0.0f, aPos.y, 1.0f);
+    position = vec4(aPos.x, 0.0f, aPos.y, 1.0f);
     texID = int(round(aTexID));
 }
