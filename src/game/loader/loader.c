@@ -18,6 +18,7 @@ static void reset(void)
     global_parstacles = parstacle_array_create(0, 100);
     global_obstacles = obstacle_array_create(0, 100);
     global_tiles = tile_array_create(0, 100);
+    interactable_tiles = tile_array_create(0, 20);
     global_walls = wall_array_create(0, 100);
     game_time = 0;
 }
@@ -35,6 +36,8 @@ void load_level1(void)
         for (i32 j = 0; j < MAP_WIDTH; j++) {
             if (i == 1 && j == 1)
                 wall_create(DEFAULT_WALL, i, j, 1, 3, 1);
+            else if (i > 30 && i < 40 && j > 30 && j < 40)
+                tile_create(HELLSTONE, i, j);
             else
                 tile_create(GRASS, i, j);
         }

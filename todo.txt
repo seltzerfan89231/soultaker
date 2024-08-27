@@ -1,0 +1,7 @@
+new sentry type that is like parstacle but animates
+
+area of effect (single)
+
+area of effect (multiple)
+
+tile interacts (lava, quicksand)

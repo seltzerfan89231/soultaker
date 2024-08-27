@@ -11,3 +11,13 @@ void grass_create(Tile *tile)
             tile->tex = GRASS_3_TEX; break;
     }
 }
+
+void grass_update(Tile *tile, f32 dt)
+{
+
+}
+
+void grass_interact(Tile *tile, Entity *entity)
+{
+    
+}

@@ -191,6 +191,9 @@ static void move_along_obstacle(Obstacle *obstacle, Entity *entity)
 
 static void collide_entity(Entity *entity, vec3f prev_position, i32 x, i32 y)
 {
+    Tile *tile = tilemap_get_tile(x, y);
+    if (tile != NULL)
+        tile_interact(tile, entity);
     Wall *wall = tilemap_get_wall(x, y);
     if (wall != NULL)
         move_along_wall(wall, entity, prev_position);

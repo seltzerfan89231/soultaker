@@ -21,6 +21,7 @@ extern ParjicleArray global_parjicles;
 extern ParstacleArray global_parstacles;
 extern ObstacleArray global_obstacles;
 extern TileArray global_tiles;
+extern TileArray interactable_tiles;
 extern WallArray global_walls;
 extern Player player;
 extern TileMap map;

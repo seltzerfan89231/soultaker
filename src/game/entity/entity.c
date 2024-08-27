@@ -53,7 +53,7 @@ void entity_update(Entity* entity, f32 dt)
     entity->timer2 -= dt;
 }
 
-void entity_damage(Entity *entity, u32 damage)
+void entity_damage(Entity *entity, f32 damage)
 {
     aud_play(GUI_CLICK_AUD);
     entity->health -= damage;

@@ -109,6 +109,14 @@ static void update_parjicles(f32 dt)
     }
 }
 
+static void update_tiles(f32 dt)
+{
+    for (i32 i = 0; i < interactable_tiles.length; i++) {
+        Tile *tile = interactable_tiles.buffer[i];
+        tile_update(tile, dt);
+    }
+}
+
 static void update_players(f32 dt)
 {
     player_update(&player, dt);
@@ -120,5 +128,6 @@ void update_objects(f32 dt)
     update_projectiles(dt);
     update_particles(dt);
     update_parjicles(dt);
+    update_tiles(dt);
     update_players(dt);
 }

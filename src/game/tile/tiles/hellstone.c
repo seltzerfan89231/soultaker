@@ -3,4 +3,18 @@
 void hellstone_create(Tile *tile)
 {
     tile->tex = HELLSTONE_TEX;
+    tile->interactable = TRUE;
+}
+
+void hellstone_update(Tile *tile, f32 dt)
+{
+    tile->timer -= dt;
+}
+
+void hellstone_interact(Tile *tile, Entity *entity)
+{
+    if (tile->timer < 0) {
+        tile->timer = 0.1;
+        entity_damage(entity, 0.1);
+    }
 }
