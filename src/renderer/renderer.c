@@ -58,7 +58,7 @@ void renderer_init(void)
     /* --------------------- */
     renderer.vaos = malloc(NUM_VAOS * sizeof(VAO));
     renderer.vaos[TILE_VAO]         = vao_create(GL_STATIC_DRAW, GL_POINTS, 3);
-    renderer.vaos[WALL_VAO]         = vao_create(GL_STATIC_DRAW, GL_POINTS, 5);
+    renderer.vaos[WALL_VAO]         = vao_create(GL_STATIC_DRAW, GL_POINTS, 7);
     renderer.vaos[ENTITY_VAO]       = vao_create(GL_DYNAMIC_DRAW, GL_POINTS, 10);
     renderer.vaos[PROJECTILE_VAO]   = vao_create(GL_DYNAMIC_DRAW, GL_POINTS, 6);
     renderer.vaos[GUI_VAO]          = vao_create(GL_STATIC_DRAW, GL_TRIANGLES, 9);
@@ -68,8 +68,9 @@ void renderer_init(void)
     renderer.vaos[PARSTACLE_VAO]    = vao_create(GL_STATIC_DRAW, GL_POINTS, 5);
     vao_attr(renderer.vaos[TILE_VAO]        , 0, 2, 0);
     vao_attr(renderer.vaos[TILE_VAO]        , 1, 1, 2);
-    vao_attr(renderer.vaos[WALL_VAO]        , 0, 3, 0);
-    vao_attr(renderer.vaos[WALL_VAO]        , 1, 2, 3);
+    vao_attr(renderer.vaos[WALL_VAO]        , 0, 2, 0);
+    vao_attr(renderer.vaos[WALL_VAO]        , 1, 3, 2);
+    vao_attr(renderer.vaos[WALL_VAO]        , 2, 2, 5);
     vao_attr(renderer.vaos[ENTITY_VAO]      , 0, 3, 0);
     vao_attr(renderer.vaos[ENTITY_VAO]      , 1, 1, 3);
     vao_attr(renderer.vaos[ENTITY_VAO]      , 2, 1, 4);

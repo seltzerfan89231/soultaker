@@ -13,6 +13,7 @@ layout (std140) uniform Matrices
 
 in VertexData
 {
+    float x, z, w, h, l;
     int top_texID;
     int side_texID;
 } inData[];
@@ -26,87 +27,95 @@ out VertexData
 
 void build_top(vec4 position)
 {   
-    texID = inData[0].top_texID;
-    gl_Position = proj * view * (position + vec4(0.0, 0.0, 0.0, 0.0));
-    texCoord = vec2(0.0f, 0.0f);
-    EmitVertex();
-    gl_Position = proj * view * (position + vec4(1.0, 0.0, 0.0, 0.0));
-    texCoord = vec2(1.0f, 0.0f);
-    EmitVertex();
-    gl_Position = proj * view * (position + vec4(0.0, 0.0, 1.0, 0.0));
-    texCoord = vec2(0.0f, 1.0f);
-    EmitVertex();
-    gl_Position = proj * view * (position + vec4(1.0, 0.0, 1.0, 0.0));
-    texCoord = vec2(1.0f, 1.0f);
-    EmitVertex();
-    EndPrimitive();
+    
 }
 
 void build_sides(vec4 position)
 {
-    texID = inData[0].side_texID;
-    gl_Position = proj * view * (position + vec4(1.0, -position.y, 0.0, 0.0));
-    texCoord = vec2(1.0f, 1.0f);
+    
+}
+
+void main() 
+{   
+    float x, z, w, h, l;
+    x = inData[0].x, z = inData[0].z;
+    w = inData[0].w, h = inData[0].h, l = inData[0].l;
+    vec4 position = vec4(x, 0, z, 1.0f);
+    vec4 center = proj * view * (position + vec4(w / 2, 0, l / 2, 0.0));
+    depthValue = 0.5 + 0.5 * center.z / center.w;
+    
+    // ---- Top ----
+    texID = inData[0].top_texID;
+    gl_Position = proj * view * (position + vec4(0, h, 0, 0));
+    texCoord = vec2(0.0f, 0.0f);
     EmitVertex();
-    gl_Position = proj * view * (position + vec4(1.0, 0.0, 0.0, 0.0));
+    gl_Position = proj * view * (position + vec4(w, h, 0, 0));
     texCoord = vec2(1.0f, 0.0f);
-    EmitVertex();   
-    gl_Position = proj * view * (position + vec4(0.0, -position.y, 0.0, 0.0));
+    EmitVertex();
+    gl_Position = proj * view * (position + vec4(0, h, l, 0));
     texCoord = vec2(0.0f, 1.0f);
     EmitVertex();
-    gl_Position = proj * view * (position + vec4(0.0, 0.0, 0.0, 0.0));
+    gl_Position = proj * view * (position + vec4(w, h, l, 0));
+    texCoord = vec2(1.0f, 1.0f);
+    EmitVertex();
+    EndPrimitive();
+
+    // --- Sides ---
+    texID = inData[0].side_texID;
+    gl_Position = proj * view * (position + vec4(w, 0, 0, 0));
+    texCoord = vec2(1.0f, 1.0f);
+    EmitVertex();
+    gl_Position = proj * view * (position + vec4(w, h, 0, 0));
+    texCoord = vec2(1.0f, 0.0f);
+    EmitVertex();   
+    gl_Position = proj * view * (position + vec4(0, 0, 0, 0));
+    texCoord = vec2(0.0f, 1.0f);
+    EmitVertex();
+    gl_Position = proj * view * (position + vec4(0, h, 0, 0));
     texCoord = vec2(0.0f, 0.0f);
     EmitVertex();
     EndPrimitive();
 
     
-    gl_Position = proj * view * (position + vec4(0.0, -position.y, 0.0, 0.0));
+    gl_Position = proj * view * (position + vec4(0, 0, 0, 0));
     texCoord = vec2(1.0f, 1.0f);
     EmitVertex();
-    gl_Position = proj * view * (position + vec4(0.0, 0.0, 0.0, 0.0));
+    gl_Position = proj * view * (position + vec4(0, h, 0, 0));
     texCoord = vec2(1.0f, 0.0f);
     EmitVertex();   
-    gl_Position = proj * view * (position + vec4(0.0, -position.y, 1.0, 0.0));
+    gl_Position = proj * view * (position + vec4(0, 0, l, 0));
     texCoord = vec2(0.0f, 1.0f);
     EmitVertex();
-    gl_Position = proj * view * (position + vec4(0.0, 0.0, 1.0, 0.0));
+    gl_Position = proj * view * (position + vec4(0, h, l, 0));
     texCoord = vec2(0.0f, 0.0f);
     EmitVertex();
     EndPrimitive();
 
-    gl_Position = proj * view * (position + vec4(1.0, -position.y, 1.0, 0.0));
+    gl_Position = proj * view * (position + vec4(w, 0, l, 0));
     texCoord = vec2(1.0f, 1.0f);
     EmitVertex();
-    gl_Position = proj * view * (position + vec4(1.0, 0.0, 1.0, 0.0));
+    gl_Position = proj * view * (position + vec4(w, h, l, 0));
     texCoord = vec2(1.0f, 0.0f);
     EmitVertex();   
-    gl_Position = proj * view * (position + vec4(1.0, -position.y, 0.0, 0.0));
+    gl_Position = proj * view * (position + vec4(w, 0, 0, 0));
     texCoord = vec2(0.0f, 1.0f);
     EmitVertex();
-    gl_Position = proj * view * (position + vec4(1.0, 0.0, 0.0, 0.0));
+    gl_Position = proj * view * (position + vec4(w, h, 0, 0));
     texCoord = vec2(0.0f, 0.0f);
     EmitVertex();
     EndPrimitive();
 
-    gl_Position = proj * view * (position + vec4(0.0, -position.y, 1.0, 0.0));
+    gl_Position = proj * view * (position + vec4(0, 0, l, 0));
     texCoord = vec2(1.0f, 1.0f);
     EmitVertex();
-    gl_Position = proj * view * (position + vec4(0.0, 0.0, 1.0, 0.0));
+    gl_Position = proj * view * (position + vec4(0, h, l, 0));
     texCoord = vec2(1.0f, 0.0f);
     EmitVertex();
-    gl_Position = proj * view * (position + vec4(1.0, -position.y, 1.0, 0.0));
+    gl_Position = proj * view * (position + vec4(w, 0, l, 0));
     texCoord = vec2(0.0f, 1.0f);
     EmitVertex();
-    gl_Position = proj * view * (position + vec4(1.0, 0.0, 1.0, 0.0));
+    gl_Position = proj * view * (position + vec4(w, h, l, 0.0));
     texCoord = vec2(0.0f, 0.0f);
     EmitVertex();
     EndPrimitive();
-}
-
-void main() 
-{   
-    vec4 center = proj * view * (gl_in[0].gl_Position + vec4(0.5, -gl_in[0].gl_Position.y, 0.5, 0.0));
-    depthValue = 0.5 + 0.5 * center.z / center.w;
-    build_top(gl_in[0].gl_Position);
-    build_sides(gl_in[0].gl_Position);
 }

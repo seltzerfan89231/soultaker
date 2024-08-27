@@ -129,6 +129,7 @@ void load_level3(void)
                 tile_create(GRASS, i, j);
         }
     }
+    wall_create(DEFAULT_WALL, 23.0, 3.0, 1.0, 3.0, 0.0f);
 
     player.entity = entity_create(KNIGHT, TRUE);
     player.entity->speed = 8;
