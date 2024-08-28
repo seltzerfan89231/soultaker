@@ -7,14 +7,12 @@ layout (std140) uniform OutlineThickness
 
 in VertexData
 {
-    flat float depthValue;
     vec2 texCoord;
     flat float healthRatio;
 };
 
 void main()
 {
-    gl_FragDepth = depthValue;
     if (texCoord.y < ot * 5 || texCoord.y > 1.0f - ot * 5)
         gl_FragColor = vec4(0.0f, 0.0f, 0.0f, 1.0f);
     else if (texCoord.x < ot * 3 / 4 || texCoord.x > 1.0f - ot * 3 / 4)

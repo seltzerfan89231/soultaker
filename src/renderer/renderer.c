@@ -169,8 +169,8 @@ void renderer_update(u32 vao, u32 offset, u32 length, f32* buffer)
 
 void renderer_render(void)
 {
-    glStencilFunc(GL_ALWAYS, 1, 0xFF);
-    glStencilMask(0xFF);
+    glStencilFunc(GL_ALWAYS, 1, 0x01);
+    glStencilMask(0x01);
 
     glClearColor(0.7f, 0.7f, 0.7f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
@@ -178,18 +178,20 @@ void renderer_render(void)
     glEnable(GL_DEPTH_TEST);
     shader_use(renderer.shaders[WALL_SHADER]);
     vao_draw(renderer.vaos[WALL_VAO]);
-    glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
+    glStencilFunc(GL_NOTEQUAL, 1, 0x01);
+    glStencilMask(0x01);
+    shader_use(renderer.shaders[HEALTHBAR_SHADER]);
+    vao_draw(renderer.vaos[ENTITY_VAO]);
+    glStencilFunc(GL_NOTEQUAL, 1, 0x01);
     glStencilMask(0x00);
     shader_use(renderer.shaders[TILE_SHADER]);
     vao_draw(renderer.vaos[TILE_VAO]);
-    shader_use(renderer.shaders[HEALTHBAR_SHADER]);
-    vao_draw(renderer.vaos[ENTITY_VAO]);
     shader_use(renderer.shaders[SHADOW_SHADER]);
     vao_draw(renderer.vaos[PROJECTILE_VAO]);
     vao_draw(renderer.vaos[OBSTACLE_VAO]);
     vao_draw(renderer.vaos[PARSTACLE_VAO]);
     vao_draw(renderer.vaos[ENTITY_VAO]);
-    glStencilFunc(GL_ALWAYS, 1, 0xFF);
+    glStencilFunc(GL_ALWAYS, 1, 0x01);
     shader_use(renderer.shaders[ENTITY_SHADER]);
     vao_draw(renderer.vaos[ENTITY_VAO]);
     shader_use(renderer.shaders[PARTICLE_SHADER]);

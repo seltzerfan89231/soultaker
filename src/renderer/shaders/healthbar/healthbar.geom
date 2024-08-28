@@ -28,7 +28,6 @@ in VertexData
 
 out VertexData
 {
-    flat float depthValue;
     vec2 texCoord;
     flat float healthRatio;
 };
@@ -39,8 +38,6 @@ void main() {
     // position.y += zoom * inData[0].position.y;
     float scale = inData[0].scale;
     healthRatio = inData[0].healthRatio;
-    vec4 depth_offset = proj * view * vec4(inData[0].position.x, 0.2, inData[0].position.z, 1.0);
-    depthValue = 0.5 + 0.5 * depth_offset.z / depth_offset.w;
 
     // bottom left
     offset = scale * zoom * vec2(-0.5 * ar, -0.30);

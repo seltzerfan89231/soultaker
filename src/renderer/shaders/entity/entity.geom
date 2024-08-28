@@ -31,7 +31,6 @@ in VertexData
 
 out VertexData
 {
-    flat float depthValue;
     vec2 texCoord;
     flat int texID;
 };
@@ -45,7 +44,6 @@ void main() {
     float x, y, w, h;
     x = inData[0].x, y = inData[0].y;
     w = inData[0].w, h = inData[0].h;
-    depthValue = 0.5 + 0.5 * position.z / position.w;
 
     // bottom left
     offset = scale * zoom * vec2((x - w / 2) * ar, y);

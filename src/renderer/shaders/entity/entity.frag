@@ -14,14 +14,12 @@ layout (std140) uniform OutlineThickness
 
 in VertexData
 {
-    flat float depthValue;
     vec2 texCoord;
     flat int texID;
 };
 
 void main()
 {
-    gl_FragDepth = depthValue;
     float a = 1 + 2 * ot; // 1 + buffer * 2;
     vec2 UV = vec2(texCoord.x - 0.5, texCoord.y - 0.5) * a + 0.5;
     vec4 col = texture(sampler2D(tex[texID]), UV);
