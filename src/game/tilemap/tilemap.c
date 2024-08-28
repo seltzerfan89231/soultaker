@@ -33,10 +33,15 @@ void tilemap_init(void)
 
 void tilemap_insert_tile(Tile *tile)
 {
-    i32 idx = idx_at(tile->position.x, tile->position.z);
-    if (idx == -1)
-        return;
-    tilemap.buffer[idx].tile = tile;
+    f32 x, z, w, l;
+    i32 x1, x2, z1, z2;
+    x = tile->position.x, z = tile->position.z;
+    w = tile->dimensions.w, l = tile->dimensions.l;
+    x1 = (int) x, x2 = (int) (x + w);
+    z1 = (int) z, z2 = (int) (z + l);
+    for (i32 i = max(x1, 0); i <= x2 && i < tilemap.width; i++)
+        for (i32 j = max(z1, 0); j <= z2 && j < tilemap.length; j++)
+            tilemap.buffer[idx_at(i, j)].tile = tile;
 }
 
 void tilemap_insert_wall(Wall *wall)
@@ -192,7 +197,8 @@ static void move_along_obstacle(Obstacle *obstacle, Entity *entity)
 static void collide_entity(Entity *entity, vec3f prev_position, i32 x, i32 y)
 {
     Tile *tile = tilemap_get_tile(x, y);
-    if (tile != NULL)
+    if (tile != NULL && entity->position.x > tile->position.x && entity->position.x < tile->position.x + tile->dimensions.w
+      && entity->position.z > tile->position.z && entity->position.z < tile->position.z + tile->dimensions.l)
         tile_interact(tile, entity);
     Wall *wall = tilemap_get_wall(x, y);
     if (wall != NULL)
@@ -229,7 +235,7 @@ void tilemap_reset(u32 width, u32 length)
     tilemap.length = length;
     tilemap.buffer = malloc(width * length * sizeof(TileMapInfo));
     for (i32 i = 0; i < width * length; i++) {
-        tilemap.buffer[i].tile = FALSE;
+        tilemap.buffer[i].tile = NULL;
         tilemap.buffer[i].wall = NULL;
         tilemap.buffer[i].obstacles = obstacle_array_create(0, 1);
     }

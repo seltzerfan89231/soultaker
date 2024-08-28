@@ -10,12 +10,14 @@ TileArray interactable_tiles;
 #define _CREATE(_id, _lid) \
     case _id : _lid##_create(tile); break;
 
-Tile* tile_create(u32 id, f32 x, f32 z)
+Tile* tile_create(u32 id, i32 x, i32 z, i32 w, i32 l)
 {
     Tile* tile = malloc(sizeof(Tile));
     tile->id = id;
     tile->position.x = x;
     tile->position.z = z;
+    tile->dimensions.w = w;
+    tile->dimensions.l = l;
     tile->interactable = FALSE;
     tile->timer = 0;
     switch (id) {

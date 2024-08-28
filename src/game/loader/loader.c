@@ -36,12 +36,15 @@ void load_level1(void)
         for (i32 j = 0; j < MAP_WIDTH; j++) {
             if (i == 1 && j == 1)
                 wall_create(DEFAULT_WALL, i, j, 1, 3, 1);
-            else if (i > 10 && i < 20 && j > 10 && j < 20)
-                tile_create(HELLSTONE, i, j);
+            else if (i >= 10 && i < 20 && j >= 10 && j < 20) {
+                if (i == 10 && j == 10)
+                    tile_create(HELLSTONE, i, j, 10, 10);
+            }
             else
-                tile_create(GRASS, i, j);
+                tile_create(GRASS, i, j, 1, 1);
         }
     }
+    tile_create(GRASS, -30, -100, MAP_WIDTH + 60, 100);
             
     player.entity = entity_create(KNIGHT, TRUE);
     player.entity->speed = 8;
@@ -85,7 +88,7 @@ void load_level2(void)
             if (i == 0 || j == 0 || i == MAP_WIDTH - 1 || j == MAP_WIDTH - 1)
                 wall_create(DEFAULT_WALL, i, j, 1, 3, 1);
             else
-                tile_create(GRASS, i, j);
+                tile_create(GRASS, i, j, 1, 1);
         }
     }
             
@@ -129,7 +132,7 @@ void load_level3(void)
             if (i == 0 || j == 0 || i == MAP_WIDTH - 1 || j == MAP_WIDTH - 1)
                 wall_create(DEFAULT_WALL, i, j, 1, 3, 1);
             else
-                tile_create(GRASS, i, j);
+                tile_create(GRASS, i, j, 1, 1);
         }
     }
     Wall *wall = wall_create(INVISIBLE_WALL, 23.0, 3.0, 5.0, 3.0, 5.0f);

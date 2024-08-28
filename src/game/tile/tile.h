@@ -11,12 +11,15 @@ typedef struct {
     struct {
         i32 x, z;
     } position;
+    struct {
+        i32 w, l;
+    } dimensions;
     u32 id, tex;
     f32 timer;
     bool interactable;
 } Tile;
 
-Tile* tile_create(u32 id, f32 x, f32 z);
+Tile* tile_create(u32 id, i32 x, i32 z, i32 w, i32 l);
 void tile_update(Tile *tile, f32 dt);
 void tile_interact(Tile *tile, Entity *entity);
 void tile_destroy(Tile* tile, u32 idx);
