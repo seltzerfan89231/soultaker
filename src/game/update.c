@@ -68,14 +68,6 @@ static void update_entities(f32 dt)
             entity_destroy(entity, i), i--;
             continue;
         }
-        if (entity->position.x < 0)
-            entity->position.x = 0;
-        if (entity->position.z < 0)
-            entity->position.z = 0;
-        if (entity->position.x > MAP_WIDTH)
-            entity->position.x = MAP_WIDTH;
-        if (entity->position.z > MAP_WIDTH)
-            entity->position.z = MAP_WIDTH;
     }
 }
 

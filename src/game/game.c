@@ -77,6 +77,8 @@ void game_setup(u32 level)
             load_level2(); break;
         case 3:
             load_level3(); break;
+        case 4:
+            load_level4(); break;
     }
     sem_post(&mutex);
     game_paused = FALSE;

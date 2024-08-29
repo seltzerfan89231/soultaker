@@ -69,7 +69,7 @@ void key_callback(GLFWwindow* handle, i32 key, i32 scancode, i32 action, i32 mod
     if (key == GLFW_KEY_B && action == GLFW_PRESS)
         game_heal();
     if (key == GLFW_KEY_J && action == GLFW_PRESS)
-        game_setup(1);
+        game_setup(4);
     if (key == GLFW_KEY_K && action == GLFW_PRESS)
         game_setup(3);
     if (key == GLFW_KEY_G && action == GLFW_PRESS)

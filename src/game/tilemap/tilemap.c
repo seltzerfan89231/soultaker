@@ -224,6 +224,14 @@ void tilemap_collide_entity(Entity *entity, vec3f prev_position)
     for (i32 i = x1; i <= x2; i++)
         for (i32 j = z1; j <= z2; j++)
             collide_entity(entity, prev_position, i, j);
+    if (entity->position.x < 0)
+        entity->position.x = 0;
+    if (entity->position.z < 0)
+        entity->position.z = 0;
+    if (entity->position.x > tilemap.width)
+        entity->position.x = tilemap.width;
+    if (entity->position.z > tilemap.length)
+        entity->position.z = tilemap.length;
 }
 
 void tilemap_reset(u32 width, u32 length)

@@ -12,9 +12,9 @@
 #define DEFAULT_DISTANCE 100
 #define DEFAULT_ROTATE_SPEED 3
 #define DEFAULT_TILT_SPEED 3
-#define DEFAULT_YAW 0
+#define DEFAULT_YAW PI / 2
 #define DEFAULT_PITCH PI / 3
-#define DEFAULT_ZOOM 8
+#define DEFAULT_ZOOM 15
 #define MIN_PITCH 0.3
 #define MAX_PITCH 1.3
 #define MIN_ZOOM 1
