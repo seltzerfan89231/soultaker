@@ -8,8 +8,8 @@ i32 i;
 
 static void wall_push_data(Wall* wall, u32 offset)
 {
-    assert((offset+1)*7 < BUFFER_SIZE);
-    offset *= 7;
+    assert((offset+1)*8 < BUFFER_SIZE);
+    offset *= 8;
     if (wall->id == INVISIBLE_WALL) {
         for (i32 i = 0; i < 7; i++)
             data.buffer[offset++] = 0;
@@ -21,7 +21,8 @@ static void wall_push_data(Wall* wall, u32 offset)
     data.buffer[offset++] = wall->dimensions.h;
     data.buffer[offset++] = wall->dimensions.l;
     data.buffer[offset++] = wall->top_tex;
-    data.buffer[offset++] = wall->side_tex;
+    data.buffer[offset++] = wall->side1_tex;
+    data.buffer[offset++] = wall->side2_tex;
 }
 
 static void tile_push_data(Tile* tile, u32 offset)

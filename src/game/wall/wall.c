@@ -5,6 +5,9 @@
 
 WallArray global_walls;
 
+#define _CREATE(_id, _lid) \
+    case _id : _lid##_create(wall); break;
+
 Wall* wall_create(u32 id, f32 x, f32 z, f32 w, f32 h, f32 l)
 {
     Wall* wall = malloc(sizeof(Wall));
@@ -15,7 +18,12 @@ Wall* wall_create(u32 id, f32 x, f32 z, f32 w, f32 h, f32 l)
     wall->dimensions.h = h;
     wall->dimensions.l = l;
     wall->top_tex = WALL_TOP_TEX;
-    wall->side_tex = WALL_SIDE_TEX;
+    wall->side1_tex = WALL_SIDE_TEX;
+    wall->side2_tex = WALL_SIDE_TEX;
+    switch(wall->id) {
+        _CREATE(SHAITAN_WALL, shaitan_wall)
+        _CREATE(SHAITAN_BARS, shaitan_bars)
+    }
     wall_array_push(&global_walls, wall);
     tilemap_insert_wall(wall);
     return wall;

@@ -23,6 +23,9 @@ Tile* tile_create(u32 id, i32 x, i32 z, i32 w, i32 l)
     switch (id) {
         _CREATE(GRASS, grass)
         _CREATE(HELLSTONE, hellstone)
+        _CREATE(SHAITAN_LAVA, shaitan_lava)
+        _CREATE(SHAITAN_FLOOR, shaitan_floor)
+        _CREATE(SHAITAN_HELLSTONE, shaitan_hellstone)
     }
     tile_array_push(&global_tiles, tile);
     if (tile->interactable)
@@ -40,6 +43,7 @@ void tile_update(Tile *tile, f32 dt)
         return;
     switch (tile->id) {
         _UPDATE(HELLSTONE, hellstone)
+        _UPDATE(SHAITAN_LAVA, shaitan_lava)
     }
 }
 
@@ -52,6 +56,7 @@ void tile_interact(Tile *tile, Entity *entity)
         return;
     switch (tile->id) {
         _INTERACT(HELLSTONE, hellstone)
+        _INTERACT(SHAITAN_LAVA, shaitan_lava)
     }
 }
 

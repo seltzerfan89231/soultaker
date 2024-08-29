@@ -182,17 +182,17 @@ void load_level4(void)
     i32 x, z, i;
     for (x = i = 0, z = 36; i < strlen(map); i++) {
         if (map[i] == '1')
-            wall_create(DEFAULT_WALL, x, z, 1, 3, 1);
+            wall_create(SHAITAN_WALL, x, z, 1, 3, 1);
         if (map[i] == '2') {
-            wall_create(DEFAULT_WALL, x, z + 0.4, 1, 3, 0.2);
-            tile_create(GRASS, x, z, 1, 1);
+            wall_create(SHAITAN_BARS, x, z + 0.5, 1, 3, 0);
+            tile_create(SHAITAN_HELLSTONE, x, z, 1, 1);
         }
         if (map[i] == '3')
-            tile_create(GRASS, x, z, 1, 1);
+            tile_create(SHAITAN_FLOOR, x, z, 1, 1);
         if (map[i] == '4')
-            tile_create(HELLSTONE, x, z, 1, 1);
+            tile_create(SHAITAN_LAVA, x, z, 1, 1);
         if (map[i] == '5')
-            tile_create(GRASS, x, z, 1, 1);
+            tile_create(SHAITAN_HELLSTONE, x, z, 1, 1);
         if (map[i] == '\n')
             x = 0, z--;
         else
@@ -207,5 +207,5 @@ void load_level4(void)
     player.mana_regen = player.health_regen = 0.5;
     player.weapon.id = 0;
     player.weapon.tex = SWORD_1_TEX;
-    player.entity->position = vec3f_create(15, 0.0f, 15);
+    player.entity->position = vec3f_create(15.5, 0.0f, 12);
 }

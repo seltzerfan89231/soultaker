@@ -68,7 +68,7 @@
 
 
 #pragma region GAME_TEXTURES
-#define NUM_GAME_TEXTURES 32
+#define NUM_GAME_TEXTURES 41
 #define BULLET_TEX        0
 #define TILE_TEX          1
 #define WALL_TOP_TEX      2
@@ -101,6 +101,15 @@
 #define SLIME_TEX 29
 #define GRAVESTONE_TEX 30
 #define TRAINING_DUMMY_TEX 31
+#define SHAITAN_LAVA_TEX 32
+#define SHAITAN_FLOOR_1_TEX 33
+#define SHAITAN_FLOOR_2_TEX 34
+#define SHAITAN_WALL_SIDE_TEX 35
+#define SHAITAN_WALL_TOP_TEX 36
+#define SHAITAN_BARS_SIDE_TEX 37
+#define SHAITAN_BARS_TOP_TEX 38
+#define SHAITAN_HELLSTONE_TEX 39
+#define GAME_NO_TEX 40
 #pragma endregion
 
 

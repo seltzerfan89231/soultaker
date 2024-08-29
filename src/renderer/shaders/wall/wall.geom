@@ -15,7 +15,8 @@ in VertexData
 {
     float x, z, w, h, l;
     int top_texID;
-    int side_texID;
+    int side1_texID;
+    int side2_texID;
 } inData[];
 
 out VertexData
@@ -61,7 +62,7 @@ void main()
     EndPrimitive();
 
     // --- Sides ---
-    texID = inData[0].side_texID;
+    texID = inData[0].side1_texID;
     gl_Position = proj * view * (position + vec4(w, 0, 0, 0));
     texCoord = vec2(1.0f, 1.0f);
     EmitVertex();
@@ -76,7 +77,7 @@ void main()
     EmitVertex();
     EndPrimitive();
 
-    
+    texID = inData[0].side2_texID;
     gl_Position = proj * view * (position + vec4(0, 0, 0, 0));
     texCoord = vec2(1.0f, 1.0f);
     EmitVertex();
@@ -91,6 +92,7 @@ void main()
     EmitVertex();
     EndPrimitive();
 
+    texID = inData[0].side2_texID;
     gl_Position = proj * view * (position + vec4(w, 0, l, 0));
     texCoord = vec2(1.0f, 1.0f);
     EmitVertex();
@@ -105,6 +107,7 @@ void main()
     EmitVertex();
     EndPrimitive();
 
+    texID = inData[0].side1_texID;
     gl_Position = proj * view * (position + vec4(0, 0, l, 0));
     texCoord = vec2(1.0f, 1.0f);
     EmitVertex();

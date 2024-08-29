@@ -18,4 +18,6 @@ void main()
 {
     gl_FragDepth = depthValue;
     gl_FragColor = texture(sampler2D(tex[texID]), texCoord);
+    if (gl_FragColor.a < 0.1)
+        discard;
 }

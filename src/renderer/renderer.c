@@ -59,7 +59,7 @@ void renderer_init(void)
     /* --------------------- */
     renderer.vaos = malloc(NUM_VAOS * sizeof(VAO));
     renderer.vaos[TILE_VAO]         = vao_create(GL_STATIC_DRAW, GL_POINTS, 5);
-    renderer.vaos[WALL_VAO]         = vao_create(GL_STATIC_DRAW, GL_POINTS, 7);
+    renderer.vaos[WALL_VAO]         = vao_create(GL_STATIC_DRAW, GL_POINTS, 8);
     renderer.vaos[ENTITY_VAO]       = vao_create(GL_DYNAMIC_DRAW, GL_POINTS, 10);
     renderer.vaos[PROJECTILE_VAO]   = vao_create(GL_DYNAMIC_DRAW, GL_POINTS, 6);
     renderer.vaos[GUI_VAO]          = vao_create(GL_STATIC_DRAW, GL_TRIANGLES, 9);
@@ -72,7 +72,7 @@ void renderer_init(void)
     vao_attr(renderer.vaos[TILE_VAO]        , 2, 1, 4);
     vao_attr(renderer.vaos[WALL_VAO]        , 0, 2, 0);
     vao_attr(renderer.vaos[WALL_VAO]        , 1, 3, 2);
-    vao_attr(renderer.vaos[WALL_VAO]        , 2, 2, 5);
+    vao_attr(renderer.vaos[WALL_VAO]        , 2, 3, 5);
     vao_attr(renderer.vaos[ENTITY_VAO]      , 0, 3, 0);
     vao_attr(renderer.vaos[ENTITY_VAO]      , 1, 1, 3);
     vao_attr(renderer.vaos[ENTITY_VAO]      , 2, 1, 4);
@@ -346,6 +346,15 @@ void load_textures(void)
     renderer.game_textures[SLIME_TEX]        = texture_create("assets/textures/game/slime.png");
     renderer.game_textures[GRAVESTONE_TEX]   = texture_create("assets/textures/game/gravestone.png");
     renderer.game_textures[TRAINING_DUMMY_TEX] = texture_create("assets/textures/game/training_dummy.png");
+    renderer.game_textures[SHAITAN_LAVA_TEX] = texture_create("assets/textures/game/shaitan/shaitan_lava.png");
+    renderer.game_textures[SHAITAN_FLOOR_1_TEX] = texture_create("assets/textures/game/shaitan/shaitan_floor_1.png");
+    renderer.game_textures[SHAITAN_FLOOR_2_TEX] = texture_create("assets/textures/game/shaitan/shaitan_floor_2.png");
+    renderer.game_textures[SHAITAN_WALL_SIDE_TEX] = texture_create("assets/textures/game/shaitan/shaitan_wall_side.png");
+    renderer.game_textures[SHAITAN_WALL_TOP_TEX] = texture_create("assets/textures/game/shaitan/shaitan_wall_top.png");
+    renderer.game_textures[SHAITAN_BARS_SIDE_TEX] = texture_create("assets/textures/game/shaitan/shaitan_bars_side.png");
+    renderer.game_textures[SHAITAN_BARS_TOP_TEX] = texture_create("assets/textures/game/shaitan/shaitan_bars_top.png");
+    renderer.game_textures[SHAITAN_HELLSTONE_TEX] = texture_create("assets/textures/game/shaitan/shaitan_hellstone.png");
+    renderer.game_textures[GAME_NO_TEX] = texture_create("assets/textures/gui/none.png");
 
     renderer.gui_textures[NO_TEX]     = texture_create("assets/textures/gui/none.png");
     renderer.gui_textures[EMPTY_TEX]  = texture_create("assets/textures/gui/empty.png");

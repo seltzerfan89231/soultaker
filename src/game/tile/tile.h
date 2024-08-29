@@ -29,9 +29,12 @@ _ARRAY_DECLARE(Tile, tile)
 extern TileArray global_tiles;
 extern TileArray interactable_tiles;
 
-#define MAX_TILE_ID 2
+#define MAX_TILE_ID 5
 #define GRASS 0
 #define HELLSTONE 1
+#define SHAITAN_LAVA 2
+#define SHAITAN_FLOOR 3
+#define SHAITAN_HELLSTONE 4
 
 #define _TILE_INIT(_type) \
     void _type##_create(Tile *tile); \
@@ -40,5 +43,8 @@ extern TileArray interactable_tiles;
 
 _TILE_INIT(grass)
 _TILE_INIT(hellstone)
+_TILE_INIT(shaitan_lava)
+_TILE_INIT(shaitan_floor)
+_TILE_INIT(shaitan_hellstone)
 
 #endif

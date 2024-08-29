@@ -31,6 +31,10 @@ static void *game_update(void *vargp)
                 sem_wait(&mutex);
                 update_objects(game_dt);
                 collide_objects(game_dt);
+                /* wall_array_update(&global_walls);
+                tile_array_update(&global_tiles);
+                obstacle_array_update(&global_obstacles);
+                parstacle_array_update(&global_parstacles); */
                 entity_array_update(&global_entities);
                 projectile_array_update(&global_projectiles);
                 particle_array_update(&global_particles);
