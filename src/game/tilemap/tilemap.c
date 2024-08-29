@@ -14,7 +14,7 @@ static i32 idx_at(i32 x, i32 z)
 {
     if (!in_tilemap(x, z))
         return -1;
-    return x * tilemap.width + z;
+    return x * tilemap.length + z;
 }
 
 static i32 max(i32 a, i32 b)
@@ -37,8 +37,8 @@ void tilemap_insert_tile(Tile *tile)
     i32 x1, x2, z1, z2;
     x = tile->position.x, z = tile->position.z;
     w = tile->dimensions.w, l = tile->dimensions.l;
-    x1 = (int) x, x2 = (int) (x + w);
-    z1 = (int) z, z2 = (int) (z + l);
+    x1 = (int) x, x2 = (int) (x + w - 0.00001);
+    z1 = (int) z, z2 = (int) (z + l - 0.00001);
     for (i32 i = max(x1, 0); i <= x2 && i < tilemap.width; i++)
         for (i32 j = max(z1, 0); j <= z2 && j < tilemap.length; j++)
             tilemap.buffer[idx_at(i, j)].tile = tile;
@@ -50,8 +50,8 @@ void tilemap_insert_wall(Wall *wall)
     i32 x1, x2, z1, z2;
     x = wall->position.x, z = wall->position.z;
     w = wall->dimensions.w, l = wall->dimensions.l;
-    x1 = (int) x, x2 = (int) (x + w);
-    z1 = (int) z, z2 = (int) (z + l);
+    x1 = (int) x, x2 = (int) (x + w - 0.00001);
+    z1 = (int) z, z2 = (int) (z + l - 0.00001);
     for (i32 i = max(x1, 0); i <= x2 && i < tilemap.width; i++)
         for (i32 j = max(z1, 0); j <= z2 && j < tilemap.length; j++)
             tilemap.buffer[idx_at(i, j)].wall = wall;
@@ -194,16 +194,12 @@ static void move_along_obstacle(Obstacle *obstacle, Entity *entity)
     }
 }
 
-static void collide_entity(Entity *entity, vec3f prev_position, i32 x, i32 y)
+static void collide_entity(Entity *entity, vec3f prev_position, i32 x, i32 z)
 {
-    Tile *tile = tilemap_get_tile(x, y);
-    if (tile != NULL && entity->position.x > tile->position.x && entity->position.x < tile->position.x + tile->dimensions.w
-      && entity->position.z > tile->position.z && entity->position.z < tile->position.z + tile->dimensions.l)
-        tile_interact(tile, entity);
-    Wall *wall = tilemap_get_wall(x, y);
+    Wall *wall = tilemap_get_wall(x, z);
     if (wall != NULL)
         move_along_wall(wall, entity, prev_position);
-    Obstacle **arr = tilemap_get_obstacles(x, y);
+    Obstacle **arr = tilemap_get_obstacles(x, z);
     if (arr == NULL)
         return;
     for (i32 k = 0; arr[k] != NULL; k++) {
@@ -221,6 +217,9 @@ void tilemap_collide_entity(Entity *entity, vec3f prev_position)
     r = entity->hitbox_radius;
     x1 = (int) (x - r), x2 = (int) (x + r);
     z1 = (int) (z - r), z2 = (int) (z + r);
+    Tile *tile = tilemap_get_tile(x, z);
+    if (tile != NULL)
+        tile_interact(tile, entity);
     for (i32 i = x1; i <= x2; i++)
         for (i32 j = z1; j <= z2; j++)
             collide_entity(entity, prev_position, i, j);

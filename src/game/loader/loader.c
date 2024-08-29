@@ -133,7 +133,7 @@ void load_level3(void)
                 tile_create(GRASS, i, j, 1, 1);
         }
     }
-    Wall *wall = wall_create(INVISIBLE_WALL, 23.0, 3.0, 5.0, 3.0, 5.0f);
+    Wall *wall = wall_create(DEFAULT_WALL, 23.0, 3.0, 5.0, 3.0, 5.0f);
 
     player.entity = entity_create(KNIGHT, TRUE);
     player.entity->speed = 8;
@@ -183,8 +183,10 @@ void load_level4(void)
     for (x = i = 0, z = 36; i < strlen(map); i++) {
         if (map[i] == '1')
             wall_create(DEFAULT_WALL, x, z, 1, 3, 1);
-        if (map[i] == '2')
+        if (map[i] == '2') {
             wall_create(DEFAULT_WALL, x, z + 0.4, 1, 3, 0.2);
+            tile_create(GRASS, x, z, 1, 1);
+        }
         if (map[i] == '3')
             tile_create(GRASS, x, z, 1, 1);
         if (map[i] == '4')

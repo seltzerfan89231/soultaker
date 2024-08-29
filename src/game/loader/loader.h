@@ -3,7 +3,7 @@
 
 #include "../game_util.h"
 
-#define MAP_WIDTH 500
+#define MAP_WIDTH 50
 
 #define LEVEL_1 0
 
