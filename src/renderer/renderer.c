@@ -48,8 +48,8 @@ void renderer_init(void)
     renderer.ssbos[GUI_SSBO] = ssbo_create(NUM_GUI_TEXTURES * sizeof(u64));
     /* --------------------- */
     renderer.shaders = malloc(NUM_SHADERS * sizeof(Shader));
-    renderer.shaders[TILE_SHADER]        = shader_create("src/renderer/shaders/tile/tile.vert", "src/renderer/shaders/tile/tile.frag", NULL);
-    renderer.shaders[TILE_SHADOW_SHADER] = shader_create("src/renderer/shaders/tile/tile.vert", "src/renderer/shaders/tile/tile_shadow.frag", NULL);
+    renderer.shaders[TILE_SHADER]        = shader_create("src/renderer/shaders/tile/tile.vert", "src/renderer/shaders/tile/tile.frag", "src/renderer/shaders/tile/tile.geom");
+    renderer.shaders[TILE_SHADOW_SHADER] = shader_create("src/renderer/shaders/tile/tile.vert", "src/renderer/shaders/tile/tile_shadow.frag", "src/renderer/shaders/tile/tile_shadow.geom");
     renderer.shaders[WALL_SHADER]        = shader_create("src/renderer/shaders/wall/wall.vert", "src/renderer/shaders/wall/wall.frag", "src/renderer/shaders/wall/wall.geom");
     renderer.shaders[ENTITY_SHADER]      = shader_create("src/renderer/shaders/entity/entity.vert", "src/renderer/shaders/entity/entity.frag", "src/renderer/shaders/entity/entity.geom");
     renderer.shaders[SHADOW_SHADER]      = shader_create("src/renderer/shaders/shadow/shadow.vert", "src/renderer/shaders/shadow/shadow.frag", "src/renderer/shaders/shadow/shadow.geom");
