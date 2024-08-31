@@ -15,7 +15,9 @@ typedef struct {
         i32 w, l;
     } dimensions;
     u32 id, tex;
+    // 4 bits
     u8 shadow;
+    vec2f offset;
     f32 timer;
     bool interactable;
 } Tile;

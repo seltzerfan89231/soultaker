@@ -15,6 +15,7 @@ in VertexData
 {
     int texID;
     int shadows;
+    vec2 offset;
     vec4 position;
     float w, l;
 } inData[];

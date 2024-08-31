@@ -21,6 +21,7 @@ Tile* tile_create(u32 id, i32 x, i32 z, i32 w, i32 l)
     tile->interactable = FALSE;
     tile->timer = 0;
     tile->shadow = 0;
+    tile->offset = vec2f_create(0, 0);
     switch (id) {
         _CREATE(GRASS, grass)
         _CREATE(HELLSTONE, hellstone)
@@ -46,6 +47,7 @@ void tile_update(Tile *tile, f32 dt)
         _UPDATE(HELLSTONE, hellstone)
         _UPDATE(SHAITAN_LAVA, shaitan_lava)
     }
+    tile_array_update(&global_tiles);
 }
 
 #define _INTERACT(_id, _lid) \
