@@ -32,18 +32,19 @@
 
 
 #pragma region SHADERS
-#define NUM_SHADERS       11
-#define TILE_SHADER       0
-#define WALL_SHADER       1
-#define ENTITY_SHADER     2
-#define PROJECTILE_SHADER 3
-#define GUI_SHADER        4
-#define SHADOW_SHADER     5
-#define HEALTHBAR_SHADER  6
-#define PARTICLE_SHADER   7
-#define OBSTACLE_SHADER   8
-#define PARJICLE_SHADER   9
-#define PARSTACLE_SHADER  10
+#define NUM_SHADERS        12
+#define TILE_SHADER        0
+#define WALL_SHADER        1
+#define ENTITY_SHADER      2
+#define PROJECTILE_SHADER  3
+#define GUI_SHADER         4 
+#define SHADOW_SHADER      5
+#define HEALTHBAR_SHADER   6
+#define PARTICLE_SHADER    7
+#define OBSTACLE_SHADER    8
+#define PARJICLE_SHADER    9
+#define PARSTACLE_SHADER   10
+#define TILE_SHADOW_SHADER 11
 #pragma endregion
 
 

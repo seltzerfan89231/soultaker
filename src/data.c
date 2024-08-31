@@ -27,12 +27,13 @@ static void wall_push_data(Wall* wall, u32 offset)
 
 static void tile_push_data(Tile* tile, u32 offset)
 {
-    assert((offset+1)*5 < BUFFER_SIZE);
-    offset *= 5;
+    assert((offset+1)*6 < BUFFER_SIZE);
+    offset *= 6;
     data.buffer[offset++] = tile->position.x;
     data.buffer[offset++] = tile->position.z;
     data.buffer[offset++] = tile->dimensions.w;
     data.buffer[offset++] = tile->dimensions.l;
+    data.buffer[offset++] = tile->shadow;
     data.buffer[offset++] = tile->tex;
 }
 

@@ -20,6 +20,7 @@ Tile* tile_create(u32 id, i32 x, i32 z, i32 w, i32 l)
     tile->dimensions.l = l;
     tile->interactable = FALSE;
     tile->timer = 0;
+    tile->shadow = 0;
     switch (id) {
         _CREATE(GRASS, grass)
         _CREATE(HELLSTONE, hellstone)

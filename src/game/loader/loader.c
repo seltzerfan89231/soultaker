@@ -200,6 +200,26 @@ void load_level4(void)
     }
     free(map);
 
+    for (x = 0; x < 31; x++) {
+        for (z = 0; z < 37; z++) {
+            Tile *tile = tilemap_get_tile(x, z);
+            if (tile == NULL || tile->id == SHAITAN_LAVA)
+                continue;
+            Tile *down = tilemap_get_tile(x, z-1);
+            Tile *right = tilemap_get_tile(x+1, z);
+            Tile *up = tilemap_get_tile(x, z+1);
+            Tile *left = tilemap_get_tile(x-1, z);
+            if (down != NULL && down->id == SHAITAN_LAVA)
+                tile->shadow |= (1 << DOWN);
+            if (up != NULL && up->id == SHAITAN_LAVA)
+                tile->shadow |= (1 << UP);
+            if (right != NULL && right->id == SHAITAN_LAVA)
+                tile->shadow |= (1 << RIGHT);
+            if (left != NULL && left->id == SHAITAN_LAVA)
+                tile->shadow |= (1 << LEFT);
+        }
+    }
+
     player.entity = entity_create(KNIGHT, TRUE);
     player.entity->speed = 8;
     player.entity->health = player.entity->max_health = 10;
