@@ -5,12 +5,15 @@
 
 Renderer renderer;
 
+static u32 framebuffer, textureColorbuffer, rbo;
+
 static void link_shader_ubo(u32 shader_index, u32 ubo_index, char *identifier);
 static void link_shader_ssbo(u32 shader_index, u32 ssbo_index);
 static void set_game_ssbo(void);
 static void set_gui_ssbo(void);
 static void set_constants_ubo(void);
 static void set_outline_ubo(void);
+static void set_quad_vao(void);
 static void message_callback();
 static void load_textures();
 
@@ -27,7 +30,7 @@ void renderer_init(void)
     glEnable(GL_MULTISAMPLE);
     glEnable(GL_CULL_FACE); 
     glCullFace(GL_BACK);
-    //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     /* --------------------- */
     renderer.ubos = malloc(NUM_UBOS * sizeof(UBO));
     renderer.ubos[MATRICES_UBO]     = ubo_create(32 * sizeof(f32));
@@ -45,8 +48,8 @@ void renderer_init(void)
     renderer.ssbos[GUI_SSBO] = ssbo_create(NUM_GUI_TEXTURES * sizeof(u64));
     /* --------------------- */
     renderer.shaders = malloc(NUM_SHADERS * sizeof(Shader));
-    renderer.shaders[TILE_SHADER]        = shader_create("src/renderer/shaders/tile/tile.vert", "src/renderer/shaders/tile/tile.frag", "src/renderer/shaders/tile/tile.geom");
-    renderer.shaders[TILE_SHADOW_SHADER] = shader_create("src/renderer/shaders/tile/tile.vert", "src/renderer/shaders/tile/tile_shadow.frag", "src/renderer/shaders/tile/tile_shadow.geom");
+    renderer.shaders[TILE_SHADER]        = shader_create("src/renderer/shaders/tile/tile.vert", "src/renderer/shaders/tile/tile.frag", NULL);
+    renderer.shaders[TILE_SHADOW_SHADER] = shader_create("src/renderer/shaders/tile/tile.vert", "src/renderer/shaders/tile/tile_shadow.frag", NULL);
     renderer.shaders[WALL_SHADER]        = shader_create("src/renderer/shaders/wall/wall.vert", "src/renderer/shaders/wall/wall.frag", "src/renderer/shaders/wall/wall.geom");
     renderer.shaders[ENTITY_SHADER]      = shader_create("src/renderer/shaders/entity/entity.vert", "src/renderer/shaders/entity/entity.frag", "src/renderer/shaders/entity/entity.geom");
     renderer.shaders[SHADOW_SHADER]      = shader_create("src/renderer/shaders/shadow/shadow.vert", "src/renderer/shaders/shadow/shadow.frag", "src/renderer/shaders/shadow/shadow.geom");
@@ -57,6 +60,7 @@ void renderer_init(void)
     renderer.shaders[OBSTACLE_SHADER]    = shader_create("src/renderer/shaders/obstacle/obstacle.vert", "src/renderer/shaders/obstacle/obstacle.frag", "src/renderer/shaders/obstacle/obstacle.geom");
     renderer.shaders[PARJICLE_SHADER]    = shader_create("src/renderer/shaders/parjicle/parjicle.vert", "src/renderer/shaders/parjicle/parjicle.frag", "src/renderer/shaders/parjicle/parjicle.geom");
     renderer.shaders[PARSTACLE_SHADER]   = shader_create("src/renderer/shaders/parstacle/parstacle.vert", "src/renderer/shaders/parstacle/parstacle.frag", "src/renderer/shaders/parstacle/parstacle.geom");
+    renderer.shaders[SCREEN_SHADER]      = shader_create("src/renderer/shaders/screen/screen.vert", "src/renderer/shaders/screen/screen.frag", NULL);
     /* --------------------- */
     renderer.vaos = malloc(NUM_VAOS * sizeof(VAO));
     renderer.vaos[TILE_VAO]         = vao_create(GL_STATIC_DRAW, GL_POINTS, 8);
@@ -68,6 +72,7 @@ void renderer_init(void)
     renderer.vaos[OBSTACLE_VAO]     = vao_create(GL_STATIC_DRAW, GL_POINTS, 5);
     renderer.vaos[PARJICLE_VAO]     = vao_create(GL_DYNAMIC_DRAW, GL_POINTS, 8);
     renderer.vaos[PARSTACLE_VAO]    = vao_create(GL_STATIC_DRAW, GL_POINTS, 5);
+    renderer.vaos[QUAD_VAO]         = vao_create(GL_STATIC_DRAW, GL_TRIANGLES, 4);
     vao_attr(renderer.vaos[TILE_VAO]        , 0, 2, 0);
     vao_attr(renderer.vaos[TILE_VAO]        , 1, 2, 2);
     vao_attr(renderer.vaos[TILE_VAO]        , 2, 2, 4);
@@ -102,6 +107,9 @@ void renderer_init(void)
     vao_attr(renderer.vaos[PARSTACLE_VAO]   , 0, 3, 0);
     vao_attr(renderer.vaos[PARSTACLE_VAO]   , 1, 1, 3);
     vao_attr(renderer.vaos[PARSTACLE_VAO]   , 2, 1, 4);
+    vao_attr(renderer.vaos[QUAD_VAO]        , 0, 2, 0);
+    vao_attr(renderer.vaos[QUAD_VAO]        , 1, 2, 2);
+    set_quad_vao();
     /* --------------------- */
     renderer.game_textures = malloc(NUM_GAME_TEXTURES * sizeof(Texture));
     renderer.gui_textures = malloc(NUM_GUI_TEXTURES * sizeof(Texture));
@@ -154,6 +162,23 @@ void renderer_init(void)
     link_shader_ssbo(PARSTACLE_SHADER, GAME_SSBO);
     link_shader_ssbo(GUI_SHADER, GUI_SSBO);
     /* --------------------- */
+    glGenFramebuffers(1, &framebuffer);
+    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+    // create a color attachment texture
+    glGenTextures(1, &textureColorbuffer);
+    glBindTexture(GL_TEXTURE_2D, textureColorbuffer);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, window.width, window.height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textureColorbuffer, 0);
+    // create a renderbuffer object for depth and stencil attachment (we won't be sampling these)
+    glGenRenderbuffers(1, &rbo);
+    glBindRenderbuffer(GL_RENDERBUFFER, rbo);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, window.width, window.height); // use a single renderbuffer object for both a depth AND stencil buffer.
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rbo); // now actually attach it
+    // now that we actually created the framebuffer and added all attachments we want to check if it is actually complete now
+    if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+        puts("?");
 }
 
 void renderer_malloc(u32 vao, u32 length)
@@ -172,6 +197,7 @@ void renderer_update(u32 vao, u32 offset, u32 length, f32* buffer)
 
 void renderer_render(void)
 {
+    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
     glStencilFunc(GL_ALWAYS, 1, 0x01);
     glStencilMask(0x01);
 
@@ -213,6 +239,14 @@ void renderer_render(void)
     glDisable(GL_DEPTH_TEST);
     shader_use(renderer.shaders[GUI_SHADER]);
     vao_draw(renderer.vaos[GUI_VAO]);
+
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glDisable(GL_DEPTH_TEST);
+    glClearColor(1.0f, 1.0f, 1.0f, 1.0f); // set clear color to white (not really necessary actually, since we won't be able to see behind the quad anyways)
+    glClear(GL_COLOR_BUFFER_BIT);
+    shader_use(renderer.shaders[SCREEN_SHADER]);
+    glBindTexture(GL_TEXTURE_2D, textureColorbuffer);	// use the color attachment texture as the texture of the quad plane
+    vao_draw(renderer.vaos[QUAD_VAO]);
 }
 
 void renderer_destroy(void)
@@ -304,6 +338,21 @@ void set_constants_ubo(void)
     sqrt2 = SQRT2;
     ubo_update(renderer.ubos[CONSTANTS_UBO], 0, sizeof(f32), &pi);
     ubo_update(renderer.ubos[CONSTANTS_UBO], sizeof(f32), sizeof(f32), &sqrt2);
+}
+
+void set_quad_vao(void)
+{
+    f32 quad_vertices[] = {
+        -1.0f,  1.0f,  0.0f, 1.0f,
+        -1.0f, -1.0f,  0.0f, 0.0f,
+         1.0f, -1.0f,  1.0f, 0.0f,
+
+        -1.0f,  1.0f,  0.0f, 1.0f,
+         1.0f, -1.0f,  1.0f, 0.0f,
+         1.0f,  1.0f,  1.0f, 1.0f
+    };
+    vao_malloc(renderer.vaos[QUAD_VAO], 24);
+    vao_update(renderer.vaos[QUAD_VAO], 0, 24, quad_vertices);
 }
 
 void set_outline_ubo(void)

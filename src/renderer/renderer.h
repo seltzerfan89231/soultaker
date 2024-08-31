@@ -3,6 +3,7 @@
 
 #include <glad.h>
 #include <glfw.h>
+#include "../window/window.h"
 #include "../util/indices.h"
 #include "../util/vec.h"
 #include "../util/constants.h"
@@ -11,6 +12,7 @@
 #include "texture/texture.h"
 #include "ubo/ubo.h"
 #include "ssbo/ssbo.h"
+#include "fbo/fbo.h"
 
 typedef struct {
     VAO *vaos;
