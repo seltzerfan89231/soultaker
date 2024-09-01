@@ -4,9 +4,16 @@
 #define BUFFER_SIZE 50000000
 
 Data data;
-i32 i;
-
 static u32 offset;
+
+static void data_update_tiles(void);
+static void data_update_walls(void);
+static void data_update_entities(void);
+static void data_update_projectiles(void);
+static void data_update_parjicles(void);
+static void data_update_particles(void);
+static void data_update_parstacles(void);
+static void data_update_obstacles(void);
 
 static void wall_push_data(Wall* wall)
 {
@@ -27,17 +34,25 @@ static void wall_push_data(Wall* wall)
 
 static void tile_push_data(Tile* tile)
 {
-    assert((data.vbo_length+1)*8 < BUFFER_SIZE);
-    offset = data.vbo_length * 8;
-    data.vbo_length++;
-    data.vbo_buffer[offset++] = tile->position.x;
-    data.vbo_buffer[offset++] = tile->position.z;
-    data.vbo_buffer[offset++] = tile->dimensions.w;
-    data.vbo_buffer[offset++] = tile->dimensions.l;
-    data.vbo_buffer[offset++] = tile->offset.x;
-    data.vbo_buffer[offset++] = tile->offset.y;
-    data.vbo_buffer[offset++] = tile->shadow;
-    data.vbo_buffer[offset++] = tile->tex;
+    assert(data.vbo_length + 6 * 4 < BUFFER_SIZE);
+    u32 dx[] = {0, 1, 0, 1};
+    u32 dy[] = {0, 1, 1, 0};
+    u32 idx = data.vbo_length / 6;
+    for (i32 i = 0; i < 4; i++) {
+        offset = data.vbo_length * 6;
+        data.vbo_buffer[data.vbo_length++] = tile->position.x + dx[i] * tile->dimensions.w;
+        data.vbo_buffer[data.vbo_length++] = tile->position.z + dy[i] * tile->dimensions.l;
+        data.vbo_buffer[data.vbo_length++] = dx[i];
+        data.vbo_buffer[data.vbo_length++] = dy[i];
+        data.vbo_buffer[data.vbo_length++] = tile->shadow;
+        data.vbo_buffer[data.vbo_length++] = tile->tex;
+    }
+    data.ebo_buffer[data.ebo_length++] = idx;
+    data.ebo_buffer[data.ebo_length++] = idx + 1;
+    data.ebo_buffer[data.ebo_length++] = idx + 2;
+    data.ebo_buffer[data.ebo_length++] = idx + 1;
+    data.ebo_buffer[data.ebo_length++] = idx;
+    data.ebo_buffer[data.ebo_length++] = idx + 3;
 }
 
 static void projectile_push_data(Projectile* projectile)
@@ -140,6 +155,7 @@ static void obstacle_push_data(Obstacle *obstacle)
 void data_init(void)
 {
     data.vbo_buffer = malloc(BUFFER_SIZE * sizeof(f32));
+    data.ebo_buffer = malloc(BUFFER_SIZE * sizeof(u32));
     data.frame_data = malloc(MAX_ENTITY_ID * sizeof(FrameData**));
     knight_init_frame_data(data.frame_data);
     enemy_init_frame_data(data.frame_data);
@@ -154,6 +170,7 @@ void data_destroy(void)
     slime_destroy_frame_data(data.frame_data);
     training_dummy_destroy_frame_data(data.frame_data);
     free(data.frame_data);
+    free(data.ebo_buffer);
     free(data.vbo_buffer);
 }
 
@@ -175,8 +192,8 @@ void data_update(void)
     void data_update_##_ltypes(void) { \
         if (!_ltype##_array_updated(&global_##_ltypes)) \
             return; \
-        data.vbo_length = 0; \
-        for (i = 0; i < global_##_ltypes.length; i++) \
+        data.vbo_length = data.ebo_length = 0; \
+        for (i32 i = 0; i < global_##_ltypes.length; i++) \
             _ltype##_push_data(global_##_ltypes.buffer[i]); \
         if (_ltype##_array_changed_size(&global_##_ltypes)) \
             renderer_malloc(_utype##_VAO, global_##_ltypes.max_length, 0); \
@@ -188,7 +205,19 @@ _DATA_UPDATE(PARJICLE, parjicle, parjicles)
 _DATA_UPDATE(PARTICLE, particle, particles)
 _DATA_UPDATE(PROJECTILE, projectile, projectiles)
 _DATA_UPDATE(ENTITY, entity, entities)
-_DATA_UPDATE(TILE, tile, tiles)
 _DATA_UPDATE(WALL, wall, walls)
 _DATA_UPDATE(PARSTACLE, parstacle, parstacles)
 _DATA_UPDATE(OBSTACLE, obstacle, obstacles)
+
+void data_update_tiles(void)
+{
+    if (!tile_array_updated(&global_tiles))
+        return;
+    data.vbo_length = data.ebo_length = 0;
+    for (i32 i = 0; i < global_tiles.length; i++)
+        tile_push_data(global_tiles.buffer[i]);
+    if (tile_array_changed_size(&global_tiles))
+        renderer_malloc(TILE_VAO, global_tiles.max_length * 24, global_tiles.max_length * 6);
+    renderer_update(TILE_VAO, 0, data.vbo_length, data.vbo_buffer, 0, data.ebo_length, data.ebo_buffer);
+    global_tiles.updated = 0;
+}

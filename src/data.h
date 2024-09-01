@@ -9,8 +9,9 @@
 #include "util/indices.h"
 
 typedef struct {
+    u32 vbo_length, ebo_length;
     f32 *vbo_buffer;
-    u32 vbo_length;
+    u32 *ebo_buffer;
     FrameData ***frame_data;
 } Data;
 
@@ -18,14 +19,6 @@ extern Data data;
 
 void data_init(void);
 void data_update(void);
-void data_update_tiles(void);
-void data_update_walls(void);
-void data_update_entities(void);
-void data_update_projectiles(void);
-void data_update_parjicles(void);
-void data_update_particles(void);
-void data_update_parstacles(void);
-void data_update_obstacles(void);
 void data_destroy(void);
 
 #endif

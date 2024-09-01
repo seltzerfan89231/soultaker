@@ -11,6 +11,7 @@ in VertexData
 {
     vec2 texCoord;
     flat int texID;
+    flat int shadows;
 };
 
 void main()
