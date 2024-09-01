@@ -18,8 +18,7 @@ static float gui_vertices[] = {
 void gui_init(void)
 {
     char_map_init();
-    gui.vbo_max_length = 1000;
-    gui.ebo_max_length = 1000;
+    gui.vbo_max_length = gui.ebo_max_length = 0;
     gui.vbo_length = gui.ebo_length = 0;
     gui.vbo_buffer = malloc(gui.vbo_max_length * sizeof(f32));
     gui.ebo_buffer = malloc(gui.ebo_max_length * sizeof(u32));
@@ -51,6 +50,25 @@ void gui_init(void)
 }
 
 #define Z gui.vbo_buffer[gui.vbo_length++]
+#define V gui.ebo_buffer[gui.ebo_length++]
+
+static u32 max(u32 a, u32 b)
+{
+    if (a > b)
+        return a;
+    return b;
+}
+
+static void resize_gui_buffers(u32 added_vbo_length)
+{
+    if (gui.vbo_length + 9 * 4 * added_vbo_length >= gui.vbo_max_length) {
+        gui.vbo_max_length += max(9 * 4 * added_vbo_length, 90);
+        gui.ebo_max_length += max(4 * added_vbo_length, 10);
+        gui.vbo_buffer = realloc(gui.vbo_buffer, gui.vbo_max_length * sizeof(f32));
+        gui.ebo_buffer = realloc(gui.ebo_buffer, gui.ebo_max_length * sizeof(u32));
+        gui.max_length_changed = TRUE;
+    }
+}
 
 void gui_update_data_add_text(Component *comp, f32 x, f32 y, f32 w, f32 h)
 {
@@ -61,12 +79,7 @@ void gui_update_data_add_text(Component *comp, f32 x, f32 y, f32 w, f32 h)
     u32 length, left, right, nl;
     char *text = comp->text;
     length = strlen(text);
-    if (gui.vbo_length + 54 * length >= gui.vbo_max_length) {
-        gui.vbo_max_length += 54 * length;
-        gui.vbo_buffer = realloc(gui.vbo_buffer, gui.vbo_max_length * sizeof(f32));
-        gui.max_length_changed = TRUE;
-    }
-
+    resize_gui_buffers(9 * 4 * length);
     pixel_size = (f32)comp->font_size / (DEFAULT_WINDOW_HEIGHT) / GLYPH_HEIGHT;
     pixel_size_x = pixel_size / w;
     pixel_size_y = pixel_size / h;
@@ -153,12 +166,12 @@ void gui_update_data_add_text(Component *comp, f32 x, f32 y, f32 w, f32 h)
             new_y1 = ly * h + y, new_y2 = (ly + lh) * h + y;
             win_x1 = 2 * (new_x1 / window.aspect_ratio - 0.5f), win_y1 = 2 * (new_y1 - 0.5f);
             win_x2 = 2 * (new_x2 / window.aspect_ratio - 0.5f), win_y2 = 2 * (new_y2 - 0.5f);
+            u32 idx = gui.vbo_length / 9;
             Z = win_x1, Z = win_y1, Z = 0.0f, Z = 1.0f, Z = c.tex, Z = 1.0f, Z = 1.0f, Z = 1.0f, Z = 1.0f;
             Z = win_x2, Z = win_y1, Z = 1.0f, Z = 1.0f, Z = c.tex, Z = 1.0f, Z = 1.0f, Z = 1.0f, Z = 1.0f;
             Z = win_x1, Z = win_y2, Z = 0.0f, Z = 0.0f, Z = c.tex, Z = 1.0f, Z = 1.0f, Z = 1.0f, Z = 1.0f;
-            Z = win_x1, Z = win_y2, Z = 0.0f, Z = 0.0f, Z = c.tex, Z = 1.0f, Z = 1.0f, Z = 1.0f, Z = 1.0f;
-            Z = win_x2, Z = win_y1, Z = 1.0f, Z = 1.0f, Z = c.tex, Z = 1.0f, Z = 1.0f, Z = 1.0f, Z = 1.0f;
             Z = win_x2, Z = win_y2, Z = 1.0f, Z = 0.0f, Z = c.tex, Z = 1.0f, Z = 1.0f, Z = 1.0f, Z = 1.0f;
+            V = idx, V = idx + 1, V = idx + 2, V = idx + 2, V = idx + 1, V = idx + 3;
             left++;
         }
         oy += glyph_size_y + py;
@@ -177,17 +190,13 @@ void gui_update_data_helper(Component *comp, f32 x, f32 y, f32 w, f32 h)
     }
     win_x1 = 2 * (new_x1 / (comp == comp_root ? 1 : window.aspect_ratio) - 0.5f), win_y1 = 2 * (new_y1 - 0.5f);
     win_x2 = 2 * (new_x2 / (comp == comp_root ? 1 : window.aspect_ratio) - 0.5f), win_y2 = 2 * (new_y2 - 0.5f);
-    if (gui.vbo_length + 54 >= gui.vbo_max_length) {
-        gui.vbo_max_length += 1000;
-        gui.vbo_buffer = realloc(gui.vbo_buffer, gui.vbo_max_length * sizeof(f32));
-        gui.max_length_changed = TRUE;
-    }
+    resize_gui_buffers(9 * 4);
+    u32 idx = gui.vbo_length / 9;
     Z = win_x1, Z = win_y1, Z = 0.0f, Z = 1.0f, Z = comp->tex, Z = comp->r, Z = comp->g, Z = comp->b, Z = comp->a;
     Z = win_x2, Z = win_y1, Z = 1.0f, Z = 1.0f, Z = comp->tex, Z = comp->r, Z = comp->g, Z = comp->b, Z = comp->a;
     Z = win_x1, Z = win_y2, Z = 0.0f, Z = 0.0f, Z = comp->tex, Z = comp->r, Z = comp->g, Z = comp->b, Z = comp->a;
-    Z = win_x1, Z = win_y2, Z = 0.0f, Z = 0.0f, Z = comp->tex, Z = comp->r, Z = comp->g, Z = comp->b, Z = comp->a;
-    Z = win_x2, Z = win_y1, Z = 1.0f, Z = 1.0f, Z = comp->tex, Z = comp->r, Z = comp->g, Z = comp->b, Z = comp->a;
     Z = win_x2, Z = win_y2, Z = 1.0f, Z = 0.0f, Z = comp->tex, Z = comp->r, Z = comp->g, Z = comp->b, Z = comp->a;
+    V = idx, V = idx + 1, V = idx + 2, V = idx + 2, V = idx + 1, V = idx + 3;
     gui_update_data_add_text(comp, new_x1, new_y1, new_x2 - new_x1, new_y2 - new_y1);
     for (i32 i = 0; i < comp->num_children; i++)
         gui_update_data_helper(comp->children[i], new_x1, new_y1, new_x2 - new_x1, new_y2 - new_y1);
@@ -195,7 +204,7 @@ void gui_update_data_helper(Component *comp, f32 x, f32 y, f32 w, f32 h)
 
 void gui_update_data(void)
 {
-    gui.vbo_length = 0;
+    gui.vbo_length = gui.ebo_length = 0;
     gui_update_data_helper(comp_root, comp_root->x, comp_root->y, comp_root->w, comp_root->h);
 }
 
@@ -229,7 +238,7 @@ void gui_update(void)
         renderer_malloc(GUI_VAO, gui.vbo_max_length, gui.ebo_max_length);
         gui.max_length_changed = FALSE;
     }
-    renderer_update(GUI_VAO, 0, gui.vbo_length, gui.vbo_buffer, 0, gui.ebo_length, NULL);
+    renderer_update(GUI_VAO, 0, gui.vbo_length, gui.vbo_buffer, 0, gui.ebo_length, gui.ebo_buffer);
 }
 
 void gui_mouse_button_callback_helper(Component *comp, f32 x, f32 y, f32 w, f32 h, i32 button, i32 action)
