@@ -9,7 +9,8 @@
 #include "util/indices.h"
 
 typedef struct {
-    f32 *buffer;
+    f32 *vbo_buffer;
+    u32 vbo_index;
     FrameData ***frame_data;
 } Data;
 
