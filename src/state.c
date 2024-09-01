@@ -46,8 +46,7 @@ void framebuffer_size_callback(GLFWwindow* handle, i32 width, i32 height)
     renderer_uniform_update_aspect_ratio(1 / window.aspect_ratio);
     camera_update_proj_matrix(window.aspect_ratio);
     update_proj_matrix();
-    gui_update_data();
-    renderer_update(GUI_VAO, 0, gui.length, gui.buffer);
+    gui_update();
 }
 
 void mouse_button_callback(GLFWwindow* handle, i32 button, i32 action)

@@ -63,16 +63,16 @@ void renderer_init(void)
     renderer.shaders[SCREEN_SHADER]      = shader_create("src/renderer/shaders/screen/screen.vert", "src/renderer/shaders/screen/screen.frag", NULL);
     /* --------------------- */
     renderer.vaos = malloc(NUM_VAOS * sizeof(VAO));
-    renderer.vaos[TILE_VAO]         = vao_create(GL_STATIC_DRAW, GL_POINTS, 8);
-    renderer.vaos[WALL_VAO]         = vao_create(GL_STATIC_DRAW, GL_POINTS, 8);
-    renderer.vaos[ENTITY_VAO]       = vao_create(GL_DYNAMIC_DRAW, GL_POINTS, 10);
-    renderer.vaos[PROJECTILE_VAO]   = vao_create(GL_DYNAMIC_DRAW, GL_POINTS, 6);
-    renderer.vaos[GUI_VAO]          = vao_create(GL_STATIC_DRAW, GL_TRIANGLES, 9);
-    renderer.vaos[PARTICLE_VAO]     = vao_create(GL_DYNAMIC_DRAW, GL_POINTS, 7);
-    renderer.vaos[OBSTACLE_VAO]     = vao_create(GL_STATIC_DRAW, GL_POINTS, 5);
-    renderer.vaos[PARJICLE_VAO]     = vao_create(GL_DYNAMIC_DRAW, GL_POINTS, 8);
-    renderer.vaos[PARSTACLE_VAO]    = vao_create(GL_STATIC_DRAW, GL_POINTS, 5);
-    renderer.vaos[QUAD_VAO]         = vao_create(GL_STATIC_DRAW, GL_TRIANGLES, 4);
+    renderer.vaos[TILE_VAO]         = vao_create(GL_STATIC_DRAW, GL_POINTS, 8, FALSE);
+    renderer.vaos[WALL_VAO]         = vao_create(GL_STATIC_DRAW, GL_POINTS, 8, FALSE);
+    renderer.vaos[ENTITY_VAO]       = vao_create(GL_DYNAMIC_DRAW, GL_POINTS, 10, FALSE);
+    renderer.vaos[PROJECTILE_VAO]   = vao_create(GL_DYNAMIC_DRAW, GL_POINTS, 6, FALSE);
+    renderer.vaos[GUI_VAO]          = vao_create(GL_STATIC_DRAW, GL_TRIANGLES, 9, FALSE);
+    renderer.vaos[PARTICLE_VAO]     = vao_create(GL_DYNAMIC_DRAW, GL_POINTS, 7, FALSE);
+    renderer.vaos[OBSTACLE_VAO]     = vao_create(GL_STATIC_DRAW, GL_POINTS, 5, FALSE);
+    renderer.vaos[PARJICLE_VAO]     = vao_create(GL_DYNAMIC_DRAW, GL_POINTS, 8, FALSE);
+    renderer.vaos[PARSTACLE_VAO]    = vao_create(GL_STATIC_DRAW, GL_POINTS, 5, FALSE);
+    renderer.vaos[QUAD_VAO]         = vao_create(GL_STATIC_DRAW, GL_TRIANGLES, 4, FALSE);
     vao_attr(renderer.vaos[TILE_VAO]        , 0, 2, 0);
     vao_attr(renderer.vaos[TILE_VAO]        , 1, 2, 2);
     vao_attr(renderer.vaos[TILE_VAO]        , 2, 2, 4);
@@ -181,18 +181,18 @@ void renderer_init(void)
         puts("?");
 }
 
-void renderer_malloc(u32 vao, u32 length)
+void renderer_malloc(u32 vao_index, u32 vbo_length, u32 ebo_length)
 {
-    if (renderer.vaos[vao].mode == GL_POINTS)
-        length *= renderer.vaos[vao].length;
-    vao_malloc(renderer.vaos[vao], length);
+    if (renderer.vaos[vao_index].mode == GL_POINTS)
+        vbo_length *= renderer.vaos[vao_index].length;
+    vao_malloc(renderer.vaos[vao_index], vbo_length, ebo_length);
 }
 
-void renderer_update(u32 vao, u32 offset, u32 length, f32* buffer)
+void renderer_update(u32 vao_index, u32 vbo_offset, u32 vbo_length, f32* vbo_buffer, u32 ebo_offset, u32 ebo_length, u32* ebo_buffer)
 {
-    if (renderer.vaos[vao].mode == GL_POINTS)
-        length *= renderer.vaos[vao].length;
-    vao_update(renderer.vaos[vao], offset, length, buffer);
+    if (renderer.vaos[vao_index].mode == GL_POINTS)
+        vbo_length *= renderer.vaos[vao_index].length;
+    vao_update(renderer.vaos[vao_index], vbo_offset, vbo_length, vbo_buffer, ebo_offset, ebo_length, ebo_buffer);
 }
 
 void renderer_render(void)
@@ -351,8 +351,8 @@ void set_quad_vao(void)
          1.0f, -1.0f,  1.0f, 0.0f,
          1.0f,  1.0f,  1.0f, 1.0f
     };
-    vao_malloc(renderer.vaos[QUAD_VAO], 24);
-    vao_update(renderer.vaos[QUAD_VAO], 0, 24, quad_vertices);
+    vao_malloc(renderer.vaos[QUAD_VAO], 24, 0);
+    vao_update(renderer.vaos[QUAD_VAO], 0, 24, quad_vertices, 0, 0, NULL);
 }
 
 void set_outline_ubo(void)

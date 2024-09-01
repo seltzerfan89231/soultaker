@@ -12,9 +12,9 @@ static void wall_push_data(Wall* wall)
 {
     if (wall->id == INVISIBLE_WALL)
         return;
-    assert((data.vbo_index+1)*8 < BUFFER_SIZE);
-    offset = data.vbo_index * 8;
-    data.vbo_index++;
+    assert((data.vbo_length+1)*8 < BUFFER_SIZE);
+    offset = data.vbo_length * 8;
+    data.vbo_length++;
     data.vbo_buffer[offset++] = wall->position.x;
     data.vbo_buffer[offset++] = wall->position.z;
     data.vbo_buffer[offset++] = wall->dimensions.w;
@@ -27,9 +27,9 @@ static void wall_push_data(Wall* wall)
 
 static void tile_push_data(Tile* tile)
 {
-    assert((data.vbo_index+1)*8 < BUFFER_SIZE);
-    offset = data.vbo_index * 8;
-    data.vbo_index++;
+    assert((data.vbo_length+1)*8 < BUFFER_SIZE);
+    offset = data.vbo_length * 8;
+    data.vbo_length++;
     data.vbo_buffer[offset++] = tile->position.x;
     data.vbo_buffer[offset++] = tile->position.z;
     data.vbo_buffer[offset++] = tile->dimensions.w;
@@ -42,9 +42,9 @@ static void tile_push_data(Tile* tile)
 
 static void projectile_push_data(Projectile* projectile)
 {
-    assert((data.vbo_index+1)*6 < BUFFER_SIZE);
-    offset = data.vbo_index * 6;
-    data.vbo_index++;
+    assert((data.vbo_length+1)*6 < BUFFER_SIZE);
+    offset = data.vbo_length * 6;
+    data.vbo_length++;
     data.vbo_buffer[offset++] = projectile->position.x;
     data.vbo_buffer[offset++] = projectile->position.y;
     data.vbo_buffer[offset++] = projectile->position.z;
@@ -55,9 +55,9 @@ static void projectile_push_data(Projectile* projectile)
 
 static void entity_push_data(Entity* entity)
 {
-    assert((data.vbo_index+1)*10 < BUFFER_SIZE);
-    offset = data.vbo_index * 10;
-    data.vbo_index++;
+    assert((data.vbo_length+1)*10 < BUFFER_SIZE);
+    offset = data.vbo_length * 10;
+    data.vbo_length++;
     data.vbo_buffer[offset++] = entity->position.x;
     data.vbo_buffer[offset++] = entity->position.y;
     data.vbo_buffer[offset++] = entity->position.z;
@@ -85,9 +85,9 @@ static void entity_push_data(Entity* entity)
 
 static void particle_push_data(Particle *particle)
 {
-    assert((data.vbo_index+1)*7 < BUFFER_SIZE);
-    offset = data.vbo_index * 7;
-    data.vbo_index++;
+    assert((data.vbo_length+1)*7 < BUFFER_SIZE);
+    offset = data.vbo_length * 7;
+    data.vbo_length++;
     data.vbo_buffer[offset++] = particle->position.x;
     data.vbo_buffer[offset++] = particle->position.y;
     data.vbo_buffer[offset++] = particle->position.z;
@@ -99,9 +99,9 @@ static void particle_push_data(Particle *particle)
 
 static void parstacle_push_data(Parstacle *parstacle)
 {
-    assert((data.vbo_index+1)*5 < BUFFER_SIZE);
-    offset = data.vbo_index * 5;
-    data.vbo_index++;
+    assert((data.vbo_length+1)*5 < BUFFER_SIZE);
+    offset = data.vbo_length * 5;
+    data.vbo_length++;
     data.vbo_buffer[offset++] = parstacle->position.x;
     data.vbo_buffer[offset++] = parstacle->position.y;
     data.vbo_buffer[offset++] = parstacle->position.z;
@@ -111,9 +111,9 @@ static void parstacle_push_data(Parstacle *parstacle)
 
 static void parjicle_push_data(Parjicle *parjicle)
 {
-    assert((data.vbo_index+1)*8 < BUFFER_SIZE);
-    offset = data.vbo_index * 8;
-    data.vbo_index++;
+    assert((data.vbo_length+1)*8 < BUFFER_SIZE);
+    offset = data.vbo_length * 8;
+    data.vbo_length++;
     data.vbo_buffer[offset++] = parjicle->position.x;
     data.vbo_buffer[offset++] = parjicle->position.y;
     data.vbo_buffer[offset++] = parjicle->position.z;
@@ -127,9 +127,9 @@ static void parjicle_push_data(Parjicle *parjicle)
 
 static void obstacle_push_data(Obstacle *obstacle)
 {
-    assert((data.vbo_index+1)*5 < BUFFER_SIZE);
-    offset = data.vbo_index * 5;
-    data.vbo_index++;
+    assert((data.vbo_length+1)*5 < BUFFER_SIZE);
+    offset = data.vbo_length * 5;
+    data.vbo_length++;
     data.vbo_buffer[offset++] = obstacle->position.x;
     data.vbo_buffer[offset++] = obstacle->position.y;
     data.vbo_buffer[offset++] = obstacle->position.z;
@@ -175,12 +175,12 @@ void data_update(void)
     void data_update_##_ltypes(void) { \
         if (!_ltype##_array_updated(&global_##_ltypes)) \
             return; \
-        data.vbo_index = 0; \
+        data.vbo_length = 0; \
         for (i = 0; i < global_##_ltypes.length; i++) \
             _ltype##_push_data(global_##_ltypes.buffer[i]); \
         if (_ltype##_array_changed_size(&global_##_ltypes)) \
-            renderer_malloc(_utype##_VAO, global_##_ltypes.max_length); \
-        renderer_update(_utype##_VAO, 0, data.vbo_index, data.vbo_buffer); \
+            renderer_malloc(_utype##_VAO, global_##_ltypes.max_length, 0); \
+        renderer_update(_utype##_VAO, 0, data.vbo_length, data.vbo_buffer, 0, 0, NULL); \
         global_##_ltypes.updated = 0; \
     }
 

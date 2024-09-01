@@ -18,9 +18,12 @@ static float gui_vertices[] = {
 void gui_init(void)
 {
     char_map_init();
-    gui.max_length = 1000;
-    gui.buffer = malloc(gui.max_length * sizeof(f32));
-    gui.length = 0;
+    gui.vbo_max_length = 1000;
+    gui.ebo_max_length = 1000;
+    gui.vbo_length = gui.ebo_length = 0;
+    gui.vbo_buffer = malloc(gui.vbo_max_length * sizeof(f32));
+    gui.ebo_buffer = malloc(gui.ebo_max_length * sizeof(u32));
+    
     comp_root = component_create(0.0f, 0.0f, 1.0f, 1.0f, NO_TEX);
     comp_root->a = 0;
     gui.max_length_changed = TRUE;
@@ -47,7 +50,7 @@ void gui_init(void)
     component_attach(comp_root, test);
 }
 
-#define Z gui.buffer[gui.length++]
+#define Z gui.vbo_buffer[gui.vbo_length++]
 
 void gui_update_data_add_text(Component *comp, f32 x, f32 y, f32 w, f32 h)
 {
@@ -58,9 +61,9 @@ void gui_update_data_add_text(Component *comp, f32 x, f32 y, f32 w, f32 h)
     u32 length, left, right, nl;
     char *text = comp->text;
     length = strlen(text);
-    if (gui.length + 54 * length >= gui.max_length) {
-        gui.max_length += 54 * length;
-        gui.buffer = realloc(gui.buffer, gui.max_length * sizeof(f32));
+    if (gui.vbo_length + 54 * length >= gui.vbo_max_length) {
+        gui.vbo_max_length += 54 * length;
+        gui.vbo_buffer = realloc(gui.vbo_buffer, gui.vbo_max_length * sizeof(f32));
         gui.max_length_changed = TRUE;
     }
 
@@ -174,9 +177,9 @@ void gui_update_data_helper(Component *comp, f32 x, f32 y, f32 w, f32 h)
     }
     win_x1 = 2 * (new_x1 / (comp == comp_root ? 1 : window.aspect_ratio) - 0.5f), win_y1 = 2 * (new_y1 - 0.5f);
     win_x2 = 2 * (new_x2 / (comp == comp_root ? 1 : window.aspect_ratio) - 0.5f), win_y2 = 2 * (new_y2 - 0.5f);
-    if (gui.length + 54 >= gui.max_length) {
-        gui.max_length += 1000;
-        gui.buffer = realloc(gui.buffer, gui.max_length * sizeof(f32));
+    if (gui.vbo_length + 54 >= gui.vbo_max_length) {
+        gui.vbo_max_length += 1000;
+        gui.vbo_buffer = realloc(gui.vbo_buffer, gui.vbo_max_length * sizeof(f32));
         gui.max_length_changed = TRUE;
     }
     Z = win_x1, Z = win_y1, Z = 0.0f, Z = 1.0f, Z = comp->tex, Z = comp->r, Z = comp->g, Z = comp->b, Z = comp->a;
@@ -192,7 +195,7 @@ void gui_update_data_helper(Component *comp, f32 x, f32 y, f32 w, f32 h)
 
 void gui_update_data(void)
 {
-    gui.length = 0;
+    gui.vbo_length = 0;
     gui_update_data_helper(comp_root, comp_root->x, comp_root->y, comp_root->w, comp_root->h);
 }
 
@@ -218,16 +221,15 @@ void gui_update_helper(Component *comp, f32 x, f32 y, f32 w, f32 h)
     component_hover_callback(comp, cursor_in_bounds(new_x1, new_x2, new_y1, new_y2));
 }
 
-bool gui_update(void)
+void gui_update(void)
 {
     gui_update_helper(comp_root, comp_root->x, comp_root->y, comp_root->w, comp_root->h);
     gui_update_data();
     if (gui.max_length_changed) {
-        renderer_malloc(GUI_VAO, gui.max_length);
+        renderer_malloc(GUI_VAO, gui.vbo_max_length, gui.ebo_max_length);
         gui.max_length_changed = FALSE;
     }
-    renderer_update(GUI_VAO, 0, gui.length, gui.buffer);
-    return FALSE;
+    renderer_update(GUI_VAO, 0, gui.vbo_length, gui.vbo_buffer, 0, gui.ebo_length, NULL);
 }
 
 void gui_mouse_button_callback_helper(Component *comp, f32 x, f32 y, f32 w, f32 h, i32 button, i32 action)
@@ -267,5 +269,5 @@ void gui_key_callback(i32 key, i32 scancode, i32 action, i32 mods)
 void gui_destroy(void)
 {
     component_destroy(comp_root);
-    free(gui.buffer);
+    free(gui.vbo_buffer);
 }

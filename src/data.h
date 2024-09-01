@@ -10,7 +10,7 @@
 
 typedef struct {
     f32 *vbo_buffer;
-    u32 vbo_index;
+    u32 vbo_length;
     FrameData ***frame_data;
 } Data;
 
