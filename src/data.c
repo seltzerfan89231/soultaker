@@ -19,40 +19,63 @@ static void wall_push_data(Wall* wall)
 {
     if (wall->id == INVISIBLE_WALL)
         return;
-    assert((data.vbo_length+1)*8 < BUFFER_SIZE);
-    offset = data.vbo_length * 8;
-    data.vbo_length++;
-    data.vbo_buffer[offset++] = wall->position.x;
-    data.vbo_buffer[offset++] = wall->position.z;
-    data.vbo_buffer[offset++] = wall->dimensions.w;
-    data.vbo_buffer[offset++] = wall->dimensions.h;
-    data.vbo_buffer[offset++] = wall->dimensions.l;
-    data.vbo_buffer[offset++] = wall->top_tex;
-    data.vbo_buffer[offset++] = wall->side1_tex;
-    data.vbo_buffer[offset++] = wall->side2_tex;
+    assert(data.vbo_length + 5 * 4 * 8 < BUFFER_SIZE);
+    static u32 dx[] = {0, 0, 0, 0, 1, 1, 1, 1};
+    static u32 dy[] = {0, 0, 1, 1, 0, 0, 1, 1};
+    static u32 dz[] = {0, 1, 0, 1, 0, 1, 0, 1};
+    static u32 tx[] = {0, 1, 1, 0};
+    static u32 ty[] = {0, 0, 1, 1};
+    static u32 winding[] = {0, 1, 2, 0, 2, 3};
+    static u32 sides[][4] = {
+        {4, 5, 7, 6}, // +x
+        {5, 1, 3, 7}, // +z
+        {2, 6, 7, 3}, // +y
+        {1, 0, 2, 3}, // -x
+        {0, 4, 6, 2}  // -z
+    };
+    for (i32 side = 0; side < 5; side++) {
+        u32 idx = data.vbo_length / 8;
+        for (i32 i = 0; i < 4; i++) {
+            data.vbo_buffer[data.vbo_length++] = wall->dimensions.w * dx[sides[side][i]] + wall->position.x;
+            data.vbo_buffer[data.vbo_length++] = wall->dimensions.h * dy[sides[side][i]];
+            data.vbo_buffer[data.vbo_length++] = wall->dimensions.l * dz[sides[side][i]] + wall->position.z;
+            data.vbo_buffer[data.vbo_length++] = wall->position.x + wall->dimensions.w / 2;
+            data.vbo_buffer[data.vbo_length++] = wall->position.z + wall->dimensions.l / 2;
+            data.vbo_buffer[data.vbo_length++] = tx[i];
+            data.vbo_buffer[data.vbo_length++] = ty[i];
+            switch (side % 3) {
+                case 0:
+                    data.vbo_buffer[data.vbo_length++] = wall->side1_tex; break;
+                case 1:
+                    data.vbo_buffer[data.vbo_length++] = wall->side2_tex; break;
+                case 2:
+                    data.vbo_buffer[data.vbo_length++] = wall->top_tex; break;
+            }
+            
+        }
+        for (i32 i = 0; i < 3 * 2; i++)
+            data.ebo_buffer[data.ebo_length++] = idx + winding[i];
+    }
 }
 
 static void tile_push_data(Tile* tile)
 {
     assert(data.vbo_length + 6 * 4 < BUFFER_SIZE);
-    u32 dx[] = {0, 1, 0, 1};
-    u32 dy[] = {0, 1, 1, 0};
+    static u32 dx[] = {0, 1, 1, 0};
+    static u32 dy[] = {0, 0, 1, 1};
+    static u32 winding[] = {0, 1, 2, 0, 2, 3};
     u32 idx = data.vbo_length / 6;
     for (i32 i = 0; i < 4; i++) {
         offset = data.vbo_length * 6;
         data.vbo_buffer[data.vbo_length++] = tile->position.x + dx[i] * tile->dimensions.w;
         data.vbo_buffer[data.vbo_length++] = tile->position.z + dy[i] * tile->dimensions.l;
-        data.vbo_buffer[data.vbo_length++] = dx[i];
-        data.vbo_buffer[data.vbo_length++] = dy[i];
+        data.vbo_buffer[data.vbo_length++] = dx[i] + tile->offset.x;
+        data.vbo_buffer[data.vbo_length++] = dy[i] + tile->offset.y;
         data.vbo_buffer[data.vbo_length++] = tile->shadow;
         data.vbo_buffer[data.vbo_length++] = tile->tex;
     }
-    data.ebo_buffer[data.ebo_length++] = idx;
-    data.ebo_buffer[data.ebo_length++] = idx + 1;
-    data.ebo_buffer[data.ebo_length++] = idx + 2;
-    data.ebo_buffer[data.ebo_length++] = idx + 1;
-    data.ebo_buffer[data.ebo_length++] = idx;
-    data.ebo_buffer[data.ebo_length++] = idx + 3;
+    for (i32 i = 0; i < 3 * 2; i++)
+        data.ebo_buffer[data.ebo_length++] = idx + winding[i];
 }
 
 static void projectile_push_data(Projectile* projectile)
@@ -205,7 +228,6 @@ _DATA_UPDATE(PARJICLE, parjicle, parjicles)
 _DATA_UPDATE(PARTICLE, particle, particles)
 _DATA_UPDATE(PROJECTILE, projectile, projectiles)
 _DATA_UPDATE(ENTITY, entity, entities)
-_DATA_UPDATE(WALL, wall, walls)
 _DATA_UPDATE(PARSTACLE, parstacle, parstacles)
 _DATA_UPDATE(OBSTACLE, obstacle, obstacles)
 
@@ -217,7 +239,20 @@ void data_update_tiles(void)
     for (i32 i = 0; i < global_tiles.length; i++)
         tile_push_data(global_tiles.buffer[i]);
     if (tile_array_changed_size(&global_tiles))
-        renderer_malloc(TILE_VAO, global_tiles.max_length * 24, global_tiles.max_length * 6);
+        renderer_malloc(TILE_VAO, global_tiles.max_length * 4 * 6, global_tiles.max_length * 6);
     renderer_update(TILE_VAO, 0, data.vbo_length, data.vbo_buffer, 0, data.ebo_length, data.ebo_buffer);
     global_tiles.updated = 0;
+}
+
+void data_update_walls(void)
+{
+    if (!wall_array_updated(&global_walls))
+        return;
+    data.vbo_length = data.ebo_length = 0;
+    for (i32 i = 0; i < global_walls.length; i++)
+        wall_push_data(global_walls.buffer[i]);
+    if (wall_array_changed_size(&global_walls))
+        renderer_malloc(WALL_VAO, global_walls.max_length * 5 * 4 * 8, global_walls.max_length * 5 * 6);
+    renderer_update(WALL_VAO, 0, data.vbo_length, data.vbo_buffer, 0, data.ebo_length, data.ebo_buffer);
+    global_walls.updated = 0;
 }

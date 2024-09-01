@@ -10,8 +10,8 @@ layout (binding = 0, std430) readonly buffer ssbo
 in VertexData
 {
     vec2 texCoord;
-    flat int texID;
     flat float depthValue;
+    flat int texID;
 };
 
 void main()
