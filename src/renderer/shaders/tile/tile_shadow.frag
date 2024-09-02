@@ -10,6 +10,7 @@ layout (binding = 0, std430) readonly buffer ssbo
 in VertexData
 {
     vec2 texCoord;
+    vec2 relCoord;
     flat int texID;
     flat int shadows;
 };
