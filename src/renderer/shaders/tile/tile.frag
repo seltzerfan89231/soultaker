@@ -17,7 +17,5 @@ in VertexData
 
 void main()
 {
-    if (relCoord.x < 0 || relCoord.x >= 1 || relCoord.y < 0 || relCoord.y >= 1)
-        discard;
     gl_FragColor = texture(sampler2D(tex[texID]), texCoord);
 }

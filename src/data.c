@@ -63,21 +63,21 @@ static void wall_push_data(Wall* wall)
 
 static void tile_push_data(Tile* tile)
 {
-    assert(data.vbo_length + 8 * 4 < BUFFER_SIZE);
+    assert(data.vbo_length + 10 * 4 < BUFFER_SIZE);
     static u32 dx[] = {0, 1, 1, 0};
     static u32 dy[] = {0, 0, 1, 1};
     static u32 winding[] = {0, 1, 2, 0, 2, 3};
-    u32 idx = data.vbo_length / 8;
+    u32 idx = data.vbo_length / 10;
     f32 xoff, yoff;
     for (i32 i = 0; i < 4; i++) {
-        xoff = (dx[i] == 1) ? 0.25 : -0.25;
-        yoff = (dy[i] == 1) ? 0.25 : -0.25;
-        data.vbo_buffer[data.vbo_length++] = tile->position.x + tile->dimensions.w * dx[i] + xoff;
-        data.vbo_buffer[data.vbo_length++] = tile->position.z + tile->dimensions.l * dy[i] + yoff;
-        data.vbo_buffer[data.vbo_length++] = dx[i] + xoff;
-        data.vbo_buffer[data.vbo_length++] = dy[i] + yoff;
-        data.vbo_buffer[data.vbo_length++] = dx[i] + xoff + tile->offset.x;
-        data.vbo_buffer[data.vbo_length++] = dy[i] + yoff + tile->offset.y;
+        data.vbo_buffer[data.vbo_length++] = tile->position.x + tile->dimensions.w * dx[i];
+        data.vbo_buffer[data.vbo_length++] = tile->position.z + tile->dimensions.l * dy[i];
+        data.vbo_buffer[data.vbo_length++] = dx[i];
+        data.vbo_buffer[data.vbo_length++] = dy[i];
+        data.vbo_buffer[data.vbo_length++] = dx[i] + tile->offset.x;
+        data.vbo_buffer[data.vbo_length++] = dy[i] + tile->offset.y;
+        data.vbo_buffer[data.vbo_length++] = (dx[i] == 1) ? 0.25 : -0.25;
+        data.vbo_buffer[data.vbo_length++] = (dy[i] == 1) ? 0.25 : -0.25;
         data.vbo_buffer[data.vbo_length++] = tile->shadow;
         data.vbo_buffer[data.vbo_length++] = tile->tex;
     }
@@ -246,7 +246,7 @@ void data_update_tiles(void)
     for (i32 i = 0; i < global_tiles.length; i++)
         tile_push_data(global_tiles.buffer[i]);
     if (tile_array_changed_size(&global_tiles))
-        renderer_malloc(TILE_VAO, global_tiles.max_length * 4 * 8, global_tiles.max_length * 6);
+        renderer_malloc(TILE_VAO, global_tiles.max_length * 4 * 10, global_tiles.max_length * 6);
     renderer_update(TILE_VAO, 0, data.vbo_length, data.vbo_buffer, 0, data.ebo_length, data.ebo_buffer);
     global_tiles.updated = 0;
 }

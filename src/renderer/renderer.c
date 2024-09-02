@@ -47,8 +47,8 @@ void renderer_init(void)
     /* --------------------- */
     renderer.shaders = malloc(NUM_SHADERS * sizeof(Shader));
     renderer.shaders[TILE_SHADER]         = shader_create("src/renderer/shaders/tile/tile.vert", "src/renderer/shaders/tile/tile.frag", NULL);
-    renderer.shaders[TILE_SHADOW1_SHADER] = shader_create("src/renderer/shaders/tile/tile.vert", "src/renderer/shaders/tile/tile_shadow1.frag", NULL);
-    renderer.shaders[TILE_SHADOW2_SHADER] = shader_create("src/renderer/shaders/tile/tile.vert", "src/renderer/shaders/tile/tile_shadow2.frag", NULL);
+    renderer.shaders[TILE_SHADOW1_SHADER] = shader_create("src/renderer/shaders/tile/tile_shadow.vert", "src/renderer/shaders/tile/tile_shadow1.frag", NULL);
+    renderer.shaders[TILE_SHADOW2_SHADER] = shader_create("src/renderer/shaders/tile/tile_shadow.vert", "src/renderer/shaders/tile/tile_shadow2.frag", NULL);
     renderer.shaders[WALL_SHADER]         = shader_create("src/renderer/shaders/wall/wall.vert", "src/renderer/shaders/wall/wall.frag", NULL);
     renderer.shaders[ENTITY_SHADER]       = shader_create("src/renderer/shaders/entity/entity.vert", "src/renderer/shaders/entity/entity.frag", "src/renderer/shaders/entity/entity.geom");
     renderer.shaders[SHADOW_SHADER]       = shader_create("src/renderer/shaders/shadow/shadow.vert", "src/renderer/shaders/shadow/shadow.frag", "src/renderer/shaders/shadow/shadow.geom");
@@ -62,7 +62,7 @@ void renderer_init(void)
     renderer.shaders[SCREEN_SHADER]       = shader_create("src/renderer/shaders/screen/screen.vert", "src/renderer/shaders/screen/screen.frag", NULL);
     /* --------------------- */
     renderer.vaos = malloc(NUM_VAOS * sizeof(VAO));
-    renderer.vaos[TILE_VAO]         = vao_create(GL_STATIC_DRAW, GL_TRIANGLES, 8, TRUE);
+    renderer.vaos[TILE_VAO]         = vao_create(GL_STATIC_DRAW, GL_TRIANGLES, 10, TRUE);
     renderer.vaos[WALL_VAO]         = vao_create(GL_STATIC_DRAW, GL_TRIANGLES, 8, TRUE);
     renderer.vaos[ENTITY_VAO]       = vao_create(GL_DYNAMIC_DRAW, GL_POINTS, 10, FALSE);
     renderer.vaos[PROJECTILE_VAO]   = vao_create(GL_DYNAMIC_DRAW, GL_POINTS, 6, FALSE);
@@ -75,8 +75,9 @@ void renderer_init(void)
     vao_attr(renderer.vaos[TILE_VAO]        , 0, 2, 0);
     vao_attr(renderer.vaos[TILE_VAO]        , 1, 2, 2);
     vao_attr(renderer.vaos[TILE_VAO]        , 2, 2, 4);
-    vao_attr(renderer.vaos[TILE_VAO]        , 3, 1, 6);
-    vao_attr(renderer.vaos[TILE_VAO]        , 4, 1, 7);
+    vao_attr(renderer.vaos[TILE_VAO]        , 3, 2, 6);
+    vao_attr(renderer.vaos[TILE_VAO]        , 4, 1, 8);
+    vao_attr(renderer.vaos[TILE_VAO]        , 5, 1, 9);
     vao_attr(renderer.vaos[WALL_VAO]        , 0, 3, 0);
     vao_attr(renderer.vaos[WALL_VAO]        , 1, 2, 3);
     vao_attr(renderer.vaos[WALL_VAO]        , 2, 2, 5);

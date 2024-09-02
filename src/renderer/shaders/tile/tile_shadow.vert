@@ -25,9 +25,9 @@ out VertexData
 
 void main()
 {
-    gl_Position = proj * view * vec4(aPos.x, 0.0f, aPos.y, 1.0f);
-    texCoord = aTexCoord;
-    relCoord = aRelCoord;
+    gl_Position = proj * view * vec4(aPos.x + aOffset.x, 0.0f, aPos.y + aOffset.y, 1.0f);
+    texCoord = aTexCoord + aOffset;
+    relCoord = aRelCoord + aOffset;
     shadows = int(round(aShadows));
     texID = int(round(aTexID));
 }
