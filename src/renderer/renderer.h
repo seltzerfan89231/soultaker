@@ -21,6 +21,8 @@ typedef struct {
     SSBO *ssbos;
     Texture *game_textures;
     Texture *gui_textures;
+    FBO fbo, fbo2;
+    RBO rbo;
 } Renderer;
 
 extern Renderer renderer;

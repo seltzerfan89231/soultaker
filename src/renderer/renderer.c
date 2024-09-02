@@ -5,8 +5,6 @@
 
 Renderer renderer;
 
-static u32 framebuffer, textureColorbuffer, rbo;
-
 static void link_shader_ubo(u32 shader_index, u32 ubo_index, char *identifier);
 static void link_shader_ssbo(u32 shader_index, u32 ssbo_index);
 static void set_game_ssbo(void);
@@ -163,22 +161,12 @@ void renderer_init(void)
     link_shader_ssbo(PARSTACLE_SHADER, GAME_SSBO);
     link_shader_ssbo(GUI_SHADER, GUI_SSBO);
     /* --------------------- */
-    glGenFramebuffers(1, &framebuffer);
-    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
-    // create a color attachment texture
-    glGenTextures(1, &textureColorbuffer);
-    glBindTexture(GL_TEXTURE_2D, textureColorbuffer);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, window.width, window.height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textureColorbuffer, 0);
-    // create a renderbuffer object for depth and stencil attachment (we won't be sampling these)
-    glGenRenderbuffers(1, &rbo);
-    glBindRenderbuffer(GL_RENDERBUFFER, rbo);
-    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, window.width, window.height); // use a single renderbuffer object for both a depth AND stencil buffer.
-    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rbo); // now actually attach it
-    // now that we actually created the framebuffer and added all attachments we want to check if it is actually complete now
-    if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+    renderer.fbo = fbo_create(window.width, window.height);
+    renderer.fbo2 = fbo_create(window.width, window.height);
+    renderer.rbo = rbo_create(window.width, window.height);
+    fbo_attach_rbo(renderer.fbo, renderer.rbo);
+    fbo_attach_rbo(renderer.fbo2, renderer.rbo);
+    if (!fbo_check_status(renderer.fbo))
         puts("?");
 }
 
@@ -198,7 +186,7 @@ void renderer_update(u32 vao_index, u32 vbo_offset, u32 vbo_length, f32* vbo_buf
 
 void renderer_render(void)
 {
-    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+    fbo_bind(renderer.fbo);
     glStencilFunc(GL_ALWAYS, 1, 0x01);
     glStencilMask(0x01);
 
@@ -216,15 +204,8 @@ void renderer_render(void)
     glStencilMask(0x00);
     shader_use(renderer.shaders[TILE_SHADER]);
     vao_draw(renderer.vaos[TILE_VAO]);
-    shader_use(renderer.shaders[SHADOW_SHADER]);
-    vao_draw(renderer.vaos[PROJECTILE_VAO]);
-    vao_draw(renderer.vaos[OBSTACLE_VAO]);
-    vao_draw(renderer.vaos[PARSTACLE_VAO]);
-    vao_draw(renderer.vaos[ENTITY_VAO]);
-    glStencilMask(0x01);
-    /* shader_use(renderer.shaders[TILE_SHADOW_SHADER]);
-    vao_draw(renderer.vaos[TILE_VAO]); */
     glStencilFunc(GL_ALWAYS, 1, 0x01);
+    glStencilMask(0x01);
     shader_use(renderer.shaders[ENTITY_SHADER]);
     vao_draw(renderer.vaos[ENTITY_VAO]);
     shader_use(renderer.shaders[PARTICLE_SHADER]);
@@ -238,16 +219,32 @@ void renderer_render(void)
     shader_use(renderer.shaders[PARSTACLE_SHADER]);
     vao_draw(renderer.vaos[PARSTACLE_VAO]);
     glDisable(GL_DEPTH_TEST);
-    shader_use(renderer.shaders[GUI_SHADER]);
-    vao_draw(renderer.vaos[GUI_VAO]);
 
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    fbo_bind(renderer.fbo2);
+    glClear(GL_COLOR_BUFFER_BIT);
+    fbo_bind_color_buffer(renderer.fbo);
+    glStencilMask(0x00);
+    shader_use(renderer.shaders[SCREEN_SHADER]);
+    vao_draw(renderer.vaos[QUAD_VAO]);
+    glStencilFunc(GL_NOTEQUAL, 1, 0x01);
+    glStencilMask(0x00);
+    shader_use(renderer.shaders[TILE_SHADOW_SHADER]);
+    vao_draw(renderer.vaos[TILE_VAO]);
+    shader_use(renderer.shaders[SHADOW_SHADER]);
+    vao_draw(renderer.vaos[PROJECTILE_VAO]);
+    vao_draw(renderer.vaos[OBSTACLE_VAO]);
+    vao_draw(renderer.vaos[PARSTACLE_VAO]);
+    vao_draw(renderer.vaos[ENTITY_VAO]);
+
+    fbo_bind_default();
     glDisable(GL_DEPTH_TEST);
-    glClearColor(1.0f, 1.0f, 1.0f, 1.0f); // set clear color to white (not really necessary actually, since we won't be able to see behind the quad anyways)
+    glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
     shader_use(renderer.shaders[SCREEN_SHADER]);
-    glBindTexture(GL_TEXTURE_2D, textureColorbuffer);	// use the color attachment texture as the texture of the quad plane
+    fbo_bind_color_buffer(renderer.fbo2);
     vao_draw(renderer.vaos[QUAD_VAO]);
+    shader_use(renderer.shaders[GUI_SHADER]);
+    vao_draw(renderer.vaos[GUI_VAO]);
 }
 
 void renderer_destroy(void)
