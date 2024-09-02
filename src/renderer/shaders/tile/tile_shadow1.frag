@@ -19,6 +19,8 @@ void main()
 {
     if (relCoord.x >= 0 && relCoord.x < 1 && relCoord.y >= 0 && relCoord.y < 1)
         discard;
+    if (relCoord.x < -0.125 || relCoord.x >= 1.125 || relCoord.y < -0.125 || relCoord.y >= 1.125)
+        discard;
     if (shadows == 0)
         discard;
     int bm = shadows;

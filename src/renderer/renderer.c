@@ -46,19 +46,20 @@ void renderer_init(void)
     renderer.ssbos[GUI_SSBO] = ssbo_create(NUM_GUI_TEXTURES * sizeof(u64));
     /* --------------------- */
     renderer.shaders = malloc(NUM_SHADERS * sizeof(Shader));
-    renderer.shaders[TILE_SHADER]        = shader_create("src/renderer/shaders/tile/tile.vert", "src/renderer/shaders/tile/tile.frag", NULL);
-    renderer.shaders[TILE_SHADOW_SHADER] = shader_create("src/renderer/shaders/tile/tile.vert", "src/renderer/shaders/tile/tile_shadow.frag", NULL);
-    renderer.shaders[WALL_SHADER]        = shader_create("src/renderer/shaders/wall/wall.vert", "src/renderer/shaders/wall/wall.frag", NULL);
-    renderer.shaders[ENTITY_SHADER]      = shader_create("src/renderer/shaders/entity/entity.vert", "src/renderer/shaders/entity/entity.frag", "src/renderer/shaders/entity/entity.geom");
-    renderer.shaders[SHADOW_SHADER]      = shader_create("src/renderer/shaders/shadow/shadow.vert", "src/renderer/shaders/shadow/shadow.frag", "src/renderer/shaders/shadow/shadow.geom");
-    renderer.shaders[HEALTHBAR_SHADER]   = shader_create("src/renderer/shaders/healthbar/healthbar.vert", "src/renderer/shaders/healthbar/healthbar.frag", "src/renderer/shaders/healthbar/healthbar.geom");
-    renderer.shaders[PROJECTILE_SHADER]  = shader_create("src/renderer/shaders/projectile/projectile.vert", "src/renderer/shaders/projectile/projectile.frag", "src/renderer/shaders/projectile/projectile.geom");
-    renderer.shaders[GUI_SHADER]         = shader_create("src/renderer/shaders/gui/gui.vert", "src/renderer/shaders/gui/gui.frag", NULL);
-    renderer.shaders[PARTICLE_SHADER]    = shader_create("src/renderer/shaders/particle/particle.vert", "src/renderer/shaders/particle/particle.frag", "src/renderer/shaders/particle/particle.geom");
-    renderer.shaders[OBSTACLE_SHADER]    = shader_create("src/renderer/shaders/obstacle/obstacle.vert", "src/renderer/shaders/obstacle/obstacle.frag", "src/renderer/shaders/obstacle/obstacle.geom");
-    renderer.shaders[PARJICLE_SHADER]    = shader_create("src/renderer/shaders/parjicle/parjicle.vert", "src/renderer/shaders/parjicle/parjicle.frag", "src/renderer/shaders/parjicle/parjicle.geom");
-    renderer.shaders[PARSTACLE_SHADER]   = shader_create("src/renderer/shaders/parstacle/parstacle.vert", "src/renderer/shaders/parstacle/parstacle.frag", "src/renderer/shaders/parstacle/parstacle.geom");
-    renderer.shaders[SCREEN_SHADER]      = shader_create("src/renderer/shaders/screen/screen.vert", "src/renderer/shaders/screen/screen.frag", NULL);
+    renderer.shaders[TILE_SHADER]         = shader_create("src/renderer/shaders/tile/tile.vert", "src/renderer/shaders/tile/tile.frag", NULL);
+    renderer.shaders[TILE_SHADOW1_SHADER] = shader_create("src/renderer/shaders/tile/tile.vert", "src/renderer/shaders/tile/tile_shadow1.frag", NULL);
+    renderer.shaders[TILE_SHADOW2_SHADER] = shader_create("src/renderer/shaders/tile/tile.vert", "src/renderer/shaders/tile/tile_shadow2.frag", NULL);
+    renderer.shaders[WALL_SHADER]         = shader_create("src/renderer/shaders/wall/wall.vert", "src/renderer/shaders/wall/wall.frag", NULL);
+    renderer.shaders[ENTITY_SHADER]       = shader_create("src/renderer/shaders/entity/entity.vert", "src/renderer/shaders/entity/entity.frag", "src/renderer/shaders/entity/entity.geom");
+    renderer.shaders[SHADOW_SHADER]       = shader_create("src/renderer/shaders/shadow/shadow.vert", "src/renderer/shaders/shadow/shadow.frag", "src/renderer/shaders/shadow/shadow.geom");
+    renderer.shaders[HEALTHBAR_SHADER]    = shader_create("src/renderer/shaders/healthbar/healthbar.vert", "src/renderer/shaders/healthbar/healthbar.frag", "src/renderer/shaders/healthbar/healthbar.geom");
+    renderer.shaders[PROJECTILE_SHADER]   = shader_create("src/renderer/shaders/projectile/projectile.vert", "src/renderer/shaders/projectile/projectile.frag", "src/renderer/shaders/projectile/projectile.geom");
+    renderer.shaders[GUI_SHADER]          = shader_create("src/renderer/shaders/gui/gui.vert", "src/renderer/shaders/gui/gui.frag", NULL);
+    renderer.shaders[PARTICLE_SHADER]     = shader_create("src/renderer/shaders/particle/particle.vert", "src/renderer/shaders/particle/particle.frag", "src/renderer/shaders/particle/particle.geom");
+    renderer.shaders[OBSTACLE_SHADER]     = shader_create("src/renderer/shaders/obstacle/obstacle.vert", "src/renderer/shaders/obstacle/obstacle.frag", "src/renderer/shaders/obstacle/obstacle.geom");
+    renderer.shaders[PARJICLE_SHADER]     = shader_create("src/renderer/shaders/parjicle/parjicle.vert", "src/renderer/shaders/parjicle/parjicle.frag", "src/renderer/shaders/parjicle/parjicle.geom");
+    renderer.shaders[PARSTACLE_SHADER]    = shader_create("src/renderer/shaders/parstacle/parstacle.vert", "src/renderer/shaders/parstacle/parstacle.frag", "src/renderer/shaders/parstacle/parstacle.geom");
+    renderer.shaders[SCREEN_SHADER]       = shader_create("src/renderer/shaders/screen/screen.vert", "src/renderer/shaders/screen/screen.frag", NULL);
     /* --------------------- */
     renderer.vaos = malloc(NUM_VAOS * sizeof(VAO));
     renderer.vaos[TILE_VAO]         = vao_create(GL_STATIC_DRAW, GL_TRIANGLES, 8, TRUE);
@@ -166,8 +167,10 @@ void renderer_init(void)
     renderer.rbo = rbo_create(window.width, window.height);
     fbo_attach_rbo(renderer.fbo, renderer.rbo);
     fbo_attach_rbo(renderer.fbo2, renderer.rbo);
-    if (!fbo_check_status(renderer.fbo))
-        puts("?");
+    if (!fbo_check_status(renderer.fbo)) {
+        puts("Something went wrong with fbo");
+        exit(1);
+    }
 }
 
 void renderer_malloc(u32 vao_index, u32 vbo_length, u32 ebo_length)
@@ -190,7 +193,7 @@ void renderer_render(void)
     glStencilFunc(GL_ALWAYS, 1, 0x01);
     glStencilMask(0x01);
 
-    glClearColor(0.7f, 0.7f, 0.7f, 1.0f);
+    glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
     
     glEnable(GL_DEPTH_TEST);
@@ -228,7 +231,9 @@ void renderer_render(void)
     vao_draw(renderer.vaos[QUAD_VAO]);
     glStencilFunc(GL_NOTEQUAL, 1, 0x01);
     glStencilMask(0x00);
-    shader_use(renderer.shaders[TILE_SHADOW_SHADER]);
+    shader_use(renderer.shaders[TILE_SHADOW1_SHADER]);
+    vao_draw(renderer.vaos[TILE_VAO]);
+    shader_use(renderer.shaders[TILE_SHADOW2_SHADER]);
     vao_draw(renderer.vaos[TILE_VAO]);
     shader_use(renderer.shaders[SHADOW_SHADER]);
     vao_draw(renderer.vaos[PROJECTILE_VAO]);
