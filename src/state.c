@@ -138,15 +138,31 @@ void state_init(void)
     data_init();
 }
 
+#include <sys/time.h>
 void state_loop(void)
 {
+    struct timeval times[6] = { 0 };
+    i64 seconds, microseconds;
     state_setup();
     while (!window_closed()) {
+        gettimeofday(&times[0], NULL);
         gui_update();
+        gettimeofday(&times[1], NULL);
         window_update();
+        gettimeofday(&times[2], NULL);
         process_input();
+        gettimeofday(&times[3], NULL);
         state_update();
+        gettimeofday(&times[4], NULL);
         renderer_render();
+        gettimeofday(&times[5], NULL);
+
+        for (i32 i = 0; i < 5; i++) {
+            seconds = times[i+1].tv_sec - times[i].tv_sec;
+            microseconds = times[i+1].tv_usec - times[i].tv_usec;
+            printf("%f\n", (f32)seconds + microseconds*1e-6);
+        }
+        printf("\n\n");
     }
 }
 

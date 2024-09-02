@@ -34,7 +34,8 @@ void window_init(void)
     glfwSetKeyCallback(window.handle, key_callback);
     glfwSetErrorCallback(error_callback);
     gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
-    glViewport(0, 0, window.width, window.height);    
+    glViewport(0, 0, window.width, window.height);
+    glfwSwapInterval(0);
 }
 
 void window_toggle_fullscreen(void)

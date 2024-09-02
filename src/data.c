@@ -1,5 +1,6 @@
 #include "data.h"
 #include <stdlib.h>
+#include <omp.h>
 
 #define BUFFER_SIZE 50000000
 
@@ -61,28 +62,28 @@ static void wall_push_data(Wall* wall)
     }
 }
 
-static void tile_push_data(Tile* tile)
+static void tile_push_data(Tile* tile, i32 vbo_offset, i32 ebo_offset)
 {
-    assert(data.vbo_length + 10 * 4 < BUFFER_SIZE);
+    assert(vbo_offset + 10 * 4 < BUFFER_SIZE);
     static u32 dx[] = {0, 1, 1, 0};
     static u32 dy[] = {0, 0, 1, 1};
     static u32 winding[] = {0, 1, 2, 0, 2, 3};
-    u32 idx = data.vbo_length / 10;
+    u32 idx = vbo_offset / 10;
     f32 xoff, yoff;
     for (i32 i = 0; i < 4; i++) {
-        data.vbo_buffer[data.vbo_length++] = tile->position.x + tile->dimensions.w * dx[i];
-        data.vbo_buffer[data.vbo_length++] = tile->position.z + tile->dimensions.l * dy[i];
-        data.vbo_buffer[data.vbo_length++] = dx[i];
-        data.vbo_buffer[data.vbo_length++] = dy[i];
-        data.vbo_buffer[data.vbo_length++] = dx[i] + tile->offset.x;
-        data.vbo_buffer[data.vbo_length++] = dy[i] + tile->offset.y;
-        data.vbo_buffer[data.vbo_length++] = (dx[i] == 1) ? 0.25 : -0.25;
-        data.vbo_buffer[data.vbo_length++] = (dy[i] == 1) ? 0.25 : -0.25;
-        data.vbo_buffer[data.vbo_length++] = tile->shadow;
-        data.vbo_buffer[data.vbo_length++] = tile->tex;
+        data.vbo_buffer[vbo_offset++] = tile->position.x + tile->dimensions.w * dx[i];
+        data.vbo_buffer[vbo_offset++] = tile->position.z + tile->dimensions.l * dy[i];
+        data.vbo_buffer[vbo_offset++] = dx[i];
+        data.vbo_buffer[vbo_offset++] = dy[i];
+        data.vbo_buffer[vbo_offset++] = dx[i] + tile->offset.x;
+        data.vbo_buffer[vbo_offset++] = dy[i] + tile->offset.y;
+        data.vbo_buffer[vbo_offset++] = (dx[i] == 1) ? 0.25 : -0.25;
+        data.vbo_buffer[vbo_offset++] = (dy[i] == 1) ? 0.25 : -0.25;
+        data.vbo_buffer[vbo_offset++] = tile->shadow;
+        data.vbo_buffer[vbo_offset++] = tile->tex;
     }
     for (i32 i = 0; i < 3 * 2; i++)
-        data.ebo_buffer[data.ebo_length++] = idx + winding[i];
+        data.ebo_buffer[ebo_offset++] = idx + winding[i];
 }
 
 static void projectile_push_data(Projectile* projectile)
