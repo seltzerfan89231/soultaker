@@ -182,9 +182,9 @@ void load_level4(void)
     i32 x, z, i;
     for (x = i = 0, z = 36; i < strlen(map); i++) {
         if (map[i] == '1')
-            wall_create(SHAITAN_WALL, x, z, 1, 3, 1);
+            wall_create(SHAITAN_WALL, x, z, 1, 2, 1);
         if (map[i] == '2') {
-            wall_create(SHAITAN_BARS, x, z + 0.5, 1, 3, 0);
+            wall_create(SHAITAN_BARS, x, z + 0.5, 1, 2, 0);
             tile_create(SHAITAN_HELLSTONE, x, z, 1, 1);
         }
         if (map[i] == '3')
@@ -210,13 +210,33 @@ void load_level4(void)
             Tile *up = tilemap_get_tile(x, z+1);
             Tile *left = tilemap_get_tile(x-1, z);
             if (down != NULL && down->id == SHAITAN_LAVA)
-                tile->shadow |= (1 << DOWN);
+                tile_set_shadow(tile, DOWN);
             if (up != NULL && up->id == SHAITAN_LAVA)
-                tile->shadow |= (1 << UP);
+                tile_set_shadow(tile, UP);
             if (right != NULL && right->id == SHAITAN_LAVA)
-                tile->shadow |= (1 << RIGHT);
+                tile_set_shadow(tile, RIGHT);
             if (left != NULL && left->id == SHAITAN_LAVA)
-                tile->shadow |= (1 << LEFT);
+                tile_set_shadow(tile, LEFT);
+        }
+    }
+
+    for (x = 0; x < 31; x++) {
+        for (z = 0; z < 37; z++) {
+            Wall *wall = tilemap_get_wall(x, z);
+            if (wall == NULL || wall->id != SHAITAN_WALL)
+                continue;
+            Wall *down = tilemap_get_wall(x, z-1);
+            Wall *right = tilemap_get_wall(x+1, z);
+            Wall *up = tilemap_get_wall(x, z+1);
+            Wall *left = tilemap_get_wall(x-1, z);
+            if (down != NULL && down->id == SHAITAN_WALL)
+                wall_set_blocked(wall, DOWN);
+            if (up != NULL && up->id == SHAITAN_WALL)
+                wall_set_blocked(wall, UP);
+            if (right != NULL && right->id == SHAITAN_WALL)
+                wall_set_blocked(wall, RIGHT);
+            if (left != NULL && left->id == SHAITAN_WALL)
+                wall_set_blocked(wall, LEFT);
         }
     }
 

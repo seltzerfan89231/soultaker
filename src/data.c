@@ -20,13 +20,14 @@ static void wall_push_data(Wall* wall)
     if (wall->id == INVISIBLE_WALL)
         return;
     assert(data.vbo_length + 5 * 4 * 8 < BUFFER_SIZE);
-    static u32 dx[] = {0, 0, 0, 0, 1, 1, 1, 1};
-    static u32 dy[] = {0, 0, 1, 1, 0, 0, 1, 1};
-    static u32 dz[] = {0, 1, 0, 1, 0, 1, 0, 1};
-    static u32 tx[] = {0, 1, 1, 0};
-    static u32 ty[] = {0, 0, 1, 1};
-    static u32 winding[] = {0, 1, 2, 0, 2, 3};
-    static u32 sides[][4] = {
+    static u8 dx[] = {0, 0, 0, 0, 1, 1, 1, 1};
+    static u8 dy[] = {0, 0, 1, 1, 0, 0, 1, 1};
+    static u8 dz[] = {0, 1, 0, 1, 0, 1, 0, 1};
+    static u8 tx[] = {0, 1, 1, 0};
+    static u8 ty[] = {0, 0, 1, 1};
+    static u8 winding[] = {0, 1, 2, 0, 2, 3};
+    static u8 side_ids[] = {RIGHT, UP, TOP, LEFT, DOWN}; 
+    static u8 sides[][4] = {
         {4, 5, 7, 6}, // +x
         {5, 1, 3, 7}, // +z
         {2, 6, 7, 3}, // +y
@@ -34,6 +35,8 @@ static void wall_push_data(Wall* wall)
         {0, 4, 6, 2}  // -z
     };
     for (i32 side = 0; side < 5; side++) {
+        if (wall_get_blocked(wall, side_ids[side]))
+            continue;
         u32 idx = data.vbo_length / 8;
         for (i32 i = 0; i < 4; i++) {
             data.vbo_buffer[data.vbo_length++] = wall->dimensions.w * dx[sides[side][i]] + wall->position.x;

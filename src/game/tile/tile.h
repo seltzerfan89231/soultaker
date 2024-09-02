@@ -24,6 +24,7 @@ typedef struct {
 
 Tile* tile_create(u32 id, i32 x, i32 z, i32 w, i32 l);
 void tile_update(Tile *tile, f32 dt);
+void tile_set_shadow(Tile *tile, u8 side);
 void tile_interact(Tile *tile, Entity *entity);
 void tile_destroy(Tile* tile, u32 idx);
 void destroy_all_tiles(void);

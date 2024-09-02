@@ -1,10 +1,12 @@
 #ifndef INDICES_H
 #define INDICES_H
 
-#define DOWN  0
-#define RIGHT 1
-#define UP    2
-#define LEFT  3
+#define DOWN   0
+#define RIGHT  1
+#define UP     2
+#define LEFT   3
+#define TOP    4
+#define BOTTOM 5
 
 #pragma region UBOS
 #define NUM_UBOS         7

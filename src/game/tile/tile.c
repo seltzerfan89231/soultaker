@@ -50,6 +50,11 @@ void tile_update(Tile *tile, f32 dt)
     tile_array_update(&global_tiles);
 }
 
+void tile_set_shadow(Tile *tile, u8 side)
+{
+    tile->shadow |= (1 << side);
+}
+
 #define _INTERACT(_id, _lid) \
     case _id : _lid##_interact(tile, entity); break;
 

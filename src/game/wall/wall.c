@@ -20,6 +20,7 @@ Wall* wall_create(u32 id, f32 x, f32 z, f32 w, f32 h, f32 l)
     wall->top_tex = WALL_TOP_TEX;
     wall->side1_tex = WALL_SIDE_TEX;
     wall->side2_tex = WALL_SIDE_TEX;
+    wall->blocked = 0;
     switch(wall->id) {
         _CREATE(SHAITAN_WALL, shaitan_wall)
         _CREATE(SHAITAN_BARS, shaitan_bars)
@@ -27,6 +28,16 @@ Wall* wall_create(u32 id, f32 x, f32 z, f32 w, f32 h, f32 l)
     wall_array_push(&global_walls, wall);
     tilemap_insert_wall(wall);
     return wall;
+}
+
+bool wall_set_blocked(Wall *wall, u8 side)
+{
+    wall->blocked |= (1 << side);
+}
+
+bool wall_get_blocked(Wall *wall, u8 side)
+{
+    return (wall->blocked >> side) & 1;
 }
 
 void wall_destroy(Wall* wall, u32 idx)

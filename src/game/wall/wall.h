@@ -13,10 +13,13 @@ typedef struct {
     struct {
         f32 w, h, l;
     } dimensions;
+    u8 blocked;
     u32 top_tex, side1_tex, side2_tex, id;
 } Wall;
 
 Wall* wall_create(u32 id, f32 x, f32 z, f32 w, f32 h, f32 l);
+bool wall_set_blocked(Wall *wall, u8 side);
+bool wall_get_blocked(Wall *wall, u8 side);
 void wall_destroy(Wall* wall, u32 idx);
 void destroy_all_walls(void);
 
