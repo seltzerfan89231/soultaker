@@ -16,8 +16,8 @@ Tile* tile_create(u32 id, i32 x, i32 z, i32 w, i32 l)
     tile->id = id;
     tile->position.x = x;
     tile->position.z = z;
-    tile->dimensions.w = w;
-    tile->dimensions.l = l;
+    tile->dimensions.w = 1;
+    tile->dimensions.l = 1;
     tile->interactable = FALSE;
     tile->timer = 0;
     tile->shadow = 0;

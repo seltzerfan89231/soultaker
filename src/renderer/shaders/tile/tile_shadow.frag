@@ -17,11 +17,9 @@ in VertexData
 
 void main()
 {
-    if (relCoord.x >= 0 && relCoord.x < 1 && relCoord.y >= 0 && relCoord.y < 1)
-        discard;
-    if (relCoord.x < -0.125 || relCoord.x >= 1.125 || relCoord.y < -0.125 || relCoord.y >= 1.125)
-        discard;
     if (shadows == 0)
+        discard;
+    if (relCoord.x >= 0 && relCoord.x < 1 && relCoord.y >= 0 && relCoord.y < 1)
         discard;
     int bm = shadows;
     int DOWN = bm - 2 * (bm / 2);
@@ -53,9 +51,9 @@ void main()
     if ((RIGHT == 0 || DOWN == 0) && relCoord.x > 1 && relCoord.y < 0)
         discard;
 
-    float dx = (relCoord.x < 0) ? - relCoord.x : relCoord.x - 1;
-    float dy = (relCoord.y < 0) ? - relCoord.y : relCoord.y - 1;
-
     gl_FragColor = texture(sampler2D(tex[texID]), texCoord);
-    gl_FragColor.a = 0.375;
+    if (relCoord.x < -0.125 || relCoord.x >= 1.125 || relCoord.y < -0.125 || relCoord.y >= 1.125)
+        gl_FragColor.a = 0.25;
+    else
+        gl_FragColor.a = 0.5;
 }

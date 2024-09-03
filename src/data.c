@@ -62,28 +62,17 @@ static void wall_push_data(Wall* wall)
     }
 }
 
-static void tile_push_data(Tile* tile, i32 vbo_offset, i32 ebo_offset)
+static void tile_push_data(Tile* tile)
 {
-    assert(vbo_offset + 10 * 4 < BUFFER_SIZE);
-    static u32 dx[] = {0, 1, 1, 0};
-    static u32 dy[] = {0, 0, 1, 1};
-    static u32 winding[] = {0, 1, 2, 0, 2, 3};
-    u32 idx = vbo_offset / 10;
-    f32 xoff, yoff;
-    for (i32 i = 0; i < 4; i++) {
-        data.vbo_buffer[vbo_offset++] = tile->position.x + tile->dimensions.w * dx[i];
-        data.vbo_buffer[vbo_offset++] = tile->position.z + tile->dimensions.l * dy[i];
-        data.vbo_buffer[vbo_offset++] = dx[i];
-        data.vbo_buffer[vbo_offset++] = dy[i];
-        data.vbo_buffer[vbo_offset++] = dx[i] + tile->offset.x;
-        data.vbo_buffer[vbo_offset++] = dy[i] + tile->offset.y;
-        data.vbo_buffer[vbo_offset++] = (dx[i] == 1) ? 0.25 : -0.25;
-        data.vbo_buffer[vbo_offset++] = (dy[i] == 1) ? 0.25 : -0.25;
-        data.vbo_buffer[vbo_offset++] = tile->shadow;
-        data.vbo_buffer[vbo_offset++] = tile->tex;
-    }
-    for (i32 i = 0; i < 3 * 2; i++)
-        data.ebo_buffer[ebo_offset++] = idx + winding[i];
+    assert((data.vbo_length+1)*6 < BUFFER_SIZE);
+    offset = data.vbo_length * 6;
+    data.vbo_length++;
+    data.vbo_buffer[offset++] = tile->position.x;
+    data.vbo_buffer[offset++] = tile->position.z;
+    data.vbo_buffer[offset++] = tile->offset.x;
+    data.vbo_buffer[offset++] = tile->offset.y;
+    data.vbo_buffer[offset++] = tile->shadow;
+    data.vbo_buffer[offset++] = tile->tex;
 }
 
 static void projectile_push_data(Projectile* projectile)
@@ -235,22 +224,10 @@ void data_update(void)
 _DATA_UPDATE(PARJICLE, parjicle, parjicles)
 _DATA_UPDATE(PARTICLE, particle, particles)
 _DATA_UPDATE(PROJECTILE, projectile, projectiles)
+_DATA_UPDATE(TILE, tile, tiles)
 _DATA_UPDATE(ENTITY, entity, entities)
 _DATA_UPDATE(PARSTACLE, parstacle, parstacles)
 _DATA_UPDATE(OBSTACLE, obstacle, obstacles)
-
-void data_update_tiles(void)
-{
-    if (!tile_array_updated(&global_tiles))
-        return;
-    data.vbo_length = data.ebo_length = 0;
-    for (i32 i = 0; i < global_tiles.length; i++)
-        tile_push_data(global_tiles.buffer[i]);
-    if (tile_array_changed_size(&global_tiles))
-        renderer_malloc(TILE_VAO, global_tiles.max_length * 4 * 10, global_tiles.max_length * 6);
-    renderer_update(TILE_VAO, 0, data.vbo_length, data.vbo_buffer, 0, data.ebo_length, data.ebo_buffer);
-    global_tiles.updated = 0;
-}
 
 void data_update_walls(void)
 {

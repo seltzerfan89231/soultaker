@@ -160,9 +160,9 @@ void state_loop(void)
         for (i32 i = 0; i < 5; i++) {
             seconds = times[i+1].tv_sec - times[i].tv_sec;
             microseconds = times[i+1].tv_usec - times[i].tv_usec;
-            printf("%f\n", (f32)seconds + microseconds*1e-6);
+            //printf("%f\n", (f32)seconds + microseconds*1e-6);
         }
-        printf("\n\n");
+        //printf("\n\n");
     }
 }
 

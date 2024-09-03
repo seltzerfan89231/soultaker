@@ -3,31 +3,22 @@
 #extension GL_ARB_bindless_texture : require
 
 layout (location = 0) in vec2 aPos;
-layout (location = 1) in vec2 aRelCoord;
-layout (location = 2) in vec2 aTexCoord;
-layout (location = 3) in vec2 aOffset;
-layout (location = 4) in float aShadows;
-layout (location = 5) in float aTexID;
-
-layout (std140) uniform Matrices
-{
-    mat4 view;
-    mat4 proj;
-};
+layout (location = 1) in vec2 aOffset;
+layout (location = 2) in float aShadows;
+layout (location = 3) in float aTexID;
 
 out VertexData
 {
-    vec2 texCoord;
-    vec2 relCoord;
-    flat int texID;
-    flat int shadows;
+    int texID;
+    int shadows;
+    vec2 offset;
+    vec4 position;
 };
 
 void main()
 {
-    gl_Position = proj * view * vec4(aPos.x, 0.0f, aPos.y, 1.0f);
-    texCoord = aTexCoord;
-    relCoord = aRelCoord;
+    position = vec4(aPos.x, 0.0f, aPos.y, 1.0f);
     shadows = int(round(aShadows));
     texID = int(round(aTexID));
+    offset = aOffset;
 }
