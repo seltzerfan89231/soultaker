@@ -69,8 +69,8 @@ static void tile_push_data(Tile* tile)
     data.vbo_length++;
     data.vbo_buffer[offset++] = tile->position.x;
     data.vbo_buffer[offset++] = tile->position.z;
-    data.vbo_buffer[offset++] = tile->offset;
-    data.vbo_buffer[offset++] = tile->shadow;
+    data.vbo_buffer[offset++] = tile_get_offset(tile);
+    data.vbo_buffer[offset++] = tile_get_shadow(tile);
     data.vbo_buffer[offset++] = tile->tex;
 }
 
@@ -174,7 +174,7 @@ static void obstacle_push_data(Obstacle *obstacle)
 void data_init(void)
 {
     data.vbo_buffer = malloc(BUFFER_SIZE * sizeof(f32));
-    data.ebo_buffer = malloc(BUFFER_SIZE * sizeof(u32));
+    data.ebo_buffer = malloc(BUFFER_SIZE / 10 * sizeof(u32));
     data.frame_data = malloc(MAX_ENTITY_ID * sizeof(FrameData**));
     knight_init_frame_data(data.frame_data);
     enemy_init_frame_data(data.frame_data);

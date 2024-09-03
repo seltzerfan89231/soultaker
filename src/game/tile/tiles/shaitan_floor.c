@@ -10,11 +10,6 @@ void shaitan_floor_create(Tile *tile)
     }
 }
 
-void shaitan_floor_update(Tile *tile, f32 dt)
-{
-
-}
-
 void shaitan_floor_interact(Tile *tile, Entity *entity)
 {
 

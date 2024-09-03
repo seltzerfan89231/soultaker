@@ -21,7 +21,6 @@ static void reset(void)
     global_parstacles = parstacle_array_create(0, 100);
     global_obstacles = obstacle_array_create(0, 100);
     global_tiles = tile_array_create(0, 1);
-    interactable_tiles = tile_array_create(0, 20);
     global_walls = wall_array_create(0, 1);
     game_time = 0;
 }

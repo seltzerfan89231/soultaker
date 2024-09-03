@@ -5,7 +5,7 @@
 #include <assert.h>
 
 TileArray global_tiles;
-TileArray interactable_tiles;
+f32 tile_timer;
 
 #define _CREATE(_id, _lid) \
     case _id : _lid##_create(tile); break;
@@ -17,7 +17,6 @@ Tile* tile_create(u32 id, i32 x, i32 z)
     tile->position.x = x;
     tile->position.z = z;
     tile->interactable = FALSE;
-    tile->timer = 0;
     tile->shadow = 0;
     tile->offset = 0;
     switch (id) {
@@ -28,23 +27,15 @@ Tile* tile_create(u32 id, i32 x, i32 z)
         _CREATE(SHAITAN_HELLSTONE, shaitan_hellstone)
     }
     tile_array_push(&global_tiles, tile);
-    if (tile->interactable)
-        tile_array_push(&interactable_tiles, tile);
     tilemap_insert_tile(tile);
     return tile;
 }
 
-#define _UPDATE(_id, _lid) \
-    case _id : _lid##_update(tile, dt); break;
-
-void tile_update(Tile *tile, f32 dt)
+void tile_update_timer(f32 dt)
 {
-    if (!tile->interactable)
-        return;
-    switch (tile->id) {
-        _UPDATE(HELLSTONE, hellstone)
-        _UPDATE(SHAITAN_LAVA, shaitan_lava)
-    }
+    if (tile_timer < 0)
+        tile_timer = 0.1;
+    tile_timer -= dt;
 }
 
 void tile_set_shadow(Tile *tile, u8 side)
@@ -57,12 +48,32 @@ void tile_set_offset(Tile *tile, u8 offset)
     tile->offset = offset;
 }
 
+void tile_set_interactable(Tile *tile, bool val)
+{
+    tile->interactable = val;
+}
+
+u8 tile_get_shadow(Tile *tile)
+{
+    return tile->shadow;
+}
+
+u8 tile_get_offset(Tile *tile)
+{
+    return tile->offset;
+}
+
+u8 tile_get_interactable(Tile *tile)
+{
+    return tile->interactable;
+}
+
 #define _INTERACT(_id, _lid) \
     case _id : _lid##_interact(tile, entity); break;
 
 void tile_interact(Tile *tile, Entity *entity)
 {
-    if (!tile->interactable)
+    if (!tile_get_interactable(tile))
         return;
     switch (tile->id) {
         _INTERACT(HELLSTONE, hellstone)
@@ -82,7 +93,6 @@ void destroy_all_tiles(void)
     for (i32 i = 0; i < global_tiles.length; i++)
         free(global_tiles.buffer[i]);
     tile_array_destroy(&global_tiles);
-    tile_array_destroy(&interactable_tiles);
 }
 
 _ARRAY_DEFINE(Tile, tile)

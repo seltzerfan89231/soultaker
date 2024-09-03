@@ -3,20 +3,13 @@
 void shaitan_lava_create(Tile *tile)
 {
     tile->tex = SHAITAN_LAVA_TEX;
-    tile->interactable = TRUE;
-}
-
-void shaitan_lava_update(Tile *tile, f32 dt)
-{
-    tile->timer -= dt;
+    tile_set_interactable(tile, TRUE);
 }
 
 void shaitan_lava_interact(Tile *tile, Entity *entity)
 {
     entity->ground_level = FALSE;
     entity->position.y = -0.5;
-    if (tile->timer < 0) {
-        tile->timer = 0.1;
+    if (tile_timer < 0)
         entity_damage(entity, 0.1);
-    }
 }

@@ -12,11 +12,6 @@ void grass_create(Tile *tile)
     }
 }
 
-void grass_update(Tile *tile, f32 dt)
-{
-
-}
-
 void grass_interact(Tile *tile, Entity *entity)
 {
     

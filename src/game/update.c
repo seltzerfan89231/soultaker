@@ -103,10 +103,7 @@ static void update_parjicles(f32 dt)
 
 static void update_tiles(f32 dt)
 {
-    for (i32 i = 0; i < interactable_tiles.length; i++) {
-        Tile *tile = interactable_tiles.buffer[i];
-        tile_update(tile, dt);
-    }
+    tile_update_timer(dt);
 }
 
 static void update_players(f32 dt)
