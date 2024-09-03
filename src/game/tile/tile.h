@@ -11,20 +11,19 @@ typedef struct {
     struct {
         i32 x, z;
     } position;
-    struct {
-        i32 w, l;
-    } dimensions;
     u32 id, tex;
     // 4 bits
     u8 shadow;
-    vec2f offset;
+    // 2 bits
+    u8 offset;
     f32 timer;
     bool interactable;
 } Tile;
 
-Tile* tile_create(u32 id, i32 x, i32 z, i32 w, i32 l);
+Tile* tile_create(u32 id, i32 x, i32 z);
 void tile_update(Tile *tile, f32 dt);
 void tile_set_shadow(Tile *tile, u8 side);
+void tile_set_offset(Tile *tile, u8 offset);
 void tile_interact(Tile *tile, Entity *entity);
 void tile_destroy(Tile* tile, u32 idx);
 void destroy_all_tiles(void);

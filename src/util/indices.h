@@ -9,7 +9,7 @@
 #define BOTTOM 5
 
 #pragma region UBOS
-#define NUM_UBOS         7
+#define NUM_UBOS         8
 #define MATRICES_UBO     0
 #define ZOOM_UBO         1
 #define ASPECT_RATIO_UBO 2
@@ -17,6 +17,7 @@
 #define TILT_UBO         4
 #define CONSTANTS_UBO    5
 #define OUTLINE_UBO      6
+#define GAME_TIME_UBO    7
 #pragma endregion
 
 

@@ -33,15 +33,9 @@ void tilemap_init(void)
 
 void tilemap_insert_tile(Tile *tile)
 {
-    f32 x, z, w, l;
-    i32 x1, x2, z1, z2;
-    x = tile->position.x, z = tile->position.z;
-    w = tile->dimensions.w, l = tile->dimensions.l;
-    x1 = (int) x, x2 = (int) (x + w - 0.00001);
-    z1 = (int) z, z2 = (int) (z + l - 0.00001);
-    for (i32 i = max(x1, 0); i <= x2 && i < tilemap.width; i++)
-        for (i32 j = max(z1, 0); j <= z2 && j < tilemap.length; j++)
-            tilemap.buffer[idx_at(i, j)].tile = tile;
+    i32 idx = idx_at(tile->position.x, tile->position.z);
+    if (idx != -1)
+        tilemap.buffer[idx].tile = tile;
 }
 
 void tilemap_insert_wall(Wall *wall)

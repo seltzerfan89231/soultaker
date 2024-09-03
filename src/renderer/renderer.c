@@ -38,6 +38,7 @@ void renderer_init(void)
     renderer.ubos[TILT_UBO]         = ubo_create(sizeof(f32));
     renderer.ubos[CONSTANTS_UBO]    = ubo_create(2 * sizeof(f32));
     renderer.ubos[OUTLINE_UBO]      = ubo_create(sizeof(f32));
+    renderer.ubos[GAME_TIME_UBO]    = ubo_create(sizeof(f32));
     set_constants_ubo();
     set_outline_ubo();
     /* --------------------- */
@@ -61,7 +62,7 @@ void renderer_init(void)
     renderer.shaders[SCREEN_SHADER]       = shader_create("src/renderer/shaders/screen/screen.vert", "src/renderer/shaders/screen/screen.frag", NULL);
     /* --------------------- */
     renderer.vaos = malloc(NUM_VAOS * sizeof(VAO));
-    renderer.vaos[TILE_VAO]         = vao_create(GL_STATIC_DRAW, GL_POINTS, 6, FALSE);
+    renderer.vaos[TILE_VAO]         = vao_create(GL_STATIC_DRAW, GL_POINTS, 5, FALSE);
     renderer.vaos[WALL_VAO]         = vao_create(GL_STATIC_DRAW, GL_TRIANGLES, 8, TRUE);
     renderer.vaos[ENTITY_VAO]       = vao_create(GL_DYNAMIC_DRAW, GL_POINTS, 10, FALSE);
     renderer.vaos[PROJECTILE_VAO]   = vao_create(GL_DYNAMIC_DRAW, GL_POINTS, 6, FALSE);
@@ -72,9 +73,9 @@ void renderer_init(void)
     renderer.vaos[PARSTACLE_VAO]    = vao_create(GL_STATIC_DRAW, GL_POINTS, 5, FALSE);
     renderer.vaos[QUAD_VAO]         = vao_create(GL_STATIC_DRAW, GL_TRIANGLES, 4, FALSE);
     vao_attr(renderer.vaos[TILE_VAO]        , 0, 2, 0);
-    vao_attr(renderer.vaos[TILE_VAO]        , 1, 2, 2);
-    vao_attr(renderer.vaos[TILE_VAO]        , 2, 1, 4);
-    vao_attr(renderer.vaos[TILE_VAO]        , 3, 1, 5);
+    vao_attr(renderer.vaos[TILE_VAO]        , 1, 1, 2);
+    vao_attr(renderer.vaos[TILE_VAO]        , 2, 1, 3);
+    vao_attr(renderer.vaos[TILE_VAO]        , 3, 1, 4);
     vao_attr(renderer.vaos[WALL_VAO]        , 0, 3, 0);
     vao_attr(renderer.vaos[WALL_VAO]        , 1, 2, 3);
     vao_attr(renderer.vaos[WALL_VAO]        , 2, 2, 5);
@@ -116,6 +117,7 @@ void renderer_init(void)
     set_gui_ssbo();
     /* --------------------- */
     link_shader_ubo(TILE_SHADER, MATRICES_UBO, "Matrices");
+    link_shader_ubo(TILE_SHADER, GAME_TIME_UBO, "GameTime");
     link_shader_ubo(WALL_SHADER, MATRICES_UBO, "Matrices");
     link_shader_ubo(ENTITY_SHADER, MATRICES_UBO, "Matrices");
     link_shader_ubo(ENTITY_SHADER, ASPECT_RATIO_UBO, "AspectRatio");
@@ -294,6 +296,10 @@ void renderer_uniform_update_rotation(f32 rotation) {
 
 void renderer_uniform_update_tilt(f32 tilt) {
     ubo_update(renderer.ubos[TILT_UBO], 0, sizeof(f32), &tilt);
+}
+
+void renderer_uniform_update_game_time(f32 game_time) {
+    ubo_update(renderer.ubos[GAME_TIME_UBO], 0, sizeof(f32), &game_time);
 }
 
 void renderer_uniform_update_aspect_ratio(f32 ar) {

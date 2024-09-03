@@ -10,18 +10,16 @@ TileArray interactable_tiles;
 #define _CREATE(_id, _lid) \
     case _id : _lid##_create(tile); break;
 
-Tile* tile_create(u32 id, i32 x, i32 z, i32 w, i32 l)
+Tile* tile_create(u32 id, i32 x, i32 z)
 {
     Tile* tile = malloc(sizeof(Tile));
     tile->id = id;
     tile->position.x = x;
     tile->position.z = z;
-    tile->dimensions.w = 1;
-    tile->dimensions.l = 1;
     tile->interactable = FALSE;
     tile->timer = 0;
     tile->shadow = 0;
-    tile->offset = vec2f_create(0, 0);
+    tile->offset = 0;
     switch (id) {
         _CREATE(GRASS, grass)
         _CREATE(HELLSTONE, hellstone)
@@ -47,12 +45,16 @@ void tile_update(Tile *tile, f32 dt)
         _UPDATE(HELLSTONE, hellstone)
         _UPDATE(SHAITAN_LAVA, shaitan_lava)
     }
-    tile_array_update(&global_tiles);
 }
 
 void tile_set_shadow(Tile *tile, u8 side)
 {
     tile->shadow |= (1 << side);
+}
+
+void tile_set_offset(Tile *tile, u8 offset)
+{
+    tile->offset = offset;
 }
 
 #define _INTERACT(_id, _lid) \

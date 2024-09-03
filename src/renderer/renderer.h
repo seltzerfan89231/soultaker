@@ -38,6 +38,7 @@ void renderer_uniform_update_proj(f32 *mat);
 void renderer_uniform_update_zoom(f32 zoom);
 void renderer_uniform_update_rotation(f32 rotation);
 void renderer_uniform_update_tilt(f32 tilt);
+void renderer_uniform_update_game_time(f32 game_time);
 void renderer_uniform_update_aspect_ratio(f32 ar);
 
 #endif

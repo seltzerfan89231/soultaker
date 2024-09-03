@@ -64,13 +64,12 @@ static void wall_push_data(Wall* wall)
 
 static void tile_push_data(Tile* tile)
 {
-    assert((data.vbo_length+1)*6 < BUFFER_SIZE);
-    offset = data.vbo_length * 6;
+    assert((data.vbo_length+1)*5 < BUFFER_SIZE);
+    offset = data.vbo_length * 5;
     data.vbo_length++;
     data.vbo_buffer[offset++] = tile->position.x;
     data.vbo_buffer[offset++] = tile->position.z;
-    data.vbo_buffer[offset++] = tile->offset.x;
-    data.vbo_buffer[offset++] = tile->offset.y;
+    data.vbo_buffer[offset++] = tile->offset;
     data.vbo_buffer[offset++] = tile->shadow;
     data.vbo_buffer[offset++] = tile->tex;
 }

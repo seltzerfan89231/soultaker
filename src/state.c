@@ -34,6 +34,7 @@ static void state_update(void)
         return;
     if (player.entity != NULL)
         camera_set_target(game_get_player_position());
+    renderer_uniform_update_game_time(game_time);
     data_update();
     update_view_matrix();
 }
