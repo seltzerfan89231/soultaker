@@ -266,7 +266,7 @@ void gui_key_callback_helper(Component *comp, f32 x, f32 y, f32 w, f32 h, i32 ke
     if (comp->update_children)
         for (i32 i = 0; i < comp->num_children; i++)
             gui_key_callback_helper(comp->children[i], new_x1, new_y1, new_x2 - new_x1, new_y2 - new_y1, key, scancode, action, mods);
-    if (comp->interactable && cursor_in_bounds(new_x1, new_x2, new_y1, new_y2))
+    if (comp->interactable)
         component_key_callback(comp, key, scancode, action, mods);
 }
 

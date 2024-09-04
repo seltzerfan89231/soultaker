@@ -52,7 +52,8 @@ void comp_singleplayer_mouse_button_callback(Component *comp, i32 button, i32 ac
         component_attach(comp_root, death_message);
 
         Component *minimap = component_create(window.aspect_ratio - 0.3, 0.7, 0.25, 0.25, MINIMAP_TEX);
-        minimap->a = 0.5;
+        minimap->interactable = TRUE;
+        minimap->a = 0.0;
         minimap->id = COMP_MINIMAP;
         component_attach(comp_root, minimap);
     }
