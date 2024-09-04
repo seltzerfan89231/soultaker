@@ -37,6 +37,7 @@ void gui_init(void)
     component_attach(comp_root, singleplayer);
 
     Component *multiplayer = component_create(window.aspect_ratio / 2 - 0.2, 0.3, 0.4, 0.4 * 2.0/3, EMPTY_TEX);
+    multiplayer->center_text = TRUE;
     multiplayer->a = 0.2;
     component_set_text(multiplayer, 14, "MULTIPLAYER");
     multiplayer->interactable = TRUE;

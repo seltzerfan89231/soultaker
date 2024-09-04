@@ -8,6 +8,26 @@
 #define TOP    4
 #define BOTTOM 5
 
+#pragma region FBOS
+#define NUM_FBOS 3
+#define SCENE_FBO 0
+#define SHADOW_FBO 1
+#define MINIMAP_FBO 2
+#pragma endregion
+
+
+
+
+
+#pragma region RBOS
+#define NUM_RBOS 1
+#define GAME_RBO 0
+#pragma endregion
+
+
+
+
+
 #pragma region UBOS
 #define NUM_UBOS         9
 #define MATRICES_UBO     0
@@ -238,5 +258,6 @@
 #pragma region AUDIO_BUFFERS
 #define NUM_BUFFERS 2
 #define GUI_CLICK_AUD 0
+#pragma endregion
 
 #endif

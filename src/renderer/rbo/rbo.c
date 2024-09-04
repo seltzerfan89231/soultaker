@@ -22,5 +22,5 @@ void rbo_bind_default(void)
 
 void rbo_destroy(RBO rbo)
 {
-    glDeleteBuffers(1, &rbo.id);
+    glDeleteRenderbuffers(1, &rbo.id);
 }

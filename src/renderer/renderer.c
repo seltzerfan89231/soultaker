@@ -1,10 +1,14 @@
 #include "renderer.h"
 #include <math.h>
+#include <semaphore.h>
 
 #define OUTLINE_THICKNESS 0
 
 Renderer renderer;
 
+static bool window_size_changed;
+
+static void update_framebuffers();
 static void link_shader_ubo(u32 shader_index, u32 ubo_index, char *identifier);
 static void link_shader_ssbo(u32 shader_index, u32 ssbo_index);
 static void set_game_ssbo(void);
@@ -177,12 +181,16 @@ void renderer_init(void)
     link_shader_ssbo(MINIMAP_WALL_SHADER, GAME_SSBO);
     link_shader_ssbo(GUI_SHADER, GUI_SSBO);
     /* --------------------- */
-    renderer.fbo = fbo_create(window.width, window.height);
-    renderer.fbo2 = fbo_create(window.width, window.height);
-    renderer.fbo3 = fbo_create(window.width, window.height);
-    renderer.rbo = rbo_create(window.width, window.height);
-    fbo_attach_rbo(renderer.fbo, renderer.rbo);
-    fbo_attach_rbo(renderer.fbo2, renderer.rbo);
+    renderer.fbos = malloc(NUM_FBOS * sizeof(FBO));
+    for (i32 i = 0; i < NUM_FBOS; i++)
+        renderer.fbos[i] = fbo_create(window.width, window.height);
+
+    renderer.rbos = malloc(NUM_RBOS * sizeof(RBO));
+    for (i32 i = 0; i < NUM_RBOS; i++)
+        renderer.rbos[i] = rbo_create(window.width, window.height);
+
+    fbo_attach_rbo(renderer.fbos[SCENE_FBO], renderer.rbos[GAME_RBO]);
+    fbo_attach_rbo(renderer.fbos[SHADOW_FBO], renderer.rbos[GAME_RBO]);
 }
 
 void renderer_malloc(u32 vao_index, u32 vbo_length, u32 ebo_length)
@@ -201,7 +209,11 @@ void renderer_update(u32 vao_index, u32 vbo_offset, u32 vbo_length, f32* vbo_buf
 
 void renderer_render(void)
 {
-    fbo_bind(renderer.fbo);
+    if (window_size_changed) {
+        update_framebuffers();
+        window_size_changed = FALSE;
+    }
+    fbo_bind(renderer.fbos[SCENE_FBO]);
     glStencilFunc(GL_ALWAYS, 1, 0x01);
     glStencilMask(0x01);
 
@@ -235,9 +247,9 @@ void renderer_render(void)
     vao_draw(renderer.vaos[PARSTACLE_VAO]);
     glDisable(GL_DEPTH_TEST);
 
-    fbo_bind(renderer.fbo2);
+    fbo_bind(renderer.fbos[SHADOW_FBO]);
     glClear(GL_COLOR_BUFFER_BIT);
-    fbo_bind_color_buffer(renderer.fbo);
+    fbo_bind_color_buffer(renderer.fbos[SCENE_FBO]);
     glStencilMask(0x00);
     shader_use(renderer.shaders[SCREEN_SHADER]);
     vao_draw(renderer.vaos[QUAD_VAO]);
@@ -251,7 +263,7 @@ void renderer_render(void)
     vao_draw(renderer.vaos[PARSTACLE_VAO]);
     vao_draw(renderer.vaos[ENTITY_VAO]);
 
-    fbo_bind(renderer.fbo3);
+    fbo_bind(renderer.fbos[MINIMAP_FBO]);
     glClearColor(0.9f, 0.9f, 0.9f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
     shader_use(renderer.shaders[MINIMAP_TILE_SHADER]);
@@ -268,9 +280,9 @@ void renderer_render(void)
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
     shader_use(renderer.shaders[SCREEN_SHADER]);
-    fbo_bind_color_buffer(renderer.fbo2);
+    fbo_bind_color_buffer(renderer.fbos[SHADOW_FBO]);
     vao_draw(renderer.vaos[QUAD_VAO]);
-    fbo_bind_color_buffer(renderer.fbo3);
+    fbo_bind_color_buffer(renderer.fbos[MINIMAP_FBO]);
     shader_use(renderer.shaders[GUI_SHADER]);
     vao_draw(renderer.vaos[GUI_VAO]);
 }
@@ -301,6 +313,33 @@ void renderer_destroy(void)
     for (i = 0; i < NUM_SSBOS; i++)
         ssbo_destroy(renderer.ssbos[i]);
     free(renderer.ssbos);
+
+    for (i = 0; i < NUM_FBOS; i++)
+        fbo_destroy(renderer.fbos[i]);
+    free(renderer.fbos);
+
+    for (i = 0; i < NUM_RBOS; i++)
+        rbo_destroy(renderer.rbos[i]);
+    free(renderer.rbos);
+}
+
+void renderer_update_framebuffers()
+{
+    window_size_changed = TRUE;
+}
+
+void update_framebuffers()
+{
+    for (i32 i = 0; i < NUM_FBOS; i++)
+        fbo_destroy(renderer.fbos[i]);
+    for (i32 i = 0; i < NUM_RBOS; i++)
+        rbo_destroy(renderer.rbos[i]);
+    for (i32 i = 0; i < NUM_FBOS; i++)
+        renderer.fbos[i] = fbo_create(window.width, window.height);
+    for (i32 i = 0; i < NUM_RBOS; i++)
+        renderer.rbos[i] = rbo_create(window.width, window.height);
+    fbo_attach_rbo(renderer.fbos[SCENE_FBO], renderer.rbos[GAME_RBO]);
+    fbo_attach_rbo(renderer.fbos[SHADOW_FBO], renderer.rbos[GAME_RBO]);
 }
 
 void renderer_uniform_update_view(f32 *mat) {

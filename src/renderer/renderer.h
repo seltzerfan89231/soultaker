@@ -21,8 +21,8 @@ typedef struct {
     SSBO *ssbos;
     Texture *game_textures;
     Texture *gui_textures;
-    FBO fbo, fbo2, fbo3;
-    RBO rbo;
+    FBO *fbos;
+    RBO *rbos;
 } Renderer;
 
 extern Renderer renderer;
@@ -33,6 +33,7 @@ void renderer_update(u32 vao_index, u32 vbo_offset, u32 vbo_length, f32* vbo_buf
 void renderer_render(void);
 void renderer_destroy(void);
 
+void renderer_update_framebuffers();
 void renderer_uniform_update_view(f32 *mat);
 void renderer_uniform_update_proj(f32 *mat);
 void renderer_uniform_update_zoom(f32 zoom);

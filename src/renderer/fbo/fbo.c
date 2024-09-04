@@ -44,5 +44,6 @@ bool fbo_check_status(FBO fbo)
 
 void fbo_destroy(FBO fbo)
 {
-    glDeleteBuffers(1, &fbo.id);
+    glDeleteTextures(1, &fbo.color_buffer_id);
+    glDeleteFramebuffers(1, &fbo.id);
 }

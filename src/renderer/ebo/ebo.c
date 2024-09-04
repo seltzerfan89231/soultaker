@@ -30,6 +30,7 @@ void ebo_bind(EBO *ebo)
 
 void ebo_destroy(EBO *ebo)
 {
+    ebo_bind(ebo);
     glDeleteBuffers(1, &ebo->id);
     free(ebo);
 }

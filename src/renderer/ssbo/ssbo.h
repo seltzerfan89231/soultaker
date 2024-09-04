@@ -10,6 +10,7 @@ typedef struct {
 } SSBO;
 
 SSBO ssbo_create(size_t size);
+void ssbo_bind(SSBO ssbo);
 void ssbo_bind_buffer_base(SSBO ssbo, u32 index);
 void ssbo_update(SSBO ssbo, size_t offset, size_t size, void *data);
 void ssbo_destroy(SSBO ssbo);
