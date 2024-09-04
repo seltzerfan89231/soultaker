@@ -247,4 +247,7 @@ void load_level4(void)
     player.weapon.id = 0;
     player.weapon.tex = SWORD_1_TEX;
     player.entity->position = vec3f_create(15.5, 0.0f, 12);
+    Entity* entity = entity_create(TRAINING_DUMMY, 0);
+    entity->position = vec3f_create(14, 0, 12);
+    entity->scale = 1.0f;
 }

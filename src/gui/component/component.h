@@ -50,6 +50,7 @@ void component_hover_callback(Component *comp, i32 action);
 #define COMP_MANABAR 9
 #define COMP_HOST 10
 #define COMP_JOIN 11
+#define COMP_MINIMAP 12
 
 #define _COMP_INIT(_ltype) \
     void comp_##_ltype##_mouse_button_callback(Component *comp, i32 button, i32 action); \
@@ -68,5 +69,6 @@ _COMP_INIT(death)
 _COMP_INIT(manabar)
 _COMP_INIT(host)
 _COMP_INIT(join)
+_COMP_INIT(minimap)
 
 #endif

@@ -25,7 +25,7 @@ void window_init(void)
     window.last_frame = glfwGetTime();
     window.dt = 0;
     window.fps = 0;
-
+    
     glfwMakeContextCurrent(window.handle);
     load_images();
     glfwSetFramebufferSizeCallback(window.handle, framebuffer_size_callback);

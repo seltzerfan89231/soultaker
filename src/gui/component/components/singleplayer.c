@@ -50,6 +50,11 @@ void comp_singleplayer_mouse_button_callback(Component *comp, i32 button, i32 ac
         Component *death_message = component_create(0.4, 0.93, 0.3, 0.05, NO_TEX);
         death_message->id = COMP_DEATH;
         component_attach(comp_root, death_message);
+
+        Component *minimap = component_create(window.aspect_ratio - 0.3, 0.7, 0.25, 0.25, MINIMAP_TEX);
+        minimap->a = 0.5;
+        minimap->id = COMP_MINIMAP;
+        component_attach(comp_root, minimap);
     }
 }
 

@@ -8,6 +8,8 @@ extern Renderer renderer;
 extern Camera camera;
 extern GUI gui;
 
+static f32 minimap_zoom;
+
 static void update_proj_matrix(void)
 {
     renderer_uniform_update_proj(camera.proj);
@@ -34,6 +36,7 @@ static void state_update(void)
         return;
     if (player.entity != NULL)
         camera_set_target(game_get_player_position());
+    renderer_uniform_update_minimap(camera.target.x, camera.target.z, 1 / minimap_zoom);
     renderer_uniform_update_game_time(game_time);
     data_update();
     update_view_matrix();
@@ -110,6 +113,18 @@ static void process_input(void)
     if (window_key_pressed(GLFW_KEY_P))
         zoom_magnitude--;
 
+    if (window_key_pressed(GLFW_KEY_EQUAL)) {
+        minimap_zoom += 5 * window.dt;
+        if (minimap_zoom > MAX_ZOOM)
+            minimap_zoom = MAX_ZOOM;
+    }
+        
+    if (window_key_pressed(GLFW_KEY_MINUS)) {
+        minimap_zoom -= 5 * window.dt;
+        if (minimap_zoom < MIN_ZOOM)
+            minimap_zoom = MIN_ZOOM;
+    }
+
     if (window_mouse_button_pressed(GLFW_MOUSE_BUTTON_LEFT))
         if (!hovered)
             game_shoot(window.cursor.position, camera.yaw, camera.pitch, camera.zoom, window.aspect_ratio);
@@ -137,6 +152,7 @@ void state_init(void)
     game_init();
     gui_init();
     data_init();
+    minimap_zoom = camera.zoom;
 }
 
 #include <sys/time.h>

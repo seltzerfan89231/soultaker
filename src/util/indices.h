@@ -9,7 +9,7 @@
 #define BOTTOM 5
 
 #pragma region UBOS
-#define NUM_UBOS         8
+#define NUM_UBOS         9
 #define MATRICES_UBO     0
 #define ZOOM_UBO         1
 #define ASPECT_RATIO_UBO 2
@@ -18,6 +18,7 @@
 #define CONSTANTS_UBO    5
 #define OUTLINE_UBO      6
 #define GAME_TIME_UBO    7
+#define MINIMAP_UBO       8
 #pragma endregion
 
 
@@ -35,7 +36,7 @@
 
 
 #pragma region SHADERS
-#define NUM_SHADERS         13
+#define NUM_SHADERS         15
 #define TILE_SHADER         0 
 #define WALL_SHADER         1
 #define ENTITY_SHADER       2
@@ -49,6 +50,8 @@
 #define PARSTACLE_SHADER    10
 #define TILE_SHADOW_SHADER  11
 #define SCREEN_SHADER       12
+#define MINIMAP_ENTITY_SHADER 13
+#define MINIMAP_TILE_SHADER 14
 #pragma endregion
 
 
@@ -123,10 +126,10 @@
 
 
 #pragma region GUI_TEXTURES
-#define NUM_GUI_TEXTURES 100
+#define NUM_GUI_TEXTURES 101
 #define NO_TEX           0
 #define EMPTY_TEX        1
-#define BUTTON_TEX       2
+#define MINIMAP_TEX 2
 #define SWORD_1_TEX 3
 #define SWORD_2_TEX 4
 #define UPPER_A_TEX 5
@@ -224,6 +227,7 @@
 #define BACKTICK_TEX 97
 #define CARROT_TEX 98
 #define TILDE_TEX 99
+#define BUTTON_TEX 100
 #pragma endregion
 
 

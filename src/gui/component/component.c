@@ -105,6 +105,7 @@ void component_mouse_button_callback(Component *comp, i32 button, i32 action)
         _COMP_MB_CALLBACK(MANABAR, manabar)
         _COMP_MB_CALLBACK(HOST, host)
         _COMP_MB_CALLBACK(JOIN, join)
+        _COMP_MB_CALLBACK(MINIMAP, minimap)
     }
 }
 
@@ -125,6 +126,7 @@ void component_update(Component *comp)
         _COMP_UPDATE(MANABAR, manabar)
         _COMP_UPDATE(HOST, host)
         _COMP_UPDATE(JOIN, join)
+        _COMP_UPDATE(MINIMAP, minimap)
     }
 }
 
@@ -150,6 +152,7 @@ void component_hover_callback(Component *comp, i32 action)
         _COMP_HOVER_CALLBACK(MANABAR, manabar)
         _COMP_HOVER_CALLBACK(HOST, host)
         _COMP_HOVER_CALLBACK(JOIN, join)
+        _COMP_HOVER_CALLBACK(MINIMAP, minimap)
     }
 }
 
@@ -170,5 +173,6 @@ void component_key_callback(Component *comp, i32 key, i32 scancode, i32 action, 
         _COMP_KEY_CALLBACK(MANABAR, manabar)
         _COMP_KEY_CALLBACK(HOST, host)
         _COMP_KEY_CALLBACK(JOIN, join)
+        _COMP_KEY_CALLBACK(MINIMAP, minimap)
     }
 }

@@ -7,11 +7,6 @@ layout (location = 1) in float aScale;
 layout (location = 3) in float aTexID;
 layout (location = 4) in vec4 aOffsetData;
 
-layout (std140) uniform Zoom
-{
-    float zoom;
-};
-
 out VertexData
 {
     vec4 position;

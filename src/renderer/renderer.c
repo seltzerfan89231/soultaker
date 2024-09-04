@@ -39,6 +39,7 @@ void renderer_init(void)
     renderer.ubos[CONSTANTS_UBO]    = ubo_create(2 * sizeof(f32));
     renderer.ubos[OUTLINE_UBO]      = ubo_create(sizeof(f32));
     renderer.ubos[GAME_TIME_UBO]    = ubo_create(sizeof(f32));
+    renderer.ubos[MINIMAP_UBO]       = ubo_create(3 * sizeof(f32));
     set_constants_ubo();
     set_outline_ubo();
     /* --------------------- */
@@ -60,6 +61,8 @@ void renderer_init(void)
     renderer.shaders[PARJICLE_SHADER]     = shader_create("src/renderer/shaders/parjicle/parjicle.vert", "src/renderer/shaders/parjicle/parjicle.frag", "src/renderer/shaders/parjicle/parjicle.geom");
     renderer.shaders[PARSTACLE_SHADER]    = shader_create("src/renderer/shaders/parstacle/parstacle.vert", "src/renderer/shaders/parstacle/parstacle.frag", "src/renderer/shaders/parstacle/parstacle.geom");
     renderer.shaders[SCREEN_SHADER]       = shader_create("src/renderer/shaders/screen/screen.vert", "src/renderer/shaders/screen/screen.frag", NULL);
+    renderer.shaders[MINIMAP_ENTITY_SHADER] = shader_create("src/renderer/shaders/minimap/entity.vert", "src/renderer/shaders/minimap/entity.frag", "src/renderer/shaders/minimap/entity.geom");
+    renderer.shaders[MINIMAP_TILE_SHADER] = shader_create("src/renderer/shaders/minimap/tile.vert", "src/renderer/shaders/minimap/tile.frag", "src/renderer/shaders/minimap/tile.geom");
     /* --------------------- */
     renderer.vaos = malloc(NUM_VAOS * sizeof(VAO));
     renderer.vaos[TILE_VAO]         = vao_create(GL_STATIC_DRAW, GL_POINTS, 5, FALSE);
@@ -153,6 +156,9 @@ void renderer_init(void)
     link_shader_ubo(PARSTACLE_SHADER, ASPECT_RATIO_UBO, "AspectRatio");
     link_shader_ubo(PARSTACLE_SHADER, ZOOM_UBO, "Zoom");
     link_shader_ubo(PARSTACLE_SHADER, OUTLINE_UBO, "OutlineThickness");
+    link_shader_ubo(MINIMAP_ENTITY_SHADER, MINIMAP_UBO, "Minimap");
+    link_shader_ubo(MINIMAP_ENTITY_SHADER, CONSTANTS_UBO, "Constants");
+    link_shader_ubo(MINIMAP_ENTITY_SHADER, ROTATION_UBO, "Rotation");
     /* --------------------- */
     link_shader_ssbo(TILE_SHADER, GAME_SSBO);
     link_shader_ssbo(WALL_SHADER, GAME_SSBO);
@@ -164,13 +170,10 @@ void renderer_init(void)
     /* --------------------- */
     renderer.fbo = fbo_create(window.width, window.height);
     renderer.fbo2 = fbo_create(window.width, window.height);
+    renderer.fbo3 = fbo_create(window.width, window.height);
     renderer.rbo = rbo_create(window.width, window.height);
     fbo_attach_rbo(renderer.fbo, renderer.rbo);
     fbo_attach_rbo(renderer.fbo2, renderer.rbo);
-    if (!fbo_check_status(renderer.fbo)) {
-        puts("Something went wrong with fbo");
-        exit(1);
-    }
 }
 
 void renderer_malloc(u32 vao_index, u32 vbo_length, u32 ebo_length)
@@ -239,6 +242,14 @@ void renderer_render(void)
     vao_draw(renderer.vaos[PARSTACLE_VAO]);
     vao_draw(renderer.vaos[ENTITY_VAO]);
 
+    fbo_bind(renderer.fbo3);
+    glClearColor(0.9f, 0.9f, 0.9f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+    shader_use(renderer.shaders[MINIMAP_ENTITY_SHADER]);
+    vao_draw(renderer.vaos[ENTITY_VAO]);
+    //shader_use(renderer.shaders[MINIMAP_TILE_SHADER]);
+    //vao_draw(renderer.vaos[TILE_VAO]);
+
     fbo_bind_default();
     glDisable(GL_DEPTH_TEST);
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
@@ -246,6 +257,7 @@ void renderer_render(void)
     shader_use(renderer.shaders[SCREEN_SHADER]);
     fbo_bind_color_buffer(renderer.fbo2);
     vao_draw(renderer.vaos[QUAD_VAO]);
+    fbo_bind_color_buffer(renderer.fbo3);
     shader_use(renderer.shaders[GUI_SHADER]);
     vao_draw(renderer.vaos[GUI_VAO]);
 }
@@ -304,6 +316,12 @@ void renderer_uniform_update_game_time(f32 game_time) {
 
 void renderer_uniform_update_aspect_ratio(f32 ar) {
     ubo_update(renderer.ubos[ASPECT_RATIO_UBO], 0, sizeof(f32), &ar);
+}
+
+void renderer_uniform_update_minimap(f32 x, f32 z, f32 zoom) {
+    ubo_update(renderer.ubos[MINIMAP_UBO], 0, sizeof(f32), &x);
+    ubo_update(renderer.ubos[MINIMAP_UBO], sizeof(f32), sizeof(f32), &z);
+    ubo_update(renderer.ubos[MINIMAP_UBO], 2 * sizeof(f32), sizeof(f32), &zoom);
 }
 
 void link_shader_ubo(u32 shader_index, u32 ubo_index, char *identifier)
@@ -418,6 +436,7 @@ void load_textures(void)
 
     renderer.gui_textures[NO_TEX]     = texture_create("assets/textures/gui/none.png");
     renderer.gui_textures[EMPTY_TEX]  = texture_create("assets/textures/gui/empty.png");
+    renderer.gui_textures[MINIMAP_TEX] = texture_create("assets/textures/gui/empty.png");
     renderer.gui_textures[BUTTON_TEX] = texture_create("assets/textures/gui/button.png");
     renderer.gui_textures[SWORD_1_TEX] = texture_create("assets/textures/game/sword1.png");
     renderer.gui_textures[SWORD_2_TEX] = texture_create("assets/textures/game/sword2.png");

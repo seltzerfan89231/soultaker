@@ -21,7 +21,7 @@ typedef struct {
     SSBO *ssbos;
     Texture *game_textures;
     Texture *gui_textures;
-    FBO fbo, fbo2;
+    FBO fbo, fbo2, fbo3;
     RBO rbo;
 } Renderer;
 
@@ -40,5 +40,6 @@ void renderer_uniform_update_rotation(f32 rotation);
 void renderer_uniform_update_tilt(f32 tilt);
 void renderer_uniform_update_game_time(f32 game_time);
 void renderer_uniform_update_aspect_ratio(f32 ar);
+void renderer_uniform_update_minimap(f32 x, f32 z, f32 zoom);
 
 #endif
