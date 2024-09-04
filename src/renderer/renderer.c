@@ -159,6 +159,9 @@ void renderer_init(void)
     link_shader_ubo(MINIMAP_ENTITY_SHADER, MINIMAP_UBO, "Minimap");
     link_shader_ubo(MINIMAP_ENTITY_SHADER, CONSTANTS_UBO, "Constants");
     link_shader_ubo(MINIMAP_ENTITY_SHADER, ROTATION_UBO, "Rotation");
+    link_shader_ubo(MINIMAP_TILE_SHADER, MINIMAP_UBO, "Minimap");
+    link_shader_ubo(MINIMAP_TILE_SHADER, CONSTANTS_UBO, "Constants");
+    link_shader_ubo(MINIMAP_TILE_SHADER, ROTATION_UBO, "Rotation");
     /* --------------------- */
     link_shader_ssbo(TILE_SHADER, GAME_SSBO);
     link_shader_ssbo(WALL_SHADER, GAME_SSBO);
@@ -166,6 +169,7 @@ void renderer_init(void)
     link_shader_ssbo(PROJECTILE_SHADER, GAME_SSBO);
     link_shader_ssbo(OBSTACLE_SHADER, GAME_SSBO);
     link_shader_ssbo(PARSTACLE_SHADER, GAME_SSBO);
+    link_shader_ssbo(MINIMAP_TILE_SHADER, GAME_SSBO);
     link_shader_ssbo(GUI_SHADER, GUI_SSBO);
     /* --------------------- */
     renderer.fbo = fbo_create(window.width, window.height);
@@ -245,10 +249,10 @@ void renderer_render(void)
     fbo_bind(renderer.fbo3);
     glClearColor(0.9f, 0.9f, 0.9f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
+    shader_use(renderer.shaders[MINIMAP_TILE_SHADER]);
+    vao_draw(renderer.vaos[TILE_VAO]);
     shader_use(renderer.shaders[MINIMAP_ENTITY_SHADER]);
     vao_draw(renderer.vaos[ENTITY_VAO]);
-    //shader_use(renderer.shaders[MINIMAP_TILE_SHADER]);
-    //vao_draw(renderer.vaos[TILE_VAO]);
 
     fbo_bind_default();
     glDisable(GL_DEPTH_TEST);

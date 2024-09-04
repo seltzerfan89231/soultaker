@@ -1,33 +1,67 @@
 #version 460 core
 
+#extension GL_ARB_bindless_texture : require
+
 layout (points) in;
 layout (triangle_strip, max_vertices = 4) out;
 
+layout (std140) uniform Constants
+{
+    float pi;
+    float sqrt2;
+};
+
+layout (std140) uniform Rotation
+{
+    float rotation;
+};
+
+layout (std140) uniform Minimap
+{
+    vec2 target;
+    float zoom;
+};
+
 in VertexData
 {
-    vec4 position;
+    flat int texID;
+    vec2 position;
 } inData[];
 
 out VertexData
 {
-    vec2 texCoord;
+    flat int texID;
 };
 
 void main()
 {   
-    vec4 position = inData[0].position;
-    float k = 1;
-    gl_Position = k * (position + vec4(0.0, 0.0, 0.0, 0.0));
-    texCoord = vec2(0.0f, 0.0f);
+    vec2 offset, pre, position;
+    float theta = - rotation + pi / 2;
+    texID = inData[0].texID;
+    
+    pre = zoom * (inData[0].position - target + vec2(0, 0));
+    position.x =   pre.x * cos(theta) - pre.y * sin(theta);
+    position.y = -(pre.y * cos(theta) + pre.x * sin(theta));
+    gl_Position = vec4(position, 0, 1);
     EmitVertex();
-    gl_Position = k * (position + vec4(1, 0.0, 0.0, 0.0));
-    texCoord = vec2(1.0f, 0.0f);
+
+    pre = zoom * (inData[0].position - target + vec2(0, 1));
+    position.x =   pre.x * cos(theta) - pre.y * sin(theta);
+    position.y = -(pre.y * cos(theta) + pre.x * sin(theta));
+    gl_Position = vec4(position, 0, 1);
     EmitVertex();
-    gl_Position = k * (position + vec4(0.0, 0.0, 1, 0.0));
-    texCoord = vec2(0.0f, 1.0f);
+
+    pre = zoom * (inData[0].position - target + vec2(1, 0));
+    position.x =   pre.x * cos(theta) - pre.y * sin(theta);
+    position.y = -(pre.y * cos(theta) + pre.x * sin(theta));
+    gl_Position = vec4(position, 0, 1);
     EmitVertex();
-    gl_Position = k * (position + vec4(1, 0.0, 1, 0.0));
-    texCoord = vec2(1.0f, 1.0f);
+
+    pre = zoom * (inData[0].position - target + vec2(1, 1));
+    position.x =   pre.x * cos(theta) - pre.y * sin(theta);
+    position.y = -(pre.y * cos(theta) + pre.x * sin(theta));
+    gl_Position = vec4(position, 0, 1);
     EmitVertex();
+
     EndPrimitive();
 }
