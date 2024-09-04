@@ -35,7 +35,7 @@ out VertexData
 
 void main()
 {   
-    vec2 offset, pre, position;
+    vec2 pre, position;
     float theta = - rotation + pi / 2;
     texID = inData[0].texID;
     

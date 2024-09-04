@@ -36,7 +36,7 @@
 
 
 #pragma region SHADERS
-#define NUM_SHADERS         15
+#define NUM_SHADERS         16
 #define TILE_SHADER         0 
 #define WALL_SHADER         1
 #define ENTITY_SHADER       2
@@ -52,6 +52,7 @@
 #define SCREEN_SHADER       12
 #define MINIMAP_ENTITY_SHADER 13
 #define MINIMAP_TILE_SHADER 14
+#define MINIMAP_WALL_SHADER 15
 #pragma endregion
 
 

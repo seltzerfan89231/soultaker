@@ -63,6 +63,7 @@ void renderer_init(void)
     renderer.shaders[SCREEN_SHADER]       = shader_create("src/renderer/shaders/screen/screen.vert", "src/renderer/shaders/screen/screen.frag", NULL);
     renderer.shaders[MINIMAP_ENTITY_SHADER] = shader_create("src/renderer/shaders/minimap/entity.vert", "src/renderer/shaders/minimap/entity.frag", "src/renderer/shaders/minimap/entity.geom");
     renderer.shaders[MINIMAP_TILE_SHADER] = shader_create("src/renderer/shaders/minimap/tile.vert", "src/renderer/shaders/minimap/tile.frag", "src/renderer/shaders/minimap/tile.geom");
+    renderer.shaders[MINIMAP_WALL_SHADER] = shader_create("src/renderer/shaders/minimap/wall.vert", "src/renderer/shaders/minimap/wall.frag", NULL);    
     /* --------------------- */
     renderer.vaos = malloc(NUM_VAOS * sizeof(VAO));
     renderer.vaos[TILE_VAO]         = vao_create(GL_STATIC_DRAW, GL_POINTS, 5, FALSE);
@@ -162,6 +163,9 @@ void renderer_init(void)
     link_shader_ubo(MINIMAP_TILE_SHADER, MINIMAP_UBO, "Minimap");
     link_shader_ubo(MINIMAP_TILE_SHADER, CONSTANTS_UBO, "Constants");
     link_shader_ubo(MINIMAP_TILE_SHADER, ROTATION_UBO, "Rotation");
+    link_shader_ubo(MINIMAP_WALL_SHADER, MINIMAP_UBO, "Minimap");
+    link_shader_ubo(MINIMAP_WALL_SHADER, CONSTANTS_UBO, "Constants");
+    link_shader_ubo(MINIMAP_WALL_SHADER, ROTATION_UBO, "Rotation");
     /* --------------------- */
     link_shader_ssbo(TILE_SHADER, GAME_SSBO);
     link_shader_ssbo(WALL_SHADER, GAME_SSBO);
@@ -170,6 +174,7 @@ void renderer_init(void)
     link_shader_ssbo(OBSTACLE_SHADER, GAME_SSBO);
     link_shader_ssbo(PARSTACLE_SHADER, GAME_SSBO);
     link_shader_ssbo(MINIMAP_TILE_SHADER, GAME_SSBO);
+    link_shader_ssbo(MINIMAP_WALL_SHADER, GAME_SSBO);
     link_shader_ssbo(GUI_SHADER, GUI_SSBO);
     /* --------------------- */
     renderer.fbo = fbo_create(window.width, window.height);
@@ -251,6 +256,10 @@ void renderer_render(void)
     glClear(GL_COLOR_BUFFER_BIT);
     shader_use(renderer.shaders[MINIMAP_TILE_SHADER]);
     vao_draw(renderer.vaos[TILE_VAO]);
+    glCullFace(GL_FRONT); // idk why minimap wall weird
+    shader_use(renderer.shaders[MINIMAP_WALL_SHADER]);
+    vao_draw(renderer.vaos[WALL_VAO]);
+    glCullFace(GL_BACK);
     shader_use(renderer.shaders[MINIMAP_ENTITY_SHADER]);
     vao_draw(renderer.vaos[ENTITY_VAO]);
 
