@@ -58,12 +58,20 @@ void entity_update(Entity* entity, f32 dt)
     entity->timer2 -= dt;
 }
 
+#define _ENTITY_DAMAGE(_id, _lid) \
+    case _id : _lid##_damage(entity, damage); break;
+
 void entity_damage(Entity *entity, f32 damage)
 {
     aud_play(GUI_CLICK_AUD);
-    entity->health -= damage;
-    if (entity->health < 0)
-        entity->health = 0;
+    switch (entity->id) {
+        _ENTITY_DAMAGE(TRAINING_DUMMY, training_dummy)
+        default:
+            entity->health -= damage;
+            if (entity->health < 0)
+                entity->health = 0;
+    }
+    
 }
 
 void entity_set_direction(Entity *entity, vec3f direction)

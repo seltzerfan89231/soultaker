@@ -37,6 +37,13 @@ void training_dummy_update(Entity *entity)
     }
 }
 
+void training_dummy_damage(Entity *entity, f32 damage)
+{
+    entity->health -= damage;
+    if (entity->health < 1)
+        entity->health = 1;
+}
+
 void training_dummy_die(Entity *entity)
 {
 

@@ -96,7 +96,7 @@ static void entity_push_data(Entity* entity)
     data.vbo_buffer[offset++] = entity->position.y;
     data.vbo_buffer[offset++] = entity->position.z;
     data.vbo_buffer[offset++] = entity->scale;
-    data.vbo_buffer[offset++] = entity->health / entity->max_health;
+    data.vbo_buffer[offset++] = (f32)entity->health / entity->max_health;
     f32 theta = atan(entity->facing.y / entity->facing.x) + (entity->facing.x >= 0 ? 0 : PI);
 
     f32 dif = theta + PI - camera.yaw;

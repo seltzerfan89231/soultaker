@@ -128,6 +128,11 @@ void knight_update(Entity *entity)
     }
 }
 
+void knight_damage(Entity *entity, f32 damage)
+{
+    
+}
+
 void knight_die(Entity *entity)
 {
     Parstacle *parstacle = parstacle_create();

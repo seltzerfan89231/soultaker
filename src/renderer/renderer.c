@@ -213,6 +213,8 @@ void renderer_render(void)
         update_framebuffers();
         window_size_changed = FALSE;
     }
+    if (!fbo_check_status(renderer.fbos[SCENE_FBO]))
+        return;
     fbo_bind(renderer.fbos[SCENE_FBO]);
     glStencilFunc(GL_ALWAYS, 1, 0x01);
     glStencilMask(0x01);
@@ -247,6 +249,8 @@ void renderer_render(void)
     vao_draw(renderer.vaos[PARSTACLE_VAO]);
     glDisable(GL_DEPTH_TEST);
 
+    if (!fbo_check_status(renderer.fbos[SHADOW_FBO]))
+        return;
     fbo_bind(renderer.fbos[SHADOW_FBO]);
     glClear(GL_COLOR_BUFFER_BIT);
     fbo_bind_color_buffer(renderer.fbos[SCENE_FBO]);
@@ -263,6 +267,8 @@ void renderer_render(void)
     vao_draw(renderer.vaos[PARSTACLE_VAO]);
     vao_draw(renderer.vaos[ENTITY_VAO]);
 
+    if (!fbo_check_status(renderer.fbos[MINIMAP_FBO]))
+        return;
     fbo_bind(renderer.fbos[MINIMAP_FBO]);
     glClearColor(0.9f, 0.9f, 0.9f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);

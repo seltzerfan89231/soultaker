@@ -55,5 +55,10 @@ void enemy_update(Entity *entity)
     }
 }
 
+void enemy_damage(Entity *entity, f32 damage)
+{
+    
+}
+
 void enemy_die(Entity *entity)
 {}

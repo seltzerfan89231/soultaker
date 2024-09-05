@@ -43,6 +43,7 @@ extern EntityArray global_entities;
     void _type##_destroy_frame_data(FrameData ***frame_data); \
     void _type##_create(Entity *entity); \
     void _type##_update(Entity *entity); \
+    void _type##_damage(Entity *entity, f32 damage); \
     void _type##_die(Entity *entity);
 
 _ENTITY_INIT(knight)

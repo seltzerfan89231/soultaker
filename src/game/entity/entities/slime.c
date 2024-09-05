@@ -57,5 +57,10 @@ void slime_update(Entity *entity)
         entity->direction = vec3f_create(0, 0, 0);
 }
 
+void slime_damage(Entity *entity, f32 damage)
+{
+    
+}
+
 void slime_die(Entity *entity)
 {}
