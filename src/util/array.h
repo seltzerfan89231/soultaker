@@ -27,6 +27,7 @@
 #define _ARRAY_DEFINE(_type, _ltype) \
     _type##Array _ltype##_array_create(u32 max_length, u32 increment) { \
         _type##Array array; \
+        assert(increment > 0); \
         array.length = 0; \
         array.max_length = max_length; \
         array.increment = increment; \
@@ -45,6 +46,7 @@
     } \
     void _ltype##_array_cut(_type##Array *array, u32 idx) { \
         assert(array->buffer != NULL); \
+        assert(idx < array->length); \
         _ltype##_array_update(array); \
         array->buffer[idx] = array->buffer[--array->length];\
     } \

@@ -14,6 +14,7 @@ static void reset(void)
     destroy_all_particles();
     destroy_all_obstacles();
     destroy_all_parjicles();
+    destroy_all_sentries();
     destroy_all_aoes();
     global_projectiles = projectile_array_create(0, 1);
     global_entities = entity_array_create(0, 1);
@@ -23,6 +24,7 @@ static void reset(void)
     global_obstacles = obstacle_array_create(0, 1);
     global_tiles = tile_array_create(0, 1);
     global_walls = wall_array_create(0, 1);
+    global_sentries = sentry_array_create(0, 1);
     global_aoes = aoe_array_create(0, 1);
     game_time = 0;
 }
@@ -254,4 +256,6 @@ void load_level4(void)
     entity->scale = 1.0f;
 
     AOE* aoe = aoe_create(17, 12);
+    Sentry* sentry = sentry_create(SHAITAN_SENTRY);
+    sentry->position = vec3f_create(14, 0, 20);
 }

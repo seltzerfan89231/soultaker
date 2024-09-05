@@ -12,6 +12,7 @@
 #include "player/player.h"
 #include "aud/aud.h"
 #include "tilemap/tilemap.h"
+#include "sentry/sentry.h"
 #include "aoe/aoe.h"
 #include "../util/array.h"
 
@@ -25,6 +26,7 @@ extern TileArray global_tiles;
 extern TileArray interactable_tiles;
 extern WallArray global_walls;
 extern AOEArray global_aoes;
+extern SentryArray global_sentries;
 extern Player player;
 extern TileMap map;
 

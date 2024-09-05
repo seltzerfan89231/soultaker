@@ -120,6 +120,14 @@ static void update_aoes(f32 dt)
         aoe_update_timer(global_aoes.buffer[i], dt);
 }
 
+static void update_sentries(f32 dt)
+{
+    for (i32 i = 0; i < global_sentries.length; i++) {
+        Sentry* sentry = global_sentries.buffer[i];
+        sentry_update(sentry, dt);
+    }
+}
+
 static void update_tiles(f32 dt)
 {
     tile_update_timer(dt);
@@ -137,6 +145,7 @@ void update_objects(f32 dt)
     update_particles(dt);
     update_parjicles(dt);
     update_tiles(dt);
+    update_sentries(dt);
     update_aoes(dt);
     update_players(dt);
 }
