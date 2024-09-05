@@ -1,10 +1,4 @@
-new sentry type that is like parstacle but animates
-
 custom vertices
-
-area of effect (single)
-
-area of effect (multiple)
 
 rotate tile
 

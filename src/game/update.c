@@ -54,13 +54,18 @@ static void collide_walls_entities(f32 dt)
 
 static void collide_entities_aoes()
 {
-    for (i32 i = 0; i < global_aoes.length; i++) {
+    for (i32 i = 0; global_aoes.length > 0; ) {
         AOE* aoe = global_aoes.buffer[i];
         for (i32 j = 0; j < global_entities.length; j++) {
+            vec2f aoe_pos, ent_pos;
             Entity* entity = global_entities.buffer[j];
-            aoe_hit(aoe, entity);
+            aoe_pos = vec2f_create(aoe->position.x, aoe->position.z);
+            ent_pos = vec2f_create(entity->position.x, entity->position.z);
+            if (aoe->friendly != entity->friendly
+              && vec2f_mag(vec2f_sub(aoe_pos, ent_pos)) < aoe->radius + entity->hitbox_radius)
+                entity_damage(entity, 10);
         }
-        aoe_update(aoe);
+        aoe_destroy(aoe, i);
     }
 }
 
@@ -114,12 +119,6 @@ static void update_parjicles(f32 dt)
     }
 }
 
-static void update_aoes(f32 dt)
-{
-    for (i32 i = 0; i < global_aoes.length; i++)
-        aoe_update_timer(global_aoes.buffer[i], dt);
-}
-
 static void update_sentries(f32 dt)
 {
     for (i32 i = 0; i < global_sentries.length; i++) {
@@ -146,6 +145,5 @@ void update_objects(f32 dt)
     update_parjicles(dt);
     update_tiles(dt);
     update_sentries(dt);
-    update_aoes(dt);
     update_players(dt);
 }

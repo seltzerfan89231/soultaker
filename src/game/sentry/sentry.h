@@ -6,6 +6,7 @@
 #include "../../util/type.h"
 #include "../../util/vec.h"
 #include "../projectile/projectile.h"
+#include "../aoe/aoe.h"
 
 typedef struct {
     vec3f position;

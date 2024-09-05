@@ -255,7 +255,6 @@ void load_level4(void)
     entity->position = vec3f_create(14, 0, 12);
     entity->scale = 1.0f;
 
-    AOE* aoe = aoe_create(17, 12);
     Sentry* sentry = sentry_create(SHAITAN_SENTRY);
     sentry->position = vec3f_create(14, 0, 20);
 }
