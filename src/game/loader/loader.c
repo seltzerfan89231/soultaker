@@ -190,10 +190,8 @@ void load_level4(void)
         }
         if (map[i] == '3')
             tile_create(SHAITAN_FLOOR, x, z);
-        if (map[i] == '4') {
-            Tile *t = tile_create(SHAITAN_LAVA, x, z);
-            tile_set_offset(t, 3);
-        }
+        if (map[i] == '4')
+            tile_create(SHAITAN_LAVA, x, z);
         if (map[i] == '5')
             tile_create(SHAITAN_HELLSTONE, x, z);
         if (map[i] == '\n')

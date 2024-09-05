@@ -7,6 +7,16 @@
 #include "../../util/indices.h"
 #include "../entity/entity.h"
 
+#define TILE_UP_LEFT    0
+#define TILE_UP         1
+#define TILE_UP_RIGHT   2
+#define TILE_LEFT       3
+#define TILE_NONE       4
+#define TILE_RIGHT      5
+#define TILE_DOWN_LEFT  6
+#define TILE_DOWN       7
+#define TILE_DOWN_RIGHT 8
+
 typedef struct {
     struct {
         i32 x, z;
@@ -14,7 +24,7 @@ typedef struct {
     u32 id, tex;
     // 4 bits
     u8 shadow;
-    // 2 bits
+    // 4 bits
     u8 offset;
     bool interactable;
 } Tile;

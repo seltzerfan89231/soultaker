@@ -35,16 +35,10 @@ void main()
     vec4 position = inData[0].position;
     float t = time - int(time);
     vec2 offset;
-    switch(inData[0].offset) {
-        case 0:
-            offset = vec2(0, 0); break;
-        case 1:
-            offset = vec2(1, 0); break;
-        case 2:
-            offset = vec2(0, -1); break;
-        case 3:
-            offset = vec2(1, -1); break;
-    }
+    float ox[] = { 1,  0, -1,  1,  0, -1,  1,  0, -1};
+    float oy[] = { 1,  1,  1,  0,  0,  0, -1, -1, -1};
+    int oi = inData[0].offset;
+    offset = vec2(ox[oi], -oy[oi]);
     offset *= t;
     texID = inData[0].texID;
     gl_Position = proj * view * (position + vec4(0.0, 0.0, 0.0, 0.0));

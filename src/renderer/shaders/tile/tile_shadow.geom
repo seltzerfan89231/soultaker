@@ -31,19 +31,14 @@ void main()
 {    
     vec4 position = inData[0].position;
     vec2 offset;
+    float ox[] = { 1,  0, -1,  1,  0, -1,  1,  0, -1};
+    float oy[] = { 1,  1,  1,  0,  0,  0, -1, -1, -1};
+    int oi = inData[0].offset;
+    offset = vec2(ox[oi], -oy[oi]);
     shadows = inData[0].shadows;
     texID = inData[0].texID;
     float v = 0.25;
-    switch(inData[0].offset) {
-        case 0:
-            offset = vec2(0, 0); break;
-        case 1:
-            offset = vec2(1, 0); break;
-        case 2:
-            offset = vec2(0, 1); break;
-        case 3:
-            offset = vec2(1, 1); break;
-    }
+
     gl_Position = proj * view * (position + vec4(-v, 0.0, -v, 0.0));
     texCoord = vec2(offset.x - v, offset.y - v);
     relCoord = vec2(-v, -v);

@@ -18,7 +18,7 @@ Tile* tile_create(u32 id, i32 x, i32 z)
     tile->position.z = z;
     tile->interactable = FALSE;
     tile->shadow = 0;
-    tile->offset = 0;
+    tile->offset = TILE_NONE;
     switch (id) {
         _CREATE(GRASS, grass)
         _CREATE(HELLSTONE, hellstone)
