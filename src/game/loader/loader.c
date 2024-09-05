@@ -14,14 +14,16 @@ static void reset(void)
     destroy_all_particles();
     destroy_all_obstacles();
     destroy_all_parjicles();
-    global_projectiles = projectile_array_create(0, 100);
-    global_entities = entity_array_create(0, 100);
-    global_particles = particle_array_create(0, 100);
-    global_parjicles = parjicle_array_create(0, 100);
-    global_parstacles = parstacle_array_create(0, 100);
-    global_obstacles = obstacle_array_create(0, 100);
+    destroy_all_aoes();
+    global_projectiles = projectile_array_create(0, 1);
+    global_entities = entity_array_create(0, 1);
+    global_particles = particle_array_create(0, 1);
+    global_parjicles = parjicle_array_create(0, 1);
+    global_parstacles = parstacle_array_create(0, 1);
+    global_obstacles = obstacle_array_create(0, 1);
     global_tiles = tile_array_create(0, 1);
     global_walls = wall_array_create(0, 1);
+    global_aoes = aoe_array_create(0, 1);
     game_time = 0;
 }
 
@@ -250,4 +252,6 @@ void load_level4(void)
     Entity* entity = entity_create(TRAINING_DUMMY, 0);
     entity->position = vec3f_create(14, 0, 12);
     entity->scale = 1.0f;
+
+    AOE* aoe = aoe_create(17, 12);
 }

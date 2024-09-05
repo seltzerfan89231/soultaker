@@ -1,5 +1,19 @@
 new sentry type that is like parstacle but animates
 
+custom vertices
+
 area of effect (single)
 
 area of effect (multiple)
+
+rotate tile
+
+pack tile bits
+
+parallelize copying data
+
+add comments to everything
+
+damage text, status effects
+
+maybeee fog

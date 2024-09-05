@@ -12,6 +12,7 @@
 #include "player/player.h"
 #include "aud/aud.h"
 #include "tilemap/tilemap.h"
+#include "aoe/aoe.h"
 #include "../util/array.h"
 
 extern ProjectileArray global_projectiles;
@@ -23,6 +24,7 @@ extern ObstacleArray global_obstacles;
 extern TileArray global_tiles;
 extern TileArray interactable_tiles;
 extern WallArray global_walls;
+extern AOEArray global_aoes;
 extern Player player;
 extern TileMap map;
 

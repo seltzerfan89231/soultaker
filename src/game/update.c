@@ -52,11 +52,24 @@ static void collide_walls_entities(f32 dt)
     }
 }
 
+static void collide_entities_aoes()
+{
+    for (i32 i = 0; i < global_aoes.length; i++) {
+        AOE* aoe = global_aoes.buffer[i];
+        for (i32 j = 0; j < global_entities.length; j++) {
+            Entity* entity = global_entities.buffer[j];
+            aoe_hit(aoe, entity);
+        }
+        aoe_update(aoe);
+    }
+}
+
 void collide_objects(f32 dt)
 {
     collide_walls_entities(dt);
     collide_walls_projectiles();
     collide_entities_projectiles();
+    collide_entities_aoes();
 }
 
 static void update_entities(f32 dt)
@@ -101,6 +114,12 @@ static void update_parjicles(f32 dt)
     }
 }
 
+static void update_aoes(f32 dt)
+{
+    for (i32 i = 0; i < global_aoes.length; i++)
+        aoe_update_timer(global_aoes.buffer[i], dt);
+}
+
 static void update_tiles(f32 dt)
 {
     tile_update_timer(dt);
@@ -118,5 +137,6 @@ void update_objects(f32 dt)
     update_particles(dt);
     update_parjicles(dt);
     update_tiles(dt);
+    update_aoes(dt);
     update_players(dt);
 }
