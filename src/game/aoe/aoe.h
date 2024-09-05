@@ -6,6 +6,7 @@
 #include "../../util/vec.h"
 #include "../../util/constants.h"
 #include "../particle/particle.h"
+#include "../parjicle/parjicle.h"
 #include "../entity/entity.h"
 
 typedef struct {

@@ -26,6 +26,8 @@ typedef struct {
     u8 shadow;
     // 4 bits
     u8 offset;
+    // 2 bits
+    u8 rotation;
     bool interactable;
 } Tile;
 

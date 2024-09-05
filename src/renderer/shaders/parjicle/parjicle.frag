@@ -7,5 +7,5 @@ in VertexData
 
 void main()
 {
-    gl_FragColor = vec4(color, 0.5f);
+    gl_FragColor = vec4(color, 1.0f);
 }

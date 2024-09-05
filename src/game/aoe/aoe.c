@@ -10,7 +10,7 @@ AOE* aoe_create(f32 x, f32 z, bool friendly)
     aoe->position.z = z;
     aoe->radius = 2.5;
     aoe->friendly = friendly;
-    for (i32 i = 0; i < 20; i++) {
+    /* for (i32 i = 0; i < 20; i++) {
         Particle* part = particle_create();
         f32 theta = 2.0 * i * PI / 20;
         part->position.x = aoe->position.x + aoe->radius * cos(theta);
@@ -22,6 +22,19 @@ AOE* aoe_create(f32 x, f32 z, bool friendly)
         part->color.b = 1.0f;
         part->scale = 0.25;
         part->lifetime = 1;
+    } */
+    for (i32 i = 0; i < 20; i++) {
+        f32 theta = 2.0 * i * PI / 20;
+        Parjicle* parj = parjicle_create(theta);
+        parj->position.x = aoe->position.x;
+        parj->position.y = 0.2;
+        parj->position.z = aoe->position.z;
+        parj->direction.x = cos(theta);
+        parj->direction.z = sin(theta);
+        parj->speed = 8;
+        parj->color.b = 1.0f;
+        parj->scale = 0.25;
+        parj->lifetime = aoe->radius / parj->speed;
     }
     aoe_array_push(&global_aoes, aoe);
     return aoe;
