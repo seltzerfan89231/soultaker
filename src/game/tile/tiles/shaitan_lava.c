@@ -10,7 +10,10 @@ void shaitan_lava_create(Tile *tile)
 void shaitan_lava_interact(Tile *tile, Entity *entity)
 {
     entity->ground_level = FALSE;
-    entity->position.y = -0.5;
-    if (tile_timer < 0)
-        entity_damage(entity, 1);
+    entity->position.y = -0.2;
+    if (tile_timer >= 0)
+        return;
+    if (entity->id == SHAITAN_THE_ADVISOR)
+        return;
+    entity_damage(entity, 1);
 }

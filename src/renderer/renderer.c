@@ -490,7 +490,23 @@ void load_textures(void)
     renderer.game_textures[SHAITAN_BARS_SIDE_TEX] = texture_create("assets/textures/game/shaitan/shaitan_bars_side.png");
     renderer.game_textures[SHAITAN_BARS_TOP_TEX] = texture_create("assets/textures/game/shaitan/shaitan_bars_top.png");
     renderer.game_textures[SHAITAN_HELLSTONE_TEX] = texture_create("assets/textures/game/shaitan/shaitan_hellstone.png");
-    renderer.game_textures[GAME_NO_TEX] = texture_create("assets/textures/gui/none.png");
+    renderer.game_textures[SHAITAN_FIREBALL_TEX] = texture_create("assets/textures/game/shaitan/shaitan_fireball.png");
+    renderer.game_textures[SHAITAN_FIREBULLET_TEX] = texture_create("assets/textures/game/shaitan/shaitan_firebullet.png");
+    renderer.game_textures[SHAITAN_FIRESTORM_TEX] = texture_create("assets/textures/game/shaitan/shaitan_firestorm.png");
+    renderer.game_textures[SHAITAN_FIREWAVE_TEX] = texture_create("assets/textures/game/shaitan/shaitan_firewave.png");
+    renderer.game_textures[SHAITAN_FLAMEBREATH_TEX] = texture_create("assets/textures/game/shaitan/shaitan_flamebreath.png");
+    renderer.game_textures[SHAITAN_HAND_CLOSED_LEFT_1_TEX] = texture_create("assets/textures/game/shaitan/shaitan_hand_closed_left_1.png");
+    renderer.game_textures[SHAITAN_HAND_CLOSED_LEFT_2_TEX] = texture_create("assets/textures/game/shaitan/shaitan_hand_closed_left_2.png");
+    renderer.game_textures[SHAITAN_HAND_CLOSED_RIGHT_1_TEX] = texture_create("assets/textures/game/shaitan/shaitan_hand_closed_right_1.png");
+    renderer.game_textures[SHAITAN_HAND_CLOSED_RIGHT_2_TEX] = texture_create("assets/textures/game/shaitan/shaitan_hand_closed_right_2.png");
+    renderer.game_textures[SHAITAN_HAND_OPEN_LEFT_TEX] = texture_create("assets/textures/game/shaitan/shaitan_hand_open_left.png");
+    renderer.game_textures[SHAITAN_HAND_OPEN_RIGHT_TEX] = texture_create("assets/textures/game/shaitan/shaitan_hand_open_right.png");
+    renderer.game_textures[SHAITAN_LASER_BODY_TEX] = texture_create("assets/textures/game/shaitan/shaitan_laser_body.png");
+    renderer.game_textures[SHAITAN_LASER_HEAD_TEX] = texture_create("assets/textures/game/shaitan/shaitan_laser_head.png");
+    renderer.game_textures[SHAITAN_LASER_TAIL_TEX] = texture_create("assets/textures/game/shaitan/shaitan_laser_tail.png");
+    renderer.game_textures[SHAITAN_THE_ADVISOR_CLOSED_TEX] = texture_create("assets/textures/game/shaitan/shaitan_the_advisor_closed.png");
+    renderer.game_textures[SHAITAN_THE_ADVISOR_OPEN_TEX] = texture_create("assets/textures/game/shaitan/shaitan_the_advisor_open.png");
+    renderer.game_textures[SHAITAN_WEB_TEX] = texture_create("assets/textures/game/shaitan/shaitan_web.png");
 
     renderer.gui_textures[NO_TEX]     = texture_create("assets/textures/gui/none.png");
     renderer.gui_textures[EMPTY_TEX]  = texture_create("assets/textures/gui/empty.png");
@@ -561,7 +577,6 @@ void load_textures(void)
     renderer.gui_textures[NUM_8_TEX]  = texture_create("assets/textures/gui/text/8.png");
     renderer.gui_textures[NUM_9_TEX]  = texture_create("assets/textures/gui/text/9.png");
     renderer.gui_textures[SOULTAKER_LOGO_TEX] = texture_create("assets/textures/gui/logo.png");
-    
     renderer.gui_textures[AMPERSAND_TEX] = texture_create("assets/textures/gui/text/ampersand.png");
     renderer.gui_textures[APOSTROPHE_TEX] = texture_create("assets/textures/gui/text/apostrophe.png");
     renderer.gui_textures[ASTERISK_TEX] = texture_create("assets/textures/gui/text/asterisk.png");
@@ -594,5 +609,4 @@ void load_textures(void)
     renderer.gui_textures[SEMICOLON_TEX] = texture_create("assets/textures/gui/text/semicolon.png");
     renderer.gui_textures[TILDE_TEX] = texture_create("assets/textures/gui/text/tilde.png");
     renderer.gui_textures[UNDERSCORE_TEX] = texture_create("assets/textures/gui/text/underscore.png");
-
 }

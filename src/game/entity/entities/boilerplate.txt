@@ -1,0 +1,42 @@
+#include "../entity.h"
+
+#define NUM_STATES 1
+#define IDLE   0
+
+void default_init_frame_data(FrameData ***frame_data)
+{
+    frame_data[DEFAULT] = malloc(4 * sizeof(FrameData*));
+    for (i32 i = 0; i < 4; i++)
+        frame_data[DEFAULT][i] = malloc(NUM_STATES * sizeof(FrameData));
+    frame_data[DEFAULT][DOWN][IDLE]  = _FDdef(SLIME_TEX);
+    frame_data[DEFAULT][RIGHT][IDLE] = _FDdef(SLIME_TEX);
+    frame_data[DEFAULT][UP][IDLE]    = _FDdef(SLIME_TEX);
+    frame_data[DEFAULT][LEFT][IDLE]  = _FDdef(SLIME_TEX);
+}
+
+void default_destroy_frame_data(FrameData ***frame_data)
+{
+    for (i32 i = 0; i < 4; i++)
+        free(frame_data[DEFAULT][i]);
+    free(frame_data[DEFAULT]);
+}
+
+void default_create(Entity *entity)
+{
+    
+}
+
+void default_update(Entity *entity)
+{
+
+}
+
+void default_damage(Entity *entity, f32 damage)
+{
+    
+}
+
+void default_die(Entity *entity)
+{
+
+}

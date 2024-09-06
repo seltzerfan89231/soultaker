@@ -138,5 +138,4 @@ void knight_die(Entity *entity)
     Parstacle *parstacle = parstacle_create();
     parstacle->tex = GRAVESTONE_TEX;
     parstacle->position = entity->position;
-    parstacle->position.y = 0;
 }

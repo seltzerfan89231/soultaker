@@ -249,10 +249,8 @@ void load_level4(void)
     player.weapon.id = 0;
     player.weapon.tex = SWORD_1_TEX;
     player.entity->position = vec3f_create(15.5, 0.0f, 12);
-    Entity* entity = entity_create(TRAINING_DUMMY, 0);
-    entity->position = vec3f_create(14, 0, 12);
-    entity->scale = 1.0f;
 
-    Sentry* sentry = sentry_create(SHAITAN_SENTRY);
-    sentry->position = vec3f_create(14, 0, 20);
+    Entity* shaitan = entity_create(SHAITAN_THE_ADVISOR, FALSE);
+    shaitan->position = vec3f_create(15.5f, 0.0f, 16.0f);
+    shaitan->scale = 3.0f;
 }
