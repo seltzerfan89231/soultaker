@@ -23,31 +23,12 @@ void gui_init(void)
     gui.vbo_buffer = malloc(gui.vbo_max_length * sizeof(f32));
     gui.ebo_buffer = malloc(gui.ebo_max_length * sizeof(u32));
     
-    comp_root = component_create(0.0f, 0.0f, 1.0f, 1.0f, NO_TEX);
+    comp_root = component_create(0.0f, 0.0f, 1.0f, 1.0f, COMP_DEFAULT, NO_TEX);
     comp_root->a = 0;
     gui.max_length_changed = TRUE;
 
-    Component *singleplayer = component_create(window.aspect_ratio / 2 - 0.2, 0.7, 0.4, 0.4 * 2.0/3, EMPTY_TEX);
-    singleplayer->a = 0.2;
-    component_set_text(singleplayer, 14, "SINGLEPLAYER");
-    singleplayer->center_text = TRUE;
-    singleplayer->hoverable = TRUE;
-    singleplayer->interactable = TRUE;
-    singleplayer->id = COMP_SINGLEPLAYER;
-    component_attach(comp_root, singleplayer);
-
-    Component *multiplayer = component_create(window.aspect_ratio / 2 - 0.2, 0.3, 0.4, 0.4 * 2.0/3, EMPTY_TEX);
-    multiplayer->center_text = TRUE;
-    multiplayer->a = 0.2;
-    component_set_text(multiplayer, 14, "MULTIPLAYER");
-    multiplayer->interactable = TRUE;
-    multiplayer->id = COMP_MULTIPLAYER;
-    component_attach(comp_root, multiplayer);
-
-    Component *test = component_create(0.05, 0.3, 0.3, 0.4, EMPTY_TEX);
-    test->a = 0.2;
-    component_set_text(test, 14, "THE QUICK BROWN FOX JUMPED OVER THE LAZY DOG. the quick brown fox jumped over the lazy dog.");
-    component_attach(comp_root, test);
+    component_attach(comp_root, component_create(window.aspect_ratio / 2 - 0.2, 0.7, 0.4, 0.4 * 2.0/3, COMP_SINGLEPLAYER, COLOR_TEX));
+    component_attach(comp_root, component_create(window.aspect_ratio / 2 - 0.2, 0.3, 0.4, 0.4 * 2.0/3, COMP_MULTIPLAYER, COLOR_TEX));
 }
 
 bool gui_input_paused(void)

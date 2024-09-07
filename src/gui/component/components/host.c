@@ -4,14 +4,25 @@
 static void create_buttons(Component *comp)
 {
     component_destroy_children(comp_root);
-
-    Component *waiting = component_create(window.aspect_ratio / 2 - 0.2, 0.7, 0.4, 0.4 * 2.0/3, EMPTY_TEX);
+    Component *waiting = component_create(window.aspect_ratio / 2 - 0.2, 0.7, 0.4, 0.4 * 2.0/3, COMP_DEFAULT, COLOR_TEX);
     waiting->a = 0.2;
     component_set_text(waiting, 14, "Waiting");
     waiting->hoverable = TRUE;
     waiting->interactable = TRUE;
-    waiting->id = COMP_DEFAULT;
     component_attach(comp_root, waiting);
+}
+
+void comp_host_create(Component *comp)
+{
+    comp->a = 0.2;
+    component_set_text(comp, 14, "HOST");
+    comp->hoverable = TRUE;
+    comp->interactable = TRUE;
+}
+
+void comp_host_destroy(Component *comp)
+{
+    
 }
 
 void comp_host_update(Component *comp)

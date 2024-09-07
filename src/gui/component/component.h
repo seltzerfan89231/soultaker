@@ -21,7 +21,7 @@ typedef struct Component {
 extern Window window;
 extern Component *comp_root;
 
-Component* component_create(f32 x, f32 y, f32 w, f32 h, u32 tex);
+Component* component_create(f32 x, f32 y, f32 w, f32 h, u32 id, u32 tex);
 void component_attach(Component *parent, Component *child);
 void component_detach(Component *parent, Component *child);
 void component_destroy(Component *comp);
@@ -56,10 +56,12 @@ void component_hover_callback(Component *comp, i32 action);
 #define COMP_CHAT 13
 
 #define _COMP_INIT(_ltype) \
+    void comp_##_ltype##_create(Component *comp); \
     void comp_##_ltype##_mouse_button_callback(Component *comp, i32 button, i32 action); \
     void comp_##_ltype##_hover_callback(Component *comp, i32 action); \
     void comp_##_ltype##_key_callback(Component *comp, i32 key, i32 scancode, i32 action, i32 mods); \
-    void comp_##_ltype##_update(Component *comp);
+    void comp_##_ltype##_update(Component *comp); \
+    void comp_##_ltype##_destroy(Component *comp);
 
 _COMP_INIT(button)
 _COMP_INIT(icon)

@@ -17,6 +17,13 @@ void main()
 {
     vec4 col;
     switch (texID) {
+        // no tex
+        case 0:
+            discard;
+        // solid color
+        case 1:
+            col = vec4(1, 1, 1, 1);
+            break;
         // minimap
         case 2:
             col = texture(minimapTexture, texCoord);

@@ -1,6 +1,20 @@
 #include "../component.h"
 #include <stdio.h>
 
+void comp_singleplayer_create(Component *comp)
+{
+    comp->a = 0.2;
+    component_set_text(comp, 14, "SINGLEPLAYER");
+    comp->center_text = TRUE;
+    comp->hoverable = TRUE;
+    comp->interactable = TRUE;
+}
+
+void comp_singleplayer_destroy(Component *comp)
+{
+    
+}
+
 void comp_singleplayer_update(Component *comp)
 {
     
@@ -12,64 +26,30 @@ void comp_singleplayer_mouse_button_callback(Component *comp, i32 button, i32 ac
         audio_play_sound(GUI_CLICK_AUD);
         game_setup(4);
         component_destroy_children(comp_root);
-        Component *text_box = component_create(0.02, 0.93, 0.3, 0.05, EMPTY_TEX);
-        text_box->a = 0;
-        text_box->id = COMP_TEXTBOX;
-        text_box->sub_id = 0;
-        component_set_text(text_box, 14, "THE QUICK BROWN FOX JUMPED OVER THE LAZY DOG 0123456789");
+
+        Component *text_box = component_create(0.02, 0.93, 0.3, 0.05, COMP_TEXTBOX, NO_TEX);
         component_attach(comp_root, text_box);
-        Component *btn = component_create(0.05f, 0.05f, 0.1f, 0.1f, BUTTON_TEX);
-        btn->interactable = TRUE;
-        btn->hoverable = TRUE;
-        btn->id = COMP_BUTTON;
-        Component *icon = component_create(0.15, 0.15, 0.7, 0.7, SWORD_1_TEX);
-        icon->id = COMP_ICON;
 
-        Component *healthbar = component_create(0.3, 0.07, 0.2, 0.02, NO_TEX);
-        healthbar->id = COMP_HEALTHBAR;
-        Component *green_part = component_create(0.0, 0.0, 0.75, 1.0, EMPTY_TEX);
-        green_part->g = 1.0, green_part->r = 0.0, green_part->b = 0.0;
-        Component *red_part = component_create(0.75, 0.0, 0.25, 1.0, EMPTY_TEX);
-        red_part->r = 1.0, red_part->g = 0.0, red_part->b = 0.0;
-        component_attach(healthbar, green_part);
-        component_attach(healthbar, red_part);
-
-        Component *manabar = component_create(0.3, 0.05, 0.2, 0.02, NO_TEX);
-        manabar->id = COMP_MANABAR;
-        Component *blue_part = component_create(0.0, 0.0, 0.75, 1.0, EMPTY_TEX);
-        blue_part->g = 0.0, blue_part->r = 0.0, blue_part->b = 1.0;
-        Component *yellow_part = component_create(0.75, 0.0, 0.25, 1.0, EMPTY_TEX);
-        yellow_part->r = 1.0, yellow_part->g = 1.0, yellow_part->b = 0.0;
-        component_attach(manabar, blue_part);
-        component_attach(manabar, yellow_part);
-
+        Component *btn = component_create(0.05f, 0.05f, 0.1f, 0.1f, COMP_BUTTON, BUTTON_TEX);
         component_attach(comp_root, btn);
+
+        Component *icon = component_create(0.15, 0.15, 0.7, 0.7, COMP_ICON, NO_TEX);
         component_attach(btn, icon);
+
+        Component *healthbar = component_create(0.3, 0.07, 0.2, 0.02, COMP_HEALTHBAR, NO_TEX);
         component_attach(comp_root, healthbar);
+
+        Component *manabar = component_create(0.3, 0.05, 0.2, 0.02, COMP_MANABAR, NO_TEX);
         component_attach(comp_root, manabar);
-        Component *death_message = component_create(0.4, 0.93, 0.3, 0.05, NO_TEX);
-        death_message->id = COMP_DEATH;
+
+        Component *death_message = component_create(0.4, 0.93, 0.3, 0.05, COMP_DEATH, NO_TEX);
         component_attach(comp_root, death_message);
 
-        Component *minimap = component_create(window.aspect_ratio - 0.3, 0.7, 0.25, 0.25, MINIMAP_TEX);
-        minimap->interactable = TRUE;
-        minimap->a = 0.0;
-        minimap->id = COMP_MINIMAP;
+        Component *minimap = component_create(window.aspect_ratio - 0.3, 0.7, 0.25, 0.25, COMP_MINIMAP, MINIMAP_TEX);
         component_attach(comp_root, minimap);
 
-        Component *chat = component_create(0, 0.18, 0.4, 0.5, EMPTY_TEX);
-        chat->interactable = TRUE;
-        chat->a = 0.0;
-        chat->id = COMP_CHAT;
+        Component *chat = component_create(0, 0.18, 0.4, 0.5, COMP_CHAT, NO_TEX);
         component_attach(comp_root, chat);
-        Component *chat_log = component_create(0, 0.1, 1, 1, EMPTY_TEX);
-        chat_log->r = chat_log->g = chat_log->b = chat_log->a = 0.3;
-        chat_log->down_text = TRUE;
-        component_set_text(chat_log, 7, "Hello World jajaja\nthe quick brown fox jumped over the lazy dog\npoo poo pooooooooooooooooooo");
-        component_attach(chat, chat_log);
-        Component *chat_input = component_create(0, 0, 1, 0.07, EMPTY_TEX);
-        chat_input->r = chat_input->g = chat_input->b = chat_input->a = 0.45;
-        component_attach(chat, chat_input);
     }
 }
 

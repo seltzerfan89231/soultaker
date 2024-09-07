@@ -1,6 +1,17 @@
 #include "../component.h"
 #include <stdio.h>
 
+void comp_minimap_create(Component *comp)
+{
+    comp->interactable = TRUE;
+    comp->a = 0.0;
+}
+
+void comp_minimap_destroy(Component *comp)
+{
+    
+}
+
 void comp_minimap_update(Component *comp)
 {
     

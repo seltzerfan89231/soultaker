@@ -1,5 +1,20 @@
 #include "../component.h"
 
+void comp_healthbar_create(Component *comp)
+{
+    Component *green_part = component_create(0.0, 0.0, 0.75, 1.0, COMP_DEFAULT, COLOR_TEX);
+    green_part->g = 1.0, green_part->r = 0.0, green_part->b = 0.0;
+    Component *red_part = component_create(0.75, 0.0, 0.25, 1.0, COMP_DEFAULT, COLOR_TEX);
+    red_part->r = 1.0, red_part->g = 0.0, red_part->b = 0.0;
+    component_attach(comp, green_part);
+    component_attach(comp, red_part);
+}
+
+void comp_healthbar_destroy(Component *comp)
+{
+    
+}
+
 void comp_healthbar_update(Component *comp)
 {
     Component *green_part, *red_part;

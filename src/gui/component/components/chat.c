@@ -16,6 +16,25 @@ static void chat_input(Component *comp, i32 key)
     free(text);
 }
 
+void comp_chat_create(Component *comp)
+{
+    comp->interactable = TRUE;
+    comp->a = 0.0;
+    Component *chat_log = component_create(0, 0.1, 1, 1, COMP_DEFAULT, COLOR_TEX);
+    chat_log->r = chat_log->g = chat_log->b = chat_log->a = 0.3;
+    chat_log->down_text = TRUE;
+    component_set_text(chat_log, 7, "Hello World jajaja\nthe quick brown fox jumped over the lazy dog\npoo poo pooooooooooooooooooo");
+    component_attach(comp, chat_log);
+    Component *chat_input = component_create(0, 0, 1, 0.07, COMP_DEFAULT, COLOR_TEX);
+    chat_input->r = chat_input->g = chat_input->b = chat_input->a = 0.45;
+    component_attach(comp, chat_input);
+}
+
+void comp_chat_destroy(Component *comp)
+{
+    
+}
+
 void comp_chat_update(Component *comp)
 {
     

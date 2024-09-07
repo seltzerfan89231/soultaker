@@ -1,5 +1,15 @@
 #include "../component.h"
 
+void comp_popup_create(Component *comp)
+{
+
+}
+
+void comp_popup_destroy(Component *comp)
+{
+    
+}
+
 void comp_popup_update(Component *comp)
 {
 

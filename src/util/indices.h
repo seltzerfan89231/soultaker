@@ -165,7 +165,7 @@
 #pragma region GUI_TEXTURES
 #define NUM_GUI_TEXTURES 101
 #define NO_TEX           0
-#define EMPTY_TEX        1
+#define COLOR_TEX        1
 #define MINIMAP_TEX 2
 #define SWORD_1_TEX 3
 #define SWORD_2_TEX 4

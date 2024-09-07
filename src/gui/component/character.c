@@ -14,7 +14,7 @@ Character char_map[128];
 void char_map_init(void)
 {
     for (i32 i = 0; i < 128; i++) {
-        _CHAR_INIT(i, EMPTY_TEX, 5, 7, 0, 0, 5);
+        _CHAR_INIT(i, COLOR_TEX, 5, 7, 0, 0, 5);
     }
     _CHAR_INIT(' ',  NO_TEX,      0, 0, 0, 0, 5)
     _CHAR_INIT('\n', NO_TEX,      0, 0, 0, 0, 0)

@@ -7,7 +7,10 @@ extern Window window;
 Component *comp_root;
 static bool input_paused;
 
-Component* component_create(f32 x, f32 y, f32 w, f32 h, u32 tex)
+#define _COMP_CREATE(_id, _lid) \
+    case COMP_##_id : comp_##_lid##_create(comp); break;
+
+Component* component_create(f32 x, f32 y, f32 w, f32 h, u32 id, u32 tex)
 {
     Component *comp = malloc(sizeof(Component));
     comp->x = x, comp->y = y, comp->w = w, comp->h = h;
@@ -23,7 +26,23 @@ Component* component_create(f32 x, f32 y, f32 w, f32 h, u32 tex)
     comp->update_children = TRUE;
     comp->text = NULL;
     comp->down_text = FALSE;
-    comp->id = COMP_DEFAULT;
+    comp->id = id;
+    switch (comp->id) {
+        _COMP_CREATE(BUTTON, button)
+        _COMP_CREATE(CHAT, chat)
+        _COMP_CREATE(DEATH, death)
+        _COMP_CREATE(HEALTHBAR, healthbar)
+        _COMP_CREATE(HOST, host)
+        _COMP_CREATE(ICON, icon)
+        _COMP_CREATE(JOIN, join)
+        _COMP_CREATE(MANABAR, manabar)
+        _COMP_CREATE(MINIMAP, minimap)
+        _COMP_CREATE(MULTIPLAYER, multiplayer)
+        _COMP_CREATE(POPUP, popup)
+        _COMP_CREATE(SINGLEPLAYER, singleplayer)
+        _COMP_CREATE(TEXTBOX, textbox)
+        default: comp->id = COMP_DEFAULT;
+    }
     return comp;
 }
 
@@ -45,8 +64,14 @@ void component_detach(Component *parent, Component *child)
     }
 }
 
+#define _COMP_DESTROY(_id, _lid) \
+    case COMP_##_id : comp_##_lid##_destroy(comp); break;
+
 void component_destroy(Component *comp)
 {
+    switch (comp->id) {
+        _COMP_DESTROY(CHAT, chat)
+    }
     for (i32 i = 0; i < comp->num_children; i++)
         component_destroy(comp->children[i]);
     free(comp->text);

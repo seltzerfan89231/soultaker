@@ -1,24 +1,17 @@
 #include "../component.h"
 #include "../../../networking/networking.h"
 
-static void create_buttons(Component *comp)
+void comp_multiplayer_create(Component *comp)
 {
-    component_destroy_children(comp_root);
+    comp->center_text = TRUE;
+    comp->a = 0.2;
+    component_set_text(comp, 14, "MULTIPLAYER");
+    comp->interactable = TRUE;
+}
 
-    Component *host = component_create(window.aspect_ratio / 2 - 0.2, 0.7, 0.4, 0.4 * 2.0/3, EMPTY_TEX);
-    host->a = 0.2;
-    component_set_text(host, 14, "HOST");
-    host->hoverable = TRUE;
-    host->interactable = TRUE;
-    host->id = COMP_HOST;
-    component_attach(comp_root, host);
-
-    Component *join = component_create(window.aspect_ratio / 2 - 0.2, 0.3, 0.4, 0.4 * 2.0/3, EMPTY_TEX);
-    join->a = 0.2;
-    component_set_text(join, 14, "JOIN");
-    join->interactable = TRUE;
-    join->id = COMP_JOIN;
-    component_attach(comp_root, join);
+void comp_multiplayer_destroy(Component *comp)
+{
+    
 }
 
 void comp_multiplayer_update(Component *comp)
@@ -30,7 +23,9 @@ void comp_multiplayer_mouse_button_callback(Component *comp, i32 button, i32 act
 {
     if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
         networking_init();
-        create_buttons(comp);
+        component_destroy_children(comp_root);
+        component_attach(comp_root, component_create(window.aspect_ratio / 2 - 0.2, 0.7, 0.4, 0.4 * 2.0/3, COMP_HOST, COLOR_TEX));
+        component_attach(comp_root, component_create(window.aspect_ratio / 2 - 0.2, 0.3, 0.4, 0.4 * 2.0/3, COMP_JOIN, COLOR_TEX));
     }
 }
 

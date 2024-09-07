@@ -1,5 +1,15 @@
 #include "../component.h"
 
+void comp_icon_create(Component *comp)
+{
+
+}
+
+void comp_icon_destroy(Component *comp)
+{
+    
+}
+
 void comp_icon_update(Component *comp)
 {
     comp->tex = game_get_weapon_tex();

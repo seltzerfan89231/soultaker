@@ -8,6 +8,16 @@ void comp_death_update(Component *comp)
         component_remove_text(comp);
 }
 
+void comp_death_create(Component *comp)
+{
+
+}
+
+void comp_death_destroy(Component *comp)
+{
+    
+}
+
 void comp_death_mouse_button_callback(Component *comp, i32 button, i32 action)
 {
 
