@@ -21,7 +21,9 @@ Entity* entity_create(u32 id, u8 friendly)
     entity->timer = 0.0f;
     entity->timer2 = 0.0f;
     entity->flag = 0;
+    entity->phase = 0;
     entity->ground_level = TRUE;
+    entity->invisible = FALSE;
     entity->direction = vec3f_create(0, 0, 0);
     entity->facing = vec2f_create(1.0, 0.0);
     entity->friendly = friendly;
@@ -33,6 +35,7 @@ Entity* entity_create(u32 id, u8 friendly)
         _ENTITY_CREATE(KNIGHT, knight)
         _ENTITY_CREATE(SLIME, slime)
         _ENTITY_CREATE(TRAINING_DUMMY, training_dummy)
+        _ENTITY_CREATE(SHAITAN_THE_ADVISOR, shaitan_the_advisor);
     }
     entity_array_push(&global_entities, entity);
     return entity;
@@ -53,6 +56,7 @@ void entity_update(Entity* entity, f32 dt)
         _ENTITY_UPDATE(KNIGHT, knight)
         _ENTITY_UPDATE(SLIME, slime)
         _ENTITY_UPDATE(TRAINING_DUMMY, training_dummy)
+        _ENTITY_UPDATE(SHAITAN_THE_ADVISOR, shaitan_the_advisor)
     }
     entity->timer += dt;
     entity->timer2 -= dt;
@@ -66,6 +70,7 @@ void entity_damage(Entity *entity, f32 damage)
     aud_play(GUI_CLICK_AUD);
     switch (entity->id) {
         _ENTITY_DAMAGE(TRAINING_DUMMY, training_dummy)
+        _ENTITY_DAMAGE(SHAITAN_THE_ADVISOR, shaitan_the_advisor)
         default:
             entity->health -= damage;
             if (entity->health < 0)
@@ -92,6 +97,7 @@ void entity_destroy(Entity* entity, u32 idx)
         _ENTITY_DIE(KNIGHT, knight)
         _ENTITY_DIE(SLIME, slime)
         _ENTITY_DIE(TRAINING_DUMMY, training_dummy)
+        _ENTITY_DIE(SHAITAN_THE_ADVISOR, shaitan_the_advisor)
     }
     if (entity == player.entity)
         player.entity = NULL;

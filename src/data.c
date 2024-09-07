@@ -89,6 +89,8 @@ static void projectile_push_data(Projectile* projectile)
 
 static void entity_push_data(Entity* entity)
 {
+    if (entity->invisible)
+        return;
     assert((data.vbo_length+1)*10 < BUFFER_SIZE);
     offset = data.vbo_length * 10;
     data.vbo_length++;

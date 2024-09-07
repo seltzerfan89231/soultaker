@@ -252,5 +252,4 @@ void load_level4(void)
 
     Entity* shaitan = entity_create(SHAITAN_THE_ADVISOR, FALSE);
     shaitan->position = vec3f_create(15.5f, 0.0f, 16.0f);
-    shaitan->scale = 3.0f;
 }
