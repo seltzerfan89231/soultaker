@@ -56,10 +56,10 @@ void gui_update_data_add_text(Component *comp, f32 x, f32 y, f32 w, f32 h)
         return;
     f32 pixel_size, pixel_size_x, pixel_size_y, glyph_size_y, px, py, bx, by, ox, oy, lx, ly, lw, lh, adv;
     f32 new_x1, new_y1, new_x2, new_y2, win_x1, win_x2, win_y1, win_y2;
-    u32 length, left, right, nl;
+    i32 length, left, right, right_copy, nl;
     char *text = comp->text;
     length = strlen(text);
-    resize_gui_buffers(9 * 4 * length);
+    resize_gui_buffers(length);
     pixel_size = (f32)comp->font_size / (DEFAULT_WINDOW_HEIGHT) / GLYPH_HEIGHT;
     pixel_size_x = pixel_size / w;
     pixel_size_y = pixel_size / h;
@@ -101,7 +101,7 @@ void gui_update_data_add_text(Component *comp, f32 x, f32 y, f32 w, f32 h)
     left = right = 0;
     while (right < length) {
         f32 test_ox = -px;
-        while (text[right] == ' ' || text[right] == '\t')
+        while (left != 0 && right < length && text[right] == ' ' || text[right] == '\t')
             right++;
         left = right;
         while (right < length && text[right] != '\n' && test_ox <= 1) {
@@ -109,22 +109,25 @@ void gui_update_data_add_text(Component *comp, f32 x, f32 y, f32 w, f32 h)
             test_ox += pixel_size_x * c.advance + px;
             right++;
         }
-        if (text[right] == '\n')
+        if (right < length && text[right] == '\n')
             right++;
+        right_copy = (test_ox > 1) ? right - 1 : right;
         if (test_ox > 1) {
             do {
-                right --;
+                right--;
                 Character c = char_map[text[right]];
                 test_ox -= pixel_size_x * c.advance + px;
-            } while (text[right-1] != ' ' && text[right-1] != '\t');
-            while (text[right-1] == ' ' || text[right-1] == '\t') { 
+            } while (right > left && text[right-1] != ' ' && text[right-1] != '\t');
+            while (right > left && (text[right-1] == ' ' || text[right-1] == '\t')) { 
                 right--;
                 Character c = char_map[text[right]];
                 test_ox -= pixel_size_x * c.advance + px;
             } 
         }
+        if (left == right)
+            right = right_copy;
         ox = (comp->center_text) ? (1.0 - test_ox) / 2.0 : 0;
-        while (left < length && left < right) {
+        while (left < right && left < length) {
             if (text[left] == '\n') {
                 left++;
                 continue;
@@ -166,7 +169,7 @@ void gui_update_data_helper(Component *comp, f32 x, f32 y, f32 w, f32 h)
     }
     win_x1 = 2 * (new_x1 / (comp == comp_root ? 1 : window.aspect_ratio) - 0.5f), win_y1 = 2 * (new_y1 - 0.5f);
     win_x2 = 2 * (new_x2 / (comp == comp_root ? 1 : window.aspect_ratio) - 0.5f), win_y2 = 2 * (new_y2 - 0.5f);
-    resize_gui_buffers(9 * 4);
+    resize_gui_buffers(1);
     u32 idx = gui.vbo_length / 9;
     Z = win_x1, Z = win_y1, Z = 0.0f, Z = 1.0f, Z = comp->tex, Z = comp->r, Z = comp->g, Z = comp->b, Z = comp->a;
     Z = win_x2, Z = win_y1, Z = 1.0f, Z = 1.0f, Z = comp->tex, Z = comp->r, Z = comp->g, Z = comp->b, Z = comp->a;
