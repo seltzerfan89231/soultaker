@@ -509,8 +509,11 @@ void load_textures(void)
     renderer.game_textures[SHAITAN_WEB_TEX] = texture_create("assets/textures/game/shaitan/shaitan_web.png");
 
     renderer.gui_textures[NO_TEX]     = texture_create("assets/textures/gui/none.png");
+    texture_unload(&renderer.gui_textures[NO_TEX]);
     renderer.gui_textures[COLOR_TEX]  = texture_create("assets/textures/gui/none.png");
+    texture_unload(&renderer.gui_textures[COLOR_TEX]);
     renderer.gui_textures[MINIMAP_TEX] = texture_create("assets/textures/gui/none.png");
+    texture_unload(&renderer.gui_textures[MINIMAP_TEX]);
     renderer.gui_textures[BUTTON_TEX] = texture_create("assets/textures/gui/button.png");
     renderer.gui_textures[SWORD_1_TEX] = texture_create("assets/textures/game/sword1.png");
     renderer.gui_textures[SWORD_2_TEX] = texture_create("assets/textures/game/sword2.png");

@@ -21,14 +21,31 @@ Texture texture_create(const char* image_path)
     glTextureParameterfv(texture.id, GL_TEXTURE_BORDER_COLOR, col);
     glTextureStorage2D(texture.id, 1, GL_RGBA8, width, height);
     glTextureSubImage2D(texture.id, 0, 0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, data);
-    texture.handle = glGetTextureHandleARB(texture.id);
-    glMakeTextureHandleResidentARB(texture.handle);
+    texture.loaded = FALSE;
+    texture_load(&texture);
     stbi_image_free(data);
     return texture;
 }
 
+void texture_load(Texture* texture)
+{
+    if (!texture->loaded) {
+        texture->handle = glGetTextureHandleARB(texture->id);
+        glMakeTextureHandleResidentARB(texture->handle);
+        texture->loaded = TRUE;
+    }
+}
+
+void texture_unload(Texture* texture)
+{
+    if (texture->loaded) {
+        glMakeTextureHandleNonResidentARB(texture->handle);
+        texture->loaded = FALSE;
+    }
+}
+
 void texture_destroy(Texture texture)
 {
-    glMakeTextureHandleNonResidentARB(texture.handle);
+    texture_unload(&texture);   
     glDeleteTextures(1, &texture.id);
 }

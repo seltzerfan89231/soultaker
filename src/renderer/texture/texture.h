@@ -10,10 +10,13 @@
 
 typedef struct {
     u32 id;
+    bool loaded;
     u64 handle;
 } Texture;
 
 Texture texture_create(const char* image_path);
+void texture_load(Texture* texture);
+void texture_unload(Texture* texture);
 void texture_destroy(Texture texture);
 
 #endif
