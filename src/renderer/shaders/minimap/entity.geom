@@ -34,7 +34,7 @@ out VertexData
 void main() {
     vec2 offset, pre, position;
     float scale = inData[0].scale;
-    pre = scale * zoom * (inData[0].position - target);
+    pre = zoom * (inData[0].position - target);
     float theta = - rotation + pi / 2;
     position.x =   pre.x * cos(theta) - pre.y * sin(theta);
     position.y = -(pre.y * cos(theta) + pre.x * sin(theta));

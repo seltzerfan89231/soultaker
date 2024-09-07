@@ -14,7 +14,7 @@ typedef struct Component {
     f32 x, y, w, h, r, g, b, a;
     Component **children;
     u32 num_children, tex, id, sub_id, font_size;
-    bool interactable, hoverable, hovered, relative, update_children, center_text;
+    bool interactable, hoverable, hovered, relative, update_children, center_text, down_text;
     char *text;
 } Component;
 
@@ -28,6 +28,8 @@ void component_destroy(Component *comp);
 void component_detach_and_destroy(Component *comp, Component *child);
 void component_destroy_children(Component *comp);
 
+bool component_input_paused(void);
+void component_pause_input(Component *comp, bool val);
 void component_set_text(Component *comp, u32 font_size, char *text);
 void component_remove_text(Component *comp);
 void component_mouse_button_callback(Component *comp, i32 button, i32 action);
@@ -51,6 +53,7 @@ void component_hover_callback(Component *comp, i32 action);
 #define COMP_HOST 10
 #define COMP_JOIN 11
 #define COMP_MINIMAP 12
+#define COMP_CHAT 13
 
 #define _COMP_INIT(_ltype) \
     void comp_##_ltype##_mouse_button_callback(Component *comp, i32 button, i32 action); \
@@ -70,5 +73,6 @@ _COMP_INIT(manabar)
 _COMP_INIT(host)
 _COMP_INIT(join)
 _COMP_INIT(minimap)
+_COMP_INIT(chat)
 
 #endif

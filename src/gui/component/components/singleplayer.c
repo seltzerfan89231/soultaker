@@ -56,6 +56,20 @@ void comp_singleplayer_mouse_button_callback(Component *comp, i32 button, i32 ac
         minimap->a = 0.0;
         minimap->id = COMP_MINIMAP;
         component_attach(comp_root, minimap);
+
+        Component *chat = component_create(0, 0.18, 0.4, 0.5, EMPTY_TEX);
+        chat->interactable = TRUE;
+        chat->a = 0.0;
+        chat->id = COMP_CHAT;
+        component_attach(comp_root, chat);
+        Component *chat_log = component_create(0, 0.1, 1, 1, EMPTY_TEX);
+        chat_log->r = chat_log->g = chat_log->b = chat_log->a = 0.3;
+        chat_log->down_text = TRUE;
+        component_set_text(chat_log, 7, "Hello World jajaja\nthe quick brown fox jumped over the lazy dog\npoo poo pooooooooooooooooooo");
+        component_attach(chat, chat_log);
+        Component *chat_input = component_create(0, 0, 1, 0.07, EMPTY_TEX);
+        chat_input->r = chat_input->g = chat_input->b = chat_input->a = 0.45;
+        component_attach(chat, chat_input);
     }
 }
 

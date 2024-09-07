@@ -46,25 +46,23 @@ void gui_init(void)
 
     Component *test = component_create(0.05, 0.3, 0.3, 0.4, EMPTY_TEX);
     test->a = 0.2;
-    component_set_text(test, 14, "THE QUICK BROWN FOX JUMPED OVER THE LAZY DOG. THE QUICK BROWN FOX JUMPED OVER THE LAZY DOG.");
+    component_set_text(test, 14, "THE QUICK BROWN FOX JUMPED OVER THE LAZY DOG. the quick brown fox jumped over the lazy dog.");
     component_attach(comp_root, test);
+}
+
+bool gui_input_paused(void)
+{
+    return component_input_paused();
 }
 
 #define Z gui.vbo_buffer[gui.vbo_length++]
 #define V gui.ebo_buffer[gui.ebo_length++]
 
-static u32 max(u32 a, u32 b)
-{
-    if (a > b)
-        return a;
-    return b;
-}
-
 static void resize_gui_buffers(u32 added_vbo_length)
 {
     if (gui.vbo_length + 9 * 4 * added_vbo_length >= gui.vbo_max_length) {
-        gui.vbo_max_length += max(9 * 4 * added_vbo_length, 90);
-        gui.ebo_max_length += max(4 * added_vbo_length, 10);
+        gui.vbo_max_length += 9 * 4 * added_vbo_length;
+        gui.ebo_max_length += 6 * added_vbo_length;
         gui.vbo_buffer = realloc(gui.vbo_buffer, gui.vbo_max_length * sizeof(f32));
         gui.ebo_buffer = realloc(gui.ebo_buffer, gui.ebo_max_length * sizeof(u32));
         gui.max_length_changed = TRUE;
@@ -118,9 +116,7 @@ void gui_update_data_add_text(Component *comp, f32 x, f32 y, f32 w, f32 h)
             left++;
         }
     }
-    oy = 0;
-    if (comp->center_text)
-        oy = 0.5 - (nl * glyph_size_y + (nl - 1) * py) / 2;
+    oy = (comp->center_text) ? 0.5 - (nl * glyph_size_y + (nl - 1) * py) / 2 : 0;
     left = right = 0;
     while (right < length) {
         f32 test_ox = -px;
@@ -146,9 +142,7 @@ void gui_update_data_add_text(Component *comp, f32 x, f32 y, f32 w, f32 h)
                 test_ox -= pixel_size_x * c.advance + px;
             } 
         }
-        ox = 0;
-        if (comp->center_text)
-            ox = (1.0 - test_ox) / 2.0;
+        ox = (comp->center_text) ? (1.0 - test_ox) / 2.0 : 0;
         while (left < length && left < right) {
             if (text[left] == '\n') {
                 left++;
@@ -161,7 +155,7 @@ void gui_update_data_add_text(Component *comp, f32 x, f32 y, f32 w, f32 h)
             by = pixel_size_y * c.bearing.y;
             adv = pixel_size_x * c.advance;
             lx = ox + bx;
-            ly = 1 - glyph_size_y + by - oy;
+            ly = (comp->down_text) ? oy + by : 1 - glyph_size_y + by - oy;
             ox += adv + px;
             new_x1 = lx * w + x, new_x2 = (lx + lw) * w + x;
             new_y1 = ly * h + y, new_y2 = (ly + lh) * h + y;

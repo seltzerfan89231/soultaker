@@ -5,6 +5,7 @@
 
 extern Window window;
 Component *comp_root;
+static bool input_paused;
 
 Component* component_create(f32 x, f32 y, f32 w, f32 h, u32 tex)
 {
@@ -21,6 +22,7 @@ Component* component_create(f32 x, f32 y, f32 w, f32 h, u32 tex)
     comp->center_text = FALSE;
     comp->update_children = TRUE;
     comp->text = NULL;
+    comp->down_text = FALSE;
     comp->id = COMP_DEFAULT;
     return comp;
 }
@@ -62,6 +64,16 @@ void component_destroy_children(Component *comp)
 {   
     while (comp->num_children != 0)
         component_detach_and_destroy(comp, comp->children[0]);
+}
+
+bool component_input_paused(void)
+{
+    return input_paused;
+}
+
+void component_pause_input(Component *comp, bool val)
+{
+    input_paused = val;
 }
 
 void component_set_text(Component *comp, u32 font_size, char *text)
@@ -106,6 +118,7 @@ void component_mouse_button_callback(Component *comp, i32 button, i32 action)
         _COMP_MB_CALLBACK(HOST, host)
         _COMP_MB_CALLBACK(JOIN, join)
         _COMP_MB_CALLBACK(MINIMAP, minimap)
+        _COMP_MB_CALLBACK(CHAT, chat)
     }
 }
 
@@ -127,6 +140,7 @@ void component_update(Component *comp)
         _COMP_UPDATE(HOST, host)
         _COMP_UPDATE(JOIN, join)
         _COMP_UPDATE(MINIMAP, minimap)
+        _COMP_UPDATE(CHAT, chat)
     }
 }
 
@@ -153,6 +167,7 @@ void component_hover_callback(Component *comp, i32 action)
         _COMP_HOVER_CALLBACK(HOST, host)
         _COMP_HOVER_CALLBACK(JOIN, join)
         _COMP_HOVER_CALLBACK(MINIMAP, minimap)
+        _COMP_HOVER_CALLBACK(CHAT, chat)
     }
 }
 
@@ -174,5 +189,6 @@ void component_key_callback(Component *comp, i32 key, i32 scancode, i32 action, 
         _COMP_KEY_CALLBACK(HOST, host)
         _COMP_KEY_CALLBACK(JOIN, join)
         _COMP_KEY_CALLBACK(MINIMAP, minimap)
+        _COMP_KEY_CALLBACK(CHAT, chat)
     }
 }

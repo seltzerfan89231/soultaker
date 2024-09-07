@@ -8,7 +8,8 @@ Character char_map[128];
     char_map[_c].size.y = _h; \
     char_map[_c].bearing.x = _bx; \
     char_map[_c].bearing.y = _by; \
-    char_map[_c].advance = _adv;
+    char_map[_c].advance = _adv; \
+    char_map[_c].character = _c;
 
 void char_map_init(void)
 {
@@ -52,7 +53,7 @@ void char_map_init(void)
     _CHAR_INIT('f',  LOWER_F_TEX, 4, 7, 0, 0, 4)
     _CHAR_INIT('g',  LOWER_G_TEX, 5, 6, 0, -1, 5)
     _CHAR_INIT('h',  LOWER_H_TEX, 5, 7, 0, 0, 5)
-    _CHAR_INIT('i',  LOWER_I_TEX, 1, 7, 1, 0, 3)
+    _CHAR_INIT('i',  LOWER_I_TEX, 1, 7, 0, 0, 1)
     _CHAR_INIT('j',  LOWER_J_TEX, 5, 8, 0, -1, 5)
     _CHAR_INIT('k',  LOWER_K_TEX, 4, 7, 0, 0, 4)
     _CHAR_INIT('l',  LOWER_L_TEX, 2, 7, 0, 0, 2)

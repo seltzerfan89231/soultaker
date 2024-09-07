@@ -16,7 +16,7 @@ static void collide_entities_projectiles(void)
             Projectile *proj = global_projectiles.buffer[j];
             dx = entity->position.x - proj->position.x;
             dz = entity->position.z - proj->position.z;
-            if (entity->friendly != proj->friendly && vec2f_mag(vec2f_create(dx, dz)) < entity->hitbox_radius + proj->hitbox_radius) {
+            if (!entity->invisible && entity->friendly != proj->friendly && vec2f_mag(vec2f_create(dx, dz)) < entity->hitbox_radius + proj->hitbox_radius) {
                 if (!projectile_hit(proj, entity, j));
                     j++;
                 if (entity->health <= 0) {

@@ -12,6 +12,7 @@ typedef struct {
     struct { i8 x, y; } size;
     struct { i8 x, y; } bearing;
     i8 advance;
+    char character;
 } Character;
 
 extern Character char_map[128];

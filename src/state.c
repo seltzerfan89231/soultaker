@@ -62,6 +62,8 @@ void mouse_button_callback(GLFWwindow* handle, i32 button, i32 action)
 void key_callback(GLFWwindow* handle, i32 key, i32 scancode, i32 action, i32 mods)
 {
     gui_key_callback(key, scancode, action, mods);
+    if (gui_input_paused())
+        return;
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
         window_close();
     if (key == GLFW_KEY_F11 && action == GLFW_PRESS)
@@ -90,7 +92,7 @@ static void process_input(void)
     vec2i move_direction = vec2i_create(0, 0);
     bool hovered = 0;
 
-    if (game_paused)
+    if (game_paused || gui_input_paused())
         return;
 
     if (window_key_pressed(GLFW_KEY_Q))
