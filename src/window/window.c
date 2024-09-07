@@ -32,6 +32,7 @@ void window_init(void)
     glfwSetMouseButtonCallback(window.handle, mouse_button_callback);
     glfwSetCursorPosCallback(window.handle, cursor_pos_callback);
     glfwSetKeyCallback(window.handle, key_callback);
+    glfwSetInputMode(window.handle, GLFW_LOCK_KEY_MODS, GLFW_TRUE);
     glfwSetErrorCallback(error_callback);
     gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
     glViewport(0, 0, window.width, window.height);

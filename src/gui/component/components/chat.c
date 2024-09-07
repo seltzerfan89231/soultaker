@@ -4,14 +4,46 @@
 
 static bool typing;
 
-static void chat_input(Component *comp, i32 key)
+static char num_to_sym[] = { ')', '!', '@', '#', '$', '%', '^', '&', '*', '(' };
+
+#define _KEY_CASE(_c, _sc) \
+    case _c : c = (shift) ? _sc : _c; break;
+
+static char get_char(i32 key, i32 mods)
+{
+    char c = '\0';
+    bool shift, caps;
+    shift = mods & GLFW_MOD_SHIFT;
+    caps = mods & GLFW_MOD_CAPS_LOCK;
+    if (key >= 'A' && key < 'Z')
+        c = char_map[key + ((shift ^ caps) ? 0 : 'a' - 'A')].character;
+    else if (key >= '0' && key < '9')
+        c = (shift) ? num_to_sym[key - '0'] : char_map[key].character;
+    switch (key) {
+        _KEY_CASE('`', '~')
+        _KEY_CASE('-', '_')
+        _KEY_CASE('=', '+')
+        _KEY_CASE('[', '{')
+        _KEY_CASE(']', '}')
+        _KEY_CASE('\\', '|')
+        _KEY_CASE(';', ':')
+        _KEY_CASE('\'', '\"')
+        _KEY_CASE(',', '<')
+        _KEY_CASE('.', '>')
+        _KEY_CASE('/', '?')
+    }
+    return c;
+}
+
+static void chat_input(Component *comp, i32 key, i32 mods)
 {
     if (!typing)
         return;
     i32 len = (comp->text == NULL) ? 0 : strlen(comp->text);
+    char c = get_char(key, mods);
     char* text = malloc((len + 2) * sizeof(char));
     strncpy(text, comp->text, len);
-    strncat(text, &char_map[key].character, 1);
+    strncat(text, &c, 1);
     component_set_text(comp, 7, text);
     free(text);
 }
@@ -52,7 +84,7 @@ void comp_chat_key_callback(Component *comp, i32 key, i32 scancode, i32 action, 
         component_pause_input(comp, typing);
     }
     if (key >= 0 && key < 128 && action == GLFW_PRESS)
-        chat_input(comp->children[1], key);
+        chat_input(comp->children[1], key, mods);
 }
 
 void comp_chat_hover_callback(Component *comp, i32 action)
