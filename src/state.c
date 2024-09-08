@@ -1,6 +1,7 @@
 #include "state.h"
 #include <stdlib.h>
 #include <stdio.h>
+#include <sys/time.h>
 #include <time.h>
 
 extern Window window;
@@ -159,11 +160,11 @@ void state_init(void)
     camera_init(window.aspect_ratio);
     game_init();
     gui_init();
+    chat_init();
     data_init();
     minimap_zoom = camera.zoom;
 }
 
-#include <sys/time.h>
 void state_loop(void)
 {
     struct timeval times[6] = { 0 };
@@ -199,4 +200,5 @@ void state_exit(void)
     game_destroy();
     data_destroy();
     gui_destroy();
+    chat_destroy();
 }

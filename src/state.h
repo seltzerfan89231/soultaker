@@ -8,6 +8,7 @@
 #include "camera/camera.h"
 #include "networking/networking.h"
 #include "gui/gui.h"
+#include "chat/chat.h"
 #include "data.h"
 
 void state_init(void);

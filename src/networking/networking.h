@@ -11,6 +11,6 @@ int networking_join(void);
 void chat_host_init(void);
 void chat_join_init(void);
 void chat_send_message(char *message);
-void chat_destroy(void);
+void networking_chat_destroy(void);
 
 #endif

@@ -31,7 +31,8 @@ void gui_init(void)
     component_attach(comp_root, component_create(window.aspect_ratio / 2 - 0.2, 0.3, 0.4, 0.4 * 2.0/3, COMP_MULTIPLAYER, COLOR_TEX));
     Component *comp = component_create(0.15, 0.1, 0.4, 0.4, COMP_DEFAULT, COLOR_TEX);
     comp->a = 0.3;
-    comp->center_text = TRUE;
+    //comp->center_text = TRUE;
+    comp->down_text = TRUE;
     component_set_text(comp, 14, "The quick brown fox jumped over the lazy dog. The quick brown fox jumped over the lazy dog.");
     component_attach(comp_root, comp);
 }
@@ -131,7 +132,12 @@ static void update_text_data(Component *comp, i32 nl, f32 x, f32 y, f32 w, f32 h
     glyph_size_y = pixel_size_y * GLYPH_HEIGHT;
     px = pixel_size_x;
     py = pixel_size_y * (2 - MIN_BEARING_Y);
-    oy = (comp->center_text) ? 0.5 - (nl * glyph_size_y + (nl - 1) * py) / 2 : 0;
+    oy = 0;
+    f32 text_height = nl * glyph_size_y + (nl - 1) * py;
+    if (comp->center_text)
+        oy = 0.5 - text_height / 2;
+    else if (comp->down_text)
+        oy = 1 - text_height;
     left = right = 0;
     while (right < length) {
         f32 test_ox = -px;
@@ -173,7 +179,7 @@ static void update_text_data(Component *comp, i32 nl, f32 x, f32 y, f32 w, f32 h
             by = pixel_size_y * c.bearing.y;
             adv = pixel_size_x * c.advance;
             lx = ox + bx;
-            ly = (comp->down_text) ? oy + by : 1 - glyph_size_y + by - oy;
+            ly = 1 - glyph_size_y + by - oy;
             ox += adv + px;
             new_x1 = lx * w + x, new_x2 = (lx + lw) * w + x;
             new_y1 = ly * h + y, new_y2 = (ly + lh) * h + y;
@@ -198,7 +204,7 @@ void gui_update_data_add_text(Component *comp, f32 x, f32 y, f32 w, f32 h)
     if (comp->text == NULL)
         return;
     resize_gui_buffers(strlen(comp->text));
-    if (comp->center_text)
+    if (comp->center_text || comp->down_text)
         update_text_data(comp, get_num_lines(comp, w, h), x, y, w, h);
     else
         update_text_data(comp, 0, x, y, w, h);

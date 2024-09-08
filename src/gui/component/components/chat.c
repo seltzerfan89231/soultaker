@@ -1,4 +1,5 @@
 #include "../component.h"
+#include "../../../chat/chat.h"
 #include <stdlib.h>
 #include <string.h>
 
@@ -70,26 +71,6 @@ static void chat_input_backspace_char(Component* chat_input, i32 key)
     free(text);
 }
 
-static void chat_log_writeline(Component* chat_log, Component* chat_input)
-{
-    if (chat_input->text == NULL)
-        return;
-    i32 len_name, len_log, len_input, len_text;
-    char* name = "Fancy> ";
-    len_name = strlen(name);
-    len_log = (chat_log->text == NULL) ? 0 : strlen(chat_log->text);
-    len_input = strlen(chat_input->text);
-    char* text = malloc((len_name + len_log + len_input + 2) * sizeof(char));
-    strncpy(text, name, len_name + 1);
-    strncat(text, chat_input->text, len_input + 1);
-    text[len_name + len_input] = '\n';
-    text[len_name + len_input + 1] = '\0';
-    if (chat_log->text != NULL)
-        strncat(text, chat_log->text, len_log + 1);
-    component_set_text(chat_log, 7, text);
-    free(text);
-}
-
 void comp_chat_create(Component *comp)
 {
     comp->interactable = TRUE;
@@ -127,8 +108,9 @@ void comp_chat_key_callback(Component *comp, i32 key, i32 scancode, i32 action, 
         typing = 1 - typing;
         component_pause_input(comp, typing);
         if (!typing) {
-            chat_log_writeline(chat_log, chat_input);
+            chat_send_input(chat_input->text);
             component_set_text(chat_input, 7, "");
+            component_set_text(chat_log, 7, chat_get_log());
         }
     }
     if (key >= 0 && key < 128 && action != GLFW_RELEASE)

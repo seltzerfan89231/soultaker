@@ -50,7 +50,7 @@ int networking_init(void)
 
 void networking_destroy(void)
 {
-    chat_destroy();
+    networking_chat_destroy();
     if (wsa_initialized) {
         WSACleanup();
         //puts("Succesfully cleaned up.");
@@ -125,7 +125,7 @@ void chat_join_init(void)
     puts("Chat client initalized");
 }
 
-void chat_destroy(void)
+void networking_chat_destroy(void)
 {
     if (chat_initialized) {
         kill_thread = TRUE;
