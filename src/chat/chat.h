@@ -2,6 +2,7 @@
 #define CHAT_H 
 
 #include "../util/type.h"
+#include "../game/game.h"
 
 typedef struct {
     i32 log_len;

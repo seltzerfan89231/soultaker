@@ -65,24 +65,18 @@ void key_callback(GLFWwindow* handle, i32 key, i32 scancode, i32 action, i32 mod
     gui_key_callback(key, scancode, action, mods);
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
         window_close();
-    if (gui_input_paused())
-        return;
     if (key == GLFW_KEY_F11 && action == GLFW_PRESS)
         window_toggle_fullscreen();
+    if (gui_input_paused())
+        return;
     if (key == GLFW_KEY_H && action == GLFW_PRESS)
         game_pause();
     if (key == GLFW_KEY_V && action == GLFW_PRESS)
         game_switch_weapon();
     if (key == GLFW_KEY_B && action == GLFW_PRESS)
         game_heal();
-    if (key == GLFW_KEY_J && action == GLFW_PRESS)
-        game_setup(4);
-    if (key == GLFW_KEY_K && action == GLFW_PRESS)
-        game_setup(1);
     if (key == GLFW_KEY_G && action == GLFW_PRESS)
         audio_play_sound(GUI_CLICK_AUD);
-    if (key == GLFW_KEY_U && action == GLFW_PRESS)
-        chat_send_message("Hello World");
 }
 
 static void process_input(void)

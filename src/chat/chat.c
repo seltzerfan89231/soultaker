@@ -3,6 +3,7 @@
 #include <string.h>
 #include <assert.h>
 #include <stdio.h>
+#include <ctype.h>
 
 Chat chat;
 
@@ -20,13 +21,14 @@ char* chat_get_log(void)
 
 void chat_writeline(char* text)
 {
-    assert(text != NULL);
+    if (text == NULL)
+        return;
     i32 len_log, len_text, new_len;
     len_text = strlen(text);
     len_log = chat.log_len;
     chat.log = realloc(chat.log, (len_text + len_log + 2) * sizeof(char));
-    strncat(chat.log, text, len_text + 1);
-    strncat(chat.log, "\n", 2);
+    memcpy(chat.log + len_log, text, len_text + 1);
+    memcpy(chat.log + len_log + len_text, "\n", 2);
     chat.log_len = len_text + len_log + 1;
 }
 
@@ -41,8 +43,8 @@ void chat_send_input(char* input)
         char* name = "Fancy> ";
         len_name = strlen(name), len_input = strlen(input);
         char* text = malloc((len_name + len_input + 1) * sizeof(char));
-        strncpy(text, name, len_name + 1);
-        strncat(text, input, len_input + 1);
+        memcpy(text, name, len_name + 1);
+        memcpy(text + len_name, input, len_input + 1);
         chat_writeline(text);
     }
 }
@@ -78,13 +80,88 @@ static char** split_string(char* str, char delim)
     return list;
 }
 
+static bool isnumber(char* str) 
+{
+    for (i32 i = 0; str[i] != '\0'; i++)
+        if (!isdigit(str[i]))
+            return FALSE;
+    return TRUE;
+}
+
+#define MAX_ARG_LEN 20
+#define MAX_OUTPUT_LEN 100
+#define INITIAL 0
+#define UNREGONIZED 1
+#define GAME 2
+#define GAME_SETUP 3
+#define GAME_SETUP_SUCCESS 4
+#define GAME_SETUP_ERROR 5
+#define GAME_PAUSE 6
+
+static struct {
+    i32 int1;
+} command_args;
+
+static char* execute_command(i32 state)
+{
+    static char output_message[MAX_OUTPUT_LEN + 1];
+    switch (state) {
+        case UNREGONIZED:
+            return "Unrecognized Command";
+        case GAME:
+            return "/game {setup, pause}";
+        case GAME_SETUP:
+            return "/game setup {1-4}";
+        case GAME_SETUP_SUCCESS:
+            sprintf(output_message, "Successfully loaded level %d", command_args.int1);
+            game_setup(command_args.int1);
+            return output_message;
+        case GAME_SETUP_ERROR:
+            return "/game setup {1-4}";
+        case GAME_PAUSE:
+            game_pause();
+            return NULL;
+    }
+    return NULL;
+}
+
+static char* parse_command(char** args, i32 idx, i32 state)
+{
+    char* arg = args[idx];
+    if (arg == NULL)
+        return execute_command(state);
+    i32 new_state = UNREGONIZED;
+    switch (state) {
+        case INITIAL:
+            if (strncmp(arg, "/game", MAX_ARG_LEN) == 0)
+                new_state = GAME;
+            break;
+        case GAME:
+            if (strncmp(arg, "setup", MAX_ARG_LEN) == 0)
+                new_state = GAME_SETUP;
+            else if (strncmp(arg, "pause", MAX_ARG_LEN) == 0)
+                new_state = GAME_PAUSE;
+            break;  
+        case GAME_SETUP:
+            if (!isnumber(arg))
+                new_state = GAME_SETUP_ERROR;
+            i32 num = atoi(arg);
+            if (num >= 1 && num <= 4) {
+                new_state = GAME_SETUP_SUCCESS;
+                command_args.int1 = num;
+            }
+            else
+                new_state = GAME_SETUP_ERROR;
+            break;
+    }
+    return parse_command(args, idx + 1, new_state);
+}
+
 void chat_run_command(char* command)
 {
-    char** list = split_string(command, ' ');
-    chat_writeline("Unrecognized command");
-    for (i32 i = 0; list[i] != NULL; i++) {
-        puts(list[i]);
-        free(list[i]);
-    }
-    free(list);
+    char** args = split_string(command, ' ');
+    chat_writeline(parse_command(args, 0, INITIAL));
+    for (i32 i = 0; args[i] != NULL; i++)
+        free(args[i]);
+    free(args);
 }
