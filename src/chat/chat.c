@@ -52,7 +52,39 @@ void chat_destroy(void)
     free(chat.log);
 }
 
+static char** split_string(char* str, char delim)
+{
+    i32 l, r, c, str_len;
+    l = r = c = 0;
+    str_len = strlen(str);
+    for (l = r = c = 0; r < str_len; l = ++r) {
+        while (r < str_len && str[r] != delim)
+            r++;
+        if (r > l)
+            c++;
+    }
+    char** list = malloc((c + 1) * sizeof(char*));
+    list[c] = NULL;
+    for (l = r = c = 0; r < str_len; l = ++r) {
+        while (r < str_len && str[r] != delim)
+            r++;
+        if (r > l) {
+            list[c] = malloc((r - l + 1) * sizeof(char));
+            strncpy(list[c], str + l, r - l);
+            list[c][r - l] = '\0';
+            c++;
+        }
+    }
+    return list;
+}
+
 void chat_run_command(char* command)
 {
+    char** list = split_string(command, ' ');
     chat_writeline("Unrecognized command");
+    for (i32 i = 0; list[i] != NULL; i++) {
+        puts(list[i]);
+        free(list[i]);
+    }
+    free(list);
 }
