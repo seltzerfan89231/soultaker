@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include <ctype.h>
+#include "../util/extlib.h"
 
 GUI gui;
 extern Window window;
@@ -32,8 +32,8 @@ void gui_init(void)
     Component *comp = component_create(0.15, 0.1, 0.4, 0.4, COMP_DEFAULT, COLOR_TEX);
     comp->a = 0.3;
     //comp->center_text = TRUE;
-    comp->down_text = TRUE;
-    component_set_text(comp, 14, "The quick brown fox jumped over the lazy dog. The quick brown fox jumped over the lazy dog.");
+    //comp->down_text = TRUE;
+    component_set_text(comp, 14, "\r00FFFF\rThe \r0000ff\rquick \rf00000\rbrown \r000000\rfox \rFF00FF\rjumped over the lazy dog.");
     component_attach(comp_root, comp);
 }
 
@@ -75,6 +75,10 @@ static i32 get_num_lines(Component *comp, f32 w, f32 h)
             right++;
         left = right;
         while (right < length && text[right] != '\n' && test_ox <= 1) {
+            if (text[right] == '\r') {
+                right += 8;
+                continue;
+            }
             Character c = char_map[text[right]];
             test_ox += pixel_size_x * c.advance + px;
             right++;
@@ -83,11 +87,15 @@ static i32 get_num_lines(Component *comp, f32 w, f32 h)
             right++;
         right_copy = (test_ox > 1) ? right - 1 : right;
         if (test_ox > 1) {
-            do {
-                right--;
-                Character c = char_map[text[right]];
+            while (right > left && text[right-1] != ' ' && text[right-1] != '\t') {
+                if (text[right-1] == '\r') {
+                    right -= 8;
+                    continue;
+                }
+                Character c = char_map[text[right-1]];
                 test_ox -= pixel_size_x * c.advance + px;
-            } while (right > left && text[right-1] != ' ' && text[right-1] != '\t');
+                right--;
+            }
             while (right > left && (text[right-1] == ' ' || text[right-1] == '\t')) { 
                 right--;
                 Character c = char_map[text[right]];
@@ -100,6 +108,9 @@ static i32 get_num_lines(Component *comp, f32 w, f32 h)
         while (left < right && left < length) {
             if (text[left] == '\n') {
                 left++;
+                continue;
+            } else if (text[left] == '\r') {
+                left += 8;
                 continue;
             }
             Character c = char_map[text[left]];
@@ -121,7 +132,7 @@ static i32 get_num_lines(Component *comp, f32 w, f32 h)
 
 static void update_text_data(Component *comp, i32 nl, f32 x, f32 y, f32 w, f32 h)
 {
-    f32 pixel_size, pixel_size_x, pixel_size_y, glyph_size_y, px, py, bx, by, ox, oy, lx, ly, lw, lh, adv;
+    f32 pixel_size, pixel_size_x, pixel_size_y, glyph_size_y, text_r, text_b, text_g, text_height, px, py, bx, by, ox, oy, lx, ly, lw, lh, adv;
     f32 new_x1, new_y1, new_x2, new_y2, win_x1, win_x2, win_y1, win_y2;
     i32 length, left, right, right_copy;
     char *text = comp->text;
@@ -133,7 +144,8 @@ static void update_text_data(Component *comp, i32 nl, f32 x, f32 y, f32 w, f32 h
     px = pixel_size_x;
     py = pixel_size_y * (2 - MIN_BEARING_Y);
     oy = 0;
-    f32 text_height = nl * glyph_size_y + (nl - 1) * py;
+    text_r = text_b = text_g = 1.0f;
+    text_height = nl * glyph_size_y + (nl - 1) * py;
     if (comp->center_text)
         oy = 0.5 - text_height / 2;
     else if (comp->down_text)
@@ -145,6 +157,10 @@ static void update_text_data(Component *comp, i32 nl, f32 x, f32 y, f32 w, f32 h
             right++;
         left = right;
         while (right < length && text[right] != '\n' && test_ox <= 1) {
+            if (text[right] == '\r') {
+                right += 8;
+                continue;
+            }
             Character c = char_map[text[right]];
             test_ox += pixel_size_x * c.advance + px;
             right++;
@@ -153,15 +169,19 @@ static void update_text_data(Component *comp, i32 nl, f32 x, f32 y, f32 w, f32 h
             right++;
         right_copy = (test_ox > 1) ? right - 1 : right;
         if (test_ox > 1) {
-            do {
-                right--;
-                Character c = char_map[text[right]];
+            while (right > left && text[right-1] != ' ' && text[right-1] != '\t') {
+                if (text[right-1] == '\r') {
+                    right -= 8;
+                    continue;
+                }
+                Character c = char_map[text[right-1]];
                 test_ox -= pixel_size_x * c.advance + px;
-            } while (right > left && text[right-1] != ' ' && text[right-1] != '\t');
+                right--;
+            }
             while (right > left && (text[right-1] == ' ' || text[right-1] == '\t')) { 
-                right--;
-                Character c = char_map[text[right]];
+                Character c = char_map[text[right-1]];
                 test_ox -= pixel_size_x * c.advance + px;
+                right--;
             } 
         }
         if (left == right)
@@ -170,6 +190,14 @@ static void update_text_data(Component *comp, i32 nl, f32 x, f32 y, f32 w, f32 h
         while (left < right && left < length) {
             if (text[left] == '\n') {
                 left++;
+                continue;
+            } else if (text[left] == '\r') {
+                if (isxnumber(text + left + 1, 6)) {
+                    text_r = (atox(text[left+1]) << 4 + atox(text[left+2])) / 255.0;
+                    text_g = (atox(text[left+3]) << 4 + atox(text[left+4])) / 255.0;
+                    text_b = (atox(text[left+5]) << 4 + atox(text[left+6])) / 255.0;
+                }
+                left += 8;
                 continue;
             }
             Character c = char_map[text[left]];
@@ -187,10 +215,10 @@ static void update_text_data(Component *comp, i32 nl, f32 x, f32 y, f32 w, f32 h
             win_x2 = 2 * (new_x2 / window.aspect_ratio - 0.5f), win_y2 = 2 * (new_y2 - 0.5f);
             u32 idx = gui.vbo_length / 9;
             if (text[left] != ' ' && text[left] != '\t') {
-                Z = win_x1, Z = win_y1, Z = 0.0f, Z = 1.0f, Z = c.tex, Z = 1.0f, Z = 1.0f, Z = 1.0f, Z = 1.0f;
-                Z = win_x2, Z = win_y1, Z = 1.0f, Z = 1.0f, Z = c.tex, Z = 1.0f, Z = 1.0f, Z = 1.0f, Z = 1.0f;
-                Z = win_x1, Z = win_y2, Z = 0.0f, Z = 0.0f, Z = c.tex, Z = 1.0f, Z = 1.0f, Z = 1.0f, Z = 1.0f;
-                Z = win_x2, Z = win_y2, Z = 1.0f, Z = 0.0f, Z = c.tex, Z = 1.0f, Z = 1.0f, Z = 1.0f, Z = 1.0f;
+                Z = win_x1, Z = win_y1, Z = 0.0f, Z = 1.0f, Z = c.tex, Z = text_r, Z = text_g, Z = text_b, Z = 1.0f;
+                Z = win_x2, Z = win_y1, Z = 1.0f, Z = 1.0f, Z = c.tex, Z = text_r, Z = text_g, Z = text_b, Z = 1.0f;
+                Z = win_x1, Z = win_y2, Z = 0.0f, Z = 0.0f, Z = c.tex, Z = text_r, Z = text_g, Z = text_b, Z = 1.0f;
+                Z = win_x2, Z = win_y2, Z = 1.0f, Z = 0.0f, Z = c.tex, Z = text_r, Z = text_g, Z = text_b, Z = 1.0f;
                 V = idx, V = idx + 1, V = idx + 2, V = idx + 2, V = idx + 1, V = idx + 3;
             }
             left++;

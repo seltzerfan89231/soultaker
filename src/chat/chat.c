@@ -40,7 +40,7 @@ void chat_send_input(char* input)
         chat_run_command(input);
     else {
         i32 len_name, len_input;
-        char* name = "Fancy> ";
+        char* name = "\rFF0000\rFancy\rffffff\r> ";
         len_name = strlen(name), len_input = strlen(input);
         char* text = malloc((len_name + len_input + 1) * sizeof(char));
         memcpy(text, name, len_name + 1);
