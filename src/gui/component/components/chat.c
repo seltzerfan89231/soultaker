@@ -74,14 +74,16 @@ static void chat_log_writeline(Component* chat_log, Component* chat_input)
 {
     if (chat_input->text == NULL)
         return;
-    i32 len_log, len_input;
-    len_log = (chat_log->text == NULL) ? 0 : strlen(chat_log->text) + 1;
+    i32 len_name, len_log, len_input, len_text;
+    char* name = "Fancy> ";
+    len_name = strlen(name);
+    len_log = (chat_log->text == NULL) ? 0 : strlen(chat_log->text);
     len_input = strlen(chat_input->text);
-    char* text = malloc((len_log + len_input + 1) * sizeof(char));
-    for (i32 i = 0; i < len_log + len_input + 1; i++)
-        text[i] = 1;
-    strncpy(text, chat_input->text, len_input + 2);
-    text[len_input] = '\n';
+    char* text = malloc((len_name + len_log + len_input + 2) * sizeof(char));
+    strncpy(text, name, len_name + 1);
+    strncat(text, chat_input->text, len_input + 1);
+    text[len_name + len_input] = '\n';
+    text[len_name + len_input + 1] = '\0';
     if (chat_log->text != NULL)
         strncat(text, chat_log->text, len_log + 1);
     component_set_text(chat_log, 7, text);

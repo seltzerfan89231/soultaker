@@ -27,12 +27,6 @@ void comp_textbox_update(Component *comp)
         strncat(text, "\nGFPS ", 20);
         sprintf(num, "%d", (i32)(1.0 / game_dt));
         strncat(text, num, 20);
-        strncat(text, "\nPROJ ", 20);
-        sprintf(num, "%d", global_projectiles.length);
-        strncat(text, num, 20);
-        strncat(text, "\nPART ", 20);
-        sprintf(num, "%d", global_particles.length + global_parjicles.length);
-        strncat(text, num, 20);
         strncat(text, "\nHP   ", 20);
         sprintf(num, "%d/%d", (i32)player.health, (i32)player.max_health);
         strncat(text, num, 20);
