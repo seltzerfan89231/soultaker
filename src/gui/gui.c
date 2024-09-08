@@ -29,6 +29,11 @@ void gui_init(void)
 
     component_attach(comp_root, component_create(window.aspect_ratio / 2 - 0.2, 0.7, 0.4, 0.4 * 2.0/3, COMP_SINGLEPLAYER, COLOR_TEX));
     component_attach(comp_root, component_create(window.aspect_ratio / 2 - 0.2, 0.3, 0.4, 0.4 * 2.0/3, COMP_MULTIPLAYER, COLOR_TEX));
+    Component *comp = component_create(0.15, 0.1, 0.4, 0.4, COMP_DEFAULT, COLOR_TEX);
+    comp->a = 0.3;
+    comp->center_text = TRUE;
+    component_set_text(comp, 14, "The quick brown fox jumped over the lazy dog. The quick brown fox jumped over the lazy dog.");
+    component_attach(comp_root, comp);
 }
 
 bool gui_input_paused(void)
@@ -50,38 +55,49 @@ static void resize_gui_buffers(u32 added_vbo_length)
     }
 }
 
-void gui_update_data_add_text(Component *comp, f32 x, f32 y, f32 w, f32 h)
+static i32 get_num_lines(Component *comp, f32 w, f32 h)
 {
-    if (comp->text == NULL)
-        return;
     f32 pixel_size, pixel_size_x, pixel_size_y, glyph_size_y, px, py, bx, by, ox, oy, lx, ly, lw, lh, adv;
-    f32 new_x1, new_y1, new_x2, new_y2, win_x1, win_x2, win_y1, win_y2;
     i32 length, left, right, right_copy, nl;
     char *text = comp->text;
     length = strlen(text);
-    resize_gui_buffers(length);
     pixel_size = (f32)comp->font_size / (DEFAULT_WINDOW_HEIGHT) / GLYPH_HEIGHT;
     pixel_size_x = pixel_size / w;
     pixel_size_y = pixel_size / h;
     glyph_size_y = pixel_size_y * GLYPH_HEIGHT;
     px = pixel_size_x;
     py = pixel_size_y * (2 - MIN_BEARING_Y);
-    nl = 1;
-    for (ox = oy = left = right = 0; right < length; right++) {
-        f32 test_ox = ox;
-        while (right < length && !isspace(text[right])) {
+    nl = 0;
+    while (right < length) {
+        f32 test_ox = -px;
+        while (left != 0 && right < length && text[right] == ' ' || text[right] == '\t')
+            right++;
+        left = right;
+        while (right < length && text[right] != '\n' && test_ox <= 1) {
             Character c = char_map[text[right]];
             test_ox += pixel_size_x * c.advance + px;
             right++;
         }
-        if (right > left)
-            test_ox -= px;
-        if (test_ox > 1)
-            ox = 0, nl++;
-        while (left < length && left <= right) {
+        if (right < length && text[right] == '\n')
+            right++;
+        right_copy = (test_ox > 1) ? right - 1 : right;
+        if (test_ox > 1) {
+            do {
+                right--;
+                Character c = char_map[text[right]];
+                test_ox -= pixel_size_x * c.advance + px;
+            } while (right > left && text[right-1] != ' ' && text[right-1] != '\t');
+            while (right > left && (text[right-1] == ' ' || text[right-1] == '\t')) { 
+                right--;
+                Character c = char_map[text[right]];
+                test_ox -= pixel_size_x * c.advance + px;
+            } 
+        }
+        if (left == right)
+            right = right_copy;
+        ox = 0;
+        while (left < right && left < length) {
             if (text[left] == '\n') {
-                ox = 0;
-                nl++;
                 left++;
                 continue;
             }
@@ -92,11 +108,29 @@ void gui_update_data_add_text(Component *comp, f32 x, f32 y, f32 w, f32 h)
             by = pixel_size_y * c.bearing.y;
             adv = pixel_size_x * c.advance;
             lx = ox + bx;
-            ly = 1 - glyph_size_y + by - oy;
+            ly = (comp->down_text) ? oy + by : 1 - glyph_size_y + by - oy;
             ox += adv + px;
             left++;
         }
+        oy += glyph_size_y + py;
+        nl++;
     }
+    return nl;
+}
+
+static void update_text_data(Component *comp, i32 nl, f32 x, f32 y, f32 w, f32 h)
+{
+    f32 pixel_size, pixel_size_x, pixel_size_y, glyph_size_y, px, py, bx, by, ox, oy, lx, ly, lw, lh, adv;
+    f32 new_x1, new_y1, new_x2, new_y2, win_x1, win_x2, win_y1, win_y2;
+    i32 length, left, right, right_copy;
+    char *text = comp->text;
+    length = strlen(text);
+    pixel_size = (f32)comp->font_size / (DEFAULT_WINDOW_HEIGHT) / GLYPH_HEIGHT;
+    pixel_size_x = pixel_size / w;
+    pixel_size_y = pixel_size / h;
+    glyph_size_y = pixel_size_y * GLYPH_HEIGHT;
+    px = pixel_size_x;
+    py = pixel_size_y * (2 - MIN_BEARING_Y);
     oy = (comp->center_text) ? 0.5 - (nl * glyph_size_y + (nl - 1) * py) / 2 : 0;
     left = right = 0;
     while (right < length) {
@@ -146,15 +180,28 @@ void gui_update_data_add_text(Component *comp, f32 x, f32 y, f32 w, f32 h)
             win_x1 = 2 * (new_x1 / window.aspect_ratio - 0.5f), win_y1 = 2 * (new_y1 - 0.5f);
             win_x2 = 2 * (new_x2 / window.aspect_ratio - 0.5f), win_y2 = 2 * (new_y2 - 0.5f);
             u32 idx = gui.vbo_length / 9;
-            Z = win_x1, Z = win_y1, Z = 0.0f, Z = 1.0f, Z = c.tex, Z = 1.0f, Z = 1.0f, Z = 1.0f, Z = 1.0f;
-            Z = win_x2, Z = win_y1, Z = 1.0f, Z = 1.0f, Z = c.tex, Z = 1.0f, Z = 1.0f, Z = 1.0f, Z = 1.0f;
-            Z = win_x1, Z = win_y2, Z = 0.0f, Z = 0.0f, Z = c.tex, Z = 1.0f, Z = 1.0f, Z = 1.0f, Z = 1.0f;
-            Z = win_x2, Z = win_y2, Z = 1.0f, Z = 0.0f, Z = c.tex, Z = 1.0f, Z = 1.0f, Z = 1.0f, Z = 1.0f;
-            V = idx, V = idx + 1, V = idx + 2, V = idx + 2, V = idx + 1, V = idx + 3;
+            if (text[left] != ' ' && text[left] != '\t') {
+                Z = win_x1, Z = win_y1, Z = 0.0f, Z = 1.0f, Z = c.tex, Z = 1.0f, Z = 1.0f, Z = 1.0f, Z = 1.0f;
+                Z = win_x2, Z = win_y1, Z = 1.0f, Z = 1.0f, Z = c.tex, Z = 1.0f, Z = 1.0f, Z = 1.0f, Z = 1.0f;
+                Z = win_x1, Z = win_y2, Z = 0.0f, Z = 0.0f, Z = c.tex, Z = 1.0f, Z = 1.0f, Z = 1.0f, Z = 1.0f;
+                Z = win_x2, Z = win_y2, Z = 1.0f, Z = 0.0f, Z = c.tex, Z = 1.0f, Z = 1.0f, Z = 1.0f, Z = 1.0f;
+                V = idx, V = idx + 1, V = idx + 2, V = idx + 2, V = idx + 1, V = idx + 3;
+            }
             left++;
         }
         oy += glyph_size_y + py;
     }
+}
+
+void gui_update_data_add_text(Component *comp, f32 x, f32 y, f32 w, f32 h)
+{
+    if (comp->text == NULL)
+        return;
+    resize_gui_buffers(strlen(comp->text));
+    if (comp->center_text)
+        update_text_data(comp, get_num_lines(comp, w, h), x, y, w, h);
+    else
+        update_text_data(comp, 0, x, y, w, h);
 }
 
 void gui_update_data_helper(Component *comp, f32 x, f32 y, f32 w, f32 h)

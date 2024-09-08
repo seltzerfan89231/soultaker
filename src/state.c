@@ -92,8 +92,11 @@ static void process_input(void)
     vec2i move_direction = vec2i_create(0, 0);
     bool hovered = 0;
 
-    if (game_paused || gui_input_paused())
+    if (game_paused)
         return;
+
+    if (gui_input_paused())
+        goto update;
 
     if (window_key_pressed(GLFW_KEY_Q))
         rotation_magnitude++;
@@ -136,6 +139,7 @@ static void process_input(void)
         if (!hovered)
             game_spellcast(window.cursor.position, camera.yaw, camera.pitch, camera.zoom, window.aspect_ratio);
 
+update:
     game_set_direction(camera_get_direction(move_direction));
     if (rotation_magnitude != 0)
         camera_rotate(rotation_magnitude, window.dt);
@@ -146,6 +150,7 @@ static void process_input(void)
     if (zoom_magnitude != 0)
         update_proj_matrix();
 }
+
 void state_init(void) 
 {
     window_init();

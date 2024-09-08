@@ -251,5 +251,5 @@ void load_level4(void)
     player.entity->position = vec3f_create(15.5, 0.0f, 12);
 
     Entity* shaitan = entity_create(SHAITAN_THE_ADVISOR, FALSE);
-    shaitan->position = vec3f_create(15.5f, 0.0f, 16.0f);
+    shaitan->position = vec3f_create(15.5f, 0.0f, 16.5f);
 }

@@ -41,7 +41,7 @@ static char get_char(i32 key, i32 mods)
     return c;
 }
 
-static void chat_input(Component *comp, i32 key, i32 mods)
+static void chat_append_char(Component *comp, i32 key, i32 mods)
 {
     if (!typing)
         return;
@@ -53,6 +53,20 @@ static void chat_input(Component *comp, i32 key, i32 mods)
     strncpy(text, comp->text, len);
     text[len] = c;
     text[len+1] = '\0';
+    component_set_text(comp, 7, text);
+    free(text);
+}
+
+static void chat_backspace_char(Component* comp, i32 key)
+{
+    if (!typing)
+        return;
+    i32 len = (comp->text == NULL) ? 0 : strlen(comp->text);
+    if (len == 0)
+        return;
+    char* text = malloc(len * sizeof(char));
+    strncpy(text, comp->text, len - 1);
+    text[len-1] = '\0';
     component_set_text(comp, 7, text);
     free(text);
 }
@@ -88,12 +102,19 @@ void comp_chat_mouse_button_callback(Component *comp, i32 button, i32 action)
 
 void comp_chat_key_callback(Component *comp, i32 key, i32 scancode, i32 action, i32 mods)
 {
+    Component* chat_input = comp->children[1];
     if (key == GLFW_KEY_ENTER && action == GLFW_PRESS) {
         typing = 1 - typing;
         component_pause_input(comp, typing);
+        if (typing == 0) {
+            puts(chat_input->text);
+            component_set_text(chat_input, 7, "");
+        }
     }
     if (key >= 0 && key < 128 && action != GLFW_RELEASE)
-        chat_input(comp->children[1], key, mods);
+        chat_append_char(chat_input, key, mods);
+    if (key == GLFW_KEY_BACKSPACE && action != GLFW_RELEASE)
+        chat_backspace_char(chat_input, key);
 }
 
 void comp_chat_hover_callback(Component *comp, i32 action)
