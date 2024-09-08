@@ -53,9 +53,9 @@ void networking_destroy(void)
     chat_destroy();
     if (wsa_initialized) {
         WSACleanup();
-        puts("Succesfully cleaned up.");
+        //puts("Succesfully cleaned up.");
     } else {
-        puts("WSA was not initialized.");
+        //puts("WSA was not initialized.");
     }
     wsa_initialized = FALSE;
 }
