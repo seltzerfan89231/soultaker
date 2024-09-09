@@ -5,6 +5,17 @@
 #include <glfw.h>
 #include "../../util/type.h"
 
+#define NUM_UBOS         9
+#define MATRICES_UBO     0
+#define ZOOM_UBO         1
+#define ASPECT_RATIO_UBO 2
+#define ROTATION_UBO     3
+#define TILT_UBO         4
+#define CONSTANTS_UBO    5
+#define OUTLINE_UBO      6
+#define GAME_TIME_UBO    7
+#define MINIMAP_UBO      8
+
 typedef struct {
     u32 id;
 } UBO;

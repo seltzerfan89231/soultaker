@@ -5,6 +5,10 @@
 #include <glfw.h>
 #include "../../util/type.h"
 
+#define NUM_SSBOS 2
+#define GAME_SSBO 0
+#define GUI_SSBO  1
+
 typedef struct {
     u32 id;
 } SSBO;

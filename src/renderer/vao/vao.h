@@ -7,6 +7,18 @@
 #include "../vbo/vbo.h"
 #include "../ebo/ebo.h"
 
+#define NUM_VAOS       10
+#define TILE_VAO       0
+#define WALL_VAO       1
+#define ENTITY_VAO     2
+#define PROJECTILE_VAO 3
+#define GUI_VAO        4
+#define PARTICLE_VAO   5
+#define OBSTACLE_VAO   6
+#define PARJICLE_VAO   7
+#define PARSTACLE_VAO  8
+#define QUAD_VAO       9
+
 typedef struct {
     u32 id, length;
     GLenum usage, mode;

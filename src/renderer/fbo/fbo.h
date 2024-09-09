@@ -6,6 +6,11 @@
 #include "../../util/type.h"
 #include "../rbo/rbo.h"
 
+#define NUM_FBOS 3
+#define SCENE_FBO 0
+#define SHADOW_FBO 1
+#define MINIMAP_FBO 2
+
 typedef struct {
     u32 id, color_buffer_id;
     RBO rbo;

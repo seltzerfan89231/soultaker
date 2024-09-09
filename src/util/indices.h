@@ -1,102 +1,6 @@
 #ifndef INDICES_H
 #define INDICES_H
 
-#define DOWN   0
-#define RIGHT  1
-#define UP     2
-#define LEFT   3
-#define TOP    4
-#define BOTTOM 5
-
-#pragma region FBOS
-#define NUM_FBOS 3
-#define SCENE_FBO 0
-#define SHADOW_FBO 1
-#define MINIMAP_FBO 2
-#pragma endregion
-
-
-
-
-
-#pragma region RBOS
-#define NUM_RBOS 1
-#define GAME_RBO 0
-#pragma endregion
-
-
-
-
-
-#pragma region UBOS
-#define NUM_UBOS         9
-#define MATRICES_UBO     0
-#define ZOOM_UBO         1
-#define ASPECT_RATIO_UBO 2
-#define ROTATION_UBO     3
-#define TILT_UBO         4
-#define CONSTANTS_UBO    5
-#define OUTLINE_UBO      6
-#define GAME_TIME_UBO    7
-#define MINIMAP_UBO       8
-#pragma endregion
-
-
-
-
-
-#pragma region SSBOS
-#define NUM_SSBOS 2
-#define GAME_SSBO 0
-#define GUI_SSBO  1
-#pragma endregion
-
-
-
-
-
-#pragma region SHADERS
-#define NUM_SHADERS         16
-#define TILE_SHADER         0 
-#define WALL_SHADER         1
-#define ENTITY_SHADER       2
-#define PROJECTILE_SHADER   3
-#define GUI_SHADER          4 
-#define SHADOW_SHADER       5
-#define HEALTHBAR_SHADER    6
-#define PARTICLE_SHADER     7
-#define OBSTACLE_SHADER     8
-#define PARJICLE_SHADER     9
-#define PARSTACLE_SHADER    10
-#define TILE_SHADOW_SHADER  11
-#define SCREEN_SHADER       12
-#define MINIMAP_ENTITY_SHADER 13
-#define MINIMAP_TILE_SHADER 14
-#define MINIMAP_WALL_SHADER 15
-#pragma endregion
-
-
-
-
-
-#pragma region VAOS
-#define NUM_VAOS       10
-#define TILE_VAO       0
-#define WALL_VAO       1
-#define ENTITY_VAO     2
-#define PROJECTILE_VAO 3
-#define GUI_VAO        4
-#define PARTICLE_VAO   5
-#define OBSTACLE_VAO   6
-#define PARJICLE_VAO   7
-#define PARSTACLE_VAO  8
-#define QUAD_VAO       9
-#pragma endregion
-
-
-
-
-
 #pragma region GAME_TEXTURES
 #define NUM_GAME_TEXTURES 57
 #define BULLET_TEX        0
@@ -271,7 +175,7 @@
 
 
 
-#pragma region AUDIO_BUFFERS
+#pragma region SOUNDS
 #define NUM_BUFFERS 2
 #define GUI_CLICK_AUD 0
 #pragma endregion

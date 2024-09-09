@@ -5,6 +5,9 @@
 #include <glfw.h>
 #include "../../util/type.h"
 
+#define NUM_RBOS 1
+#define GAME_RBO 0
+
 typedef struct {
     u32 id;
 } RBO;
