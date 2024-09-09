@@ -5,8 +5,8 @@ void comp_singleplayer_create(Component *comp)
 {
     comp->a = 0.2;
     component_set_text(comp, 14, "SINGLEPLAYER");
-    comp->alignment.x = ALIGN_CENTER;
-    comp->alignment.y = ALIGN_CENTER;
+    //comp->alignment.x = ALIGN_CENTER;
+    //comp->alignment.y = ALIGN_CENTER;
     comp->hoverable = TRUE;
     comp->interactable = TRUE;
 }
@@ -28,28 +28,28 @@ void comp_singleplayer_mouse_button_callback(Component *comp, i32 button, i32 ac
         game_setup(4);
         component_destroy_children(comp_root);
 
-        Component *text_box = component_create(0.02, 0.93, 0.3, 0.05, COMP_TEXTBOX, NO_TEX);
+        Component *text_box = component_create(10, 480, 150, 50, COMP_TEXTBOX, NO_TEX);
         component_attach(comp_root, text_box);
 
-        Component *btn = component_create(0.05f, 0.05f, 0.1f, 0.1f, COMP_BUTTON, BUTTON_TEX);
+        Component *btn = component_create(10, 10, 80, 80, COMP_BUTTON, BUTTON_TEX);
         component_attach(comp_root, btn);
 
-        Component *icon = component_create(0.15, 0.15, 0.7, 0.7, COMP_ICON, NO_TEX);
+        Component *icon = component_create(10, 10, 60, 60, COMP_ICON, NO_TEX);
         component_attach(btn, icon);
 
-        Component *healthbar = component_create(0.3, 0.07, 0.2, 0.02, COMP_HEALTHBAR, NO_TEX);
+        Component *healthbar = component_create(100, 30, 100, 14, COMP_HEALTHBAR, NO_TEX);
         component_attach(comp_root, healthbar);
 
-        Component *manabar = component_create(0.3, 0.05, 0.2, 0.02, COMP_MANABAR, NO_TEX);
+        Component *manabar = component_create(100, 16, 100, 14, COMP_MANABAR, NO_TEX);
         component_attach(comp_root, manabar);
 
-        Component *death_message = component_create(0.4, 0.93, 0.3, 0.05, COMP_DEATH, NO_TEX);
+        Component *death_message = component_create(155, 520, 50, 12, COMP_DEATH, NO_TEX);
         component_attach(comp_root, death_message);
 
-        Component *minimap = component_create(window.aspect_ratio - 0.3, 0.7, 0.25, 0.25, COMP_MINIMAP, MINIMAP_TEX);
+        Component *minimap = component_create(790, 370, 150, 150, COMP_MINIMAP, MINIMAP_TEX);
         component_attach(comp_root, minimap);
 
-        Component *chat = component_create(0, 0.18, 0.4, 0.5, COMP_CHAT, NO_TEX);
+        Component *chat = component_create(10, 120, 200, 100, COMP_CHAT, NO_TEX);
         component_attach(comp_root, chat);
     }
 }

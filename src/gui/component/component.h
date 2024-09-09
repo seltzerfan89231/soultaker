@@ -18,7 +18,8 @@
 typedef struct Component Component;
 
 typedef struct Component {
-    f32 x, y, w, h, r, g, b, a;
+    i32 x, y, w, h;
+    f32 r, g, b, a;
     Component **children;
     u32 num_children, tex, id, sub_id, font_size;
     struct {
@@ -31,7 +32,7 @@ typedef struct Component {
 extern Window window;
 extern Component *comp_root;
 
-Component* component_create(f32 x, f32 y, f32 w, f32 h, u32 id, u32 tex);
+Component* component_create(i32 x, i32 y, i32 w, i32 h, u32 id, u32 tex);
 void component_attach(Component *parent, Component *child);
 void component_detach(Component *parent, Component *child);
 void component_destroy(Component *comp);

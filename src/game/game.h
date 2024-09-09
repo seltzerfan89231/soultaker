@@ -16,6 +16,7 @@ vec3f game_get_player_position(void);
 void game_pause(void);
 void game_switch_weapon(void);
 void game_heal(void);
+void game_kill(void);
 void game_wait(void);
 void game_post(void);
 f32 game_get_player_health_ratio(void);

@@ -10,7 +10,7 @@ static bool input_paused;
 #define _COMP_CREATE(_id, _lid) \
     case COMP_##_id : comp_##_lid##_create(comp); break;
 
-Component* component_create(f32 x, f32 y, f32 w, f32 h, u32 id, u32 tex)
+Component* component_create(i32 x, i32 y, i32 w, i32 h, u32 id, u32 tex)
 {
     Component *comp = malloc(sizeof(Component));
     comp->x = x, comp->y = y, comp->w = w, comp->h = h;

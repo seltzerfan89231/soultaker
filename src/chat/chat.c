@@ -97,6 +97,7 @@ static bool isnumber(char* str)
 #define GAME_SETUP_SUCCESS 4
 #define GAME_SETUP_ERROR 5
 #define GAME_PAUSE 6
+#define GAME_KILL 7
 
 static struct {
     i32 int1;
@@ -121,6 +122,9 @@ static char* execute_command(i32 state)
         case GAME_PAUSE:
             game_pause();
             return NULL;
+        case GAME_KILL:
+            game_kill();
+            return NULL;
     }
     return NULL;
 }
@@ -141,6 +145,8 @@ static char* parse_command(char** args, i32 idx, i32 state)
                 new_state = GAME_SETUP;
             else if (strncmp(arg, "pause", MAX_ARG_LEN) == 0)
                 new_state = GAME_PAUSE;
+            else if (strncmp(arg, "kill", MAX_ARG_LEN) == 0)
+                new_state = GAME_KILL;
             break;  
         case GAME_SETUP:
             if (!isnumber(arg))

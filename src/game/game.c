@@ -193,32 +193,34 @@ void game_switch_weapon(void)
 
 void game_heal(void)
 {
-    if (player.entity == NULL || game_paused)
+    if (player.entity == NULL)
         return;
-    assert(player.entity != NULL);
+    player.entity->health = player.entity->max_health;
+}
+
+void game_kill(void)
+{
+    if (player.entity == NULL)
+        return;
     player.entity->health = 0;
 }
 
 f32 game_get_player_health_ratio(void)
 {
-    if (player.entity == NULL || game_paused)
+    if (player.entity == NULL)
         return 0;
-    assert(player.entity != NULL);
     return (f32)player.entity->health / player.entity->max_health;
 }
 
 f32 game_get_player_mana_ratio(void)
 {
-    if (player.entity == NULL || game_paused)
+    if (player.entity == NULL)
         return 0;
-    assert(player.entity != NULL);
     return player.mana / player.max_mana;
 }
 
 u32 game_get_weapon_tex(void)
 {
-    if (game_paused)
-        return 0;
     return player.weapon.tex;
 }
 
