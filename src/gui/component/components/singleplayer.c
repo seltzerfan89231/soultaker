@@ -5,7 +5,8 @@ void comp_singleplayer_create(Component *comp)
 {
     comp->a = 0.2;
     component_set_text(comp, 14, "SINGLEPLAYER");
-    comp->center_text = TRUE;
+    comp->alignment.x = ALIGN_CENTER;
+    comp->alignment.y = ALIGN_CENTER;
     comp->hoverable = TRUE;
     comp->interactable = TRUE;
 }

@@ -30,9 +30,9 @@ void gui_init(void)
     component_attach(comp_root, component_create(window.aspect_ratio / 2 - 0.2, 0.7, 0.4, 0.4 * 2.0/3, COMP_SINGLEPLAYER, COLOR_TEX));
     component_attach(comp_root, component_create(window.aspect_ratio / 2 - 0.2, 0.3, 0.4, 0.4 * 2.0/3, COMP_MULTIPLAYER, COLOR_TEX));
     Component *comp = component_create(0.15, 0.1, 0.4, 0.4, COMP_DEFAULT, COLOR_TEX);
+    comp->alignment.x = ALIGN_RIGHT;
+    comp->alignment.y = ALIGN_CENTER;
     comp->a = 0.3;
-    comp->center_text = TRUE;
-    //comp->down_text = TRUE;
     component_set_text(comp, 14, "\r00FFFF\rThe \r0000ffASDGERAG\rquick \rf00ASDFA000\rbrown \r0000\rfox \r\rjumped over the lazy dog.");
     component_attach(comp_root, comp);
 }
@@ -130,7 +130,7 @@ static i32 get_num_lines(Component *comp, f32 w, f32 h)
             by = pixel_size_y * c.bearing.y;
             adv = pixel_size_x * c.advance;
             lx = ox + bx;
-            ly = (comp->down_text) ? oy + by : 1 - glyph_size_y + by - oy;
+            ly = (comp->alignment.y == ALIGN_DOWN) ? oy + by : 1 - glyph_size_y + by - oy;
             ox += adv + px;
             left++;
         }
@@ -156,9 +156,9 @@ static void update_text_data(Component *comp, i32 nl, f32 x, f32 y, f32 w, f32 h
     oy = 0;
     text_r = text_b = text_g = 1.0f;
     text_height = nl * glyph_size_y + (nl - 1) * py;
-    if (comp->center_text)
+    if (comp->alignment.y == ALIGN_CENTER)
         oy = 0.5 - text_height / 2;
-    else if (comp->down_text)
+    else if (comp->alignment.y == ALIGN_DOWN)
         oy = 1 - text_height;
     left = right = 0;
     while (right < length) {
@@ -202,7 +202,11 @@ static void update_text_data(Component *comp, i32 nl, f32 x, f32 y, f32 w, f32 h
         }
         if (left == right)
             right = right_copy;
-        ox = (comp->center_text) ? (1.0 - test_ox) / 2.0 : 0;
+        ox = 0;
+        if (comp->alignment.x == ALIGN_CENTER)
+            ox = (1.0 - test_ox) / 2.0;
+        else if (comp->alignment.x == ALIGN_RIGHT)
+            ox = 1.0 - test_ox;
         right = (right > length) ? length : right;
         while (left < right) {
             if (text[left] == '\n') {
@@ -252,7 +256,7 @@ void gui_update_data_add_text(Component *comp, f32 x, f32 y, f32 w, f32 h)
     if (comp->text == NULL)
         return;
     resize_gui_buffers(strlen(comp->text));
-    if (comp->center_text || comp->down_text)
+    if (comp->alignment.y != ALIGN_LEFT)
         update_text_data(comp, get_num_lines(comp, w, h), x, y, w, h);
     else
         update_text_data(comp, 0, x, y, w, h);

@@ -3,7 +3,8 @@
 
 void comp_multiplayer_create(Component *comp)
 {
-    comp->center_text = TRUE;
+    comp->alignment.x = ALIGN_CENTER;
+    comp->alignment.y = ALIGN_CENTER;
     comp->a = 0.2;
     component_set_text(comp, 14, "MULTIPLAYER");
     comp->interactable = TRUE;

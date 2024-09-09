@@ -22,10 +22,10 @@ Component* component_create(f32 x, f32 y, f32 w, f32 h, u32 id, u32 tex)
     comp->hoverable = FALSE;
     comp->hovered = FALSE;
     comp->relative = TRUE;
-    comp->center_text = FALSE;
     comp->update_children = TRUE;
     comp->text = NULL;
-    comp->down_text = FALSE;
+    comp->alignment.x = ALIGN_LEFT;
+    comp->alignment.y = ALIGN_TOP;
     comp->id = id;
     switch (comp->id) {
         _COMP_CREATE(BUTTON, button)
@@ -101,7 +101,7 @@ void component_pause_input(Component *comp, bool val)
     input_paused = val;
 }
 
-void component_set_text(Component *comp, u32 font_size, char *text)
+void component_set_text(Component *comp, u8 font_size, char *text)
 {
     u32 length;
     char *copied_text;

@@ -8,14 +8,24 @@
 #include "../../audio/audio.h"
 #include "character.h"
 
+#define ALIGN_LEFT   0
+#define ALIGN_TOP    0
+#define ALIGN_RIGHT  1
+#define ALIGN_DOWN   1
+#define ALIGN_CENTER 2
+#define JUSTIFY      3
+
 typedef struct Component Component;
 
 typedef struct Component {
     f32 x, y, w, h, r, g, b, a;
     Component **children;
     u32 num_children, tex, id, sub_id, font_size;
-    bool interactable, hoverable, hovered, relative, update_children, center_text, down_text;
-    char *text;
+    struct {
+        u8 x, y;
+    } alignment;
+    bool interactable, hoverable, hovered, relative, update_children;
+    char* text;
 } Component;
 
 extern Window window;
@@ -30,7 +40,7 @@ void component_destroy_children(Component *comp);
 
 bool component_input_paused(void);
 void component_pause_input(Component *comp, bool val);
-void component_set_text(Component *comp, u32 font_size, char *text);
+void component_set_text(Component *comp, u8 font_size, char *text);
 void component_remove_text(Component *comp);
 void component_mouse_button_callback(Component *comp, i32 button, i32 action);
 void component_key_callback(Component *comp, i32 key, i32 scancode, i32 action, i32 mods);
