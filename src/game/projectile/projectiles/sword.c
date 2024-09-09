@@ -1,6 +1,6 @@
 #include "../projectile.h"
 
-void sword_update(Projectile *projectile, f32 dt)
+void sword_proj_update(Projectile *projectile, f32 dt)
 {
     if (projectile->timer >= 0.03) {
         Parjicle *parjicle = parjicle_create(projectile->rotation);

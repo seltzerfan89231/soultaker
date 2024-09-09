@@ -43,7 +43,7 @@ void slime_update(Entity *entity)
         entity->direction = vec3f_normalize(offset);
         if (entity->timer >= 0.5) {
             entity->timer = 0;
-            Projectile* proj = projectile_create(SWORD, FALSE, FALSE);
+            Projectile* proj = projectile_create(DEFAULT_PROJ, FALSE, FALSE);
             proj->position = entity->position;
             proj->rotation = atan(entity->direction.z / entity->direction.x) + (entity->direction.x > 0 ? 0 : PI);
             proj->direction = entity->direction;

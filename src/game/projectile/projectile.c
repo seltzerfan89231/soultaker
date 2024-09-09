@@ -36,7 +36,8 @@ void projectile_update(Projectile* projectile, f32 dt)
 {
     projectile->position = vec3f_add(projectile->position, vec3f_scale(projectile->speed * dt, projectile->direction));
     switch (projectile->id) {
-        _UPDATE(SWORD, sword);
+        _UPDATE(SWORD_PROJ, sword_proj);
+        _UPDATE(SHAITAN_FIRESTORM_PROJ, shaitan_firestorm_proj);
     }
     projectile->lifetime -= dt;
     projectile->timer += dt;

@@ -12,7 +12,7 @@ void shaitan_sentry_update(Sentry* sentry, f32 dt)
         sentry->timer = 2;
         AOE* aoe = aoe_create(sentry->position.x, sentry->position.z, FALSE);
         for (i32 i = 0; i < 8; i++) {
-            Projectile* proj = projectile_create(SWORD, FALSE, FALSE);
+            Projectile* proj = projectile_create(DEFAULT_PROJ, FALSE, FALSE);
             f32 theta = 2.0 * PI * i / 8;
             proj->position = sentry->position;
             proj->position.y = 0.5;
