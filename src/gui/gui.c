@@ -31,9 +31,9 @@ void gui_init(void)
     component_attach(comp_root, component_create(window.aspect_ratio / 2 - 0.2, 0.3, 0.4, 0.4 * 2.0/3, COMP_MULTIPLAYER, COLOR_TEX));
     Component *comp = component_create(0.15, 0.1, 0.4, 0.4, COMP_DEFAULT, COLOR_TEX);
     comp->a = 0.3;
-    //comp->center_text = TRUE;
+    comp->center_text = TRUE;
     //comp->down_text = TRUE;
-    component_set_text(comp, 14, "\r00FFFF\rThe \r0000ff\rquick \rf00000\rbrown \r000000\rfox \rFF00FF\rjumped over the lazy dog.");
+    component_set_text(comp, 14, "\r00FFFF\rThe \r0000ffASDGERAG\rquick \rf00ASDFA000\rbrown \r0000\rfox \r\rjumped over the lazy dog.");
     component_attach(comp_root, comp);
 }
 
@@ -76,7 +76,10 @@ static i32 get_num_lines(Component *comp, f32 w, f32 h)
         left = right;
         while (right < length && text[right] != '\n' && test_ox <= 1) {
             if (text[right] == '\r') {
-                right += 8;
+                right++;
+                while (right < length && text[right] != '\r')
+                    right++;
+                right++;
                 continue;
             }
             Character c = char_map[text[right]];
@@ -89,7 +92,10 @@ static i32 get_num_lines(Component *comp, f32 w, f32 h)
         if (test_ox > 1) {
             while (right > left && text[right-1] != ' ' && text[right-1] != '\t') {
                 if (text[right-1] == '\r') {
-                    right -= 8;
+                    right--;
+                    while (right > left && text[right-1] != '\r')
+                        right--;
+                    right--;
                     continue;
                 }
                 Character c = char_map[text[right-1]];
@@ -105,12 +111,16 @@ static i32 get_num_lines(Component *comp, f32 w, f32 h)
         if (left == right)
             right = right_copy;
         ox = 0;
-        while (left < right && left < length) {
+        right = (right > length) ? length : right;
+        while (left < right) {
             if (text[left] == '\n') {
                 left++;
                 continue;
             } else if (text[left] == '\r') {
-                left += 8;
+                left++;
+                while (left < right && text[left] != '\r')
+                    left++;
+                left++;
                 continue;
             }
             Character c = char_map[text[left]];
@@ -157,8 +167,11 @@ static void update_text_data(Component *comp, i32 nl, f32 x, f32 y, f32 w, f32 h
             right++;
         left = right;
         while (right < length && text[right] != '\n' && test_ox <= 1) {
-            if (text[right] == '\r') {
-                right += 8;
+            if (right < length && text[right] == '\r') {
+                right++;
+                while (right < length && text[right] != '\r')
+                    right++;
+                right++;
                 continue;
             }
             Character c = char_map[text[right]];
@@ -170,8 +183,11 @@ static void update_text_data(Component *comp, i32 nl, f32 x, f32 y, f32 w, f32 h
         right_copy = (test_ox > 1) ? right - 1 : right;
         if (test_ox > 1) {
             while (right > left && text[right-1] != ' ' && text[right-1] != '\t') {
-                if (text[right-1] == '\r') {
-                    right -= 8;
+                if (right > left && text[right-1] == '\r') {
+                    right--;
+                    while (right > left && text[right-1] != '\r')
+                        right--;
+                    right--;
                     continue;
                 }
                 Character c = char_map[text[right-1]];
@@ -187,7 +203,8 @@ static void update_text_data(Component *comp, i32 nl, f32 x, f32 y, f32 w, f32 h
         if (left == right)
             right = right_copy;
         ox = (comp->center_text) ? (1.0 - test_ox) / 2.0 : 0;
-        while (left < right && left < length) {
+        right = (right > length) ? length : right;
+        while (left < right) {
             if (text[left] == '\n') {
                 left++;
                 continue;
@@ -197,7 +214,10 @@ static void update_text_data(Component *comp, i32 nl, f32 x, f32 y, f32 w, f32 h
                     text_g = (atox(text[left+3]) << 4 + atox(text[left+4])) / 255.0;
                     text_b = (atox(text[left+5]) << 4 + atox(text[left+6])) / 255.0;
                 }
-                left += 8;
+                left++;
+                while (left < right && text[left] != '\r')
+                    left++;
+                left++;
                 continue;
             }
             Character c = char_map[text[left]];
