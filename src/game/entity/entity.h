@@ -21,6 +21,8 @@ typedef struct {
     u32 id;
     vec3f position, direction;
     vec2f facing;
+    // entity dependent info
+    void* info;
 } Entity;
 
 Entity* entity_create(u32 id, u8 friendly);

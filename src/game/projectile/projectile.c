@@ -13,6 +13,7 @@ Projectile* projectile_create(u32 id, bool friendly, bool pierce)
     projectile->lifetime = 1;
     projectile->rotation = 0;
     projectile->damage = 1;
+    projectile->tilt_tex = TRUE;
     projectile->tex = BULLET_TEX;
     projectile->id = id;
     projectile->direction = vec3f_create(0, 0, 0);

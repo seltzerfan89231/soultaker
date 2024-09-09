@@ -14,7 +14,7 @@ typedef struct {
     f32 speed, scale, lifetime, rotation, hitbox_radius, timer;
     u32 tex, id, damage;
     vec3f position, direction;
-    bool pierce, friendly;
+    bool pierce, friendly, tilt_tex;
     EntityArray *hit_entities;
 } Projectile;
 

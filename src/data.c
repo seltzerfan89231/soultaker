@@ -76,8 +76,8 @@ static void tile_push_data(Tile* tile)
 
 static void projectile_push_data(Projectile* projectile)
 {
-    assert((data.vbo_length+1)*6 < BUFFER_SIZE);
-    offset = data.vbo_length * 6;
+    assert((data.vbo_length+1)*7 < BUFFER_SIZE);
+    offset = data.vbo_length * 7;
     data.vbo_length++;
     data.vbo_buffer[offset++] = projectile->position.x;
     data.vbo_buffer[offset++] = projectile->position.y;
@@ -85,6 +85,7 @@ static void projectile_push_data(Projectile* projectile)
     data.vbo_buffer[offset++] = projectile->scale;
     data.vbo_buffer[offset++] = projectile->rotation;
     data.vbo_buffer[offset++] = projectile->tex;
+    data.vbo_buffer[offset++] = projectile->tilt_tex;
 }
 
 static void entity_push_data(Entity* entity)

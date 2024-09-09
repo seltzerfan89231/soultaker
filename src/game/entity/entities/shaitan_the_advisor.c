@@ -4,12 +4,13 @@
 #define NUM_STATES 1
 #define IDLE   0
 
-#define NUM_PHASES 3
+#define NUM_PHASES 4
 #define INVISIBLE  0
 #define GROW       1
 #define ATTACK_1   2
+#define ATTACK_2   3
 
-static void attack_1(Entity* entity)
+static void attack1(Entity* entity)
 {
     i32 safe_spot = rand() % 2;
     for (i32 i = 0; i < 12; i++) {
@@ -20,6 +21,24 @@ static void attack_1(Entity* entity)
         f32 theta = 2.0 * i * PI / 12;
         Projectile* proj = projectile_create(SHAITAN_FIRESTORM_PROJ, FALSE, FALSE);
         proj->tex = SHAITAN_FIRESTORM_TEX;
+        proj->rotation = theta;
+        proj->position = entity->position;
+        proj->position.y = 0.5;
+        proj->direction = vec3f_create(cos(theta), 0.0, sin(theta));
+    }
+}
+
+static void attack2(Entity* entity)
+{
+    i32 pattern = rand() % 2;
+    for (i32 i = 0; i < 12; i++) {
+        f32 theta = ((2.0 * i + pattern) * PI) / 12;
+        Projectile* proj = projectile_create(DEFAULT_PROJ, FALSE, FALSE);
+        proj->tex = SHAITAN_FIREBALL_TEX;
+        proj->tilt_tex = FALSE;
+        proj->rotation = theta;
+        proj->speed = 4.5;
+        proj->lifetime = 1.5;
         proj->position = entity->position;
         proj->position.y = 0.5;
         proj->direction = vec3f_create(cos(theta), 0.0, sin(theta));
@@ -72,8 +91,18 @@ void shaitan_the_advisor_update(Entity *entity)
             }
             break;
         case ATTACK_1:
+            if (entity->health < entity->max_health) {
+                entity->phase = ATTACK_2;
+                break;
+            }
             if (entity->timer2 < 0) {
-                attack_1(entity);
+                attack1(entity);
+                entity->timer2 = 1.5;
+            }
+            break;
+        case ATTACK_2:
+            if (entity->timer2 < 0) {
+                attack2(entity);
                 entity->timer2 = 1.5;
             }
             break;
