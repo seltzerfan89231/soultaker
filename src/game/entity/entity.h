@@ -15,14 +15,15 @@
 #define FLAG_BIT     3
 
 typedef struct {
-    f32 speed, scale, hitbox_radius, timer, timer2, health, max_health;
+    f32 speed, scale, hitbox_radius, health, max_health;
     // state for textures, phase for behavior
-    bool friendly, face_dir, state, phase, flag, ground_level, invisible;
+    u8 state, phase;
+    bool friendly, face_dir, flag, ground_level, invisible;
     u32 id;
     vec3f position, direction;
     vec2f facing;
-    // entity dependent info
-    void* info;
+    // entity dependent data
+    void* data;
 } Entity;
 
 Entity* entity_create(u32 id, u8 friendly);

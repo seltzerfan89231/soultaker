@@ -10,6 +10,10 @@
 #define ATTACK_1   2
 #define ATTACK_2   3
 
+typedef struct {
+    f32 timer;
+} Data;
+
 static void attack1(Entity* entity)
 {
     i32 safe_spot = rand() % 2;
@@ -68,26 +72,27 @@ void shaitan_the_advisor_create(Entity *entity)
     entity->scale = 3;
     entity->phase = ATTACK_1;
     entity->invisible = FALSE;
-    entity->timer2 = 1.5;
+    entity->data = malloc(sizeof(Data));
 }
 
 void shaitan_the_advisor_update(Entity *entity, f32 dt)
 {
+    Data* data = entity->data;
     switch (entity->phase) {
         case INVISIBLE:
-            if (entity->timer2 < 0) {
+            if (data->timer < 0) {
                 entity->phase = GROW;
                 entity->invisible = FALSE;
-                entity->timer2 = 0.5;
+                data->timer = 0.5;
             }
             break;
         case GROW:
-            if (entity->timer2 < 0) {
+            if (data->timer < 0) {
                 if (entity->scale < 3)
                     entity->scale += 0.5;
                 else
                     entity->phase = ATTACK_1;
-                entity->timer2 = 0.5;
+                data->timer = 0.5;
             }
             break;
         case ATTACK_1:
@@ -95,18 +100,19 @@ void shaitan_the_advisor_update(Entity *entity, f32 dt)
                 entity->phase = ATTACK_2;
                 break;
             }
-            if (entity->timer2 < 0) {
+            if (data->timer < 0) {
                 attack1(entity);
-                entity->timer2 = 1.5;
+                data->timer = 1.5;
             }
             break;
         case ATTACK_2:
-            if (entity->timer2 < 0) {
+            if (data->timer < 0) {
                 attack2(entity);
-                entity->timer2 = 1.5;
+                data->timer = 1.5;
             }
             break;
     }
+    data->timer -= dt;
 }
 
 void shaitan_the_advisor_damage(Entity *entity, f32 damage)

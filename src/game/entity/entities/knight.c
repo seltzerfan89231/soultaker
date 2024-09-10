@@ -7,6 +7,10 @@
 #define SHOOT_1 3
 #define SHOOT_2 4
 
+typedef struct {
+    f32 timer;
+} Data;
+
 void knight_init_frame_data(FrameData ***frame_data)
 {
     frame_data[KNIGHT] = malloc(4 * sizeof(FrameData*));
@@ -47,23 +51,24 @@ void knight_destroy_frame_data(FrameData ***frame_data)
 
 void knight_create(Entity *entity)
 {
-    
+    entity->data = malloc(sizeof(Data));
 }
 
 void knight_update(Entity *entity, f32 dt)
 {
+    Data* data = entity->data;
     if (entity->flag == TRUE) {
         if (entity->state != SHOOT_1 && entity->state != SHOOT_2) {
             entity->state = SHOOT_1;
-            entity->timer = 0;
+            data->timer = 0;
             entity->face_dir = FALSE;
         }
         entity->flag = FALSE;
     } else {
         if (entity->state == SHOOT_2) {
-            if (entity->timer > 0.15) {
+            if (data->timer > 0.15) {
                 entity->state = IDLE;
-                entity->timer = 0;
+                data->timer = 0;
                 entity->face_dir = TRUE;
             }
         }
@@ -80,52 +85,33 @@ void knight_update(Entity *entity, f32 dt)
 
     switch (entity->state) {
         case WALK_1:
-            if (entity->timer > 0.15) {
-                entity->timer = 0;
+            if (data->timer > 0.15) {
+                data->timer = 0;
                 entity->state = WALK_2;
             }
             break;
         case WALK_2:
-            if (entity->timer > 0.15) {
-                entity->timer = 0;
+            if (data->timer > 0.15) {
+                data->timer = 0;
                 entity->state = WALK_1;
             }
             break;
         case SHOOT_1:
-            if (entity->timer > 0.15) {
-                entity->timer = 0;
+            if (data->timer > 0.15) {
+                data->timer = 0;
                 entity->state = SHOOT_2;
             }
             break;
         case SHOOT_2:
-            if (entity->timer > 0.15) {
-                entity->timer = 0;
+            if (data->timer > 0.15) {
+                data->timer = 0;
                 entity->state = SHOOT_1;
             }
             break;
         default:
             break;
     }
-
-    if (entity->timer2 < 0) {
-        for (i32 i = 0; i < 0; i++) {
-            Particle *particle = particle_create();
-            particle->position = entity->position;
-            f32 r = (float)rand() / RAND_MAX / 2;
-            f32 a = (float)rand() / RAND_MAX * 360;
-            particle->position.x += r * cos(a);
-            particle->position.z += r * sin(a);
-            particle->direction = vec3f_create(0, 1, 0);
-            particle->speed = 1;
-            particle->scale = 0.15;
-            particle->lifetime = 5;
-            particle->color.r = (float)rand() / RAND_MAX;
-            particle->color.g = (float)rand() / RAND_MAX;
-            particle->color.b = (float)rand() / RAND_MAX;
-            entity->timer2 = 0.1;
-        }
-        
-    }
+    data->timer -= dt;
 }
 
 void knight_damage(Entity *entity, f32 damage)

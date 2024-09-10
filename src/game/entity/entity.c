@@ -18,8 +18,7 @@ Entity* entity_create(u32 id, u8 friendly)
     entity->speed = 1;
     entity->state = 0;
     entity->face_dir = TRUE;
-    entity->timer = 0.0f;
-    entity->timer2 = 0.0f;
+    entity->data = NULL;
     entity->flag = 0;
     entity->phase = 0;
     entity->ground_level = TRUE;
@@ -60,8 +59,6 @@ void entity_update(Entity* entity, f32 dt)
         _ENTITY_UPDATE(SHAITAN_THE_ADVISOR, shaitan_the_advisor)
         _ENTITY_UPDATE(SHAITAN_HAND, shaitan_hand)
     }
-    entity->timer += dt;
-    entity->timer2 -= dt;
 }
 
 #define _ENTITY_DAMAGE(_id, _lid) \
@@ -105,13 +102,16 @@ void entity_destroy(Entity* entity, u32 idx)
     if (entity == player.entity)
         player.entity = NULL;
     entity_array_cut(&global_entities, idx);
+    free(entity->data);
     free(entity);
 }
 
 void destroy_all_entities(void)
 {
-    for (i32 i = 0; i < global_entities.length; i++)
+    for (i32 i = 0; i < global_entities.length; i++) {
+        free(global_entities.buffer[i]->data);
         free(global_entities.buffer[i]);
+    }   
     entity_array_destroy(&global_entities);
 }
 

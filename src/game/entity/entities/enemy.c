@@ -7,6 +7,10 @@ extern f32 game_time;
 #define NUM_STATES 1
 #define IDLE   0
 
+typedef struct {
+    f32 timer;
+} Data;
+
 void enemy_init_frame_data(FrameData ***frame_data)
 {
     frame_data[ENEMY] = malloc(4 * sizeof(FrameData*));
@@ -29,10 +33,12 @@ void enemy_create(Entity *entity)
 {
     entity->health = 100;
     entity->max_health = 100;
+    entity->data = malloc(sizeof(Data));
 }
 
 void enemy_update(Entity *entity, f32 dt)
 {
+    Data* data = entity->data;
     if (player.entity == NULL) {
         entity->direction = vec3f_create(0, 0, 0);
         return;
@@ -40,8 +46,8 @@ void enemy_update(Entity *entity, f32 dt)
     entity->speed = 0.5;
     entity->direction = vec3f_normalize(vec3f_sub(player.entity->position, entity->position));
     entity->facing = vec2f_create(entity->direction.x, entity->direction.z);
-    if (entity->timer >= 0.05) {
-        entity->timer = 0;
+    if (data->timer < 0) {
+        data->timer = 0.05;
         for (i32 i = 0; i < 8; i++) {
             Projectile* proj = projectile_create(DEFAULT_PROJ, FALSE, FALSE);
             proj->tex = BULLET_TEX;
@@ -54,6 +60,7 @@ void enemy_update(Entity *entity, f32 dt)
             proj->position.y = 0.5f;
         }
     }
+    data->timer -= dt;
 }
 
 void enemy_damage(Entity *entity, f32 damage)

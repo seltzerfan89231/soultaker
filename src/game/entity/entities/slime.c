@@ -5,6 +5,10 @@
 #define NUM_STATES 1
 #define IDLE   0
 
+typedef struct {
+    f32 timer;
+} Data;
+
 void slime_init_frame_data(FrameData ***frame_data)
 {
     frame_data[SLIME] = malloc(4 * sizeof(FrameData*));
@@ -27,6 +31,7 @@ void slime_create(Entity *entity)
 {
     entity->health = 5;
     entity->max_health = 5;
+    entity->data = malloc(sizeof(Data));
 }
 
 void slime_update(Entity *entity, f32 dt)
@@ -35,14 +40,15 @@ void slime_update(Entity *entity, f32 dt)
         entity->direction = vec3f_create(0, 0, 0);
         return;
     }
+    Data* data = entity->data;
     vec3f target, offset;
     target = player.entity->position;
     target.y = 0;
     offset = vec3f_sub(target, entity->position);
     if (vec3f_mag(offset) < 10) {
         entity->direction = vec3f_normalize(offset);
-        if (entity->timer >= 0.5) {
-            entity->timer = 0;
+        if (data->timer >= 0.5) {
+            data->timer = 0;
             Projectile* proj = projectile_create(DEFAULT_PROJ, FALSE, FALSE);
             proj->position = entity->position;
             proj->rotation = atan(entity->direction.z / entity->direction.x) + (entity->direction.x > 0 ? 0 : PI);
@@ -55,6 +61,7 @@ void slime_update(Entity *entity, f32 dt)
     }
     else
         entity->direction = vec3f_create(0, 0, 0);
+    data->timer -= dt;
 }
 
 void slime_damage(Entity *entity, f32 damage)

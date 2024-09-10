@@ -5,6 +5,10 @@ extern f32 game_time;
 #define NUM_STATES 1
 #define IDLE   0
 
+typedef struct {
+    f32 timer;
+} Data;
+
 void training_dummy_init_frame_data(FrameData ***frame_data)
 {
     frame_data[TRAINING_DUMMY] = malloc(4 * sizeof(FrameData*));
@@ -27,14 +31,17 @@ void training_dummy_create(Entity *entity)
 {
     entity->health = 20;
     entity->max_health = 20;
+    entity->data = malloc(sizeof(Data));
 }
 
 void training_dummy_update(Entity *entity, f32 dt)
 {
-    if (entity->timer > 2) {
-        entity->timer = 0;
+    Data* data = entity->data;
+    if (data->timer > 2) {
+        data->timer = 0;
         entity->health = entity->max_health;
     }
+    data->timer -= dt;
 }
 
 void training_dummy_damage(Entity *entity, f32 damage)
