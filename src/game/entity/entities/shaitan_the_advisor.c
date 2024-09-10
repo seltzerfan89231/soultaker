@@ -71,7 +71,7 @@ void shaitan_the_advisor_create(Entity *entity)
     entity->timer2 = 1.5;
 }
 
-void shaitan_the_advisor_update(Entity *entity)
+void shaitan_the_advisor_update(Entity *entity, f32 dt)
 {
     switch (entity->phase) {
         case INVISIBLE:
@@ -91,7 +91,7 @@ void shaitan_the_advisor_update(Entity *entity)
             }
             break;
         case ATTACK_1:
-            if (entity->health < entity->max_health) {
+            if (entity->health < 0.95 * entity->max_health) {
                 entity->phase = ATTACK_2;
                 break;
             }

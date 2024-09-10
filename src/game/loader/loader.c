@@ -252,4 +252,6 @@ void load_level4(void)
 
     Entity* shaitan = entity_create(SHAITAN_THE_ADVISOR, FALSE);
     shaitan->position = vec3f_create(15.5f, 0.0f, 16.5f);
+    Entity* hand = entity_create(SHAITAN_HAND, FALSE);
+    hand->position = vec3f_create(23.0f, 0.0f, 16.5f);
 }

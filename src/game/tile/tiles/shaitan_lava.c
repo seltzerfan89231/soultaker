@@ -13,7 +13,7 @@ void shaitan_lava_interact(Tile *tile, Entity *entity)
     entity->position.y = -0.2;
     if (tile_timer >= 0)
         return;
-    if (entity->id == SHAITAN_THE_ADVISOR)
+    if (entity->id == SHAITAN_THE_ADVISOR || entity->id == SHAITAN_HAND)
         return;
     entity_damage(entity, 1);
 }

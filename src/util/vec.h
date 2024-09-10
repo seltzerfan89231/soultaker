@@ -62,35 +62,38 @@
         return vec1.x * vec2.x + vec1.y * vec2.y; \
     }
 
-_VEC2_STRUCT(u)
+#define _VEC2_ROTATE(_type) \
+    static inline vec2##_type vec2##_type##_rotate(vec2##_type point, vec2##_type pivot, f32 theta) { \
+        vec2##_type res; \
+        f32 c = cos(theta), s = sin(theta); \
+        res.x = (point.x - pivot.x) * c - (point.y - pivot.y) * s + pivot.x; \
+        res.y = (point.x - pivot.x) * s + (point.y - pivot.y) * c + pivot.y; \
+        return res; \
+    }
+
 _VEC2_STRUCT(f)
 _VEC2_STRUCT(i)
 
-_VEC2_CREATE(u)
 _VEC2_CREATE(f)
 _VEC2_CREATE(i)
 
-_VEC2_ADD(u)
 _VEC2_ADD(f)
 _VEC2_ADD(i)
 
-_VEC2_SUB(u)
 _VEC2_SUB(f)
 _VEC2_SUB(i)
 
-_VEC2_SCALE(u)
 _VEC2_SCALE(f)
 _VEC2_SCALE(i)
 
-_VEC2_MAG(u)
 _VEC2_MAG(f)
 _VEC2_MAG(i)
 
-_VEC2_NORMALIZE(u)
 _VEC2_NORMALIZE(f)
 _VEC2_NORMALIZE(i)
 
 _VEC2_DOT(f)
+_VEC2_ROTATE(f)
 
 #define _VEC3_STRUCT(_type) \
     typedef struct vec3##_type { \
@@ -166,38 +169,14 @@ _VEC2_DOT(f)
         return sqrt(dx*dx + dy*dy + dz*dz); \
     }
 
-_VEC3_STRUCT(u)
 _VEC3_STRUCT(f)
-_VEC3_STRUCT(i)
-
-_VEC3_CREATE(u)
 _VEC3_CREATE(f)
-_VEC3_CREATE(i)
-
-_VEC3_ADD(u)
 _VEC3_ADD(f)
-_VEC3_ADD(i)
-
-_VEC3_SUB(u)
 _VEC3_SUB(f)
-_VEC3_SUB(i)
-
-_VEC3_SCALE(u)
 _VEC3_SCALE(f)
-_VEC3_SCALE(i)
-
-_VEC3_CROSS(u)
 _VEC3_CROSS(f)
-_VEC3_CROSS(i)
-
-_VEC3_MAG(u)
 _VEC3_MAG(f)
-_VEC3_MAG(i)
-
-_VEC3_NORMALIZE(u)
 _VEC3_NORMALIZE(f)
-_VEC3_NORMALIZE(i)
-
 _VEC3_DISTANCE(f)
 
 #endif

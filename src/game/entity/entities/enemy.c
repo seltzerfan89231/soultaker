@@ -31,7 +31,7 @@ void enemy_create(Entity *entity)
     entity->max_health = 100;
 }
 
-void enemy_update(Entity *entity)
+void enemy_update(Entity *entity, f32 dt)
 {
     if (player.entity == NULL) {
         entity->direction = vec3f_create(0, 0, 0);

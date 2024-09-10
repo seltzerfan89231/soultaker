@@ -35,18 +35,19 @@ void destroy_all_entities(void);
 _ARRAY_DECLARE(Entity, entity)
 extern EntityArray global_entities;
 
-#define MAX_ENTITY_ID 5
+#define MAX_ENTITY_ID 6
 #define KNIGHT 0
 #define ENEMY  1
 #define SLIME  2
 #define TRAINING_DUMMY 3
 #define SHAITAN_THE_ADVISOR 4
+#define SHAITAN_HAND 5
 
 #define _ENTITY_INIT(_type) \
     void _type##_init_frame_data(FrameData ***frame_data); \
     void _type##_destroy_frame_data(FrameData ***frame_data); \
     void _type##_create(Entity *entity); \
-    void _type##_update(Entity *entity); \
+    void _type##_update(Entity *entity, f32 dt); \
     void _type##_damage(Entity *entity, f32 damage); \
     void _type##_die(Entity *entity);
 
@@ -55,5 +56,6 @@ _ENTITY_INIT(enemy)
 _ENTITY_INIT(slime)
 _ENTITY_INIT(training_dummy)
 _ENTITY_INIT(shaitan_the_advisor)
+_ENTITY_INIT(shaitan_hand)
 
 #endif

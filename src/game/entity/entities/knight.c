@@ -50,7 +50,7 @@ void knight_create(Entity *entity)
     
 }
 
-void knight_update(Entity *entity)
+void knight_update(Entity *entity, f32 dt)
 {
     if (entity->flag == TRUE) {
         if (entity->state != SHOOT_1 && entity->state != SHOOT_2) {

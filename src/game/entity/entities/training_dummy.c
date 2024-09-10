@@ -29,7 +29,7 @@ void training_dummy_create(Entity *entity)
     entity->max_health = 20;
 }
 
-void training_dummy_update(Entity *entity)
+void training_dummy_update(Entity *entity, f32 dt)
 {
     if (entity->timer > 2) {
         entity->timer = 0;

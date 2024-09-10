@@ -184,6 +184,7 @@ void data_init(void)
     slime_init_frame_data(data.frame_data);
     training_dummy_init_frame_data(data.frame_data);
     shaitan_the_advisor_init_frame_data(data.frame_data);
+    shaitan_hand_init_frame_data(data.frame_data);
 }
 
 void data_destroy(void)
@@ -192,7 +193,8 @@ void data_destroy(void)
     enemy_destroy_frame_data(data.frame_data);
     slime_destroy_frame_data(data.frame_data);
     training_dummy_destroy_frame_data(data.frame_data);
-    shaitan_the_advisor_init_frame_data(data.frame_data);
+    shaitan_the_advisor_destroy_frame_data(data.frame_data);
+    shaitan_hand_destroy_frame_data(data.frame_data);
     free(data.frame_data);
     free(data.ebo_buffer);
     free(data.vbo_buffer);

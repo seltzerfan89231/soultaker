@@ -50,7 +50,7 @@ void main() {
     vec4 position = gl_in[0].gl_Position;
     float scale = inData[0].scale;
     float drot = inData[0].projectileRotation - rotation;
-    drot = atan(tan(drot) / cos(pi / 2 + tilt)) + (cos(drot) > 0 ? 0 : pi) + ((inData[0].tex_tilt > 0) ? pi / 4 : 0);
+    drot = atan(tan(drot) / cos(pi / 2 + tilt)) + (cos(drot) > 0 ? 0 : pi) + ((inData[0].tex_tilt > 0) ? pi / 4 : pi / 2);
     vec2 offset;
     offset = scale * zoom * (1 / sqrt2) * vec2(ar * cos(drot - 3 * pi / 4), sin(drot - 3 * pi / 4));
     gl_Position = position + vec4(offset, 0.0 , 0.0);    // 1:bottom-left

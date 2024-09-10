@@ -36,13 +36,14 @@ Entity* entity_create(u32 id, u8 friendly)
         _ENTITY_CREATE(SLIME, slime)
         _ENTITY_CREATE(TRAINING_DUMMY, training_dummy)
         _ENTITY_CREATE(SHAITAN_THE_ADVISOR, shaitan_the_advisor);
+        _ENTITY_CREATE(SHAITAN_HAND, shaitan_hand)
     }
     entity_array_push(&global_entities, entity);
     return entity;
 }
 
 #define _ENTITY_UPDATE(_id, _lid) \
-    case _id : _lid##_update(entity); break;
+    case _id : _lid##_update(entity, dt); break;
 
 void entity_update(Entity* entity, f32 dt)
 {
@@ -57,6 +58,7 @@ void entity_update(Entity* entity, f32 dt)
         _ENTITY_UPDATE(SLIME, slime)
         _ENTITY_UPDATE(TRAINING_DUMMY, training_dummy)
         _ENTITY_UPDATE(SHAITAN_THE_ADVISOR, shaitan_the_advisor)
+        _ENTITY_UPDATE(SHAITAN_HAND, shaitan_hand)
     }
     entity->timer += dt;
     entity->timer2 -= dt;
@@ -98,6 +100,7 @@ void entity_destroy(Entity* entity, u32 idx)
         _ENTITY_DIE(SLIME, slime)
         _ENTITY_DIE(TRAINING_DUMMY, training_dummy)
         _ENTITY_DIE(SHAITAN_THE_ADVISOR, shaitan_the_advisor)
+        _ENTITY_DIE(SHAITAN_HAND, shaitan_hand)
     }
     if (entity == player.entity)
         player.entity = NULL;
