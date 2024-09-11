@@ -224,6 +224,11 @@ u32 game_get_weapon_tex(void)
     return player.weapon.tex;
 }
 
+Entity* game_get_current_boss(void)
+{
+    return boss;
+}
+
 void game_wait(void)
 {
     sem_wait(&mutex);

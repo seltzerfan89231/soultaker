@@ -51,6 +51,9 @@ void comp_singleplayer_mouse_button_callback(Component *comp, i32 button, i32 ac
 
         Component *chat = component_create(10, 120, 200, 100, COMP_CHAT, NO_TEX);
         component_attach(comp_root, chat);
+
+        Component *boss_healthbar = component_create(10, 400, 80, 20, COMP_BOSS_HEALTHBAR, COLOR_TEX);
+        component_attach(comp_root, boss_healthbar);
     }
 }
 

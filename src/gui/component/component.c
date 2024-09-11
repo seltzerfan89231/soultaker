@@ -41,6 +41,7 @@ Component* component_create(i32 x, i32 y, i32 w, i32 h, u32 id, u32 tex)
         _COMP_CREATE(POPUP, popup)
         _COMP_CREATE(SINGLEPLAYER, singleplayer)
         _COMP_CREATE(TEXTBOX, textbox)
+        _COMP_CREATE(BOSS_HEALTHBAR, boss_healthbar)
         default: comp->id = COMP_DEFAULT;
     }
     return comp;
@@ -119,8 +120,6 @@ void component_set_text(Component *comp, u8 font_size, char *text)
 
 void component_remove_text(Component *comp)
 {
-    if (comp->text == NULL) 
-        return;
     free(comp->text);
     comp->text = NULL;
 }
@@ -166,6 +165,7 @@ void component_update(Component *comp)
         _COMP_UPDATE(JOIN, join)
         _COMP_UPDATE(MINIMAP, minimap)
         _COMP_UPDATE(CHAT, chat)
+        _COMP_UPDATE(BOSS_HEALTHBAR, boss_healthbar)
     }
 }
 

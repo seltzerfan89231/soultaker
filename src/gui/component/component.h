@@ -65,6 +65,7 @@ void component_hover_callback(Component *comp, i32 action);
 #define COMP_JOIN 11
 #define COMP_MINIMAP 12
 #define COMP_CHAT 13
+#define COMP_BOSS_HEALTHBAR 14
 
 #define _COMP_INIT(_ltype) \
     void comp_##_ltype##_create(Component *comp); \
@@ -87,5 +88,6 @@ _COMP_INIT(host)
 _COMP_INIT(join)
 _COMP_INIT(minimap)
 _COMP_INIT(chat)
+_COMP_INIT(boss_healthbar)
 
 #endif

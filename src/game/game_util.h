@@ -29,6 +29,7 @@ extern AOEArray global_aoes;
 extern SentryArray global_sentries;
 extern Player player;
 extern TileMap map;
+extern Entity* boss;
 
 extern f32 game_time;
 extern f32 game_dt;

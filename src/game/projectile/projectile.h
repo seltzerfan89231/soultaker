@@ -11,7 +11,7 @@
 #include "../parjicle/parjicle.h"
 
 typedef struct {
-    f32 speed, scale, lifetime, rotation, hitbox_radius, timer;
+    f32 speed, scale, lifetime, rotation, rot_speed, hitbox_radius, timer;
     u32 tex, id, damage;
     vec3f position, direction;
     bool pierce, friendly, tilt_tex;
@@ -30,12 +30,9 @@ extern ProjectileArray global_projectiles;
 #define MAX_PROJECTILE_ID 3
 #define DEFAULT_PROJ 0
 #define SWORD_PROJ 1
-#define SHAITAN_FIRESTORM_PROJ 2
 
 #define _PROJECTILE_INIT(_type) \
     void _type##_update(Projectile *projectile, f32 dt);
 
 _PROJECTILE_INIT(sword_proj)
-_PROJECTILE_INIT(shaitan_firestorm_proj)
-
 #endif

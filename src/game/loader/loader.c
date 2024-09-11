@@ -27,6 +27,7 @@ static void reset(void)
     global_sentries = sentry_array_create(0, 1);
     global_aoes = aoe_array_create(0, 1);
     game_time = 0;
+    boss = NULL;
 }
 
 void load_level1(void)
@@ -252,6 +253,4 @@ void load_level4(void)
 
     Entity* shaitan = entity_create(SHAITAN_THE_ADVISOR, FALSE);
     shaitan->position = vec3f_create(15.5f, 0.0f, 16.5f);
-    Entity* hand = entity_create(SHAITAN_HAND, FALSE);
-    hand->position = vec3f_create(23.0f, 0.0f, 16.5f);
 }

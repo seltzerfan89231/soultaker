@@ -18,7 +18,7 @@ typedef struct {
     f32 speed, scale, hitbox_radius, health, max_health;
     // state for textures, phase for behavior
     u8 state, phase;
-    bool friendly, face_dir, flag, ground_level, invisible;
+    bool friendly, face_dir, flag, ground_level, invisible, invulnerable;
     u32 id;
     vec3f position, direction;
     vec2f facing;
@@ -35,6 +35,7 @@ void destroy_all_entities(void);
 
 _ARRAY_DECLARE(Entity, entity)
 extern EntityArray global_entities;
+extern Entity* boss;
 
 #define MAX_ENTITY_ID 6
 #define KNIGHT 0
@@ -58,5 +59,6 @@ _ENTITY_INIT(slime)
 _ENTITY_INIT(training_dummy)
 _ENTITY_INIT(shaitan_the_advisor)
 _ENTITY_INIT(shaitan_hand)
+void shatian_hand_connect_advisor(Entity* hand, Entity* advisor);
 
 #endif

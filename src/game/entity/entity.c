@@ -6,6 +6,7 @@
 #include <assert.h>
 
 EntityArray global_entities;
+Entity* boss;
 
 #define _ENTITY_CREATE(_id, _lid) \
     case _id : _lid##_create(entity); break;
@@ -28,6 +29,7 @@ Entity* entity_create(u32 id, u8 friendly)
     entity->friendly = friendly;
     entity->hitbox_radius = 0.5;
     entity->health = 100;
+    entity->invulnerable = FALSE;
     entity->max_health = 100;
     switch (entity->id) {
         _ENTITY_CREATE(ENEMY, enemy)
@@ -66,6 +68,8 @@ void entity_update(Entity* entity, f32 dt)
 
 void entity_damage(Entity *entity, f32 damage)
 {
+    if (entity->invulnerable)
+        return;
     aud_play(GUI_CLICK_AUD);
     switch (entity->id) {
         _ENTITY_DAMAGE(TRAINING_DUMMY, training_dummy)
@@ -113,6 +117,11 @@ void destroy_all_entities(void)
         free(global_entities.buffer[i]);
     }   
     entity_array_destroy(&global_entities);
+}
+
+void entity_connect(Entity* entity1, Entity* entity2)
+{
+
 }
 
 _ARRAY_DEFINE(Entity, entity)

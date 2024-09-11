@@ -60,15 +60,15 @@ void knight_update(Entity *entity, f32 dt)
     if (entity->flag == TRUE) {
         if (entity->state != SHOOT_1 && entity->state != SHOOT_2) {
             entity->state = SHOOT_1;
-            data->timer = 0;
+            data->timer = 0.15;
             entity->face_dir = FALSE;
         }
         entity->flag = FALSE;
     } else {
         if (entity->state == SHOOT_2) {
-            if (data->timer > 0.15) {
+            if (data->timer < 0) {
                 entity->state = IDLE;
-                data->timer = 0;
+                data->timer = 0.15;
                 entity->face_dir = TRUE;
             }
         }
@@ -85,26 +85,26 @@ void knight_update(Entity *entity, f32 dt)
 
     switch (entity->state) {
         case WALK_1:
-            if (data->timer > 0.15) {
-                data->timer = 0;
+            if (data->timer < 0) {
+                data->timer = 0.15;
                 entity->state = WALK_2;
             }
             break;
         case WALK_2:
-            if (data->timer > 0.15) {
-                data->timer = 0;
+            if (data->timer < 0) {
+                data->timer = 0.15;
                 entity->state = WALK_1;
             }
             break;
         case SHOOT_1:
-            if (data->timer > 0.15) {
-                data->timer = 0;
+            if (data->timer < 0) {
+                data->timer = 0.15;
                 entity->state = SHOOT_2;
             }
             break;
         case SHOOT_2:
-            if (data->timer > 0.15) {
-                data->timer = 0;
+            if (data->timer < 0) {
+                data->timer = 0.15;
                 entity->state = SHOOT_1;
             }
             break;

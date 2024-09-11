@@ -11,6 +11,7 @@ Projectile* projectile_create(u32 id, bool friendly, bool pierce)
     projectile->scale = 1;
     projectile->speed = 10;
     projectile->lifetime = 1;
+    projectile->rot_speed = 0;
     projectile->rotation = 0;
     projectile->damage = 1;
     projectile->tilt_tex = TRUE;
@@ -36,9 +37,9 @@ Projectile* projectile_create(u32 id, bool friendly, bool pierce)
 void projectile_update(Projectile* projectile, f32 dt)
 {
     projectile->position = vec3f_add(projectile->position, vec3f_scale(projectile->speed * dt, projectile->direction));
+    projectile->rotation += projectile->rot_speed * dt;
     switch (projectile->id) {
         _UPDATE(SWORD_PROJ, sword_proj);
-        _UPDATE(SHAITAN_FIRESTORM_PROJ, shaitan_firestorm_proj);
     }
     projectile->lifetime -= dt;
     projectile->timer += dt;
